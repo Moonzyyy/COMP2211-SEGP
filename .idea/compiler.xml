@@ -10,6 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="COMP2211-SEGP" target="17" />
       <module name="Group30" target="17" />
     </bytecodeTargetLevel>
   </component>
