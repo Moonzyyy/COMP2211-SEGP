@@ -3,7 +3,9 @@ package csvTest;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Scanner;
 
 public class CsvReader {
     private static final String IMPRESSION_LOG_FILEPATH = "src/main/resources/testData/2_week_campaign_2/impression_log.csv";
@@ -13,6 +15,8 @@ public class CsvReader {
     private static final String TWO_MONTH_CLICK_LOG_FILEPATH = "/Users/chris/UniLocal/COMP2211/testData/2_month_campaign/click_log.csv";
 
     public static void main(String[] args) {
+        List<Impression> inputList = null;
+        System.out.println("Loading, please wait...");
         try {
             File inputF = new File(TWO_MONTH_IMPRESSION_LOG_FILEPATH);
             InputStream inputFS = new FileInputStream(inputF);
@@ -22,7 +26,7 @@ public class CsvReader {
             LocalDateTime start = LocalDateTime.parse("2015-02-01 12:01:21", formatter);
             LocalDateTime end = LocalDateTime.parse("2015-03-01 12:01:21", formatter);
 
-            List<Impression> inputList = br.lines().skip(1).map((line) -> {
+            inputList = br.lines().skip(1).map((line) -> {
                 String[] p = split(line,',');
                 return new Impression(p, formatter);
             }).toList();
@@ -41,6 +45,26 @@ public class CsvReader {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Data loaded");
+        try {
+            if (inputList != null) {
+                while (true) {
+                    System.out.println("Please choose a metric to check: \n 1: Total impression cost; \n 99: Exit");
+                    System.out.print("Option: ");
+                    int option = scanner.nextInt();
+                    if (option == 1) {
+                        System.out.println(inputList.parallelStream().mapToDouble(Impression::getImpressionCost).sum());
+                    } else if (option == 99 ) {
+                        System.exit(0);
+                    }
+                }
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Please enter an integer value;");
+        }
+
     }
 
     /*
