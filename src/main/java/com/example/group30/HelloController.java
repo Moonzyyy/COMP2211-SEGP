@@ -12,4 +12,10 @@ public class HelloController {
   protected void onHelloButtonClick() {
     welcomeText.setText("Welcome to JavaFX Application!");
   }
+
+  @FXML
+  //Change scene to settings
+  protected void onSettingsButtonClick() {
+    System.out.println("Settings button clicked");
+  }
 }

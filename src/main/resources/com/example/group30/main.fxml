@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane id="mainBorderPane" nodeOrientation="LEFT_TO_RIGHT" style="-fx-background-color: #121212;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox id="menuVBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="357.0" prefWidth="724.0">
+               <children>
+                  <Button id="importBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="60.0" prefWidth="150.0" style="-fx-background-radius: 70; -fx-background-color: #ffffff; -fx-font-size: 24;" text="Import">
+                     <VBox.margin>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="Roboto" size="15.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="8.0" left="20.0" right="20.0" top="8.0" />
+                     </padding>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Button>
+                  <Button id="settingsBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="60.0" prefWidth="150.0" style="-fx-background-radius: 70; -fx-background-color: #ffffff; -fx-font-size: 24;" text="Settings">
+                     <font>
+                        <Font name="Roboto" size="15.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="8.0" left="17.0" right="17.0" top="8.0" />
+                     </padding>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets top="-30.0" />
+               </padding>
+            </VBox>
+            <Rectangle arcHeight="50.0" arcWidth="50.0" blendMode="ADD" fill="DODGERBLUE" height="211.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: #212121;" width="200.0" />
+         </children>
+      </StackPane>
+   </center>
+   <top>
+      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="AdViz" textAlignment="CENTER" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Roboto" />
+            <Font size="50.0" />
+         </font>
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </BorderPane.margin>
+      </Text>
+   </top>
+</BorderPane>
