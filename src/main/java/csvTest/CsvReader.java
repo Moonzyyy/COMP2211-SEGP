@@ -34,9 +34,12 @@ public class CsvReader {
 
     }
 
+    /**
+    Handles the incoming CSV and creates the related Java objects
+     */
     private static void handleCSVInput() {
         try {
-            File inputF = new File(TWO_MONTH_IMPRESSION_LOG_FILEPATH);
+            File inputF = new File(IMPRESSION_LOG_FILEPATH);
             InputStream inputFS = new FileInputStream(inputF);
             BufferedReader br = new BufferedReader(new InputStreamReader(inputFS));
 
@@ -54,6 +57,9 @@ public class CsvReader {
         }
     }
 
+    /**
+    Takes in the input from user for developers only. To disable comment the function in main function.
+     */
     private static void takeUserInput() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Data loaded");
@@ -71,6 +77,9 @@ public class CsvReader {
         }
     }
 
+    /**
+    Executes the required function for the selected option.
+     */
     private static void handleUserInput(int option) {
         switch (option) {
             case 1 -> System.out.println(inputList.parallelStream().mapToDouble(Impression::getImpressionCost).sum());
@@ -79,15 +88,17 @@ public class CsvReader {
         }
     }
 
-    /*
+    /**
     Slightly more efficient than String.split()
+    @param line: the line to split
+    @param delimiter: the character by which to split the string
      */
     public static String[] split(final String line, final char delimiter)
     {
         CharSequence[] temp = new CharSequence[(line.length() / 2) + 1];
         int wordCount = 0;
         int i = 0;
-        int j = line.indexOf(delimiter, 0); // first substring
+        int j = line.indexOf(delimiter); // first substring
 
         while (j >= 0)
         {

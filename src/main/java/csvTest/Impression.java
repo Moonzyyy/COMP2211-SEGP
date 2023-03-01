@@ -20,6 +20,12 @@ public class Impression {
 
     private Double impressionCost;
 
+    /**
+     *
+     * @param input: The incoming data used to create the Impression
+     * @param formatter: The date formatter used when converting date string to DateTime object.
+     *                   It's a parameter to avoid re-initializing for every object.
+     */
     public Impression(String[] input, DateTimeFormatter formatter) {
         setDate(LocalDateTime.parse(input[0], formatter));
         setUserId(input[1]);
@@ -82,6 +88,10 @@ public class Impression {
         return impressionCost;
     }
 
+    /**
+     *
+     * @param impressionCost: string to be converted to Double.
+     */
     public void setImpressionCost(String impressionCost) {
         this.impressionCost = Double.parseDouble(impressionCost);
     }
