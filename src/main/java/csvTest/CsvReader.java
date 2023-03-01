@@ -48,21 +48,23 @@ public class CsvReader {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Data loaded");
-        try {
-            if (inputList != null) {
-                while (true) {
-                    System.out.println("Please choose a metric to check: \n 1: Total impression cost; \n 99: Exit");
-                    System.out.print("Option: ");
-                    int option = scanner.nextInt();
-                    if (option == 1) {
-                        System.out.println(inputList.parallelStream().mapToDouble(Impression::getImpressionCost).sum());
-                    } else if (option == 99 ) {
-                        System.exit(0);
-                    }
+        if (inputList != null) {
+            while (true) {
+                System.out.println("Please choose a metric to check: \n 1: Total impression cost; \n 99: Exit");
+                System.out.print("Option: ");
+                while (!scanner.hasNextInt()) {
+                    System.out.print("Please enter an integer: ");
+                    scanner.next();
+                }
+                int option = scanner.nextInt();
+                if (option == 1) {
+                    System.out.println(inputList.parallelStream().mapToDouble(Impression::getImpressionCost).sum());
+                } else if (option == 99 ) {
+                    System.exit(0);
+                } else {
+                    System.out.println("Please enter a valid option");
                 }
             }
-        } catch (InputMismatchException e) {
-            System.out.println("Please enter an integer value;");
         }
 
     }
