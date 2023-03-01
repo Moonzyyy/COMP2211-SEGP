@@ -14,9 +14,27 @@ public class CsvReader {
     private static final String TWO_MONTH_IMPRESSION_LOG_FILEPATH = "/Users/chris/UniLocal/COMP2211/testData/2_month_campaign/impression_log.csv";
     private static final String TWO_MONTH_CLICK_LOG_FILEPATH = "/Users/chris/UniLocal/COMP2211/testData/2_month_campaign/click_log.csv";
 
+    private static List<Impression> inputList = null;
+
     public static void main(String[] args) {
-        List<Impression> inputList = null;
         System.out.println("Loading, please wait...");
+        handleCSVInput();
+//            List<Impression> men = inputList.parallelStream().filter(p -> p.getGender().equals("Male")).toList();
+//            List<Impression> men = inputList.stream().filter(p -> p.getGender().equals("Male")).toList();
+//            List<Impression> dates = inputList.parallelStream().filter(p -> {
+//                var date = p.getDate();
+//                return date.isAfter(start) && date.isBefore(end);
+//            }).toList();
+//            System.out.println(dates);
+
+//            System.out.println(inputList.size());
+//            System.out.println(inputList.parallelStream().distinct());
+
+        takeUserInput();
+
+    }
+
+    private static void handleCSVInput() {
         try {
             File inputF = new File(TWO_MONTH_IMPRESSION_LOG_FILEPATH);
             InputStream inputFS = new FileInputStream(inputF);
@@ -31,21 +49,12 @@ public class CsvReader {
                 return new Impression(p, formatter);
             }).toList();
 
-//            List<Impression> men = inputList.parallelStream().filter(p -> p.getGender().equals("Male")).toList();
-//            List<Impression> men = inputList.stream().filter(p -> p.getGender().equals("Male")).toList();
-//            List<Impression> dates = inputList.parallelStream().filter(p -> {
-//                var date = p.getDate();
-//                return date.isAfter(start) && date.isBefore(end);
-//            }).toList();
-//            System.out.println(dates);
-
-//            System.out.println(inputList.size());
-//            System.out.println(inputList.parallelStream().distinct());
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
 
+    private static void takeUserInput() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Data loaded");
         if (inputList != null) {
@@ -57,16 +66,17 @@ public class CsvReader {
                     scanner.next();
                 }
                 int option = scanner.nextInt();
-                if (option == 1) {
-                    System.out.println(inputList.parallelStream().mapToDouble(Impression::getImpressionCost).sum());
-                } else if (option == 99 ) {
-                    System.exit(0);
-                } else {
-                    System.out.println("Please enter a valid option");
-                }
+                handleUserInput(option);
             }
         }
+    }
 
+    private static void handleUserInput(int option) {
+        switch (option) {
+            case 1 -> System.out.println(inputList.parallelStream().mapToDouble(Impression::getImpressionCost).sum());
+            case 99 -> System.exit(0);
+            default -> System.out.println("Please enter a valid option");
+        }
     }
 
     /*
