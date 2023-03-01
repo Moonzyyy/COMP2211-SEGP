@@ -1,20 +1,10 @@
 package csvTest;
 
 import java.io.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import com.opencsv.*;
-import com.opencsv.bean.CsvToBeanBuilder;
-import com.opencsv.exceptions.CsvException;
 public class csvReader {
     private static final String IMPRESSION_LOG_FILEPATH = "src/main/resources/testData/2_week_campaign_2/impression_log.csv";
     private static final String CLICK_LOG_FILEPATH = "src/main/resources/testData/2_week_campaign_2/click_log.csv";
@@ -28,37 +18,25 @@ public class csvReader {
             InputStream inputFS = new FileInputStream(inputF);
             BufferedReader br = new BufferedReader(new InputStreamReader(inputFS));
 
-//            BlockingQueue<String> queue = new LinkedBlockingQueue<String>();
-//
-//            String nextLine;
-//            while ((nextLine = br.readLine()) != null) {
-//                queue.put(nextLine);
-//            }
-
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime start = LocalDateTime.parse("2015-02-01 12:01:21", formatter);
             LocalDateTime end = LocalDateTime.parse("2015-03-01 12:01:21", formatter);
 
             List<Impression> inputList = br.lines().skip(1).map((line) -> {
                 String[] p = split(line,',');
-
-
-                Impression user = new Impression();
-
-                user.setGender(p[2]);
-                LocalDateTime date = LocalDateTime.parse(p[0], formatter);
-                user.setDate(date);
-                return user;
+                return new Impression(p, formatter);
             }).toList();
 
-            List<Impression> men = inputList.parallelStream().filter(p -> p.getGender().equals("Male")).toList();
+//            List<Impression> men = inputList.parallelStream().filter(p -> p.getGender().equals("Male")).toList();
 //            List<Impression> men = inputList.stream().filter(p -> p.getGender().equals("Male")).toList();
-            List<Impression> dates = inputList.parallelStream().filter(p -> {
-                var date = p.getDate();
-                return date.isAfter(start) && date.isBefore(end);
-            }).toList();
+//            List<Impression> dates = inputList.parallelStream().filter(p -> {
+//                var date = p.getDate();
+//                return date.isAfter(start) && date.isBefore(end);
+//            }).toList();
+//            System.out.println(dates);
 
-            System.out.println(inputList.size());
+//            System.out.println(inputList.size());
+//            System.out.println(inputList.parallelStream().distinct());
 
         } catch (Exception e) {
             System.out.println(e.getMessage());

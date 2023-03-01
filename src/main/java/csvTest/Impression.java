@@ -3,6 +3,7 @@ package csvTest;
 import com.opencsv.bean.CsvBindByName;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Impression {
     private LocalDateTime date;
@@ -13,9 +14,21 @@ public class Impression {
 
     private String age;
 
+    private String income;
+
     private String context;
 
-    private String impressionCost;
+    private Double impressionCost;
+
+    public Impression(String[] input, DateTimeFormatter formatter) {
+        setDate(LocalDateTime.parse(input[0], formatter));
+        setUserId(input[1]);
+        setGender(input[2]);
+        setAge(input[3]);
+        setIncome(input[4]);
+        setContext(input[5]);
+        setImpressionCost(input[6]);
+    }
 
     public LocalDateTime getDate() {
         return date;
@@ -49,6 +62,14 @@ public class Impression {
         this.age = age;
     }
 
+    public String getIncome() {
+        return income;
+    }
+
+    public void setIncome(String income) {
+        this.income = income;
+    }
+
     public String getContext() {
         return context;
     }
@@ -57,12 +78,12 @@ public class Impression {
         this.context = context;
     }
 
-    public String getImpressionCost() {
+    public Double getImpressionCost() {
         return impressionCost;
     }
 
     public void setImpressionCost(String impressionCost) {
-        this.impressionCost = impressionCost;
+        this.impressionCost = Double.parseDouble(impressionCost);
     }
 
 //    @Override
