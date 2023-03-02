@@ -1,0 +1,15 @@
+.DashboardComp {
+  -fx-spacing: 40;
+  -fx-alignment: center;
+}
+
+.number {
+  -fx-text-fill: white;
+  -fx-font-size: 30px;
+  -fx-cursor: hand;
+}
+
+.text {
+  -fx-text-fill: white;
+  -fx-font-size: 40px;
+}
