@@ -3,9 +3,8 @@ package csvTest;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class CsvReader {
     private static final String IMPRESSION_LOG_FILEPATH = "src/main/resources/testData/2_week_campaign_2/impression_log.csv";
@@ -14,16 +13,22 @@ public class CsvReader {
     private static final String TWO_MONTH_IMPRESSION_LOG_FILEPATH = "/Users/chris/UniLocal/COMP2211/testData/2_month_campaign/impression_log.csv";
     private static final String TWO_MONTH_CLICK_LOG_FILEPATH = "/Users/chris/UniLocal/COMP2211/testData/2_month_campaign/click_log.csv";
 
-    private static List<Impression> inputImpressionList = null;
-    private static List<Click> inputClickList = null;
-    private static List<Server> inputServerList = null;
+    private static List<Impression> impressions = null;
+    private static List<Click> clicks = null;
+    private static List<Server> serverInteractions = null;
 
     public static void main(String[] args) {
         System.out.println("Loading, please wait...");
         //Get CSV data from all 3 log files (can be changed to for loop)
-        handleCSVInput(IMPRESSION_LOG_FILEPATH, "i");
-        handleCSVInput(CLICK_LOG_FILEPATH, "c");
-        handleCSVInput(SERVER_LOG_FILEPATH, "s");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//        try {
+//            impressions = splitArray(getReader(IMPRESSION_LOG_FILEPATH)).map((p) -> new Impression(p, formatter)).toList();
+//            clicks = splitArray(getReader(CLICK_LOG_FILEPATH)).map((p) -> new Click(p, formatter)).toList();
+//            serverInteractions = splitArray(getReader(SERVER_LOG_FILEPATH)).map((p) -> new Server(p, formatter)).toList();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+
 //            List<Impression> men = inputList.parallelStream().filter(p -> p.getGender().equals("Male")).toList();
 //            List<Impression> men = inputList.stream().filter(p -> p.getGender().equals("Male")).toList();
 //            List<Impression> dates = inputList.parallelStream().filter(p -> {
@@ -40,39 +45,14 @@ public class CsvReader {
 
     }
 
-    /**
-    Handles the incoming CSV and creates the related Java objects
-     */
-    private static void handleCSVInput(String filepath, String logType) {
-        try {
-            File inputF = new File(filepath);
-            InputStream inputFS = new FileInputStream(inputF);
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputFS));
+    private static BufferedReader getReader(String filepath) throws FileNotFoundException {
+        File inputF = new File(filepath);
+        InputStream inputFS = new FileInputStream(inputF);
+        return new BufferedReader(new InputStreamReader(inputFS));
+    }
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime start = LocalDateTime.parse("2015-02-01 12:01:21", formatter);
-            LocalDateTime end = LocalDateTime.parse("2015-03-01 12:01:21", formatter);
-
-            if (logType.equals("i")) {
-                inputImpressionList = br.lines().skip(1).map((line) -> {
-                    String[] p = split(line,',');
-                    return new Impression(p, formatter);
-                }).toList();
-            } else if (logType.equals("c")) {
-                inputClickList = br.lines().skip(1).map((line) -> {
-                    String[] p = split(line,',');
-                    return new Click(p, formatter);
-                }).toList();
-            } else {
-                inputServerList = br.lines().skip(1).map((line) -> {
-                    String[] p = split(line,',');
-                    return new Server(p, formatter);
-                }).toList();
-            }
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+    private static Stream<String[]> splitArray(BufferedReader br) {
+        return br.lines().skip(1).map((line) -> split(line,','));
     }
 
 //    /**
