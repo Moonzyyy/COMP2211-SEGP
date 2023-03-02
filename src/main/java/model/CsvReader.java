@@ -16,7 +16,7 @@ public class CsvReader {
     private static List<Click> clicks = null;
     private static List<Server> serverInteractions = null;
 
-    public static void main(String[] args) {
+    public CsvReader() {
         System.out.println("Loading, please wait...");
         //Get CSV data from all 3 log files (can be changed to for loop)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -27,21 +27,6 @@ public class CsvReader {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
-//            List<Impression> men = inputList.parallelStream().filter(p -> p.getGender().equals("Male")).toList();
-//            List<Impression> men = inputList.stream().filter(p -> p.getGender().equals("Male")).toList();
-//            List<Impression> dates = inputList.parallelStream().filter(p -> {
-//                var date = p.getDate();
-//                return date.isAfter(start) && date.isBefore(end);
-//            }).toList();
-//            System.out.println(dates);
-
-//            System.out.println(inputList.size());
-//            System.out.println(inputList.parallelStream().distinct());
-
-        //Commented out because inputlist was changed to 3 different types so function no longer works
-        //takeUserInput();
-
     }
 
     private static BufferedReader getReader(String filepath) throws FileNotFoundException {
@@ -53,37 +38,6 @@ public class CsvReader {
     private static Stream<String[]> splitArray(BufferedReader br) {
         return br.lines().skip(1).map((line) -> split(line,','));
     }
-
-//    /**
-//    Takes in the input from user for developers only. To disable comment the function in main function.
-//     */
-//    private static void takeUserInput() {
-//        Scanner scanner = new Scanner(System.in);
-//        System.out.println("Data loaded");
-//        if (inputList != null) {
-//            while (true) {
-//                System.out.println("Please choose a metric to check: \n 1: Total impression cost; \n 99: Exit");
-//                System.out.print("Option: ");
-//                while (!scanner.hasNextInt()) {
-//                    System.out.print("Please enter an integer: ");
-//                    scanner.next();
-//                }
-//                int option = scanner.nextInt();
-//                handleUserInput(option);
-//            }
-//        }
-//    }
-
-//    /**
-//    Executes the required function for the selected option.
-//     */
-//    private static void handleUserInput(int option) {
-//        switch (option) {
-//            case 1 -> System.out.println(inputList.parallelStream().mapToDouble(Impression::getImpressionCost).sum());
-//            case 99 -> System.exit(0);
-//            default -> System.out.println("Please enter a valid option");
-//        }
-//    }
 
     /**
     Slightly more efficient than String.split()
@@ -111,4 +65,17 @@ public class CsvReader {
 
         return result;
     }
+
+    public static List<Impression> getImpressions() {
+        return impressions;
+    }
+
+    public static List<Click> getClicks() {
+        return clicks;
+    }
+
+    public static List<Server> getServerInteractions() {
+        return serverInteractions;
+    }
+
 }

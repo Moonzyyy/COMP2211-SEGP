@@ -16,5 +16,6 @@ public class AdViz {
 
     public static void main(String[] args) {
         AdViz app = new AdViz();
+
     }
 }
