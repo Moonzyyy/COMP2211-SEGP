@@ -21,13 +21,13 @@ public class CsvReader {
         System.out.println("Loading, please wait...");
         //Get CSV data from all 3 log files (can be changed to for loop)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//        try {
-//            impressions = splitArray(getReader(IMPRESSION_LOG_FILEPATH)).map((p) -> new Impression(p, formatter)).toList();
-//            clicks = splitArray(getReader(CLICK_LOG_FILEPATH)).map((p) -> new Click(p, formatter)).toList();
-//            serverInteractions = splitArray(getReader(SERVER_LOG_FILEPATH)).map((p) -> new Server(p, formatter)).toList();
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
+        try {
+            impressions = splitArray(getReader(IMPRESSION_LOG_FILEPATH)).map((p) -> new Impression(p, formatter)).toList();
+            clicks = splitArray(getReader(CLICK_LOG_FILEPATH)).map((p) -> new Click(p, formatter)).toList();
+            serverInteractions = splitArray(getReader(SERVER_LOG_FILEPATH)).map((p) -> new Server(p, formatter)).toList();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
 //            List<Impression> men = inputList.parallelStream().filter(p -> p.getGender().equals("Male")).toList();
 //            List<Impression> men = inputList.stream().filter(p -> p.getGender().equals("Male")).toList();
