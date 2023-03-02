@@ -2,6 +2,7 @@ package com.adviz;
 
 import java.io.IOException;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
@@ -17,7 +18,10 @@ public class Main extends Application {
   //Start Menu
   @Override
   public void start(Stage stage) throws IOException {
-    //Simple start menu, no fxml
+
+
+    //Simple start menu
+
     Button startButton = new Button("Import");
     startButton.setOnAction(e -> {
       System.out.println("Import button clicked");
@@ -32,6 +36,8 @@ public class Main extends Application {
     var startButtonsVBox = new VBox();
     startButtonsVBox.getChildren().addAll(startButton, settingsButton);
     startBorderPane.setCenter(startButtonsVBox);
+    startButtonsVBox.setSpacing(20);
+    startButtonsVBox.setAlignment(Pos.CENTER);
 
     var scene = new Scene(startBorderPane, 300, 300);
 
