@@ -1,4 +1,4 @@
-module com.example.group30 {
+module com.adviz {
   requires javafx.controls;
   requires javafx.fxml;
   requires com.opencsv;
