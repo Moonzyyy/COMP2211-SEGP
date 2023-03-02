@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class CsvReader {
-    private static final String IMPRESSION_LOG_FILEPATH = "src/main/resources/testData/2_week_campaign_2/impression_log.csv";
-    private static final String CLICK_LOG_FILEPATH = "src/main/resources/testData/2_week_campaign_2/click_log.csv";
-    private static final String SERVER_LOG_FILEPATH = "src/main/resources/testData/2_week_campaign_2/server_log.csv";
-    private static final String TWO_MONTH_IMPRESSION_LOG_FILEPATH = "/Users/chris/UniLocal/COMP2211/testData/2_month_campaign/impression_log.csv";
-    private static final String TWO_MONTH_CLICK_LOG_FILEPATH = "/Users/chris/UniLocal/COMP2211/testData/2_month_campaign/click_log.csv";
+    private final String IMPRESSION_LOG_FILEPATH = "src/main/resources/testData/2_week_campaign_2/impression_log.csv";
+    private final String CLICK_LOG_FILEPATH = "src/main/resources/testData/2_week_campaign_2/click_log.csv";
+    private final String SERVER_LOG_FILEPATH = "src/main/resources/testData/2_week_campaign_2/server_log.csv";
+    private final String TWO_MONTH_IMPRESSION_LOG_FILEPATH = "/Users/chris/UniLocal/COMP2211/testData/2_month_campaign/impression_log.csv";
+    private final String TWO_MONTH_CLICK_LOG_FILEPATH = "/Users/chris/UniLocal/COMP2211/testData/2_month_campaign/click_log.csv";
 
-    private static List<Impression> impressions = null;
-    private static List<Click> clicks = null;
-    private static List<Server> serverInteractions = null;
+    private List<Impression> impressions = null;
+    private List<Click> clicks = null;
+    private List<Server> serverInteractions = null;
 
     public CsvReader() {
         System.out.println("Loading, please wait...");
@@ -29,13 +29,13 @@ public class CsvReader {
         }
     }
 
-    private static BufferedReader getReader(String filepath) throws FileNotFoundException {
+    private BufferedReader getReader(String filepath) throws FileNotFoundException {
         File inputF = new File(filepath);
         InputStream inputFS = new FileInputStream(inputF);
         return new BufferedReader(new InputStreamReader(inputFS));
     }
 
-    private static Stream<String[]> splitArray(BufferedReader br) {
+    private Stream<String[]> splitArray(BufferedReader br) {
         return br.lines().skip(1).map((line) -> split(line,','));
     }
 
@@ -44,7 +44,7 @@ public class CsvReader {
     @param line: the line to split
     @param delimiter: the character by which to split the string
      */
-    public static String[] split(final String line, final char delimiter)
+    public String[] split(final String line, final char delimiter)
     {
         CharSequence[] temp = new CharSequence[(line.length() / 2) + 1];
         int wordCount = 0;
@@ -66,15 +66,15 @@ public class CsvReader {
         return result;
     }
 
-    public static List<Impression> getImpressions() {
+    public List<Impression> getImpressions() {
         return impressions;
     }
 
-    public static List<Click> getClicks() {
+    public List<Click> getClicks() {
         return clicks;
     }
 
-    public static List<Server> getServerInteractions() {
+    public List<Server> getServerInteractions() {
         return serverInteractions;
     }
 
