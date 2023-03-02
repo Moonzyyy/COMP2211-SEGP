@@ -4,7 +4,7 @@ module com.adviz {
   requires com.opencsv;
   requires java.sql;
 
-  opens com.adviz to javafx.fxml;
-  exports com.adviz;
-  exports csvTest;
+  opens view to javafx.fxml;
+  exports view;
+  exports model;
 }
