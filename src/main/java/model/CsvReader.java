@@ -1,7 +1,6 @@
-package csvTest;
+package model;
 
 import java.io.*;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Stream;

@@ -1,6 +1,4 @@
-package csvTest;
-
-import com.opencsv.bean.CsvBindByName;
+package model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

@@ -1,4 +1,4 @@
-package com.example.group30;
+package view;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

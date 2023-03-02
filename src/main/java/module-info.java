@@ -4,7 +4,7 @@ module com.example.group30 {
   requires com.opencsv;
   requires java.sql;
 
-  opens com.example.group30 to javafx.fxml;
-  exports com.example.group30;
-  exports csvTest;
+  opens view to javafx.fxml;
+  exports view;
+  exports model;
 }
