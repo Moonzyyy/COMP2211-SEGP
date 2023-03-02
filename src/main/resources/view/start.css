@@ -1,0 +1,32 @@
+.startButton{
+    -fx-background-radius: 30;
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: black;
+    -fx-font-size: 25px;
+    -fx-font-family: "Roboto";
+    -fx-padding: 10;
+    -fx-cursor: hand;
+    -fx-pref-width: 200;
+}
+
+.startButton:hover{
+    -fx-background-color: #dedede;
+    -fx-text-fill: #121212;
+}
+
+.startButton:pressed{
+    -fx-background-color: #bfbfbf;
+    -fx-text-fill: #121212;
+}
+
+.title {
+    -fx-font-size: 100px;
+    -fx-font-family: "Roboto";
+    -fx-text-fill: #FFFFFF;
+    -fx-padding: 100 0 0 0;
+
+}
+
+.root {
+    -fx-background-color: #121212;
+}
