@@ -16,9 +16,7 @@ public class Model {
     }
 
     public void importData() {
-        System.out.println("Loading, please wait...");
         //Get CSV data from all 3 log files (can be changed to for loop)
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         CsvReader cr = new CsvReader();
         try {
             this.impressions = cr.getImpressions();
