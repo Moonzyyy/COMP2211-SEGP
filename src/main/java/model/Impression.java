@@ -47,7 +47,7 @@ public class Impression {
     }
 
     public void setUserId(String id) {
-        this.userId = userId;
+        this.userId = id;
     }
 
     public String getGender() {

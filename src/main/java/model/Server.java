@@ -42,7 +42,7 @@ public class Server {
     }
 
     public void setUserId(String id) {
-        this.userId = userId;
+        this.userId = id;
     }
 
     public int getTimeSpent() {

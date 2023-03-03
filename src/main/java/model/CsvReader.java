@@ -6,11 +6,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class CsvReader {
-    private final String IMPRESSION_LOG_FILEPATH = "src/main/resources/testData/2_week_campaign_2/impression_log.csv";
-    private final String CLICK_LOG_FILEPATH = "src/main/resources/testData/2_week_campaign_2/click_log.csv";
-    private final String SERVER_LOG_FILEPATH = "src/main/resources/testData/2_week_campaign_2/server_log.csv";
-    private final String TWO_MONTH_IMPRESSION_LOG_FILEPATH = "/Users/chris/UniLocal/COMP2211/testData/2_month_campaign/impression_log.csv";
-    private final String TWO_MONTH_CLICK_LOG_FILEPATH = "/Users/chris/UniLocal/COMP2211/testData/2_month_campaign/click_log.csv";
+    private final String IMPRESSION_LOG_FILEPATH = "src/test/TestData/impression_log.csv";
+    private final String CLICK_LOG_FILEPATH = "src/test/TestData/click_log.csv";
+    private final String SERVER_LOG_FILEPATH = "src/test/TestData/server_log.csv";
 
     private List<Impression> impressions = null;
     private List<Click> clicks = null;
