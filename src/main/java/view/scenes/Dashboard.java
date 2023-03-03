@@ -8,21 +8,20 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import view.AppView;
 import view.components.DashboardComp;
 
-public class Dashboard {
+public class Dashboard extends AbstractScene {
 
-  private final Stage stage;
   private final BorderPane layout;
-  private Scene scene;
 
-  public Dashboard(Stage stage) {
-    this.stage = stage;
+  public Dashboard(Stage stage, AppView view) {
+    super(stage, view);
     layout = new BorderPane();
     createScene();
   }
 
-  private void createScene() {
+  void createScene() {
     var titleBox = new VBox();
     titleBox.setAlignment(Pos.CENTER);
     var titleLabel = new Label("Dashboard");
@@ -30,14 +29,14 @@ public class Dashboard {
     titleBox.getChildren().add(titleLabel);
     layout.setTop(titleBox);
 
-    var dashboard = new DashboardComp(stage);
+    var dashboard = new DashboardComp(this, stage);
     dashboard.getStyleClass().add("dashboardComp");
     layout.setCenter(dashboard);
 
     //Make it so that the back button is circular, and at the bottom left of the screen.
     var backButton = new Button("<");
     backButton.setOnAction(e -> {
-      stage.setScene(new StartMenu(stage).getScene());
+      stage.setScene(new StartMenu(stage, getView()).getScene());
     });
     backButton.getStyleClass().add("backButton");
 
@@ -51,7 +50,4 @@ public class Dashboard {
     scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
   }
 
-  public Scene getScene() {
-    return scene;
-  }
 }

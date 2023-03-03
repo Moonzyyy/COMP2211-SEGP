@@ -9,20 +9,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import view.AppView;
 
-public class Graph {
+public class Graph extends AbstractScene {
 
-  private final Stage stage;
   private final BorderPane layout;
-  private Scene scene;
 
-  public Graph(Stage stage) {
-    this.stage = stage;
+  public Graph(Stage stage, AppView view) {
+    super(stage, view);
     layout = new BorderPane();
     createScene();
   }
 
-  private void createScene() {
+  void createScene() {
     scene = new Scene(layout, 800, 600);
     scene.getStylesheets().add(getClass().getResource("/view/graph.css").toExternalForm());
 
@@ -32,7 +31,7 @@ public class Graph {
 
     var homeButton = new Button("Home");
     homeButton.setOnAction(e -> {
-      stage.setScene(new Dashboard(stage).getScene());
+      getStage().setScene(new Dashboard(getStage(), getView()).getScene());
     });
     homeButton.getStyleClass().add("button");
     HBox.setHgrow(homeButton, Priority.ALWAYS);
@@ -58,7 +57,4 @@ public class Graph {
 
   }
 
-  public Scene getScene() {
-    return scene;
-  }
 }

@@ -5,12 +5,17 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import view.scenes.AbstractScene;
 import view.scenes.Graph;
+
+import java.util.*;
 
 // Creates a component that displays two rows of 6 clickable numbers that each have a piece of text below them.
 public class DashboardComp extends VBox {
 
-  public DashboardComp(Stage stage) {
+  public List<VBox> numberBoxes = new ArrayList<VBox>();
+
+  public DashboardComp(AbstractScene scene, Stage stage) {
     var row1 = new HBox();
     var row2 = new HBox();
     row1.setAlignment(Pos.CENTER);
@@ -30,7 +35,7 @@ public class DashboardComp extends VBox {
       int finalI = i;
       numberBox.setOnMouseClicked(e -> {
         System.out.println("Number " + finalI + " clicked");
-        stage.setScene(new Graph(stage).getScene());
+        stage.setScene(new Graph(stage, scene.getView()).getScene());
       });
       numberBox.getChildren().addAll(number, text);
       if (i <= 6) {
@@ -38,6 +43,7 @@ public class DashboardComp extends VBox {
       } else {
         row2.getChildren().add(numberBox);
       }
+      numberBoxes.add(numberBox);
     }
     this.getChildren().addAll(row1, row2);
     this.setSpacing(20);

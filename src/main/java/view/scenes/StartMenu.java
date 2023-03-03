@@ -7,27 +7,20 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import view.scenes.Dashboard;
+import view.AppView;
 
-public class StartMenu {
+public class StartMenu extends AbstractScene {
 
-  private final Stage stage;
-  private Scene scene;
-
-  public StartMenu(Stage stage) {
-    this.stage = stage;
+  public StartMenu(Stage stage, AppView view) {
+    super(stage, view);
     createScene();
   }
 
-  public Scene getScene() {
-    return scene;
-  }
-
-  private void createScene() {
+  void createScene() {
     Button startButton = new Button("Import");
     startButton.setOnAction(e -> {
       System.out.println("Import button clicked");
-      stage.setScene(new Dashboard(stage).getScene());
+      stage.setScene(new Dashboard(stage, view).getScene());
     });
     startButton.getStyleClass().add("startButton");
 

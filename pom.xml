@@ -44,6 +44,7 @@
       <artifactId>opencsv</artifactId>
       <version>5.7.1</version>
     </dependency>
+
   </dependencies>
 
   <build>
@@ -66,7 +67,7 @@
             <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
-              <mainClass>view.Main</mainClass>
+              <mainClass>view.AppView</mainClass>
             </configuration>
           </execution>
         </executions>
