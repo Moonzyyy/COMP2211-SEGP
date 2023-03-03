@@ -13,17 +13,22 @@ public class DashboardComp extends VBox {
     var row2 = new HBox();
     row1.setAlignment(Pos.CENTER);
     row2.setAlignment(Pos.CENTER);
-    row1.setSpacing(20);
-    row2.setSpacing(20);
-    row1.setPrefSize(800, 300);
-    row2.setPrefSize(800, 300);
+    row1.getStyleClass().add("row");
+    row2.getStyleClass().add("row");
+    row1.setPrefSize(800, 100);
+    row2.setPrefSize(800, 100);
     for (int i = 1; i <= 12; i++) {
       var number = new Label(String.valueOf(i));
       number.getStyleClass().add("number");
       var text = new Label("Text");
       text.getStyleClass().add("text");
       var numberBox = new VBox();
+      numberBox.getStyleClass().add("numberBox");
       numberBox.setAlignment(Pos.CENTER);
+      int finalI = i;
+      numberBox.setOnMouseClicked(e -> {
+        System.out.println("Number " + finalI + " clicked");
+      });
       numberBox.getChildren().addAll(number, text);
       if (i <= 6) {
         row1.getChildren().add(numberBox);
@@ -32,6 +37,7 @@ public class DashboardComp extends VBox {
       }
     }
     this.getChildren().addAll(row1, row2);
+    this.setSpacing(20);
   }
 
 }

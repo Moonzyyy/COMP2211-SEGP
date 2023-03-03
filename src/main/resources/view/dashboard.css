@@ -1,12 +1,12 @@
 .backButton {
-  -fx-background-radius: 50%;
-  -fx-background-color: #FFFFFF;
+  -fx-background-radius: 30;
+  -fx-background-color: #f2e9e4;
   -fx-text-fill: black;
   -fx-font-size: 11px;
   -fx-font-family: "Roboto";
   -fx-cursor: hand;
-  -fx-pref-width: 30;
-  -fx-pref-height: 30;
+  /*-fx-pref-width: 30;*/
+  -fx-padding: 5;
 }
 
 .backButton:hover {
@@ -25,6 +25,11 @@
   -fx-text-fill: #FFFFFF;
   -fx-padding: 20 0 0 0;
 
+}
+
+.dashboardComp{
+  -fx-spacing: 40;
+  -fx-alignment: center;
 }
 
 .root {

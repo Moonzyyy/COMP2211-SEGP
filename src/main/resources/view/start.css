@@ -1,6 +1,6 @@
 .startButton{
     -fx-background-radius: 30;
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: #f2e9e4;
     -fx-text-fill: black;
     -fx-font-size: 25px;
     -fx-font-family: "Roboto";
@@ -22,7 +22,7 @@
 .title {
     -fx-font-size: 100px;
     -fx-font-family: "Roboto";
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: #f2e9e4;
     -fx-padding: 100 0 0 0;
 
 }

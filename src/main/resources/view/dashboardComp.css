@@ -6,10 +6,27 @@
 .number {
   -fx-text-fill: white;
   -fx-font-size: 30px;
-  -fx-cursor: hand;
 }
 
 .text {
   -fx-text-fill: white;
   -fx-font-size: 40px;
+}
+
+.row {
+  -fx-spacing: 10;
+  -fx-alignment: center;
+}
+
+.numberBox {
+  -fx-background-radius: 10;
+  -fx-background-color: #808B9F;
+  -fx-opacity: 0.8;
+  -fx-padding: 15;
+  -fx-cursor: hand;
+}
+
+.numberBox:hover {
+  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 0);
+  -fx-text-fill: #121212;
 }

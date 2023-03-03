@@ -31,10 +31,11 @@ public class Dashboard {
     layout.setTop(titleBox);
 
     var dashboard = new DashboardComp();
+    dashboard.getStyleClass().add("dashboardComp");
     layout.setCenter(dashboard);
 
     //Make it so that the back button is circular, and at the bottom left of the screen.
-    var backButton = new Button("<-");
+    var backButton = new Button("<");
     backButton.setOnAction(e -> {
       stage.setScene(new StartMenu(stage).getScene());
     });
@@ -42,6 +43,7 @@ public class Dashboard {
 
     BorderPane.setMargin(backButton, new Insets(0, 0, 10, 10));
     BorderPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
+    BorderPane.setAlignment(dashboard, Pos.CENTER);
     layout.setBottom(backButton);
 
     scene = new Scene(layout, 800, 600);
