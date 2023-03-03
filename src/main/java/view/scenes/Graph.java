@@ -50,7 +50,7 @@ public class Graph extends AbstractScene {
     topBar.getChildren().addAll(homeButton, graphTitle, printButton, compareButton);
     layout.setTop(topBar);
 
-    var graph = new Rectangle();
+    var graph = new Rectangle(600, 400);
     graph.getStyleClass().add("graph");
     layout.setCenter(graph);
 
