@@ -7,4 +7,6 @@ module com.adviz {
   opens view to javafx.fxml;
   exports view;
   exports model;
+  exports view.scenes;
+  opens view.scenes to javafx.fxml;
 }

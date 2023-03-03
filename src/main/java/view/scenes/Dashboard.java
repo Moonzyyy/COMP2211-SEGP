@@ -1,5 +1,6 @@
-package view;
+package view.scenes;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -7,13 +8,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import view.Components.DashboardComp;
+import view.components.DashboardComp;
 
 public class Dashboard {
 
   private final Stage stage;
-  private Scene scene;
   private final BorderPane layout;
+  private Scene scene;
 
   public Dashboard(Stage stage) {
     this.stage = stage;
@@ -32,17 +33,20 @@ public class Dashboard {
     var dashboard = new DashboardComp();
     layout.setCenter(dashboard);
 
-    var backButton = new Button("Back");
+    //Make it so that the back button is circular, and at the bottom left of the screen.
+    var backButton = new Button("<-");
     backButton.setOnAction(e -> {
       stage.setScene(new StartMenu(stage).getScene());
     });
-    backButton.getStyleClass().add("startButton");
+    backButton.getStyleClass().add("backButton");
+
+    BorderPane.setMargin(backButton, new Insets(0, 0, 10, 10));
+    BorderPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
     layout.setBottom(backButton);
 
-
     scene = new Scene(layout, 800, 600);
-    scene.getStylesheets().add(getClass().getResource("dashboard.css").toExternalForm());
-    scene.getStylesheets().add(getClass().getResource("dashboardComp.css").toExternalForm());
+    scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
+    scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
   }
 
   public Scene getScene() {

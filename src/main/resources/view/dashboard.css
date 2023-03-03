@@ -1,20 +1,20 @@
-.startButton {
-  -fx-background-radius: 30;
+.backButton {
+  -fx-background-radius: 50%;
   -fx-background-color: #FFFFFF;
   -fx-text-fill: black;
-  -fx-font-size: 25px;
+  -fx-font-size: 11px;
   -fx-font-family: "Roboto";
-  -fx-padding: 10;
   -fx-cursor: hand;
-  -fx-pref-width: 200;
+  -fx-pref-width: 30;
+  -fx-pref-height: 30;
 }
 
-.startButton:hover {
+.backButton:hover {
   -fx-background-color: #dedede;
   -fx-text-fill: #121212;
 }
 
-.startButton:pressed {
+.backButton:pressed {
   -fx-background-color: #bfbfbf;
   -fx-text-fill: #121212;
 }

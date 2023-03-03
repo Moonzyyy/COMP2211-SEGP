@@ -1,4 +1,4 @@
-package view;
+package view.scenes;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import view.scenes.Dashboard;
 
 public class StartMenu {
 
@@ -54,6 +55,6 @@ public class StartMenu {
     startBorderPane.setCenter(startButtonsVBox);
 
     scene = new Scene(startBorderPane, 800, 600);
-    scene.getStylesheets().add(getClass().getResource("start.css").toExternalForm());
+    scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
   }
 }

@@ -1,4 +1,4 @@
-package view.Components;
+package view.components;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -13,6 +13,8 @@ public class DashboardComp extends VBox {
     var row2 = new HBox();
     row1.setAlignment(Pos.CENTER);
     row2.setAlignment(Pos.CENTER);
+    row1.setSpacing(20);
+    row2.setSpacing(20);
     row1.setPrefSize(800, 300);
     row2.setPrefSize(800, 300);
     for (int i = 1; i <= 12; i++) {
