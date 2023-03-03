@@ -30,7 +30,7 @@ public class Dashboard {
     titleBox.getChildren().add(titleLabel);
     layout.setTop(titleBox);
 
-    var dashboard = new DashboardComp();
+    var dashboard = new DashboardComp(stage);
     dashboard.getStyleClass().add("dashboardComp");
     layout.setCenter(dashboard);
 

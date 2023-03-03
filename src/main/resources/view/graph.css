@@ -1,0 +1,37 @@
+.topBar{
+  -fx-pref-height: 49;
+  -fx-pref-width: 100%;
+  -fx-spacing: 50;
+  -fx-alignment: center;
+}
+
+.graph{
+
+}
+
+.graphTitle{
+  -fx-font-size: 20;
+  -fx-font-weight: bold;
+  -fx-text-fill: #000000;
+  -fx-alignment: center;
+}
+
+.compare{
+  -fx-alignment: center-right;
+  -fx-nodeorientation: left-to-right;
+}
+
+.button{
+  -fx-background-radius: 30;
+  -fx-background-color: #f2e9e4;
+  -fx-text-fill: black;
+  -fx-font-size: 16px;
+  -fx-font-family: "Roboto";
+  -fx-padding: 10;
+  -fx-cursor: hand;
+  -fx-pref-width: 100;
+}
+
+.root {
+  -fx-background-color: #121212;
+}

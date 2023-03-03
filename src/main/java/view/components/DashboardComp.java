@@ -4,11 +4,13 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import view.scenes.Graph;
 
 // Creates a component that displays two rows of 6 clickable numbers that each have a piece of text below them.
 public class DashboardComp extends VBox {
 
-  public DashboardComp() {
+  public DashboardComp(Stage stage) {
     var row1 = new HBox();
     var row2 = new HBox();
     row1.setAlignment(Pos.CENTER);
@@ -28,6 +30,7 @@ public class DashboardComp extends VBox {
       int finalI = i;
       numberBox.setOnMouseClicked(e -> {
         System.out.println("Number " + finalI + " clicked");
+        stage.setScene(new Graph(stage).getScene());
       });
       numberBox.getChildren().addAll(number, text);
       if (i <= 6) {
