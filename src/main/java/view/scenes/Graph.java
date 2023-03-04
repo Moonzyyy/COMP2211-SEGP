@@ -34,7 +34,7 @@ public class Graph extends AbstractScene {
   }
 
   void createScene() {
-    scene = new Scene(layout, 800, 600);
+    scene = new Scene(layout, 1280, 720);
     scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
 
     var topBar = new HBox();

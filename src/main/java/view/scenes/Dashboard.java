@@ -53,7 +53,7 @@ public class Dashboard extends AbstractScene {
     BorderPane.setAlignment(dashboard, Pos.CENTER);
     layout.setBottom(backButton);
 
-    scene = new Scene(layout, 800, 600);
+    scene = new Scene(layout, 1280, 720);
     scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
     scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
   }

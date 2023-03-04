@@ -101,7 +101,7 @@ public class Settings extends AbstractScene{
         settingsPane.setBottom(backButton);
         BorderPane.setMargin(backButton, new Insets(0, 0, 10, 10));
 
-        Scene settingsScene = new Scene(settingsPane, 800, 600);
+        Scene settingsScene = new Scene(settingsPane, 1280, 720);
         settingsScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/view/settings.css")).toExternalForm());
         setScene(settingsScene);
     }

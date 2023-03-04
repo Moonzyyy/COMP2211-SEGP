@@ -48,7 +48,7 @@ public class StartMenu extends AbstractScene {
     startBorderPane.setTop(startTitle);
     startBorderPane.setCenter(startButtonsVBox);
 
-    scene = new Scene(startBorderPane, 800, 600);
+    scene = new Scene(startBorderPane, 1280, 720);
     scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
   }
 }

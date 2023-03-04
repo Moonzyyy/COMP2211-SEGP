@@ -24,11 +24,46 @@ public class DashboardComp extends VBox {
     row2.getStyleClass().add("row");
     row1.setPrefSize(800, 100);
     row2.setPrefSize(800, 100);
-    for (int i = 1; i <= 12; i++) {
+    for (int i = 1; i <= 11; i++) {
       var number = new Label(String.valueOf(i));
       number.getStyleClass().add("number");
-      var text = new Label("Text");
+      var text = new Label();
       text.getStyleClass().add("text");
+      switch (i) {
+        case 1:
+          text.setText("Impressions");
+          break;
+        case 2:
+          text.setText("Clicks");
+          break;
+        case 3:
+          text.setText("Bounces");
+          break;
+        case 4:
+          text.setText("Conversions");
+          break;
+        case 5:
+          text.setText("Cost");
+          break;
+        case 6:
+          text.setText("CTR");
+          break;
+        case 7:
+          text.setText("CPA");
+          break;
+        case 8:
+          text.setText("CPC");
+          break;
+        case 9:
+          text.setText("CPM");
+          break;
+        case 10:
+          text.setText("Bounce Rate");
+          break;
+        case 11:
+          text.setText("Uniques");
+          break;
+      }
       var numberBox = new VBox();
       numberBox.getStyleClass().add("numberBox");
       numberBox.setAlignment(Pos.CENTER);
