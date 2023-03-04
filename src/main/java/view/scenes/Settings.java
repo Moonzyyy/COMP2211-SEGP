@@ -25,7 +25,7 @@ public class Settings extends AbstractScene{
     void createScene() {
         BorderPane settingsPane = new BorderPane();
 
-        // Create a label for the page title
+
         Label titleLabel = new Label("Settings");
         titleLabel.setStyle("-fx-text-fill: white;");
         var titleBox = new HBox(titleLabel);
@@ -33,7 +33,7 @@ public class Settings extends AbstractScene{
         titleBox.setAlignment(Pos.CENTER);
         settingsPane.setTop(titleBox);
 
-        // Create a dropdown menu for the text font
+
         Label fontLabel = new Label("Text Font:");
         fontLabel.setStyle("-fx-text-fill: white; -fx-font-size: 25px;");
         ComboBox<String> fontDropdown = new ComboBox<>();
@@ -43,14 +43,14 @@ public class Settings extends AbstractScene{
         fontBox.setAlignment(Pos.CENTER);
         fontBox.setSpacing(10);
 
-        // Create a label for the text size
+
         Label sizeLabel = new Label("Text Size:");
         sizeLabel.setStyle("-fx-text-fill: white; -fx-font-size: 25px;");
         HBox sizeLabelBox = new HBox(sizeLabel);
         sizeLabelBox.setAlignment(Pos.CENTER);
         sizeLabelBox.setSpacing(10);
 
-        // Create a button for decreasing font size
+
         Button decreaseButton = new Button("-");
         decreaseButton.setStyle("-fx-font-size: 25px;");
         decreaseButton.setOnAction(e -> {
@@ -59,7 +59,7 @@ public class Settings extends AbstractScene{
         decreaseButton.getStyleClass().add("button");
         decreaseButton.setStyle("-fx-font-size: 18px;");
 
-        // Create a button for increasing font size
+
         Button increaseButton = new Button("+");
         increaseButton.setStyle("-fx-font-size: 25px;");
         increaseButton.setOnAction(e -> {
@@ -75,7 +75,7 @@ public class Settings extends AbstractScene{
         sizeBox.setAlignment(Pos.CENTER);
         sizeBox.setSpacing(10);
 
-        // Create a dropdown menu for the colour scheme
+
         Label themeLabel = new Label("Colour Scheme:");
         themeLabel.setStyle("-fx-text-fill: white; -fx-font-size: 25px;");
         ComboBox<String> themeDropdown = new ComboBox<>();
@@ -85,13 +85,13 @@ public class Settings extends AbstractScene{
         themeBox.setAlignment(Pos.CENTER);
         themeBox.setSpacing(10);
 
-        // Create a VBox to align the controls vertically
+
         VBox controls = new VBox(fontBox, sizeBox, themeBox);
         controls.setAlignment(Pos.CENTER);
         controls.setSpacing(20);
         settingsPane.setCenter(controls);
 
-        // Create a button for the bottom left corner
+
         Button backButton = new Button("<");
         backButton.setOnAction(e -> {
             stage.setScene(new StartMenu(stage, getView()).getScene());
