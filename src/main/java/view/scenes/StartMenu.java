@@ -16,6 +16,9 @@ public class StartMenu extends AbstractScene {
     createScene();
   }
 
+  /**
+   * Creates the scene for the start menu.
+   */
   void createScene() {
     Button startButton = new Button("Import");
     startButton.setOnAction(e -> {

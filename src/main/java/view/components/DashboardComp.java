@@ -1,5 +1,7 @@
 package view.components;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -8,80 +10,88 @@ import javafx.stage.Stage;
 import view.scenes.AbstractScene;
 import view.scenes.Graph;
 
-import java.util.*;
-
-// Creates a component that displays two rows of 6 clickable numbers that each have a piece of text below them.
 public class DashboardComp extends VBox {
 
-  public List<VBox> numberBoxes = new ArrayList<VBox>();
+  private final List<VBox> numberBoxes = new ArrayList<>();
 
   public DashboardComp(AbstractScene scene, Stage stage) {
-    var row1 = new HBox();
-    var row2 = new HBox();
-    row1.setAlignment(Pos.CENTER);
-    row2.setAlignment(Pos.CENTER);
-    row1.getStyleClass().add("row");
-    row2.getStyleClass().add("row");
-    row1.setPrefSize(800, 100);
-    row2.setPrefSize(800, 100);
-    for (int i = 1; i <= 11; i++) {
-      var number = new Label(String.valueOf(i));
-      number.getStyleClass().add("number");
-      var text = new Label();
-      text.getStyleClass().add("text");
-      switch (i) {
-        case 1:
-          text.setText("Impressions");
-          break;
-        case 2:
-          text.setText("Clicks");
-          break;
-        case 3:
-          text.setText("Bounces");
-          break;
-        case 4:
-          text.setText("Conversions");
-          break;
-        case 5:
-          text.setText("Cost");
-          break;
-        case 6:
-          text.setText("CTR");
-          break;
-        case 7:
-          text.setText("CPA");
-          break;
-        case 8:
-          text.setText("CPC");
-          break;
-        case 9:
-          text.setText("CPM");
-          break;
-        case 10:
-          text.setText("Bounce Rate");
-          break;
-        case 11:
-          text.setText("Uniques");
-          break;
+    setAlignment(Pos.CENTER);
+    setSpacing(20);
+
+    final int boxesPerRow = 6;
+    final int totalBoxes = 11;
+    final int rows = (int) Math.ceil((double) totalBoxes / boxesPerRow);
+
+    for (int i = 0; i < rows; i++) {
+      final HBox row = new HBox();
+      row.setAlignment(Pos.CENTER);
+      row.getStyleClass().add("row");
+      row.setPrefWidth(USE_COMPUTED_SIZE);
+      row.setPrefHeight(USE_COMPUTED_SIZE);
+
+      for (int j = 0; j < boxesPerRow && i * boxesPerRow + j < totalBoxes; j++) {
+        final int number = i * boxesPerRow + j + 1;
+        final String text = getLabelText(number);
+        final VBox numberBox = createNumberBox(number, text, scene, stage);
+        row.getChildren().add(numberBox);
+        numberBoxes.add(numberBox);
       }
-      var numberBox = new VBox();
-      numberBox.getStyleClass().add("numberBox");
-      numberBox.setAlignment(Pos.CENTER);
-      int finalI = i;
-      numberBox.setOnMouseClicked(e -> {
-        System.out.println("Number " + finalI + " clicked");
-        stage.setScene(new Graph(stage, scene.getView()).getScene());
-      });
-      numberBox.getChildren().addAll(number, text);
-      if (i <= 6) {
-        row1.getChildren().add(numberBox);
-      } else {
-        row2.getChildren().add(numberBox);
-      }
-      numberBoxes.add(numberBox);
+
+      getChildren().add(row);
     }
-    this.getChildren().addAll(row1, row2);
-    this.setSpacing(20);
   }
 
+  private String getLabelText(int number) {
+    switch (number) {
+      case 1:
+        return "Impressions";
+      case 2:
+        return "Clicks";
+      case 3:
+        return "Bounces";
+      case 4:
+        return "Conversions";
+      case 5:
+        return "Cost";
+      case 6:
+        return "CTR";
+      case 7:
+        return "CPA";
+      case 8:
+        return "CPC";
+      case 9:
+        return "CPM";
+      case 10:
+        return "Bounce Rate";
+      case 11:
+        return "Uniques";
+      default:
+        return "";
+    }
+  }
+
+  private VBox createNumberBox(int number, String text, AbstractScene scene, Stage stage) {
+    final Label numberLabel = new Label(Integer.toString(number));
+    numberLabel.getStyleClass().add("number");
+
+    final Label textLabel = new Label(text);
+    textLabel.getStyleClass().add("text");
+
+    final VBox numberBox = new VBox(numberLabel, textLabel);
+    numberBox.getStyleClass().add("numberBox");
+    numberBox.setAlignment(Pos.CENTER);
+    numberBox.setPrefWidth(USE_COMPUTED_SIZE);
+    numberBox.setPrefHeight(USE_COMPUTED_SIZE);
+
+    numberBox.setOnMouseClicked(e -> {
+      System.out.println("Number " + number + " clicked");
+      stage.setScene(new Graph(stage, scene.getView()).getScene());
+    });
+
+    return numberBox;
+  }
+
+  public List<VBox> getNumberBoxes() {
+    return numberBoxes;
+  }
 }

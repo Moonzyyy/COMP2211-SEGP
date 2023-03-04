@@ -4,32 +4,36 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import view.AppView;
 
+/**
+ * Abstract class for all scenes in the application.
+ */
 abstract public class AbstractScene {
-    protected final AppView view;
-    protected Scene scene;
-    protected final Stage stage;
 
-    AbstractScene(Stage stage, AppView view) {
-        this.view = view;
-        this.stage = stage;
-    }
+  protected final AppView view;
+  protected final Stage stage;
+  protected Scene scene;
 
-    public Scene getScene() {
-        return scene;
-    }
+  AbstractScene(Stage stage, AppView view) {
+    this.view = view;
+    this.stage = stage;
+  }
 
-    public void setScene(Scene scene) {
-        this.scene = scene;
-    }
+  public Scene getScene() {
+    return scene;
+  }
 
-    public Stage getStage() {
-        return stage;
-    }
+  public void setScene(Scene scene) {
+    this.scene = scene;
+  }
 
-    public AppView getView() {
-        return view;
-    }
+  public Stage getStage() {
+    return stage;
+  }
 
-    abstract void createScene();
+  public AppView getView() {
+    return view;
+  }
+
+  abstract void createScene();
 
 }
