@@ -39,33 +39,33 @@ public class Model {
     //Return number of uniques; (Distinct IDs from Click log)
     public int numberOfUniques()
     {
-        return 0;
+        return clicks.size();
     }
 
     //Return number of Conversions; (Conversions which are true)
     public int numberOfConversions()
     {
-        return 0;
+        return (int) serverInteractions.stream().filter(Server::getConversion).count();
     }
 
     //Bounce is defined by user in later sprints. For now keep it as number of page viewed = 1;
     public int numberOfBounces()
     {
-        return 0;
+        return (int) serverInteractions.stream().filter(Server -> !Server.getConversion() && Server.getPagesViewed() <= 1).count();
     }
 
-    //Bounce Rate:	The	average	number	of	bounces	per	click
+    //Bounce Rate:	The	average	number of bounces per click
     //Convert ints to doubles before doing any calculations
     //return double in 3.dp
     public double bounceRate()
     {
-        return 0.0;
+        return Math.round(((double) numberOfBounces() / (double) totalClicks()) * 1000d) / 1000d;
     }
 
     //TotalCost = Click Cost + Impression Cost
     public double totalCost()
     {
-        return 0.0;
+        return impressions.stream().mapToDouble(Impression::getImpressionCost).sum() + clicks.stream().mapToDouble(Click::getClickCost).sum();
     }
 
     //Click-through-rate	(CTR):	The	average	number	of	clicks	per	impression
@@ -73,7 +73,7 @@ public class Model {
     //return double in 3.dp
     public Double clickThroughRate()
     {
-        return 0.0;
+        return Math.round(((double) totalClicks() / (double) totalImpressions()) * 1000d) / 1000d;
     }
 
     //Cost-per-click	(CPC):	The	average	amount	of	money spent	on	an	advertising	campaign	for	each click
@@ -81,7 +81,7 @@ public class Model {
     //return double in 3.dp
     public Double costPerClick()
     {
-        return 0.0;
+        return Math.round((clicks.stream().mapToDouble(Click::getClickCost).sum() / (double) totalClicks()) * 1000d) / 1000d;
     }
 
     //Cost-per-acquisition	(CPA):	The	average	amount	of	money	spent	on	an	advertising	campaign for	each	acquisition	(i.e.,	conversion).
@@ -89,9 +89,6 @@ public class Model {
     //return double in 3.dp
     public Double costPerAcquisition()
     {
-        return 0.0;
+        return Math.round((totalCost() / (double) serverInteractions.stream().filter(Server::getConversion).count()) * 1000d) / 1000d;
     }
-
-
-
 }
