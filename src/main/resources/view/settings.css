@@ -1,0 +1,45 @@
+.backButton {
+    -fx-background-radius: 30;
+    -fx-background-color: #f2e9e4;
+    -fx-text-fill: black;
+    -fx-font-size: 11px;
+    -fx-font-family: "Roboto";
+    -fx-cursor: hand;
+    -fx-padding: 5;
+}
+.backButton:hover {
+    -fx-background-color: #dedede;
+    -fx-text-fill: #121212;
+}
+
+.backButton:pressed {
+    -fx-background-color: #bfbfbf;
+    -fx-text-fill: #121212;
+}
+.button {
+    -fx-background-color: #f2e9e4;
+    -fx-text-fill: black;
+    -fx-font-size: 11px;
+    -fx-font-family: "Roboto";
+    -fx-cursor: hand;
+    -fx-padding: 5;
+}
+.button:hover {
+    -fx-background-color: #dedede;
+    -fx-text-fill: #121212;
+}
+
+.button:pressed {
+    -fx-background-color: #bfbfbf;
+    -fx-text-fill: #121212;
+}
+.title {
+    -fx-font-size: 60px;
+    -fx-font-family: "Roboto";
+    -fx-text-fill: #FFFFFF;
+    -fx-padding: 20 0 0 0;
+
+}
+.root {
+    -fx-background-color: #121212;
+}

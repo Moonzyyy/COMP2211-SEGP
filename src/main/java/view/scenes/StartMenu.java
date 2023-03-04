@@ -27,6 +27,7 @@ public class StartMenu extends AbstractScene {
     Button settingsButton = new Button("Settings");
     settingsButton.setOnAction(e -> {
       System.out.println("Settings button clicked");
+      stage.setScene(new Settings(stage, view).getScene() );
     });
     settingsButton.getStyleClass().add("startButton");
 

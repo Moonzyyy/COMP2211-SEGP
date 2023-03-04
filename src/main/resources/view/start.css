@@ -1,3 +1,17 @@
+.root {
+    -fx-background-color: #171515;
+}
+
+.button {
+    -fx-background-color: #4c4c4c;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 30;
+}
+
+.botton:hover {
+    -fx-background-color: #282828;
+}
 .startButton{
     -fx-background-radius: 30;
     -fx-background-color: #f2e9e4;
