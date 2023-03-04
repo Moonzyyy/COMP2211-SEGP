@@ -77,7 +77,7 @@ public class Model {
     //TotalCost = Click Cost + Impression Cost
     public double totalCost()
     {
-        return Math.round(impressions.stream().mapToDouble(Impression::getImpressionCost).sum() + clicks.stream().mapToDouble(Click::getClickCost).sum() * 1000d) / 1000d;
+        return Math.round((impressions.stream().mapToDouble(Impression::getImpressionCost).sum() + clicks.stream().mapToDouble(Click::getClickCost).sum()) * 1000d) / 1000d;
     }
 
     //Click-through-rate	(CTR):	The	average	number	of	clicks	per	impression

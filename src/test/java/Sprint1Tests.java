@@ -70,7 +70,7 @@ public class Sprint1Tests {
   {
     if(model.totalCost() != 113545.694)
     {
-      fail("Bounce rate is not calculated correctly."
+      fail("Total cost is not calculated correctly."
           + "\n Expected: 113545.694 (3 dp) || Actual: " + model.totalCost()
           + "\n Click Costs: 103303.5723070003 || Impression Cost: 10242.12170000238");
     }
@@ -92,7 +92,7 @@ public class Sprint1Tests {
   {
     if(model.costPerClick() != 5.819)
     {
-      fail("Bounce rate is not calculated correctly."
+      fail("cost-per-click is not calculated correctly."
           + "\n Expected: 5.819 (3 dp) || Actual: " + model.costPerClick()
           + "\n Click Cost: 103303.5723070003 || Total Clicks: 17754");
     }
@@ -103,8 +103,8 @@ public class Sprint1Tests {
   {
     if(model.costPerAcquisition() != 166.002)
     {
-      fail("Bounce rate is not calculated correctly."
-          + "\n Expected: 166.002(3 dp) || Actual: " + model.costPerClick()
+      fail("Cost-per-acquisition is not calculated correctly."
+          + "\n Expected: 166.002(3 dp) || Actual: " + model.costPerAcquisition()
           + "\n Number of Conversions: 684 || Total Cost: 113545.694");
     }
   }
