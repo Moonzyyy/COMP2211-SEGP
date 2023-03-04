@@ -36,7 +36,7 @@ public class Dashboard extends AbstractScene {
     dashboard.getStyleClass().add("dashboardComp");
     layout.setCenter(dashboard);
 
-    //Make it so that the back button is circular, and at the bottom left of the screen.
+    //Make it so that the back button is circular
     var backButton = new Button("<");
     backButton.setOnAction(e -> {
       stage.setScene(new StartMenu(stage, getView()).getScene());

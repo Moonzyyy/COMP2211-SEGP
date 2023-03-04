@@ -32,6 +32,6 @@
 
 .numberBox:hover {
   /*Material design hover effect*/
-  -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.9), 0, 0, 2, 2);
+  -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.3), 0, 0, 2, 2);
   -fx-text-fill: #121212;
 }
