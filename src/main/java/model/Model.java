@@ -71,8 +71,7 @@ public class Model {
     //return double in 3.dp
     public double bounceRate()
     {
-        BigDecimal bRate = BigDecimal.valueOf((double) numberOfBounces() / (double) totalClicks()).setScale(3, RoundingMode.HALF_EVEN);
-        return bRate.doubleValue();
+        return Math.round(((double) numberOfBounces() / (double) totalClicks()) * 1000d) / 1000d;
     }
 
     //TotalCost = Click Cost + Impression Cost
