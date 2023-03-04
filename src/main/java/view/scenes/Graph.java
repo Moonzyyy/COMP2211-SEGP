@@ -3,6 +3,7 @@ package view.scenes;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -19,6 +20,7 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.chart.ChartPanel;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Graph extends AbstractScene {
@@ -97,7 +99,34 @@ public class Graph extends AbstractScene {
 
     layout.setCenter(swingNode);
 
+    var filterBar = new HBox();
+    filterBar.setAlignment(Pos.CENTER);
 
+    var startDatePicker = new DatePicker();
+    var endDatePicker = new DatePicker();
+
+
+    var filterButton = new Button("Filter");
+    filterButton.setOnAction(e -> {
+      LocalDate startDate = startDatePicker.getValue();
+      LocalDate endDate = endDatePicker.getValue();
+      if (startDate != null && endDate != null) {
+
+        TimeSeries filteredSeries = new TimeSeries("Filtered Clicks");
+        for (int i = 0; i < clicksSeries.getItemCount(); i++) {
+          Day day = (Day) clicksSeries.getTimePeriod(i);
+          if (day.compareTo(new Day(((LocalDate) startDate).getDayOfMonth(), startDate.getMonthValue(), startDate.getYear())) >= 0
+                  && day.compareTo(new Day(endDate.getDayOfMonth(), endDate.getMonthValue(), endDate.getYear())) <= 0) {
+            filteredSeries.add(clicksSeries.getDataItem(i));
+          }
+        }
+
+        dataset.removeAllSeries();
+        dataset.addSeries(filteredSeries);
+      }
+    });
+    filterBar.getChildren().addAll( startDatePicker, endDatePicker, filterButton);
+    layout.setBottom(filterBar);
   }
 
 }
