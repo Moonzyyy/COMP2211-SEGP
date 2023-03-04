@@ -27,7 +27,6 @@ public class Model {
             System.out.println(e.getMessage());
         }
     }
-
     public int totalImpressions()
     {
         return impressions.size();

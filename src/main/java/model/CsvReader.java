@@ -19,9 +19,15 @@ public class CsvReader {
         //Get CSV data from all 3 log files (can be changed to for loop)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
-            impressions = splitArray(getReader(IMPRESSION_LOG_FILEPATH)).map((p) -> new Impression(p, formatter)).toList();
-            clicks = splitArray(getReader(CLICK_LOG_FILEPATH)).map((p) -> new Click(p, formatter)).toList();
-            serverInteractions = splitArray(getReader(SERVER_LOG_FILEPATH)).map((p) -> new Server(p, formatter)).toList();
+            var iReader = getReader(IMPRESSION_LOG_FILEPATH);
+            impressions = splitArray(iReader).map((p) -> new Impression(p, formatter)).toList();
+            iReader.close();
+            var cReader = getReader(CLICK_LOG_FILEPATH);
+            clicks = splitArray(cReader).map((p) -> new Click(p, formatter)).toList();
+            cReader.close();
+            var sReader = getReader(SERVER_LOG_FILEPATH);
+            serverInteractions = splitArray(sReader).map((p) -> new Server(p, formatter)).toList();
+            sReader.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -34,7 +40,7 @@ public class CsvReader {
     }
 
     private Stream<String[]> splitArray(BufferedReader br) {
-        return br.lines().skip(1).map((line) -> split(line,','));
+        return br.lines().skip(1).parallel().map((line) -> split(line,','));
     }
 
     /**
