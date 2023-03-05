@@ -14,7 +14,7 @@
 }
 
 .row {
-  -fx-spacing: 10;
+  -fx-spacing: 20;
   -fx-alignment: center;
 }
 
@@ -22,7 +22,8 @@
   -fx-background-radius: 10;
   -fx-background-color: #808B9F;
   -fx-opacity: 0.8;
-  -fx-padding: 15;
+  -fx-padding: 10;
+  -fx-spacing: 15;
   -fx-cursor: hand;
   -fx-pref-width: 150;
   -fx-pref-height: 150;
@@ -33,5 +34,18 @@
 .numberBox:hover {
   /*Material design hover effect*/
   -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.3), 0, 0, 2, 2);
-  -fx-text-fill: #121212;
+}
+
+.numberBox:hover .text {
+  -fx-font-size: 20px;
+  -fx-font-weight: bold;
+  -fx-translate-x: -2;
+  -fx-translate-y: -2;
+}
+
+.numberBox:hover .number {
+  -fx-font-size: 30px;
+  -fx-font-weight: bold;
+  -fx-translate-x: -2;
+  -fx-translate-y: -2;
 }
