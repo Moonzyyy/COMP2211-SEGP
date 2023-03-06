@@ -5,9 +5,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import view.scenes.StartMenu;
 
-import java.awt.event.ActionListener;
-
-
 public class AppView {
 
 private StartMenu sm = null;
