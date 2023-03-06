@@ -7,7 +7,7 @@ import view.AppView;
 import view.scenes.StartMenu;
 
 public class AdViz extends Application {
-    private AppView theView;
+    private AppView theView ;
     private Model theModel;
     private Controller theController;
 

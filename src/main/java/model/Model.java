@@ -4,6 +4,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -103,4 +104,30 @@ public class Model {
     {
         return Math.round((totalCost() / (double) serverInteractions.stream().filter(Server::getConversion).count()) * 1000d) / 1000d;
     }
+
+    //Cost-per-thousand-impressions(CPM): The average amount of money spent on an advertising campaign for every 1000 impressions.
+    //Convert ints to doubles before doing any calculations
+    //return double in 3.dp
+    public Double costPerThousandImps()
+    {
+        return Math.round((totalCost() *1000/ (double) totalImpressions())*1000) / 1000d;
+    }
+
+    public ArrayList<String> getMetrics() {
+        ArrayList<String> metrics = new ArrayList<String>();
+        metrics.add(Integer.toString(totalImpressions()));
+        metrics.add(Integer.toString(totalClicks()));
+        metrics.add(Integer.toString(numberOfBounces()));
+        metrics.add(Integer.toString(numberOfConversions()));
+        metrics.add(Double.toString(totalCost()));
+        metrics.add(Double.toString(clickThroughRate()));
+        metrics.add(Double.toString(costPerAcquisition()));
+        metrics.add(Double.toString(costPerClick()));
+        metrics.add(Double.toString(costPerThousandImps()));
+        metrics.add(Double.toString(bounceRate()));
+        metrics.add(Integer.toString(numberOfUniques()));
+        return metrics;
+
+    }
+
 }
