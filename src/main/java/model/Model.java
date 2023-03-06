@@ -17,9 +17,9 @@ public class Model {
     private List<Server> serverInteractions = null;
 
     public Model() {
-        importData();
-        System.out.println(serverInteractions.size());
-        System.out.print(impressions.size());
+//        importData();
+//        System.out.println(serverInteractions.size());
+//        System.out.print(impressions.size());
     }
 
     public void importData() {

@@ -49,6 +49,16 @@
       <artifactId>javafx-graphics</artifactId>
       <version>19.0.2.1</version>
     </dependency>
+      <dependency>
+          <groupId>org.jfree</groupId>
+          <artifactId>jfreechart</artifactId>
+          <version>1.5.4</version>
+      </dependency>
+      <dependency>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-swing</artifactId>
+          <version>17.0.2</version>
+      </dependency>
   </dependencies>
 
   <build>
@@ -71,7 +81,7 @@
             <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
-              <mainClass>view.Main</mainClass>
+              <mainClass>view.AppView</mainClass>
             </configuration>
           </execution>
         </executions>

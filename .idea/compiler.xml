@@ -10,8 +10,13 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="COMP2211-SEGP" target="17" />
+      <module name="cw" target="17" />
       <module name="Group30" target="17" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Group30" options="" />
+    </option>
   </component>
 </project>
