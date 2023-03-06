@@ -23,7 +23,8 @@ public class StartMenu extends AbstractScene {
     Button startButton = new Button("Import");
     startButton.setOnAction(e -> {
       System.out.println("Import button clicked");
-      stage.setScene(new Dashboard(stage, view).getScene());
+      view.setDashBoard(new Dashboard(stage, view));
+      stage.setScene(view.getDashBoard().getScene());
     });
     startButton.getStyleClass().add("startButton");
 

@@ -1,5 +1,6 @@
 package view.scenes;
 
+import java.util.List;
 import java.util.Objects;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
@@ -34,7 +35,6 @@ public class Dashboard extends AbstractScene {
   }
 
   void createScene() {
-
     var titleBox = new HBox();
     titleBox.setAlignment(Pos.CENTER);
     var titleLabel = new Label("Dashboard");
@@ -119,5 +119,7 @@ public class Dashboard extends AbstractScene {
     scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
     layout.setPrefHeight(scene.getHeight());
   }
+
+
 
 }

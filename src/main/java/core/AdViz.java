@@ -29,7 +29,7 @@ public class AdViz extends Application {
         StartMenu sm = new StartMenu(stage, theView);
         stage.setScene(sm.getScene());
         this.theView.setSm(sm);
-        this.theModel.importData();
+        //this.theModel.importData();
         stage.show();
     }
 }

@@ -11,11 +11,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import listeners.MetricListener;
 
 public class Model {
     private List<Impression> impressions = null;
     private List<Click> clicks = null;
     private List<Server> serverInteractions = null;
+    MetricListener metricListener;
 
     public Model() {
 //        importData();
@@ -113,7 +115,7 @@ public class Model {
         return Math.round((totalCost() *1000/ (double) totalImpressions())*1000) / 1000d;
     }
 
-    public ArrayList<String> getMetrics() {
+    public void getMetrics() {
         ArrayList<String> metrics = new ArrayList<String>();
         metrics.add(Integer.toString(totalImpressions()));
         metrics.add(Integer.toString(totalClicks()));
@@ -126,8 +128,12 @@ public class Model {
         metrics.add(Double.toString(costPerThousandImps()));
         metrics.add(Double.toString(bounceRate()));
         metrics.add(Integer.toString(numberOfUniques()));
-        return metrics;
-
+        metricListener.metricListener(metrics);
     }
+
+    public void setMetricListener(MetricListener listener)
+    {
+        metricListener = listener;
+    };
 
 }
