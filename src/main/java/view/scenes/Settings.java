@@ -12,16 +12,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 
-
 public class Settings extends AbstractScene {
 
-  Settings() {
+  private Button backButton;
+
+  public Settings() {
     super();
     createScene();
   }
 
   @Override
-  void createScene() {
+  public void createScene() {
     BorderPane settingsPane = new BorderPane();
 
     Label titleLabel = new Label("Settings");
@@ -83,18 +84,19 @@ public class Settings extends AbstractScene {
     controls.setSpacing(20);
     settingsPane.setCenter(controls);
 
-    Button backButton = new Button("<");
-//    backButton.setOnAction(e -> {
-//      stage.setScene(new StartMenu().getScene());
-//    });
-    backButton.setPrefSize(40, 40);
+    backButton = new Button("<");
     backButton.getStyleClass().add("backButton");
     settingsPane.setBottom(backButton);
-    BorderPane.setMargin(backButton, new Insets(0, 0, 10, 10));
+    BorderPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
+    BorderPane.setMargin(backButton, new Insets(20, 0, 10, 10));
 
     Scene settingsScene = new Scene(settingsPane, 1280, 720);
     settingsScene.getStylesheets()
         .add(Objects.requireNonNull(getClass().getResource("/view/settings.css")).toExternalForm());
     setScene(settingsScene);
+  }
+
+  public Button getBackButton() {
+    return backButton;
   }
 }

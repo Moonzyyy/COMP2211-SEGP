@@ -23,23 +23,30 @@ import java.util.Objects;
 
 public class Graph extends AbstractScene {
 
-  private final BorderPane layout;
+  private Button homeButton;
+  private Button printButton;
+  private Button compareButton;
+  private Button filterButton;
 
-  public Graph() {
+  private final BorderPane layout;
+  /**
+   * The id of the metric that is being graphed.
+   */
+  private Integer metricId;
+
+  public Graph(Integer id) {
     super();
     layout = new BorderPane();
-    createScene();
+    metricId = id;
+
   }
 
-  void createScene() {
-    scene = new Scene(layout, 1280, 720);
-    scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
-
+  public void createScene() {
     var topBar = new HBox();
     topBar.setAlignment(Pos.BOTTOM_CENTER);
     topBar.getStyleClass().add("topBar");
 
-    var homeButton = new Button("Home");
+    homeButton = new Button("Home");
 //    homeButton.setOnAction(e -> {
 //      getStage().setScene(new Dashboard().getScene());
 //    });
@@ -50,10 +57,11 @@ public class Graph extends AbstractScene {
     graphTitle.getStyleClass().add("graphTitle");
     HBox.setHgrow(graphTitle, Priority.ALWAYS);
 
-    var printButton = new Button("Print");
+    printButton = new Button("Print");
     printButton.getStyleClass().add("button");
     HBox.setHgrow(printButton, Priority.ALWAYS);
-    var compareButton = new Button("Compare");
+
+    compareButton = new Button("Compare");
     compareButton.getStyleClass().add("button");
     HBox.setHgrow(compareButton, Priority.ALWAYS);
 
@@ -104,7 +112,7 @@ public class Graph extends AbstractScene {
     var endDatePicker = new DatePicker();
 
 
-    var filterButton = new Button("Filter");
+    filterButton = new Button("Filter");
     filterButton.setOnAction(e -> {
       LocalDate startDate = startDatePicker.getValue();
       LocalDate endDate = endDatePicker.getValue();
@@ -125,6 +133,26 @@ public class Graph extends AbstractScene {
     });
     filterBar.getChildren().addAll( startDatePicker, endDatePicker, filterButton);
     layout.setBottom(filterBar);
+
+    scene = new Scene(layout, 1280, 720);
+    scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
+
+  }
+
+  public Button getHomeButton() {
+    return homeButton;
+  }
+
+  public Button getPrintButton() {
+    return printButton;
+  }
+
+  public Button getCompareButton() {
+    return compareButton;
+  }
+
+  public Button getFilterButton() {
+    return filterButton;
   }
 
 }

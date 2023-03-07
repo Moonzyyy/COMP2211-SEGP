@@ -29,9 +29,11 @@ public class Dashboard extends AbstractScene {
   public Dashboard() {
     super();
     layout = new BorderPane();
-//    createScene();
   }
 
+  /**
+   * Creates all the components of the scene, and adds them to the layout.
+   */
   public void createScene() {
     var titleBox = new HBox();
     titleBox.setAlignment(Pos.CENTER);
@@ -44,11 +46,7 @@ public class Dashboard extends AbstractScene {
     dashboard.getStyleClass().add("dashboardComp");
     layout.setCenter(dashboard);
 
-    //Make it so that the back button is circular
     var backButton = new Button("<");
-    backButton.setOnAction(e -> {
-//      stage.setScene(new StartMenu(stage).getScene());
-    });
     backButton.getStyleClass().add("backButton");
 
     // Sliding Menu Pane
@@ -116,6 +114,14 @@ public class Dashboard extends AbstractScene {
     scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
     scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
     layout.setPrefHeight(scene.getHeight());
+  }
+
+  public DashboardComp getDashboardComp() {
+    return (DashboardComp) layout.getCenter();
+  }
+
+  public Button getBackButton(){
+    return (Button) layout.getBottom();
   }
 
 

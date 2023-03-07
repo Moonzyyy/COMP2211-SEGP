@@ -6,11 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 public class StartMenu extends AbstractScene {
 
   private Button importButton;
+  private Button settingsButton;
 
   public StartMenu() {
     super();
@@ -23,18 +23,9 @@ public class StartMenu extends AbstractScene {
    */
   public void createScene() {
     importButton = new Button("Import");
-//    importButton.setOnAction(e -> {
-//      System.out.println("Import button clicked");
-////      view.setCurrentScene(new Dashboard(stage, view));
-////      stage.setScene(view.getCurrentScene().getScene());
-//    });
     importButton.getStyleClass().add("startButton");
 
-    Button settingsButton = new Button("Settings");
-    settingsButton.setOnAction(e -> {
-      System.out.println("Settings button clicked");
-//      stage.setScene(new Settings(stage, view).getScene() );
-    });
+    settingsButton = new Button("Settings");
     settingsButton.getStyleClass().add("startButton");
 
     var title = new Label("AdViz");
@@ -60,5 +51,9 @@ public class StartMenu extends AbstractScene {
 
   public Button getImportButton() {
     return this.importButton;
+  }
+
+  public Button getSettingsButton() {
+    return this.settingsButton;
   }
 }

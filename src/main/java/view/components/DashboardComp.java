@@ -83,8 +83,7 @@ public class DashboardComp extends VBox {
     numberBox.setPrefHeight(USE_COMPUTED_SIZE);
 
     numberBox.setOnMouseClicked(e -> {
-      System.out.println("Number " + number + " clicked");
-//      stage.setScene(new Graph().getScene());
+      System.out.println("Button:" + text + " clicked");
     });
 
     return numberBox;
@@ -92,5 +91,12 @@ public class DashboardComp extends VBox {
 
   public List<VBox> getNumberBoxes() {
     return numberBoxes;
+  }
+
+  public void updateNumberBoxes(List<String> numbers) {
+    for (int i = 0; i < numbers.size(); i++) {
+      final Label numberLabel = (Label) numberBoxes.get(i).getChildren().get(0);
+      numberLabel.setText(numbers.get(i));
+    }
   }
 }

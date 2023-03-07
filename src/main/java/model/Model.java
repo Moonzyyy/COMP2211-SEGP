@@ -115,7 +115,7 @@ public class Model {
         return Math.round((totalCost() *1000/ (double) totalImpressions())*1000) / 1000d;
     }
 
-    public void getMetrics() {
+    public ArrayList<String> getMetrics() {
         ArrayList<String> metrics = new ArrayList<String>();
         metrics.add(Integer.toString(totalImpressions()));
         metrics.add(Integer.toString(totalClicks()));
@@ -129,6 +129,7 @@ public class Model {
         metrics.add(Double.toString(bounceRate()));
         metrics.add(Integer.toString(numberOfUniques()));
 //        metricListener.metricListener(metrics);
+        return metrics;
     }
 
 //    public void setMetricListener(MetricListener listener)
