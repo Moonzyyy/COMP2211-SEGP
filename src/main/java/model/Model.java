@@ -106,7 +106,7 @@ public class Model {
         return Double.parseDouble(df.format(totalCost() / (double) totalImpressions()));
     }
 
-    public void getMetrics() {
+    public ArrayList<String> getMetrics() {
         ArrayList<String> metrics = new ArrayList<String>();
         metrics.add(Integer.toString(totalImpressions()));
         metrics.add(Integer.toString(totalClicks()));
@@ -119,6 +119,7 @@ public class Model {
         metrics.add(Double.toString(costPerThousandImps()));
         metrics.add(Double.toString(bounceRate()));
         metrics.add(Integer.toString(numberOfUniques()));
+        return metrics;
     }
 
 }
