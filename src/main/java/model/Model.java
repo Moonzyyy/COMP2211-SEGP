@@ -3,6 +3,7 @@ package model;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,8 @@ public class Model {
     private List<Click> clicks = null;
     private List<Server> serverInteractions = null;
 //    MetricListener metricListener;
+
+    private DecimalFormat df = new DecimalFormat("#.###");
 
     public Model() {
 //        importData();
@@ -74,13 +77,13 @@ public class Model {
     //return double in 3.dp
     public double bounceRate()
     {
-        return Math.round(((double) numberOfBounces() / (double) totalClicks()) * 1000d) / 1000d;
+        return Double.parseDouble(df.format((double) numberOfBounces() / (double) totalClicks()));
     }
 
     //TotalCost = Click Cost + Impression Cost
     public double totalCost()
     {
-        return Math.round((impressions.stream().mapToDouble(Impression::getImpressionCost).sum() + clicks.stream().mapToDouble(Click::getClickCost).sum()) * 1000d) / 1000d;
+        return Double.parseDouble(df.format(impressions.stream().mapToDouble(Impression::getImpressionCost).sum() + clicks.stream().mapToDouble(Click::getClickCost).sum()));
     }
 
     //Click-through-rate	(CTR):	The	average	number	of	clicks	per	impression
@@ -88,7 +91,7 @@ public class Model {
     //return double in 3.dp
     public Double clickThroughRate()
     {
-        return Math.round(((double) totalClicks() / (double) totalImpressions()) * 1000d) / 1000d;
+        return Double.parseDouble(df.format((double) totalClicks() / (double) totalImpressions()));
     }
 
     //Cost-per-click	(CPC):	The	average	amount	of	money spent	on	an	advertising	campaign	for	each click
@@ -96,7 +99,7 @@ public class Model {
     //return double in 3.dp
     public Double costPerClick()
     {
-        return Math.round((clicks.stream().mapToDouble(Click::getClickCost).sum() / (double) totalClicks()) * 1000d) / 1000d;
+        return Double.parseDouble(df.format(clicks.stream().mapToDouble(Click::getClickCost).sum() / (double) totalClicks()));
     }
 
     //Cost-per-acquisition	(CPA):	The	average	amount	of	money	spent	on	an	advertising	campaign for	each	acquisition	(i.e.,	conversion).
@@ -104,7 +107,7 @@ public class Model {
     //return double in 3.dp
     public Double costPerAcquisition()
     {
-        return Math.round((totalCost() / (double) serverInteractions.stream().filter(Server::getConversion).count()) * 1000d) / 1000d;
+        return Double.parseDouble(df.format(totalCost() / (double) serverInteractions.stream().filter(Server::getConversion).count()));
     }
 
     //Cost-per-thousand-impressions(CPM): The average amount of money spent on an advertising campaign for every 1000 impressions.
@@ -112,7 +115,7 @@ public class Model {
     //return double in 3.dp
     public Double costPerThousandImps()
     {
-        return Math.round((totalCost() *1000/ (double) totalImpressions())*1000) / 1000d;
+        return Double.parseDouble(df.format(totalCost() / (double) totalImpressions()));
     }
 
     public void getMetrics() {
