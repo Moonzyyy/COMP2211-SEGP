@@ -3,19 +3,17 @@ package core;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.Model;
-import view.AppView;
 import view.scenes.StartMenu;
 
 public class AdViz extends Application {
-    private AppView theView ;
-    private Model theModel;
-    private Controller theController;
+    private final Model theModel;
+    private final Controller theController;
 
     public AdViz() {
         this.theModel = new Model();
-        this.theView = new AppView();
-        this.theController = new Controller(theView, theModel);
-        this.theView.setController(theController);
+//        this.theView = new AppView();
+        this.theController = new Controller(theModel);
+//        this.theView.setController(theController);
     }
 
     public static void main(String[] args) {
@@ -26,10 +24,9 @@ public class AdViz extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("AdViz");
-        StartMenu sm = new StartMenu(stage, theView);
-        stage.setScene(sm.getScene());
-        this.theView.setSm(sm);
-        //this.theModel.importData();
-        stage.show();
+        StartMenu sm = new StartMenu();
+        theController.setStage(stage);
+        theController.setUpScene(sm);
+//        this.theController.setHandler((StartMenu) theView.getCurrentScene());
     }
 }

@@ -7,31 +7,33 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import view.AppView;
 
 public class StartMenu extends AbstractScene {
 
-  public StartMenu(Stage stage, AppView view) {
-    super(stage, view);
-    createScene();
+  private Button importButton;
+
+  public StartMenu() {
+    super();
+//    createScene();
+
   }
 
   /**
    * Creates the scene for the start menu.
    */
-  void createScene() {
-    Button startButton = new Button("Import");
-    startButton.setOnAction(e -> {
-      System.out.println("Import button clicked");
-      view.setDashBoard(new Dashboard(stage, view));
-      stage.setScene(view.getDashBoard().getScene());
-    });
-    startButton.getStyleClass().add("startButton");
+  public void createScene() {
+    importButton = new Button("Import");
+//    importButton.setOnAction(e -> {
+//      System.out.println("Import button clicked");
+////      view.setCurrentScene(new Dashboard(stage, view));
+////      stage.setScene(view.getCurrentScene().getScene());
+//    });
+    importButton.getStyleClass().add("startButton");
 
     Button settingsButton = new Button("Settings");
     settingsButton.setOnAction(e -> {
       System.out.println("Settings button clicked");
-      stage.setScene(new Settings(stage, view).getScene() );
+//      stage.setScene(new Settings(stage, view).getScene() );
     });
     settingsButton.getStyleClass().add("startButton");
 
@@ -43,7 +45,7 @@ public class StartMenu extends AbstractScene {
     startTitle.getChildren().add(title);
 
     var startButtonsVBox = new VBox();
-    startButtonsVBox.getChildren().addAll(startButton, settingsButton);
+    startButtonsVBox.getChildren().addAll(importButton, settingsButton);
     startButtonsVBox.setPrefSize(200, 200);
     startButtonsVBox.setSpacing(20);
     startButtonsVBox.setAlignment(Pos.CENTER);
@@ -54,5 +56,9 @@ public class StartMenu extends AbstractScene {
 
     scene = new Scene(startBorderPane, 1280, 720);
     scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
+  }
+
+  public Button getImportButton() {
+    return this.importButton;
   }
 }

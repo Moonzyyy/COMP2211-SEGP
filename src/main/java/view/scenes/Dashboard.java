@@ -16,9 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.util.Duration;
-import view.AppView;
 import view.components.DashboardComp;
 
 /**
@@ -28,13 +26,13 @@ public class Dashboard extends AbstractScene {
 
   private final BorderPane layout;
 
-  public Dashboard(Stage stage, AppView view) {
-    super(stage, view);
+  public Dashboard() {
+    super();
     layout = new BorderPane();
-    createScene();
+//    createScene();
   }
 
-  void createScene() {
+  public void createScene() {
     var titleBox = new HBox();
     titleBox.setAlignment(Pos.CENTER);
     var titleLabel = new Label("Dashboard");
@@ -42,14 +40,14 @@ public class Dashboard extends AbstractScene {
     titleLabel.getStyleClass().add("title");
     layout.setTop(titleBox);
 
-    var dashboard = new DashboardComp(this, stage);
+    var dashboard = new DashboardComp(this);
     dashboard.getStyleClass().add("dashboardComp");
     layout.setCenter(dashboard);
 
     //Make it so that the back button is circular
     var backButton = new Button("<");
     backButton.setOnAction(e -> {
-      stage.setScene(new StartMenu(stage, getView()).getScene());
+//      stage.setScene(new StartMenu(stage).getScene());
     });
     backButton.getStyleClass().add("backButton");
 

@@ -6,7 +6,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import view.scenes.AbstractScene;
 import view.scenes.Graph;
 
@@ -14,7 +13,7 @@ public class DashboardComp extends VBox {
 
   private final List<VBox> numberBoxes = new ArrayList<>();
 
-  public DashboardComp(AbstractScene scene, Stage stage) {
+  public DashboardComp(AbstractScene scene) {
     setAlignment(Pos.CENTER);
     setSpacing(20);
 
@@ -32,7 +31,7 @@ public class DashboardComp extends VBox {
       for (int j = 0; j < boxesPerRow && i * boxesPerRow + j < totalBoxes; j++) {
         final int number = i * boxesPerRow + j + 1;
         final String text = getLabelText(number);
-        final VBox numberBox = createNumberBox(number, text, scene, stage);
+        final VBox numberBox = createNumberBox(number, text, scene);
         row.getChildren().add(numberBox);
         numberBoxes.add(numberBox);
       }
@@ -70,7 +69,7 @@ public class DashboardComp extends VBox {
     }
   }
 
-  private VBox createNumberBox(int number, String text, AbstractScene scene, Stage stage) {
+  private VBox createNumberBox(int number, String text, AbstractScene scene) {
     final Label numberLabel = new Label(Integer.toString(number));
     numberLabel.getStyleClass().add("number");
 
@@ -85,7 +84,7 @@ public class DashboardComp extends VBox {
 
     numberBox.setOnMouseClicked(e -> {
       System.out.println("Number " + number + " clicked");
-      stage.setScene(new Graph(stage, scene.getView()).getScene());
+//      stage.setScene(new Graph().getScene());
     });
 
     return numberBox;

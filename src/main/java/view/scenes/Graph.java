@@ -8,8 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.stage.Stage;
-import view.AppView;
 
 import javafx.embed.swing.SwingNode;
 import javax.swing.SwingUtilities;
@@ -27,8 +25,8 @@ public class Graph extends AbstractScene {
 
   private final BorderPane layout;
 
-  public Graph(Stage stage, AppView view) {
-    super(stage, view);
+  public Graph() {
+    super();
     layout = new BorderPane();
     createScene();
   }
@@ -42,9 +40,9 @@ public class Graph extends AbstractScene {
     topBar.getStyleClass().add("topBar");
 
     var homeButton = new Button("Home");
-    homeButton.setOnAction(e -> {
-      getStage().setScene(new Dashboard(getStage(), getView()).getScene());
-    });
+//    homeButton.setOnAction(e -> {
+//      getStage().setScene(new Dashboard().getScene());
+//    });
     homeButton.getStyleClass().add("button");
     HBox.setHgrow(homeButton, Priority.ALWAYS);
 

@@ -10,14 +10,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import view.AppView;
+
 
 
 public class Settings extends AbstractScene {
 
-  Settings(Stage stage, AppView view) {
-    super(stage, view);
+  Settings() {
+    super();
     createScene();
   }
 
@@ -85,9 +84,9 @@ public class Settings extends AbstractScene {
     settingsPane.setCenter(controls);
 
     Button backButton = new Button("<");
-    backButton.setOnAction(e -> {
-      stage.setScene(new StartMenu(stage, getView()).getScene());
-    });
+//    backButton.setOnAction(e -> {
+//      stage.setScene(new StartMenu().getScene());
+//    });
     backButton.setPrefSize(40, 40);
     backButton.getStyleClass().add("backButton");
     settingsPane.setBottom(backButton);
