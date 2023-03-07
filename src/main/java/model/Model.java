@@ -1,29 +1,20 @@
 package model;
 
-import java.io.*;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.format.DateTimeFormatter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
-//import listeners.MetricListener;
 
 public class Model {
     private List<Impression> impressions = null;
     private List<Click> clicks = null;
     private List<Server> serverInteractions = null;
-//    MetricListener metricListener;
+    private final DecimalFormat df = new DecimalFormat("#.###");
 
-    public Model() {
-//        importData();
-//        System.out.println(serverInteractions.size());
-//        System.out.print(impressions.size());
-    }
+    public Model() {}
 
     public void importData() {
         //Get CSV data from all 3 log files (can be changed to for loop)
@@ -74,13 +65,13 @@ public class Model {
     //return double in 3.dp
     public double bounceRate()
     {
-        return Math.round(((double) numberOfBounces() / (double) totalClicks()) * 1000d) / 1000d;
+        return Double.parseDouble(df.format((double) numberOfBounces() / (double) totalClicks()));
     }
 
     //TotalCost = Click Cost + Impression Cost
     public double totalCost()
     {
-        return Math.round((impressions.stream().mapToDouble(Impression::getImpressionCost).sum() + clicks.stream().mapToDouble(Click::getClickCost).sum()) * 1000d) / 1000d;
+        return Double.parseDouble(df.format(impressions.stream().mapToDouble(Impression::getImpressionCost).sum() + clicks.stream().mapToDouble(Click::getClickCost).sum()));
     }
 
     //Click-through-rate	(CTR):	The	average	number	of	clicks	per	impression
@@ -88,7 +79,7 @@ public class Model {
     //return double in 3.dp
     public Double clickThroughRate()
     {
-        return Math.round(((double) totalClicks() / (double) totalImpressions()) * 1000d) / 1000d;
+        return Double.parseDouble(df.format((double) totalClicks() / (double) totalImpressions()));
     }
 
     //Cost-per-click	(CPC):	The	average	amount	of	money spent	on	an	advertising	campaign	for	each click
@@ -96,7 +87,7 @@ public class Model {
     //return double in 3.dp
     public Double costPerClick()
     {
-        return Math.round((clicks.stream().mapToDouble(Click::getClickCost).sum() / (double) totalClicks()) * 1000d) / 1000d;
+        return Double.parseDouble(df.format(clicks.stream().mapToDouble(Click::getClickCost).sum() / (double) totalClicks()));
     }
 
     //Cost-per-acquisition	(CPA):	The	average	amount	of	money	spent	on	an	advertising	campaign for	each	acquisition	(i.e.,	conversion).
@@ -104,7 +95,7 @@ public class Model {
     //return double in 3.dp
     public Double costPerAcquisition()
     {
-        return Math.round((totalCost() / (double) serverInteractions.stream().filter(Server::getConversion).count()) * 1000d) / 1000d;
+        return Double.parseDouble(df.format(totalCost() / (double) serverInteractions.stream().filter(Server::getConversion).count()));
     }
 
     //Cost-per-thousand-impressions(CPM): The average amount of money spent on an advertising campaign for every 1000 impressions.
@@ -112,10 +103,10 @@ public class Model {
     //return double in 3.dp
     public Double costPerThousandImps()
     {
-        return Math.round((totalCost() *1000/ (double) totalImpressions())*1000) / 1000d;
+        return Double.parseDouble(df.format(totalCost() / (double) totalImpressions()));
     }
 
-    public ArrayList<String> getMetrics() {
+    public void getMetrics() {
         ArrayList<String> metrics = new ArrayList<String>();
         metrics.add(Integer.toString(totalImpressions()));
         metrics.add(Integer.toString(totalClicks()));
@@ -128,13 +119,6 @@ public class Model {
         metrics.add(Double.toString(costPerThousandImps()));
         metrics.add(Double.toString(bounceRate()));
         metrics.add(Integer.toString(numberOfUniques()));
-//        metricListener.metricListener(metrics);
-        return metrics;
     }
-
-//    public void setMetricListener(MetricListener listener)
-//    {
-//        metricListener = listener;
-//    };
 
 }
