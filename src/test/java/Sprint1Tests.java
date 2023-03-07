@@ -14,6 +14,7 @@ public class Sprint1Tests {
   {
     long start = System.currentTimeMillis();
     model = new Model();
+    model.importData();
     long end = System.currentTimeMillis();
 
     if(end - start > 30000)
@@ -106,6 +107,17 @@ public class Sprint1Tests {
       fail("Cost-per-acquisition is not calculated correctly."
           + "\n Expected: 166.002(3 dp) || Actual: " + model.costPerAcquisition()
           + "\n Number of Conversions: 684 || Total Cost: 113545.694");
+    }
+  }
+
+  @Test
+  void TestCostPerThousandImpression()
+  {
+    if(model.costPerThousandImps() != 12.862)
+    {
+      fail("Cost-per-thousand-impressions is not calculated correctly."
+          + "\n Expected: 12.862 (3 dp) || Actual: " + model.costPerThousandImps()
+          + "\n Total Cost: 113545.694 || Total Impressions: 8828258");
     }
   }
 
