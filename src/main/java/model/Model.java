@@ -1,32 +1,20 @@
 package model;
 
-import java.io.*;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
-//import listeners.MetricListener;
 
 public class Model {
     private List<Impression> impressions = null;
     private List<Click> clicks = null;
     private List<Server> serverInteractions = null;
-//    MetricListener metricListener;
+    private final DecimalFormat df = new DecimalFormat("#.###");
 
-    private DecimalFormat df = new DecimalFormat("#.###");
-
-    public Model() {
-//        importData();
-//        System.out.println(serverInteractions.size());
-//        System.out.print(impressions.size());
-    }
+    public Model() {}
 
     public void importData() {
         //Get CSV data from all 3 log files (can be changed to for loop)
@@ -131,12 +119,6 @@ public class Model {
         metrics.add(Double.toString(costPerThousandImps()));
         metrics.add(Double.toString(bounceRate()));
         metrics.add(Integer.toString(numberOfUniques()));
-//        metricListener.metricListener(metrics);
     }
-
-//    public void setMetricListener(MetricListener listener)
-//    {
-//        metricListener = listener;
-//    };
 
 }
