@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class CsvReader {
-    private final String IMPRESSION_LOG_FILEPATH = "src/test/TestData/impression_log.csv";
-    private final String CLICK_LOG_FILEPATH = "src/test/TestData/click_log.csv";
-    private final String SERVER_LOG_FILEPATH = "src/test/TestData/server_log.csv";
 
     private List<Impression> impressions = null;
     private List<Click> clicks = null;
@@ -19,13 +16,13 @@ public class CsvReader {
         //Get CSV data from all 3 log files (can be changed to for loop)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
-            var iReader = getReader(IMPRESSION_LOG_FILEPATH);
+            var iReader = getReader(CsvReader.class.getResource("/testdata/impression_log.csv").getPath());
             impressions = splitArray(iReader).map((p) -> new Impression(p, formatter)).toList();
             iReader.close();
-            var cReader = getReader(CLICK_LOG_FILEPATH);
+            var cReader = getReader(CsvReader.class.getResource("/testdata/click_log.csv").getPath());
             clicks = splitArray(cReader).map((p) -> new Click(p, formatter)).toList();
             cReader.close();
-            var sReader = getReader(SERVER_LOG_FILEPATH);
+            var sReader = getReader(CsvReader.class.getResource("/testdata/server_log.csv").getPath());
             serverInteractions = splitArray(sReader).map((p) -> new Server(p, formatter)).toList();
             sReader.close();
         } catch (Exception e) {
