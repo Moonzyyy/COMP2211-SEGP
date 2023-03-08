@@ -11,7 +11,7 @@ module com.adviz {
   opens view to javafx.fxml;
   opens core to javafx.fxml;
   exports core;
-  exports view;
+  //exports view;
   exports model;
   exports view.scenes;
   opens view.scenes to javafx.fxml;

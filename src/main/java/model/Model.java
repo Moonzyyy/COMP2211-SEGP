@@ -107,7 +107,7 @@ public class Model {
     }
 
     public ArrayList<String> getMetrics() {
-        ArrayList<String> metrics = new ArrayList<String>()
+        ArrayList<String> metrics = new ArrayList<String>();
         metrics.add(Integer.toString(totalImpressions()));
         metrics.add(Integer.toString(totalClicks()));
         metrics.add(Integer.toString(numberOfBounces()));
