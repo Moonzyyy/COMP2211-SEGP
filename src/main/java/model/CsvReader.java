@@ -16,25 +16,34 @@ public class CsvReader {
         //Get CSV data from all 3 log files (can be changed to for loop)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
-            var iReader = getReader(CsvReader.class.getResource("/testdata/impression_log.csv").getPath());
+            InputStream impressionPath = getClass().getResourceAsStream("/testdata/impression_log.csv");
+            BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
             impressions = splitArray(iReader).map((p) -> new Impression(p, formatter)).toList();
             iReader.close();
-            var cReader = getReader(CsvReader.class.getResource("/testdata/click_log.csv").getPath());
+
+            InputStream clickPath = getClass().getResourceAsStream("/testdata/click_log.csv");
+            BufferedReader cReader = new BufferedReader(new InputStreamReader(clickPath));
             clicks = splitArray(cReader).map((p) -> new Click(p, formatter)).toList();
             cReader.close();
-            var sReader = getReader(CsvReader.class.getResource("/testdata/server_log.csv").getPath());
+
+            InputStream serverPath = getClass().getResourceAsStream("/testdata/server_log.csv");
+            BufferedReader sReader = new BufferedReader(new InputStreamReader(serverPath));
             serverInteractions = splitArray(sReader).map((p) -> new Server(p, formatter)).toList();
             sReader.close();
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private BufferedReader getReader(String filepath) throws FileNotFoundException {
+    //DO NOT DELETE!!!!
+    /*private BufferedReader getReader(String filepath) throws FileNotFoundException {
+        //Can not be included in a jar file, might need to be re-used later on
         File inputF = new File(filepath);
         InputStream inputFS = new FileInputStream(inputF);
         return new BufferedReader(new InputStreamReader(inputFS));
-    }
+    }*/
+
 
     private Stream<String[]> splitArray(BufferedReader br) {
         return br.lines().skip(1).parallel().map((line) -> split(line,','));
