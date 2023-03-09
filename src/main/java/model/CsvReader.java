@@ -2,12 +2,13 @@ package model;
 
 import java.io.*;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class CsvReader {
 
-    private List<Impression> impressions = null;
+    private HashMap<Long,User> users = null;
     private List<Click> clicks = null;
     private List<Server> serverInteractions = null;
 
@@ -18,7 +19,10 @@ public class CsvReader {
         try {
             InputStream impressionPath = getClass().getResourceAsStream("/testdata/impression_log.csv");
             BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
-            impressions = splitArray(iReader).map((p) -> new Impression(p, formatter)).toList();
+//            impressions = splitArray(iReader).map((p) -> new Impression(p, formatter)).toList();
+//            users = splitArray(iReader).map((p) -> new User(p, formatter)).toList();
+            users = splitArray(iReader).map((p) -> new User(p, formatter)).collect(HashMap::new, (m, u) -> m.put(u.getId(), u), HashMap::putAll);
+            System.out.println("Users: " + users.size());
             iReader.close();
 
             InputStream clickPath = getClass().getResourceAsStream("/testdata/click_log.csv");
@@ -76,8 +80,8 @@ public class CsvReader {
         return result;
     }
 
-    public List<Impression> getImpressions() {
-        return impressions;
+    public HashMap<Long,User> getImpressions() {
+        return users;
     }
 
     public List<Click> getClicks() {
