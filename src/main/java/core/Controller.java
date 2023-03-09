@@ -1,12 +1,15 @@
 package core;
 
 import java.util.List;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import model.Model;
 import view.components.DashboardComp;
 import view.scenes.AbstractScene;
 import view.scenes.Dashboard;
 import view.scenes.Graph;
+import view.scenes.Loading;
 import view.scenes.Settings;
 import view.scenes.StartMenu;
 
@@ -52,8 +55,23 @@ public class Controller {
 
     //Add the action listeners
     menu.getImportButton().setOnAction((event) -> {
-      model.importData();
-      setUpScene(new Dashboard());
+      //Load the data, switch to a loading screen, then switch to the dashboard
+      Task task = new Task<Void>() {
+        @Override
+        public Void call() {
+          model.importData();
+
+          return null;
+        }
+      };
+      setUpScene(new Loading());
+      task.setOnSucceeded(e -> {
+        setUpScene(new Dashboard());
+      });
+      Thread thread = new Thread(task);
+      thread.start();
+
+//      setUpScene(new Dashboard());
     });
 
     menu.getSettingsButton().setOnAction((event) -> {
@@ -122,11 +140,14 @@ public class Controller {
     });
 
     graphScene.getCompareButton().setOnAction((event) -> {
-      System.out.printf("Compare button pressed");
+      System.out.print("Compare button pressed");
     });
 
-//
+  }
 
+  public void setUpScene(Loading loading) {
+    loading.createScene();
+    this.setCurrentScene(loading);
   }
 
 
