@@ -20,9 +20,9 @@ public class Model {
         //Get CSV data from all 3 log files (can be changed to for loop)
         CsvReader cr = new CsvReader();
         try {
-            this.impressions = cr.getImpressions();
-            this.clicks = cr.getClicks();
-            this.serverInteractions= cr.getServerInteractions();
+//            this.impressions = cr.getImpressions();
+//            this.clicks = cr.getClicks();
+//            this.serverInteractions= cr.getServerInteractions();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

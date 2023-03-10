@@ -32,8 +32,8 @@ public class User {
     setAge(input[3]);
     setIncome(input[4]);
     setContext(input[5]);
-    addImpression(
-        new Pair<>(LocalDateTime.parse(input[0], formatter), Double.parseDouble(input[6])));
+//    addImpression(
+//        new Pair<>(LocalDateTime.parse(input[0], formatter), Double.parseDouble(input[6])));
   }
 
   public Long getId() {

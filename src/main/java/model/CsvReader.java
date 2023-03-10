@@ -1,14 +1,20 @@
 package model;
 
+import javafx.util.Pair;
+
 import java.io.*;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CsvReader {
 
-    private HashMap<Long,User> users = null;
+    private HashMap<Long,User> users = new HashMap<Long, User>();
     private List<Click> clicks = null;
     private List<Server> serverInteractions = null;
 
@@ -21,19 +27,46 @@ public class CsvReader {
             BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
 //            impressions = splitArray(iReader).map((p) -> new Impression(p, formatter)).toList();
 //            users = splitArray(iReader).map((p) -> new User(p, formatter)).toList();
-            users = splitArray(iReader).map((p) -> new User(p, formatter)).collect(HashMap::new, (m, u) -> m.put(u.getId(), u), HashMap::putAll);
-            System.out.println("Users: " + users.size());
-            iReader.close();
-
-            InputStream clickPath = getClass().getResourceAsStream("/testdata/click_log.csv");
-            BufferedReader cReader = new BufferedReader(new InputStreamReader(clickPath));
-            clicks = splitArray(cReader).map((p) -> new Click(p, formatter)).toList();
-            cReader.close();
-
-            InputStream serverPath = getClass().getResourceAsStream("/testdata/server_log.csv");
-            BufferedReader sReader = new BufferedReader(new InputStreamReader(serverPath));
-            serverInteractions = splitArray(sReader).map((p) -> new Server(p, formatter)).toList();
-            sReader.close();
+//            iReader.readLine();
+//            System.out.println(splitArray(iReader).map((p) -> p[1]).distinct().count());
+            int existing = 0;
+            int newUsers = 0;
+            var test = splitArray(iReader).collect(Collectors.groupingBy(u -> u[1]));
+            System.out.println(test);
+            test.forEach((id, value) -> {
+                User user = new User(value.get(0), formatter);
+                value.forEach(val -> {
+                    user.addImpression(new Pair<>(LocalDateTime.parse(val[0], formatter), Double.parseDouble(val[6])));
+                });
+                users.put(user.getId(), user);
+            });
+//            System.out.println(users.size());
+//            iReader.lines().skip(1).parallel().forEach(line -> {
+//                String[] array = split(line, ',');
+//                if (users.containsKey(Long.parseLong(array[1]))) {
+////                    existing++;
+//                } else {
+////                    newUsers++;
+//                    User user = new User(array, formatter);
+//                    users.put(user.getId(), user);
+//                }
+//            });
+            System.out.println("done!");
+//            System.out.println("existing: " + existing);
+//            System.out.println("new " + newUsers);
+//            users = splitArray(iReader).map((p) -> new User(p, formatter)).collect(HashMap::new, (m, u) -> m.put(u.getId(), u), HashMap::putAll);
+//            System.out.println("Users: " + users.size());
+//            iReader.close();
+//
+//            InputStream clickPath = getClass().getResourceAsStream("/testdata/click_log.csv");
+//            BufferedReader cReader = new BufferedReader(new InputStreamReader(clickPath));
+//            clicks = splitArray(cReader).map((p) -> new Click(p, formatter)).toList();
+//            cReader.close();
+//
+//            InputStream serverPath = getClass().getResourceAsStream("/testdata/server_log.csv");
+//            BufferedReader sReader = new BufferedReader(new InputStreamReader(serverPath));
+//            serverInteractions = splitArray(sReader).map((p) -> new Server(p, formatter)).toList();
+//            sReader.close();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
