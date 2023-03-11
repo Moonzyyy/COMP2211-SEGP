@@ -1,0 +1,26 @@
+module com.adviz {
+    requires com.opencsv;
+    requires java.sql;
+    requires java.desktop;
+    requires javafx.swing;
+    requires org.jfree.jfreechart;
+    requires javafx.graphics;
+    requires javafx.controls;
+    requires javafx.fxml;
+    requires microstream.afs;
+    requires microstream.base;
+    requires microstream.configuration;
+    requires microstream.persistence;
+    requires microstream.storage;
+    requires microstream.afs.nio;
+    requires microstream.storage.embedded;
+    requires org.slf4j;
+
+    opens view to javafx.fxml;
+    opens core to javafx.fxml, org.slf4j;
+    exports core;
+    //exports view;
+    exports model;
+    exports view.scenes;
+    opens view.scenes to javafx.fxml;
+}

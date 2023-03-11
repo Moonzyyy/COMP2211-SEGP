@@ -1,6 +1,7 @@
 package model;
 
-import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javafx.util.Pair;
@@ -13,11 +14,11 @@ public class User {
   /**
    * A list of pairs of date and impression cost associated with this user.
    */
-  private final ArrayList<Pair<LocalDateTime, Double>> impressions;
+  private final ArrayList<Pair<Date, Double>> impressions;
   /**
    * A list of pairs of a click date and click cost associated with this user.
    */
-  private final ArrayList<Pair<LocalDateTime, Integer>> click;
+  private final ArrayList<Pair<Date, Integer>> click;
   private final ArrayList<Server> servers;
   private Long id;
   private String gender;
@@ -25,7 +26,7 @@ public class User {
   private String context;
   private String income;
 
-  public User(String[] input, DateTimeFormatter formatter) {
+  public User(String[] input, SimpleDateFormat formatter) {
     impressions = new ArrayList<>();
     click = new ArrayList<>();
     servers = new ArrayList<>();
@@ -36,7 +37,7 @@ public class User {
     setIncome(input[4]);
     setContext(input[5]);
 //    addImpression(
-//        new Pair<>(LocalDateTime.parse(input[0], formatter), Double.parseDouble(input[6])));
+//        new Pair<>(Date.parse(input[0], formatter), Double.parseDouble(input[6])));
   }
 
   public Long getId() {
@@ -85,11 +86,11 @@ public class User {
     this.context = context;
   }
 
-  public void addImpression(Pair<LocalDateTime, Double> impression) {
+  public void addImpression(Pair<Date, Double> impression) {
     impressions.add(impression);
   }
 
-  public void addClick(Pair<LocalDateTime, Integer> click) {
+  public void addClick(Pair<Date, Integer> click) {
     this.click.add(click);
   }
 
@@ -101,11 +102,11 @@ public class User {
     return servers;
   }
 
-  public ArrayList<Pair<LocalDateTime, Double>> getImpressions() {
+  public ArrayList<Pair<Date, Double>> getImpressions() {
     return impressions;
   }
 
-  public ArrayList<Pair<LocalDateTime, Integer>> getClicks() {
+  public ArrayList<Pair<Date, Integer>> getClicks() {
     return click;
   }
 

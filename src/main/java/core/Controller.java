@@ -5,6 +5,9 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import model.Model;
+import one.microstream.afs.nio.types.NioFileSystem;
+import one.microstream.storage.embedded.types.EmbeddedStorage;
+import one.microstream.storage.embedded.types.EmbeddedStorageManager;
 import view.components.DashboardComp;
 import view.scenes.AbstractScene;
 import view.scenes.Dashboard;
@@ -19,6 +22,11 @@ public class Controller {
   private AbstractScene currentScene;
   private Stage stage;
 
+  private static Controller instance;
+
+  private volatile EmbeddedStorageManager storageManager;
+
+
   /**
    * The constructor of the controller.
    *
@@ -26,6 +34,64 @@ public class Controller {
    */
   public Controller(Model model) {
     this.model = model;
+    Controller.instance = this;
+  }
+
+  public EmbeddedStorageManager storageManager()
+  {
+    /*
+     * Double-checked locking to reduce the overhead of acquiring a lock
+     * by testing the locking criterion.
+     * The field (this.storageManager) has to be volatile.
+     */
+    if(this.storageManager == null)
+    {
+      synchronized(this)
+      {
+        if(this.storageManager == null)
+        {
+          this.storageManager = this.createStorageManager();
+        }
+      }
+    }
+
+    return this.storageManager;
+  }
+
+  private EmbeddedStorageManager createStorageManager() {
+    NioFileSystem fileSystem = NioFileSystem.New();
+    EmbeddedStorageManager storageManager = EmbeddedStorage.start(fileSystem.ensureDirectoryPath("data"));
+    DataRoot rootInstance;
+
+    if (storageManager.root() == null) {
+      rootInstance = new DataRoot("SEG Test");
+      storageManager.setRoot(rootInstance);
+      storageManager.storeRoot();
+    }
+    return storageManager;
+  }
+
+  /**
+   * Gets the {@link DataRoot} root object of this demo.
+   * This is the entry point to all the data used in this application, basically the "database".
+   *
+   * @return the {@link DataRoot} root object of this demo
+   */
+  public DataRoot data()
+  {
+    return (DataRoot)this.storageManager().root();
+  }
+
+  /**
+   * Shuts down the {@link EmbeddedStorageManager} of this demo.
+   */
+  public synchronized void shutdown()
+  {
+    if(this.storageManager != null)
+    {
+      this.storageManager.shutdown();
+      this.storageManager = null;
+    }
   }
 
   public void setStage(Stage stage) {
@@ -150,5 +216,12 @@ public class Controller {
     this.setCurrentScene(loading);
   }
 
+  /**
+   * @return the single instance of this class
+   */
+  public static Controller getInstance()
+  {
+    return instance;
+  }
 
 }

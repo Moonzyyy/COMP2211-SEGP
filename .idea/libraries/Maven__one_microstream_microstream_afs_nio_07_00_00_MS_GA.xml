@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: one.microstream:microstream-afs-nio:07.00.00-MS-GA">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/one/microstream/microstream-afs-nio/07.00.00-MS-GA/microstream-afs-nio-07.00.00-MS-GA.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/one/microstream/microstream-afs-nio/07.00.00-MS-GA/microstream-afs-nio-07.00.00-MS-GA-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/one/microstream/microstream-afs-nio/07.00.00-MS-GA/microstream-afs-nio-07.00.00-MS-GA-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -14,7 +14,9 @@ public class Model {
     private List<Server> serverInteractions = null;
     private final DecimalFormat df = new DecimalFormat("#.###");
 
-    public Model() {}
+    public Model() {
+
+    }
 
     public void importData() {
         //Get CSV data from all 3 log files (can be changed to for loop)

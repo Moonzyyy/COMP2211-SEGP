@@ -3,6 +3,9 @@ package core;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.Model;
+import one.microstream.afs.nio.types.NioFileSystem;
+import one.microstream.storage.embedded.types.EmbeddedStorage;
+import one.microstream.storage.embedded.types.EmbeddedStorageManager;
 import view.scenes.StartMenu;
 
 /**
@@ -16,6 +19,7 @@ public class AdViz extends Application {
         this.theModel = new Model();
 //        this.theView = new AppView();
         this.theController = new Controller(theModel);
+        this.theController.storageManager();
 //        this.theView.setController(theController);
         theModel.importData();
     }
