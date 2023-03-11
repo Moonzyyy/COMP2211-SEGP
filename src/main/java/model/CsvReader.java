@@ -29,14 +29,24 @@ public class CsvReader {
             HashMap<Long, User> map = new HashMap<>();
 
             //OPTION 1
-            Stream<String[]> s1 = splitArray(iReader);
-            s1.forEach(line -> {
-                User user = map.get(Long.parseLong(line[1]));
+//            Stream<String[]> s1 = splitArray(iReader);
+//            s1.forEach(line -> {
+//                User user = map.get(Long.parseLong(line[1]));
+//                if (user == null) {
+//                    user = new User(line, formatter);
+//                    map.put(user.getId(), user);
+//                } else {
+//                    user.addImpression(new Pair<>(LocalDateTime.parse(line[0], formatter), Double.parseDouble(line[6])));
+//                }
+//            });
+            iReader.lines().skip(1).forEach(line -> {
+                String[] arr = split(line, ',');
+                User user = map.get(Long.parseLong(arr[1]));
                 if (user == null) {
-                    user = new User(line, formatter);
+                    user = new User(arr, formatter);
                     map.put(user.getId(), user);
                 } else {
-                    user.addImpression(new Pair<>(LocalDateTime.parse(line[0], formatter), Double.parseDouble(line[6])));
+                    user.addImpression(new Pair<>(LocalDateTime.parse(arr[0], formatter), Double.parseDouble(arr[6])));
                 }
             });
             //END OPTION 1
@@ -92,13 +102,13 @@ public class CsvReader {
     }
 
     private Stream<String[]> splitArray(BufferedReader br) {
-        return br.lines().skip(1).parallel().map((line) -> split(line,','));
+        return br.lines().skip(1).map((line) -> split(line,','));
     }
 
     /**
-    Slightly more efficient than String.split()
-    @param line: the line to split
-    @param delimiter: the character by which to split the string
+     Slightly more efficient than String.split()
+     @param line: the line to split
+     @param delimiter: the character by which to split the string
      */
     public String[] split(final String line, final char delimiter)
     {
