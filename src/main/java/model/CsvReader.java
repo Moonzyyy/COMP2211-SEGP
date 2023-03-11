@@ -22,22 +22,38 @@ public class CsvReader {
         try {
             InputStream impressionPath = getClass().getResourceAsStream("/testdata/impression_log.csv");
             BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
-            Stream<String[]> s1 = splitArray(iReader);
-            Stream<String> s2 = iReader.lines();
-            var newUsers = s1.filter(distinctByKey(x -> x[1]));
-//            var test = newUsers.map(u -> new User(u, formatter)).collect(Collectors.toMap(User::getId, User::getClass));
-            var test = newUsers.map(u -> {
+            BufferedReader iReader2 = new BufferedReader(new InputStreamReader(impressionPath));
+//            Stream<String[]> s1 = splitArray(iReader);
+//            var newUsers = s1.filter(distinctByKey(x -> x[1]));
+            HashMap map = new HashMap();
+            HashMap mapTmp = new HashMap<>(100);
+            String line;
+            while ((line = iReader.readLine()) != null) {
+                String[] arr = line.split(line, ',');
+                map.put(arr[1], arr);
+//                mapTmp.put(arr[1], arr);
+//                if (mapTmp.size() == 100000) {
+//                    map.putAll(mapTmp);
+//                    mapTmp.clear();
+//                }
+            }
 
-                return new User(u, formatter);
-            });
-            System.out.println(test.count());
+//            Stream<String[]> s2 = splitArray(iReader);
+//            var test = newUsers.map(u -> new User(u, formatter)).collect(Collectors.toMap(User::getId, User::getClass));
+//            var idk = newUsers.map(u -> {
+//                User user = new User(u, formatter);
+//                return user;
+////                Stream<String[]> s3 = s2.filter(p -> user.getId().equals(Long.parseLong(p[1])));
+//            });
+//            System.out.println();
+//            System.out.println(idk.get(0).getId());
+//            System.out.println(s2.filter(p -> Long.parseLong(p[1]) == idk.get(0).getId()).count());
 //            impressions = splitArray(iReader).map((p) -> new Impression(p, formatter)).toList();
 //            users = splitArray(iReader).map((p) -> new User(p, formatter)).toList();
 //            iReader.readLine();
 //            System.out.println(splitArray(iReader).map((p) -> p[1]).distinct().count());
             int existing = 0;
 //            int newUsers = 0;
-            String line;
 //            String[][] test = splitArray(iReader).toArray(String[][]::new);
 //            for (String[] entry : test ) {
 //                if (!users.containsKey(entry[1])) {

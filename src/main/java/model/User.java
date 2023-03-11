@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javafx.util.Pair;
+import model.segments.Age;
+
+import static model.segments.Age.*;
 
 public class User {
 
@@ -18,7 +21,7 @@ public class User {
   private final ArrayList<Server> servers;
   private Long id;
   private String gender;
-  private String age;
+  private Age age;
   private String context;
   private String income;
 
@@ -52,12 +55,18 @@ public class User {
     this.gender = gender;
   }
 
-  public String getAge() {
+  public Age getAge() {
     return age;
   }
 
   public void setAge(String age) {
-    this.age = age;
+    switch (age) {
+      case "<25" -> this.age = U25;
+      case "25-34" -> this.age = U34;
+      case "35-44" -> this.age = U44;
+      case "45-54" -> this.age = U54;
+      default -> this.age = O54;
+    }
   }
 
   public String getIncome() {
@@ -98,5 +107,20 @@ public class User {
 
   public ArrayList<Pair<LocalDateTime, Integer>> getClicks() {
     return click;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    User that = (User) o;
+
+    return id.equals(that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Long.hashCode(id);
   }
 }
