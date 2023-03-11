@@ -17,6 +17,7 @@ public class AdViz extends Application {
 //        this.theView = new AppView();
         this.theController = new Controller(theModel);
 //        this.theView.setController(theController);
+        theModel.importData();
     }
 
     /**
@@ -25,7 +26,7 @@ public class AdViz extends Application {
      */
     public static void main(String[] args) {
         AdViz app = new AdViz();
-        launch();
+//        launch();
     }
 
     /**

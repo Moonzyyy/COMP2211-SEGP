@@ -109,18 +109,18 @@ public class User {
     return click;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-
-    User that = (User) o;
-
-    return id.equals(that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return Long.hashCode(id);
-  }
+//  @Override
+//  public boolean equals(Object o) {
+//    if (this == o) return true;
+//    if (o == null || getClass() != o.getClass()) return false;
+//
+//    User that = (User) o;
+//
+//    return id.equals(that.id);
+//  }
+//
+//  @Override
+//  public int hashCode() {
+//    return Long.hashCode(id);
+//  }
 }

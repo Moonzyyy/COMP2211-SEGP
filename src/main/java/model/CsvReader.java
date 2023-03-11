@@ -1,6 +1,9 @@
 package model;
 
+import javafx.util.Pair;
+
 import java.io.*;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,71 +25,37 @@ public class CsvReader {
         try {
             InputStream impressionPath = getClass().getResourceAsStream("/testdata/impression_log.csv");
             BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
-            BufferedReader iReader2 = new BufferedReader(new InputStreamReader(impressionPath));
-//            Stream<String[]> s1 = splitArray(iReader);
 //            var newUsers = s1.filter(distinctByKey(x -> x[1]));
-            HashMap map = new HashMap();
-            HashMap mapTmp = new HashMap<>(100);
-            String line;
-            while ((line = iReader.readLine()) != null) {
-                String[] arr = line.split(line, ',');
-                map.put(arr[1], arr);
-//                mapTmp.put(arr[1], arr);
-//                if (mapTmp.size() == 100000) {
-//                    map.putAll(mapTmp);
-//                    mapTmp.clear();
-//                }
-            }
+            HashMap<Long, User> map = new HashMap<>();
 
-//            Stream<String[]> s2 = splitArray(iReader);
-//            var test = newUsers.map(u -> new User(u, formatter)).collect(Collectors.toMap(User::getId, User::getClass));
-//            var idk = newUsers.map(u -> {
-//                User user = new User(u, formatter);
-//                return user;
-////                Stream<String[]> s3 = s2.filter(p -> user.getId().equals(Long.parseLong(p[1])));
-//            });
-//            System.out.println();
-//            System.out.println(idk.get(0).getId());
-//            System.out.println(s2.filter(p -> Long.parseLong(p[1]) == idk.get(0).getId()).count());
-//            impressions = splitArray(iReader).map((p) -> new Impression(p, formatter)).toList();
-//            users = splitArray(iReader).map((p) -> new User(p, formatter)).toList();
+            //OPTION 1
+            Stream<String[]> s1 = splitArray(iReader);
+            s1.forEach(line -> {
+                User user = map.get(Long.parseLong(line[1]));
+                if (user == null) {
+                    user = new User(line, formatter);
+                    map.put(user.getId(), user);
+                } else {
+                    user.addImpression(new Pair<>(LocalDateTime.parse(line[0], formatter), Double.parseDouble(line[6])));
+                }
+            });
+            //END OPTION 1
+            //OPTION 2
 //            iReader.readLine();
-//            System.out.println(splitArray(iReader).map((p) -> p[1]).distinct().count());
-            int existing = 0;
-//            int newUsers = 0;
-//            String[][] test = splitArray(iReader).toArray(String[][]::new);
-//            for (String[] entry : test ) {
-//                if (!users.containsKey(entry[1])) {
-//                    User user = new User(entry, formatter);
-//                    Stream<String[]> entries = Arrays.stream(test).filter(a -> Objects.equals(a[1], entry[1]));
-//                    entries.forEach(instance -> {
-//                        user.addImpression(new Pair<>(LocalDateTime.parse(instance[0], formatter), Double.parseDouble(instance[6])));
-//                    });
-//                    users.put(user.getId(), user);
+//            String line;
+//            while ((line = iReader.readLine()) != null) {
+//                String[] arr = split(line, ',');
+//                User user = map.get(Long.parseLong(arr[1]));
+//                if (user == null) {
+//                    user = new User(arr, formatter);
+//                    map.put(user.getId(), user);
+//                } else {
+//                    user.addImpression(new Pair<>(LocalDateTime.parse(arr[0], formatter), Double.parseDouble(arr[6])));
 //                }
 //            }
-//            var test = splitArray(iReader).collect(Collectors.groupingBy(u -> u[1]));
-//            test.forEach((id, value) -> {
-//                User user = new User(value.get(0), formatter);
-//                value.forEach(val -> {
-//                    user.addImpression(new Pair<>(LocalDateTime.parse(val[0], formatter), Double.parseDouble(val[6])));
-//                });
-//                users.put(user.getId(), user);
-//            });
-//            System.out.println(users.size());
-//            iReader.lines().skip(1).parallel().forEach(line -> {
-//                String[] array = split(line, ',');
-//                if (users.containsKey(Long.parseLong(array[1]))) {
-////                    existing++;
-//                } else {
-////                    newUsers++;
-//                    User user = new User(array, formatter);
-//                    users.put(user.getId(), user);
-//                }
-//            });
+            //END OPTION 2
             System.out.println("done!");
-//            System.out.println("existing: " + existing);
-//            System.out.println("new " + newUsers);
+
 //            users = splitArray(iReader).map((p) -> new User(p, formatter)).collect(HashMap::new, (m, u) -> m.put(u.getId(), u), HashMap::putAll);
 //            System.out.println("Users: " + users.size());
 //            iReader.close();
@@ -104,6 +73,10 @@ public class CsvReader {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public boolean containsId(final List<User> list, final long id){
+        return list.stream().anyMatch(o -> id == o.getId());
     }
 
     //DO NOT DELETE!!!!
