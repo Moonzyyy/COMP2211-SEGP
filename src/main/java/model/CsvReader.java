@@ -23,6 +23,18 @@ public class CsvReader {
         //Get CSV data from all 3 log files (can be changed to for loop)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
+            InputStream clickPath = getClass().getResourceAsStream("/testdata/click_log.csv");
+            BufferedReader cReader = new BufferedReader(new InputStreamReader(clickPath));
+//            clicks = splitArray(cReader).map((p) -> new Click(p, formatter)).toList();
+//            clicks = splitArray(cReader).map((p) -> new Click(p, formatter)).toList();
+//            cReader.close();
+
+            InputStream serverPath = getClass().getResourceAsStream("/testdata/server_log.csv");
+            BufferedReader sReader = new BufferedReader(new InputStreamReader(serverPath));
+//            serverInteractions = splitArray(sReader).map((p) -> new Server(p, formatter)).toList();
+//            sReader.close();
+
+
             InputStream impressionPath = getClass().getResourceAsStream("/testdata/impression_log.csv");
             BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
 //            var newUsers = s1.filter(distinctByKey(x -> x[1]));
@@ -44,6 +56,7 @@ public class CsvReader {
                 User user = map.get(Long.parseLong(arr[1]));
                 if (user == null) {
                     user = new User(arr, formatter);
+                    user.addImpression(new Pair<>(LocalDateTime.parse(arr[0], formatter), Double.parseDouble(arr[6])));
                     map.put(user.getId(), user);
                 } else {
                     user.addImpression(new Pair<>(LocalDateTime.parse(arr[0], formatter), Double.parseDouble(arr[6])));
@@ -70,15 +83,6 @@ public class CsvReader {
 //            System.out.println("Users: " + users.size());
 //            iReader.close();
 //
-//            InputStream clickPath = getClass().getResourceAsStream("/testdata/click_log.csv");
-//            BufferedReader cReader = new BufferedReader(new InputStreamReader(clickPath));
-//            clicks = splitArray(cReader).map((p) -> new Click(p, formatter)).toList();
-//            cReader.close();
-//
-//            InputStream serverPath = getClass().getResourceAsStream("/testdata/server_log.csv");
-//            BufferedReader sReader = new BufferedReader(new InputStreamReader(serverPath));
-//            serverInteractions = splitArray(sReader).map((p) -> new Server(p, formatter)).toList();
-//            sReader.close();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
