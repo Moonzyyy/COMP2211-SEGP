@@ -33,7 +33,7 @@ public class csvReader {
 
             Statement stat = conn.createStatement();
             stat.execute("Delete From myDatabase");
-            PreparedStatement statement = conn.prepareStatement("INSERT INTO myDatabase VALUES(?,?,?,?,?,?,?)");
+            /*PreparedStatement statement = conn.prepareStatement("INSERT INTO myDatabase VALUES(?,?,?,?,?,?,?)");
             InputStream inputStream = getClass().getResourceAsStream("/testData/impression_log.csv");
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
             br.readLine();
@@ -60,7 +60,7 @@ public class csvReader {
             statement.executeBatch();
             statement.close();
             br.close();
-            System.out.println("DONE!!");
+            System.out.println("DONE!!");*/
 
         }
         catch (Exception e)
