@@ -59,21 +59,21 @@ public class AdViz extends Application {
             stmt.execute("INSERT INTO incomes (label) VALUES ('Low'), ('Medium'), ('High')");
             stmt.execute("INSERT INTO contexts (label) VALUES ('News'), ('Shopping'), ('Social Media'), ('Blog'), ('Hobbies'), ('Travel')");
 
-            InputStream impression_log = AdViz.class.getResourceAsStream("/testData/impression_log.csv");
 
-            PreparedStatement users = conn.prepareStatement("INSERT INTO users VALUES (?, ?, ?, ?, ?)");
+            InputStream impression_log = AdViz.class.getResourceAsStream("/testData/impression_log.csv");
             BufferedReader br = new BufferedReader(new InputStreamReader(impression_log));
             br.readLine();
+//            Stream<String[]> uniques = br.lines().skip(1).map(line -> line.split(",")).filter(distinctByKey(x -> x[1]));
+
             final int batchSize = 50000;
-            ArrayList<Long> existing = new ArrayList<Long>();
+//            ArrayList<Long> existing = new ArrayList<Long>();
+            PreparedStatement users = conn.prepareStatement("INSERT IGNORE INTO users VALUES (?, ?, ?, ?, ?)");
             int count = 0;
             String line;
 
-//            Stream<String[]> uniques = br.lines().skip(1).map(line -> line.split(",")).filter(distinctByKey(x -> x[1]));
-
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
-                int age = 1;
+                int age = 0;
                 switch (values[3]) {
                     case "<25" -> age = 0;
                     case "25-34" -> age = 1;
@@ -82,14 +82,14 @@ public class AdViz extends Application {
                     case ">54" -> age = 4;
                 }
 
-                int income = 1;
+                int income = 0;
                 switch (values[4]) {
                     case "Low" -> income = 0;
                     case "Medium" -> income = 1;
                     case "High" -> income = 2;
                 }
 
-                int context = 1;
+                int context = 0;
                 switch (values[5]) {
                     case "News" -> context = 0;
                     case "Shopping" -> context = 1;
@@ -99,24 +99,19 @@ public class AdViz extends Application {
                     case "Travel" -> context = 5;
                 }
                 long id = Long.parseLong(values[1]);
-                if (!existing.contains(id)) {
-                    existing.add(id);
-                    users.setLong(1, id);
-                    users.setBoolean(2, values[2].equals("male"));
-                    users.setInt(3, age);
-                    users.setInt(4, income);
-                    users.setInt(5, context);
-                    users.addBatch();
-                    count++;
-                    if (count % batchSize == 0) {
-                        users.executeBatch();
-                        count = 0;
-                        System.out.println(existing.size());
-                    }
+                users.setLong(1, id);
+                users.setBoolean(2, values[2].equals("male"));
+                users.setInt(3, age);
+                users.setInt(4, income);
+                users.setInt(5, context);
+                users.addBatch();
+                count++;
+                if (count % batchSize == 0) {
+                    users.executeBatch();
+                    count = 0;
                 }
-
             }
-            System.out.println(existing);
+
             ResultSet rs = stmt.executeQuery("SELECT * FROM users");
             while (rs.next()) {
                 System.out.println(rs.getLong("id"));
