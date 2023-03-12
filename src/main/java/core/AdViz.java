@@ -73,6 +73,7 @@ public class AdViz extends Application {
 //            ArrayList<Long> existing = new ArrayList<Long>();
 
             PreparedStatement users = conn.prepareStatement("INSERT IGNORE INTO users VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement impressions = conn.prepareStatement("INSERT IGNORE INTO impressions VALUES (?, ?, ?)");
             int count = 0;
             String line;
 
@@ -104,15 +105,21 @@ public class AdViz extends Application {
                     case "Travel" -> context = 5;
                 }
                 long id = Long.parseLong(values[1]);
+                Timestamp ts = Timestamp.valueOf(values[0]);
                 users.setLong(1, id);
                 users.setBoolean(2, values[2].equals("male"));
                 users.setInt(3, age);
                 users.setInt(4, income);
                 users.setInt(5, context);
                 users.addBatch();
+                impressions.setLong(1, id);
+                impressions.setTimestamp(2, ts);
+                impressions.setDouble(3, Double.parseDouble(values[6]));
+                impressions.addBatch();
                 count++;
                 if (count % batchSize == 0) {
                     users.executeBatch();
+                    impressions.executeBatch();
                     count = 0;
                 }
             }
