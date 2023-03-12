@@ -1,7 +1,7 @@
 package core;
 
+import java.io.File;
 import java.util.List;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import model.Model;
@@ -9,6 +9,7 @@ import view.components.DashboardComp;
 import view.scenes.AbstractScene;
 import view.scenes.Dashboard;
 import view.scenes.Graph;
+import view.scenes.Import;
 import view.scenes.Loading;
 import view.scenes.Settings;
 import view.scenes.StartMenu;
@@ -18,6 +19,10 @@ public class Controller {
   private final Model model;
   private AbstractScene currentScene;
   private Stage stage;
+
+  private File clicksFile;
+  private File impressionsFile;
+  private File serverFile;
 
   /**
    * The constructor of the controller.
@@ -54,24 +59,25 @@ public class Controller {
     this.setCurrentScene(menu);
 
     //Add the action listeners
+//    menu.getImportButton().setOnAction((event) -> {
+//      //Load the data, switch to a loading screen, then switch to the dashboard
+//      Task<Void> task = new Task<>() {
+//        @Override
+//        public Void call() {
+//          model.importData();
+//          return null;
+//        }
+//      };
+//      setUpScene(new Loading());
+//      task.setOnSucceeded(e -> {
+//        setUpScene(new Dashboard());
+//      });
+//      Thread thread = new Thread(task);
+//      thread.start();
+//
+//    });
     menu.getImportButton().setOnAction((event) -> {
-      //Load the data, switch to a loading screen, then switch to the dashboard
-      Task task = new Task<Void>() {
-        @Override
-        public Void call() {
-          model.importData();
-
-          return null;
-        }
-      };
-      setUpScene(new Loading());
-      task.setOnSucceeded(e -> {
-        setUpScene(new Dashboard());
-      });
-      Thread thread = new Thread(task);
-      thread.start();
-
-//      setUpScene(new Dashboard());
+      setUpScene(new Import());
     });
 
     menu.getSettingsButton().setOnAction((event) -> {
@@ -148,6 +154,67 @@ public class Controller {
   public void setUpScene(Loading loading) {
     loading.createScene();
     this.setCurrentScene(loading);
+  }
+
+  /**
+   * Sets up an import screen that walks the user through the import process.
+   *
+   * @param importScene the import scene
+   */
+  public void setUpScene(Import importScene) {
+    File impressionFile = null;
+    File costFile = null;
+
+    importScene.createScene();
+    this.setCurrentScene(importScene);
+
+    //Button action listeners
+    importScene.getBackButton().setOnAction((event) -> {
+      setUpScene(new StartMenu());
+    });
+
+    //When each button is pressed, open a file browser and set the corresponding text field
+    importScene.getImportClicks().setOnAction((event) -> {
+      clicksFile = importScene.getFileChooser().showOpenDialog(stage);
+//      if (clicksFile != null) {
+//        importScene.getClicksTextField().setText(clicksFile.getName());
+//      } else {
+//        importScene.getClicksTextField().setText("No file selected");
+//      }
+
+      importScene.getLoadButton()
+          .setVisible(clicksFile != null && impressionsFile != null && serverFile != null);
+
+    });
+
+    importScene.getImportImpressions().setOnAction((event) -> {
+      impressionsFile = importScene.getFileChooser().showOpenDialog(stage);
+      importScene.getLoadButton()
+          .setVisible(clicksFile != null && impressionsFile != null && serverFile != null);
+    });
+
+    importScene.getImportServer().setOnAction((event) -> {
+      serverFile = importScene.getFileChooser().showOpenDialog(stage);
+      importScene.getLoadButton()
+          .setVisible(clicksFile != null && impressionsFile != null && serverFile != null);
+    });
+
+    importScene.getLoadButton().setOnAction((event) -> {
+      Task<Void> task = new Task<>() {
+        @Override
+        public Void call() {
+          //TODO: Change the model so that this works
+          model.importData(clicksFile, impressionsFile, serverFile);
+          return null;
+        }
+      };
+      setUpScene(new Loading());
+      task.setOnSucceeded(e -> {
+        setUpScene(new Dashboard());
+      });
+      Thread thread = new Thread(task);
+      thread.start();
+    });
   }
 
 

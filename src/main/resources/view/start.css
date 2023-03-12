@@ -12,6 +12,7 @@
 .botton:hover {
     -fx-background-color: #282828;
 }
+
 .startButton{
     -fx-background-radius: 30;
     -fx-background-color: #f2e9e4;

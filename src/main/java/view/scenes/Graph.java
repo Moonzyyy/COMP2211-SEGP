@@ -1,5 +1,6 @@
 package view.scenes;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
 import javafx.embed.swing.SwingNode;
+import javafx.scene.layout.Region;
 import javax.swing.SwingUtilities;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -44,29 +46,39 @@ public class Graph extends AbstractScene {
   public void createScene() {
     var topBar = new HBox();
     topBar.setAlignment(Pos.BOTTOM_CENTER);
+
     topBar.getStyleClass().add("topBar");
 
     homeButton = new Button("Home");
-//    homeButton.setOnAction(e -> {
-//      getStage().setScene(new Dashboard().getScene());
-//    });
     homeButton.getStyleClass().add("button");
     HBox.setHgrow(homeButton, Priority.ALWAYS);
 
     var graphTitle = new Label("AdViz - Graph");
     graphTitle.getStyleClass().add("graphTitle");
-    HBox.setHgrow(graphTitle, Priority.ALWAYS);
+    //HBox.setHgrow(graphTitle, Priority.ALWAYS);
 
     printButton = new Button("Print");
     printButton.getStyleClass().add("button");
-    HBox.setHgrow(printButton, Priority.ALWAYS);
+//    HBox.setHgrow(printButton, Priority.ALWAYS);
 
     compareButton = new Button("Compare");
     compareButton.getStyleClass().add("button");
-    HBox.setHgrow(compareButton, Priority.ALWAYS);
+//    HBox.setHgrow(compareButton, Priority.ALWAYS);
 
-    topBar.getChildren().addAll(homeButton, graphTitle, printButton, compareButton);
+    topBar.getChildren().add(homeButton);
+    Region spacer = new Region();
+    HBox.setHgrow(spacer, Priority.ALWAYS);
+    topBar.getChildren().add(spacer);
+    topBar.getChildren().add(graphTitle);
+    Region spacer2 = new Region();
+    HBox.setHgrow(spacer2, Priority.ALWAYS);
+    topBar.getChildren().add(spacer2);
+    topBar.getChildren().add(printButton);
+    topBar.getChildren().add(compareButton);
+
     layout.setTop(topBar);
+
+    BorderPane.setMargin(topBar, new Insets(10, 10, 10, 10));
 
     TimeSeries clicksSeries = new TimeSeries("Clicks");
     TimeSeriesCollection dataset = new TimeSeriesCollection();
@@ -103,7 +115,12 @@ public class Graph extends AbstractScene {
       swingNode.setContent(chartPanel);
     });
 
-    layout.setCenter(swingNode);
+    var graphContainer = new HBox();
+    graphContainer.setAlignment(Pos.CENTER);
+    graphContainer.setPadding(new Insets(10, 10, 10, 10));
+    graphContainer.getChildren().add(swingNode);
+    layout.setCenter(graphContainer);
+
 
     var filterBar = new HBox();
     filterBar.setAlignment(Pos.CENTER);

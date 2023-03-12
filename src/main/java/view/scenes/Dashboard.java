@@ -76,8 +76,8 @@ public class Dashboard extends AbstractScene {
     menuImg.setFitWidth(20);
     menuButton.setGraphic(menuImg);
 
-    var menuTransition = new TranslateTransition(Duration.millis(200), menuBar);
     // Menu Animation
+    var menuTransition = new TranslateTransition(Duration.millis(200), menuBar);
     menuButton.setOnAction(e -> {
       if (layout.getLeft() == null) {
         menuTransition.setToX(0);
@@ -94,6 +94,8 @@ public class Dashboard extends AbstractScene {
         menuTransition.play();
       }
     });
+
+    // Title box positioning
     titleBox.getChildren().add(menuButton);
     Region spacer = new Region();
     HBox.setHgrow(spacer, Priority.ALWAYS);

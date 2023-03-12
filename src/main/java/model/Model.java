@@ -1,5 +1,6 @@
 package model;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +17,9 @@ public class Model {
 
     public Model() {}
 
-    public void importData() {
+    public void importData(File clicksFile, File impressionsFile, File serverFile) {
         //Get CSV data from all 3 log files (can be changed to for loop)
-        CsvReader cr = new CsvReader();
+        CsvReader cr = new CsvReader(clicksFile, impressionsFile, serverFile);
         try {
             this.impressions = cr.getImpressions();
             this.clicks = cr.getClicks();
