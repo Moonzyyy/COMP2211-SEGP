@@ -212,7 +212,6 @@ public class Controller {
       Task<Void> task = new Task<>() {
         @Override
         public Void call() {
-          //TODO: Change the model so that this works
           model.importData();
           return null;
         }
