@@ -21,8 +21,7 @@ public class Loading extends AbstractScene {
     labelContainer.setAlignment(Pos.CENTER);
 
     var loadingBorderPane = new BorderPane();
-    loadingBorderPane.setCenter(loadingLabel);
-    loadingLabel.setAlignment(loadingLabel.getAlignment().CENTER);
+    loadingBorderPane.setCenter(labelContainer);
     scene = new Scene(loadingBorderPane, 1280, 720);
     scene.getStylesheets().add(
         Objects.requireNonNull(getClass().getResource("/view/start.css")).toExternalForm());

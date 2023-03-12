@@ -20,10 +20,6 @@ public class Controller {
   private AbstractScene currentScene;
   private Stage stage;
 
-  private File clicksFile;
-  private File impressionsFile;
-  private File serverFile;
-
   /**
    * The constructor of the controller.
    *
@@ -83,6 +79,16 @@ public class Controller {
     menu.getSettingsButton().setOnAction((event) -> {
       setUpScene(new Settings());
     });
+
+    menu.getResumeButton().setOnAction((event) -> {
+      if (model.getMetrics().size() > 0) {
+        setUpScene(new Dashboard());
+      }
+    });
+
+    // Predicates
+    menu.getResumeButton().setVisible(
+        model.getImpressions() != null && model.getMetrics().size() > 0);
 
 
   }
@@ -175,28 +181,31 @@ public class Controller {
 
     //When each button is pressed, open a file browser and set the corresponding text field
     importScene.getImportClicks().setOnAction((event) -> {
-      clicksFile = importScene.getFileChooser().showOpenDialog(stage);
+      model.setClicksFile(importScene.getFileChooser().showOpenDialog(stage));
 //      if (clicksFile != null) {
 //        importScene.getClicksTextField().setText(clicksFile.getName());
 //      } else {
 //        importScene.getClicksTextField().setText("No file selected");
 //      }
 
-      importScene.getLoadButton()
-          .setVisible(clicksFile != null && impressionsFile != null && serverFile != null);
+      importScene.getLoadButton().setVisible(
+          model.getClicksFile() != null && model.getImpressionsFile() != null
+              && model.getServerFile() != null);
 
     });
 
     importScene.getImportImpressions().setOnAction((event) -> {
-      impressionsFile = importScene.getFileChooser().showOpenDialog(stage);
-      importScene.getLoadButton()
-          .setVisible(clicksFile != null && impressionsFile != null && serverFile != null);
+      model.setImpressionsFile(importScene.getFileChooser().showOpenDialog(stage));
+      importScene.getLoadButton().setVisible(
+          model.getClicksFile() != null && model.getImpressionsFile() != null
+              && model.getServerFile() != null);
     });
 
     importScene.getImportServer().setOnAction((event) -> {
-      serverFile = importScene.getFileChooser().showOpenDialog(stage);
-      importScene.getLoadButton()
-          .setVisible(clicksFile != null && impressionsFile != null && serverFile != null);
+      model.setServerFile(importScene.getFileChooser().showOpenDialog(stage));
+      importScene.getLoadButton().setVisible(
+          model.getClicksFile() != null && model.getImpressionsFile() != null
+              && model.getServerFile() != null);
     });
 
     importScene.getLoadButton().setOnAction((event) -> {
@@ -204,7 +213,7 @@ public class Controller {
         @Override
         public Void call() {
           //TODO: Change the model so that this works
-          model.importData(clicksFile, impressionsFile, serverFile);
+          model.importData();
           return null;
         }
       };
