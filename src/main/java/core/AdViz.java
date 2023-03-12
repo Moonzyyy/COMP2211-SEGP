@@ -32,10 +32,10 @@ public class AdViz extends Application {
              Statement stmt = conn.createStatement();
         ){
 
-            String agesTbl = "CREATE TABLE ages (id TINYINT NOT NULL, label VARCHAR(10), PRIMARY KEY (id))";
-            String incomesTbl = "CREATE TABLE incomes (id TINYINT NOT NULL, label VARCHAR(10), PRIMARY KEY (id))";
-            String contextsTbl = "CREATE TABLE contexts (id TINYINT NOT NULL, label VARCHAR(10), PRIMARY KEY (id))";
-            String userTbl = "CREATE TABLE users (id BIGINT, gender BOOLEAN, age TINYINT FOREIGN KEY REFERENCES ages, income TINYINT FOREIGN KEY REFERENCES incomes, context TINYINT FOREIGN KEY REFERENCES contexts, PRIMARY KEY (id))";
+            String agesTbl = "CREATE TABLE ages (id TINYINT IDENTITY PRIMARY KEY, label VARCHAR(5))";
+            String incomesTbl = "CREATE TABLE incomes (id TINYINT IDENTITY PRIMARY KEY, label VARCHAR(6))";
+            String contextsTbl = "CREATE TABLE contexts (id TINYINT IDENTITY PRIMARY KEY, label VARCHAR(12))";
+            String userTbl = "CREATE TABLE users (id BIGINT PRIMARY KEY, gender BOOLEAN, age TINYINT FOREIGN KEY REFERENCES ages, income TINYINT FOREIGN KEY REFERENCES incomes, context TINYINT FOREIGN KEY REFERENCES contexts)";
             String impressionTbl = "CREATE TABLE impressions (id BIGINT FOREIGN KEY REFERENCES users, date TIMESTAMP, cost double)";
             String clickTbl = "CREATE TABLE clicks (id BIGINT FOREIGN KEY REFERENCES users, date TIMESTAMP, cost double)";
             String serverTbl = "CREATE TABLE server (id BIGINT FOREIGN KEY REFERENCES users, entryDate TIMESTAMP, exitDate TIMESTAMP, pagesViewed int, converted BOOLEAN)";
@@ -46,9 +46,12 @@ public class AdViz extends Application {
             stmt.execute(impressionTbl);
             stmt.execute(clickTbl);
             stmt.execute(serverTbl);
-            stmt.execute("INSERT INTO ages VALUES (1, 'test')");
+            stmt.execute("INSERT INTO ages (label) VALUES ('<25'), ('25-34'), ('35-44'), ('45-54'), ('>54')");
+            stmt.execute("INSERT INTO incomes (label) VALUES ('Low'), ('Medium'), ('High')");
+            stmt.execute("INSERT INTO contexts (label) VALUES ('News'), ('Shopping'), ('Social Media'), ('Blog'), ('Hobbies'), ('Travel')");
             ResultSet rs = stmt.executeQuery("SELECT * FROM ages");
             while(rs.next()) {
+                System.out.print(rs.getInt("id"));
                 System.out.println(rs.getString("label"));
             }
         }  catch (SQLException e) {
