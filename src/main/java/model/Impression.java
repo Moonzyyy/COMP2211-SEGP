@@ -9,7 +9,7 @@ public class Impression {
 
   private String userId;
 
-  private String gender;
+  private Boolean gender;
 
   private String age;
 
@@ -27,7 +27,7 @@ public class Impression {
   public Impression(String[] input, DateTimeFormatter formatter) {
     setDate(LocalDateTime.parse(input[0], formatter));
     setUserId(input[1]);
-    setGender(input[2]);
+    setGender(input[2].equals("Male"));
     setAge(input[3]);
     setIncome(input[4]);
     setContext(input[5]);
@@ -50,11 +50,11 @@ public class Impression {
     this.userId = id;
   }
 
-  public String getGender() {
+  public Boolean getGender() {
     return gender;
   }
 
-  public void setGender(String gender) {
+  public void setGender(Boolean gender) {
     this.gender = gender;
   }
 

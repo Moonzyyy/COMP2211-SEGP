@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 public class Server {
     private LocalDateTime entryDate;
 
-    private String userId;
+    private Long userId;
 
     private int timeSpent;
 
@@ -37,12 +37,12 @@ public class Server {
         this.entryDate = date;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
     public void setUserId(String id) {
-        this.userId = id;
+        this.userId = Long.parseLong(id);
     }
 
     public int getTimeSpent() {

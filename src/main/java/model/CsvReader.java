@@ -9,83 +9,52 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CsvReader {
 
     private HashMap<Long,User> users = new HashMap<Long, User>();
-    private List<Click> clicks = null;
-    private List<Server> serverInteractions = null;
 
     public CsvReader() {
         System.out.println("Loading, please wait...");
         //Get CSV data from all 3 log files (can be changed to for loop)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
+            InputStream impressionPath = getClass().getResourceAsStream("/testdata/impression_log.csv");
+            BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
+
+            iReader.lines().skip(1).forEach(line -> {
+                String[] arr = split(line, ',');
+                User user = users.get(Long.parseLong(arr[1]));
+                if (user == null) {
+                    user = new User(arr, formatter);
+                    users.put(user.getId(), user);
+                }
+                user.addImpression(new Pair<>(LocalDateTime.parse(arr[0], formatter), Double.parseDouble(arr[6])));
+                final User finalUser = user;
+            });
+            iReader.close();
+
             InputStream clickPath = getClass().getResourceAsStream("/testdata/click_log.csv");
             BufferedReader cReader = new BufferedReader(new InputStreamReader(clickPath));
-//            clicks = splitArray(cReader).map((p) -> new Click(p, formatter)).toList();
-//            clicks = splitArray(cReader).map((p) -> new Click(p, formatter)).toList();
-//            cReader.close();
+            List<String[]> tmp = splitArray(cReader).toList();
+            cReader.close();
+
+            tmp.forEach(click -> {
+                final User user = users.get(Long.parseLong(click[1]));
+                var dt = LocalDateTime.parse(click[0], formatter);
+                user.addClick(new Pair<>(LocalDateTime.parse(click[0], formatter), Double.parseDouble(click[2])));
+            });
 
             InputStream serverPath = getClass().getResourceAsStream("/testdata/server_log.csv");
             BufferedReader sReader = new BufferedReader(new InputStreamReader(serverPath));
-//            serverInteractions = splitArray(sReader).map((p) -> new Server(p, formatter)).toList();
-//            sReader.close();
+            tmp = splitArray(sReader).toList();
+            sReader.close();
 
-
-            InputStream impressionPath = getClass().getResourceAsStream("/testdata/impression_log.csv");
-            BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
-//            var newUsers = s1.filter(distinctByKey(x -> x[1]));
-            HashMap<Long, User> map = new HashMap<>();
-
-            //OPTION 1
-//            Stream<String[]> s1 = splitArray(iReader);
-//            s1.forEach(line -> {
-//                User user = map.get(Long.parseLong(line[1]));
-//                if (user == null) {
-//                    user = new User(line, formatter);
-//                    map.put(user.getId(), user);
-//                } else {
-//                    user.addImpression(new Pair<>(LocalDateTime.parse(line[0], formatter), Double.parseDouble(line[6])));
-//                }
-//            });
-//            Stream<String[]> tmp = iReader.lines().skip(1).parallel().map(line -> split(line, ','));
-//            tmp.sequential().forEach(arr -> {
-            iReader.lines().skip(1).forEach(line -> {
-                String[] arr = split(line, ',');
-                User user = map.get(Long.parseLong(arr[1]));
-                if (user == null) {
-                    user = new User(arr, formatter);
-                    map.put(user.getId(), user);
-                }
-                user.addImpression(new Pair<>(LocalDateTime.parse(arr[0], formatter), Double.parseDouble(arr[6])));
+            tmp.forEach(interaction -> {
+                final User user = users.get(Long.parseLong(interaction[1]));
+                user.addServer(new Server(interaction, formatter));
             });
-            System.out.println("Import done");
-            var imps = map.values().stream().filter(user -> user.getGender().equals("male"));
-            System.out.println(imps);
-            //END OPTION 1
-            //OPTION 2
-//            iReader.readLine();
-//            String line;
-//            while ((line = iReader.readLine()) != null) {
-//                String[] arr = split(line, ',');
-//                User user = map.get(Long.parseLong(arr[1]));
-//                if (user == null) {
-//                    user = new User(arr, formatter);
-//                    map.put(user.getId(), user);
-//                } else {
-//                    user.addImpression(new Pair<>(LocalDateTime.parse(arr[0], formatter), Double.parseDouble(arr[6])));
-//                }
-//            }
-            //END OPTION 2
-            System.out.println("done!");
-
-//            users = splitArray(iReader).map((p) -> new User(p, formatter)).collect(HashMap::new, (m, u) -> m.put(u.getId(), u), HashMap::putAll);
-//            System.out.println("Users: " + users.size());
-//            iReader.close();
-//
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -139,16 +108,8 @@ public class CsvReader {
         return result;
     }
 
-    public HashMap<Long,User> getImpressions() {
+    public HashMap<Long,User> getUsers() {
         return users;
-    }
-
-    public List<Click> getClicks() {
-        return clicks;
-    }
-
-    public List<Server> getServerInteractions() {
-        return serverInteractions;
     }
 
 }

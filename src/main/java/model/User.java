@@ -5,8 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javafx.util.Pair;
 import model.segments.Age;
-
-import static model.segments.Age.*;
+import model.segments.Context;
+import model.segments.Income;
 
 public class User {
 
@@ -17,13 +17,13 @@ public class User {
   /**
    * A list of pairs of a click date and click cost associated with this user.
    */
-  private final ArrayList<Pair<LocalDateTime, Integer>> click;
+  private final ArrayList<Pair<LocalDateTime, Double>> click;
   private final ArrayList<Server> servers;
   private Long id;
-  private String gender;
+  private Boolean gender;
   private Age age;
-  private String context;
-  private String income;
+  private Context context;
+  private Income income;
 
   public User(String[] input, DateTimeFormatter formatter) {
     impressions = new ArrayList<>();
@@ -31,12 +31,10 @@ public class User {
     servers = new ArrayList<>();
 
     setId(input[1]);
-    setGender(input[2]);
+    setGender(input[2].equals("Male"));
     setAge(input[3]);
     setIncome(input[4]);
     setContext(input[5]);
-//    addImpression(
-//        new Pair<>(LocalDateTime.parse(input[0], formatter), Double.parseDouble(input[6])));
   }
 
   public Long getId() {
@@ -47,11 +45,11 @@ public class User {
     this.id = Long.parseLong(id);
   }
 
-  public String getGender() {
+  public Boolean getGender() {
     return gender;
   }
 
-  public void setGender(String gender) {
+  public void setGender(Boolean gender) {
     this.gender = gender;
   }
 
@@ -60,36 +58,30 @@ public class User {
   }
 
   public void setAge(String age) {
-    switch (age) {
-      case "<25" -> this.age = U25;
-      case "25-34" -> this.age = U34;
-      case "35-44" -> this.age = U44;
-      case "45-54" -> this.age = U54;
-      default -> this.age = O54;
-    }
-  }
-
-  public String getIncome() {
-    return income;
+    this.age = Age.valueOfLabel(age);
   }
 
   public void setIncome(String income) {
-    this.income = income;
+    this.income = Income.valueOf(income.toUpperCase());
   }
 
-  public String getContext() {
+  public Income getIncome() {
+    return income;
+  }
+
+  public Context getContext() {
     return context;
   }
 
   public void setContext(String context) {
-    this.context = context;
+    this.context = Context.valueOfLabel(context);
   }
 
   public void addImpression(Pair<LocalDateTime, Double> impression) {
     impressions.add(impression);
   }
 
-  public void addClick(Pair<LocalDateTime, Integer> click) {
+  public void addClick(Pair<LocalDateTime, Double> click) {
     this.click.add(click);
   }
 
@@ -105,7 +97,7 @@ public class User {
     return impressions;
   }
 
-  public ArrayList<Pair<LocalDateTime, Integer>> getClicks() {
+  public ArrayList<Pair<LocalDateTime, Double>> getClicks() {
     return click;
   }
 
