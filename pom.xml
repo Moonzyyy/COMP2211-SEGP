@@ -59,6 +59,11 @@
           <artifactId>javafx-swing</artifactId>
           <version>17.0.2</version>
       </dependency>
+      <dependency>
+        <groupId>org.hsqldb</groupId>
+        <artifactId>hsqldb</artifactId>
+        <version>2.7.1</version>
+      </dependency>
   </dependencies>
 
   <build>

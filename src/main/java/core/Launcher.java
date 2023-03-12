@@ -15,9 +15,9 @@ public class Launcher {
     * @param args commandline arguments
     */
    public static void main(String[] args) {
-//     AdViz.main(args);
-       Model model = new Model();
-       model.importData();
+     AdViz.main(args);
+//       Model model = new Model();
+//       model.importData();
    }
  }
 

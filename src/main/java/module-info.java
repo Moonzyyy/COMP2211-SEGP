@@ -7,8 +7,9 @@ module com.adviz {
   requires javafx.graphics;
   requires javafx.controls;
   requires javafx.fxml;
+  requires org.hsqldb;
 
-  opens view to javafx.fxml;
+    opens view to javafx.fxml;
   opens core to javafx.fxml;
   exports core;
   //exports view;
