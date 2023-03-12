@@ -51,17 +51,20 @@ public class CsvReader {
 //                    user.addImpression(new Pair<>(LocalDateTime.parse(line[0], formatter), Double.parseDouble(line[6])));
 //                }
 //            });
+//            Stream<String[]> tmp = iReader.lines().skip(1).parallel().map(line -> split(line, ','));
+//            tmp.sequential().forEach(arr -> {
             iReader.lines().skip(1).forEach(line -> {
                 String[] arr = split(line, ',');
                 User user = map.get(Long.parseLong(arr[1]));
                 if (user == null) {
                     user = new User(arr, formatter);
-                    user.addImpression(new Pair<>(LocalDateTime.parse(arr[0], formatter), Double.parseDouble(arr[6])));
                     map.put(user.getId(), user);
-                } else {
-                    user.addImpression(new Pair<>(LocalDateTime.parse(arr[0], formatter), Double.parseDouble(arr[6])));
                 }
+                user.addImpression(new Pair<>(LocalDateTime.parse(arr[0], formatter), Double.parseDouble(arr[6])));
             });
+            System.out.println("Import done");
+            var imps = map.values().stream().filter(user -> user.getGender().equals("male"));
+            System.out.println(imps);
             //END OPTION 1
             //OPTION 2
 //            iReader.readLine();
