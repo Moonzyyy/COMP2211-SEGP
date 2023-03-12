@@ -1,7 +1,7 @@
 package core;
 
+import java.io.File;
 import java.util.List;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import model.Model;
@@ -9,6 +9,7 @@ import view.components.DashboardComp;
 import view.scenes.AbstractScene;
 import view.scenes.Dashboard;
 import view.scenes.Graph;
+import view.scenes.Import;
 import view.scenes.Loading;
 import view.scenes.Settings;
 import view.scenes.StartMenu;
@@ -54,29 +55,24 @@ public class Controller {
     this.setCurrentScene(menu);
 
     //Add the action listeners
+
     menu.getImportButton().setOnAction((event) -> {
-      //Load the data, switch to a loading screen, then switch to the dashboard
-      Task task = new Task<Void>() {
-        @Override
-        public Void call() {
-          model.importData();
-
-          return null;
-        }
-      };
-      setUpScene(new Loading());
-      task.setOnSucceeded(e -> {
-        setUpScene(new Dashboard());
-      });
-      Thread thread = new Thread(task);
-      thread.start();
-
-//      setUpScene(new Dashboard());
+      setUpScene(new Import());
     });
 
     menu.getSettingsButton().setOnAction((event) -> {
       setUpScene(new Settings());
     });
+
+    menu.getResumeButton().setOnAction((event) -> {
+      if (model.getMetrics().size() > 0) {
+        setUpScene(new Dashboard());
+      }
+    });
+
+    // Predicates
+    menu.getResumeButton()
+            .setVisible(model.getUsers() != null && model.getMetrics().size() > 0);
 
 
   }
@@ -150,5 +146,69 @@ public class Controller {
     this.setCurrentScene(loading);
   }
 
+  /**
+   * Sets up an import screen that walks the user through the import process.
+   *
+   * @param importScene the import scene
+   */
+  public void setUpScene(Import importScene) {
+    File impressionFile = null;
+    File costFile = null;
 
+    importScene.createScene();
+    this.setCurrentScene(importScene);
+
+    //Button action listeners
+    importScene.getBackButton().setOnAction((event) -> {
+      setUpScene(new StartMenu());
+    });
+
+    //When each button is pressed, open a file browser and set the corresponding text field
+    importScene.getImportClicks().setOnAction((event) -> {
+      model.setClicksFile(importScene.getFileChooser().showOpenDialog(stage));
+//      if (clicksFile != null) {
+//        importScene.getClicksTextField().setText(clicksFile.getName());
+//      } else {
+//        importScene.getClicksTextField().setText("No file selected");
+//      }
+      importScene.getLoadButton().setDisable(
+              model.getClicksFile() == null || model.getImpressionsFile() == null
+                      || model.getServerFile() == null);
+
+    });
+
+    importScene.getImportImpressions().setOnAction((event) -> {
+      model.setImpressionsFile(importScene.getFileChooser().showOpenDialog(stage));
+      importScene.getLoadButton().setDisable(
+              model.getClicksFile() == null || model.getImpressionsFile() == null
+                      || model.getServerFile() == null);
+    });
+
+    importScene.getImportServer().setOnAction((event) -> {
+      model.setServerFile(importScene.getFileChooser().showOpenDialog(stage));
+      importScene.getLoadButton().setDisable(
+              model.getClicksFile() == null || model.getImpressionsFile() == null
+                      || model.getServerFile() == null);
+    });
+
+    importScene.getLoadButton().setDisable(
+            model.getClicksFile() == null || model.getImpressionsFile() == null
+                    || model.getServerFile() == null);
+
+    importScene.getLoadButton().setOnAction((event) -> {
+      Task<Void> task = new Task<>() {
+        @Override
+        public Void call() {
+          model.importData();
+          return null;
+        }
+      };
+      setUpScene(new Loading());
+      task.setOnSucceeded(e -> {
+        setUpScene(new Dashboard());
+      });
+      Thread thread = new Thread(task);
+      thread.start();
+    });
+  }
 }
