@@ -36,8 +36,12 @@ public class AdViz extends Application {
      */
     public static void main(String[] args) {
 
-        try (Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:testDb", "sa", "");
-        ){
+        try (Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:testDb", "sa", "");)
+        {
+            if(!conn.isClosed())
+            {
+                System.out.println("Connection Established");
+            }
             conn.setAutoCommit(false);
             Statement stmt = conn.createStatement();
 
@@ -58,7 +62,7 @@ public class AdViz extends Application {
             stmt.execute("INSERT INTO ages (label) VALUES ('<25'), ('25-34'), ('35-44'), ('45-54'), ('>54')");
             stmt.execute("INSERT INTO incomes (label) VALUES ('Low'), ('Medium'), ('High')");
             stmt.execute("INSERT INTO contexts (label) VALUES ('News'), ('Shopping'), ('Social Media'), ('Blog'), ('Hobbies'), ('Travel')");
-
+            stmt.execute("SET DATABASE SQL SYNTAX MYS TRUE");
 
             InputStream impression_log = AdViz.class.getResourceAsStream("/testData/impression_log.csv");
             BufferedReader br = new BufferedReader(new InputStreamReader(impression_log));
@@ -67,6 +71,7 @@ public class AdViz extends Application {
 
             final int batchSize = 50000;
 //            ArrayList<Long> existing = new ArrayList<Long>();
+
             PreparedStatement users = conn.prepareStatement("INSERT IGNORE INTO users VALUES (?, ?, ?, ?, ?)");
             int count = 0;
             String line;
@@ -110,11 +115,6 @@ public class AdViz extends Application {
                     users.executeBatch();
                     count = 0;
                 }
-            }
-
-            ResultSet rs = stmt.executeQuery("SELECT * FROM users");
-            while (rs.next()) {
-                System.out.println(rs.getLong("id"));
             }
             stmt.close();
             users.close();
