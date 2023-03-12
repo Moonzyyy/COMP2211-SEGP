@@ -1,8 +1,9 @@
 module com.example.group30 {
-  requires javafx.controls;
-  requires javafx.fxml;
   requires com.opencsv;
   requires java.sql;
+  requires javafx.graphics;
+  requires javafx.fxml;
+  requires javafx.controls;
 
   opens com.example.group30 to javafx.fxml;
   exports com.example.group30;

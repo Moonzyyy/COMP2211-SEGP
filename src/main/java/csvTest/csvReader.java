@@ -3,22 +3,25 @@ package csvTest;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.*;
 
 public class csvReader {
 
-    private static final String IMPRESSION_LOG_FILEPATH = "C:\\Users\\danie\\OneDrive\\Desktop\\SEGCOURSEWORK\\week_campaign";
 
     public static void main(String[] args) {
-        connector();
+        csvReader reader = new csvReader();
+        reader.connector();
     }
 
-    public static void connector()
+    public void connector()
     {
         try
         {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\danie\\OneDrive\\Desktop\\SEGCOURSEWORK\\src\\Database\\identifier.sqlite");
+            conn.setAutoCommit(false);
             if(conn.isClosed())
             {
                 System.out.println("Connection is closed");
@@ -30,9 +33,9 @@ public class csvReader {
 
             Statement stat = conn.createStatement();
             stat.execute("Delete From myDatabase");
-
             PreparedStatement statement = conn.prepareStatement("INSERT INTO myDatabase VALUES(?,?,?,?,?,?,?)");
-            BufferedReader br = new BufferedReader(new FileReader(IMPRESSION_LOG_FILEPATH));
+            InputStream inputStream = getClass().getResourceAsStream("/testData/impression_log.csv");
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
             br.readLine();
             final int batchSize = 10000;
             int count = 0;
@@ -50,13 +53,14 @@ public class csvReader {
                 statement.addBatch();
                 if (++count % batchSize == 0) {
                     statement.executeBatch();
+                    count = 0;
                 }
             }
             stat.close();
             statement.executeBatch();
             statement.close();
             br.close();
-
+            System.out.println("DONE!!");
 
         }
         catch (Exception e)
