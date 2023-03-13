@@ -27,6 +27,12 @@
 
 }
 
+.titleBox .text {
+  -fx-fill: #FFFFFF;
+  -fx-font-size: 40;
+  -fx-font-family: "Roboto";
+}
+
 .dashboardComp{
   -fx-spacing: 40;
   -fx-alignment: center;

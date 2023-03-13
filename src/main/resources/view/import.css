@@ -48,6 +48,19 @@
 
 }
 
+.importBox{
+  -fx-background-radius: 30;
+  -fx-padding: 20;
+  -fx-spacing: 20;
+  -fx-alignment: center;
+}
+
+.importBox .label{
+  -fx-text-fill: #FFFFFF;
+  -fx-font-size: 30;
+  -fx-font-family: "Roboto";
+}
+
 .root {
   -fx-background-color: #121212;
 }

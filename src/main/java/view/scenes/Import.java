@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 /**
@@ -42,18 +43,33 @@ public class Import extends AbstractScene {
     centreBox.setAlignment(Pos.CENTER);
     layout.setCenter(centreBox);
 
-    importClicks = new Button("Import Click Data");
+    var clickDataBox = new VBox();
+    var clickDataLabel = new Label("Click Data");
+    VBox.setVgrow(clickDataBox, Priority.NEVER);
+    clickDataLabel.getStyleClass().add("text");
+    importClicks = new Button("Import");
     importClicks.getStyleClass().add("importButton");
+    clickDataBox.getStyleClass().add("importBox");
+    clickDataBox.getChildren().addAll(clickDataLabel, importClicks);
 
-    importImpressions = new Button("Import Impression Data");
+    var impressionDataBox = new VBox();
+    var impressionDataLabel = new Label("Impression Data");
+    impressionDataLabel.getStyleClass().add("text");
+    importImpressions = new Button("Import");
+    impressionDataBox.getChildren().addAll(impressionDataLabel, importImpressions);
     importImpressions.getStyleClass().add("importButton");
+    impressionDataBox.getStyleClass().add("importBox");
 
-    importServer = new Button("Import Server Data");
+    var serverDataBox = new VBox();
+    var serverDataLabel = new Label("Server Data");
+    serverDataLabel.getStyleClass().add("text");
+    importServer = new Button("Import");
+    serverDataBox.getChildren().addAll(serverDataLabel, importServer);
     importServer.getStyleClass().add("importButton");
+    serverDataBox.getStyleClass().add("importBox");
 
-    centreBox.getChildren().addAll(importClicks, importImpressions, importServer);
+    centreBox.getChildren().addAll(clickDataBox, impressionDataBox, serverDataBox);
     centreBox.setSpacing(20);
-    centreBox.setAlignment(Pos.CENTER);
 
     var bottomBar = new HBox();
 
