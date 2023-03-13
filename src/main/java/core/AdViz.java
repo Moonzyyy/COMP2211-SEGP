@@ -60,7 +60,12 @@ public class AdViz extends Application {
             final int batchSize = 50000;
 //            ArrayList<Long> existing = new ArrayList<Long>();
 
+<<<<<<< HEAD
             PreparedStatement impressions = conn.prepareStatement("INSERT INTO impressions VALUES (?, ?, ? , ?, ? , ?, ?)");
+=======
+            PreparedStatement users = conn.prepareStatement("INSERT IGNORE INTO users VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement impressions = conn.prepareStatement("INSERT IGNORE INTO impressions VALUES (?, ?, ?)");
+>>>>>>> 0018b75ada3afc3d92a0b6660eca9940b2351e7a
             int count = 0;
             String line;
 
@@ -75,12 +80,42 @@ public class AdViz extends Application {
               impressions.setString(6, values[5]);
               impressions.setString(7, values[6]);
 
+<<<<<<< HEAD
               impressions.addBatch();
               count++;
               if (count % batchSize == 0) {
                 impressions.executeBatch();
                 count = 0;
               }
+=======
+                int context = 0;
+                switch (values[5]) {
+                    case "News" -> context = 0;
+                    case "Shopping" -> context = 1;
+                    case "Social Media" -> context = 2;
+                    case "Blog" -> context = 3;
+                    case "Hobbies" -> context = 4;
+                    case "Travel" -> context = 5;
+                }
+                long id = Long.parseLong(values[1]);
+                Timestamp ts = Timestamp.valueOf(values[0]);
+                users.setLong(1, id);
+                users.setBoolean(2, values[2].equals("male"));
+                users.setInt(3, age);
+                users.setInt(4, income);
+                users.setInt(5, context);
+                users.addBatch();
+                impressions.setLong(1, id);
+                impressions.setTimestamp(2, ts);
+                impressions.setDouble(3, Double.parseDouble(values[6]));
+                impressions.addBatch();
+                count++;
+                if (count % batchSize == 0) {
+                    users.executeBatch();
+                    impressions.executeBatch();
+                    count = 0;
+                }
+>>>>>>> 0018b75ada3afc3d92a0b6660eca9940b2351e7a
             }
             System.out.println(stmt.executeQuery("SELECT Count(ID) FROM impressions"));
             stmt.close();
