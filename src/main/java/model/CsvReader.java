@@ -16,13 +16,12 @@ public class CsvReader {
 
     private final HashMap<Long,User> users = new HashMap<Long, User>();
 
-    public CsvReader(File clicksFile, File impressionsFile, File serverFile) {
+    public CsvReader() {
         System.out.println("Loading, please wait...");
         //Get CSV data from all 3 log files (can be changed to for loop)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
-//            InputStream impressionPath = getClass().getResourceAsStream(impressionsFile);
-            InputStream impressionPath = new FileInputStream(impressionsFile);
+            InputStream impressionPath = getClass().getResourceAsStream("/testdata/impression_log.csv");
             BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
 
             iReader.lines().skip(1).forEach(line -> {
@@ -36,8 +35,7 @@ public class CsvReader {
             });
             iReader.close();
 
-//            InputStream clickPath = getClass().getResourceAsStream(clicksFile);
-            InputStream clickPath = new FileInputStream(clicksFile);
+            InputStream clickPath = getClass().getResourceAsStream("/testdata/click_log.csv");
             BufferedReader cReader = new BufferedReader(new InputStreamReader(clickPath));
             Stream<String[]> tmp = splitArray(cReader);
 
@@ -47,8 +45,7 @@ public class CsvReader {
             });
             cReader.close();
 
-//            InputStream serverPath = getClass().getResourceAsStream(serverFile);
-            InputStream serverPath = new FileInputStream(serverFile);
+            InputStream serverPath = getClass().getResourceAsStream("/testdata/server_log.csv");
             BufferedReader sReader = new BufferedReader(new InputStreamReader(serverPath));
             tmp = splitArray(sReader);
 

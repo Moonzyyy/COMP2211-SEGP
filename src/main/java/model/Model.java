@@ -1,6 +1,5 @@
 package model;
 
-import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,15 +15,11 @@ public class Model {
     private List<Server> serverInteractions = null;
     private final DecimalFormat df = new DecimalFormat("#.###");
 
-    private File clicksFile;
-    private File impressionsFile;
-    private File serverFile;
-
     public Model() {}
 
     public void importData() {
         //Get CSV data from all 3 log files (can be changed to for loop)
-        CsvReader cr = new CsvReader(clicksFile, impressionsFile, serverFile);
+        CsvReader cr = new CsvReader();
         try {
             this.users = cr.getUsers();
 //            this.clicks = cr.getClicks();
@@ -129,30 +124,5 @@ public class Model {
         metrics.add(Integer.toString(numberOfUniques()));
         return metrics;
     }
-
-    public void setClicksFile(File clicksFile) {
-        this.clicksFile = clicksFile;
-    }
-    public void setImpressionsFile(File impressionsFile) {
-        this.impressionsFile = impressionsFile;
-    }
-    public void setServerFile(File serverFile) {
-        this.serverFile = serverFile;
-    }
-
-    public File getClicksFile() {
-        return clicksFile;
-    }
-    public File getImpressionsFile() {
-        return impressionsFile;
-    }
-    public File getServerFile() {
-        return serverFile;
-    }
-
-    public List<Impression> getImpressions() {
-        return impressions;
-    }
-
 
 }
