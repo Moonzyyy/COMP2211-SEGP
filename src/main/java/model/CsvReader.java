@@ -1,52 +1,81 @@
 package model;
 
+import javafx.util.Pair;
+
 import java.io.*;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CsvReader {
-    private final String IMPRESSION_LOG_FILEPATH = "src/test/TestData/impression_log.csv";
-    private final String CLICK_LOG_FILEPATH = "src/test/TestData/click_log.csv";
-    private final String SERVER_LOG_FILEPATH = "src/test/TestData/server_log.csv";
 
-    private List<Impression> impressions = null;
-    private List<Click> clicks = null;
-    private List<Server> serverInteractions = null;
+    private final HashMap<Long,User> users = new HashMap<Long, User>();
 
     public CsvReader() {
         System.out.println("Loading, please wait...");
         //Get CSV data from all 3 log files (can be changed to for loop)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
-            var iReader = getReader(IMPRESSION_LOG_FILEPATH);
-            impressions = splitArray(iReader).map((p) -> new Impression(p, formatter)).toList();
+            InputStream impressionPath = getClass().getResourceAsStream("/testdata/impression_log.csv");
+            BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
+
+            iReader.lines().skip(1).forEach(line -> {
+                String[] arr = split(line, ',');
+                User user = users.get(Long.parseLong(arr[1]));
+                if (user == null) {
+                    user = new User(arr);
+                    users.put(user.getId(), user);
+                }
+                user.addImpression(new Pair<>(LocalDateTime.parse(arr[0], formatter), Double.parseDouble(arr[6])));
+            });
             iReader.close();
-            var cReader = getReader(CLICK_LOG_FILEPATH);
-            clicks = splitArray(cReader).map((p) -> new Click(p, formatter)).toList();
+
+            InputStream clickPath = getClass().getResourceAsStream("/testdata/click_log.csv");
+            BufferedReader cReader = new BufferedReader(new InputStreamReader(clickPath));
+            Stream<String[]> tmp = splitArray(cReader);
+
+            tmp.forEach(click -> {
+                final User user = users.get(Long.parseLong(click[1]));
+                user.addClick(new Pair<>(LocalDateTime.parse(click[0], formatter), Double.parseDouble(click[2])));
+            });
             cReader.close();
-            var sReader = getReader(SERVER_LOG_FILEPATH);
-            serverInteractions = splitArray(sReader).map((p) -> new Server(p, formatter)).toList();
+
+            InputStream serverPath = getClass().getResourceAsStream("/testdata/server_log.csv");
+            BufferedReader sReader = new BufferedReader(new InputStreamReader(serverPath));
+            tmp = splitArray(sReader);
+
+            tmp.forEach(interaction -> {
+                final User user = users.get(Long.parseLong(interaction[1]));
+                user.addServer(new Server(interaction, formatter));
+            });
             sReader.close();
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private BufferedReader getReader(String filepath) throws FileNotFoundException {
+    //DO NOT DELETE!!!!
+    /*private BufferedReader getReader(String filepath) throws FileNotFoundException {
+        //Can not be included in a jar file, might need to be re-used later on
         File inputF = new File(filepath);
         InputStream inputFS = new FileInputStream(inputF);
         return new BufferedReader(new InputStreamReader(inputFS));
-    }
+    }*/
 
     private Stream<String[]> splitArray(BufferedReader br) {
-        return br.lines().skip(1).parallel().map((line) -> split(line,','));
+        return br.lines().skip(1).map((line) -> split(line,','));
     }
 
     /**
-    Slightly more efficient than String.split()
-    @param line: the line to split
-    @param delimiter: the character by which to split the string
+     Slightly more efficient than String.split()
+     @param line: the line to split
+     @param delimiter: the character by which to split the string
      */
     public String[] split(final String line, final char delimiter)
     {
@@ -70,16 +99,8 @@ public class CsvReader {
         return result;
     }
 
-    public List<Impression> getImpressions() {
-        return impressions;
-    }
-
-    public List<Click> getClicks() {
-        return clicks;
-    }
-
-    public List<Server> getServerInteractions() {
-        return serverInteractions;
+    public HashMap<Long,User> getUsers() {
+        return users;
     }
 
 }

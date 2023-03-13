@@ -4,95 +4,94 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Impression {
-    private LocalDateTime date;
 
-    private String userId;
+  private LocalDateTime date;
 
-    private String gender;
+  private String userId;
 
-    private String age;
+  private Boolean gender;
 
-    private String income;
+  private String age;
 
-    private String context;
+  private String income;
 
-    private Double impressionCost;
+  private String context;
 
-    /**
-     *
-     * @param input: The incoming data used to create the Impression
-     * @param formatter: The date formatter used when converting date string to DateTime object.
-     *                   It's a parameter to avoid re-initializing for every object.
-     */
-    public Impression(String[] input, DateTimeFormatter formatter) {
-        setDate(LocalDateTime.parse(input[0], formatter));
-        setUserId(input[1]);
-        setGender(input[2]);
-        setAge(input[3]);
-        setIncome(input[4]);
-        setContext(input[5]);
-        setImpressionCost(input[6]);
-    }
+  private Double impressionCost;
 
-    public LocalDateTime getDate() {
-        return date;
-    }
+  /**
+   * @param input:     The incoming data used to create the Impression
+   * @param formatter: The date formatter used when converting date string to DateTime object. It's
+   *                   a parameter to avoid re-initializing for every object.
+   */
+  public Impression(String[] input, DateTimeFormatter formatter) {
+    setDate(LocalDateTime.parse(input[0], formatter));
+    setUserId(input[1]);
+    setGender(input[2].equals("Male"));
+    setAge(input[3]);
+    setIncome(input[4]);
+    setContext(input[5]);
+    setImpressionCost(input[6]);
+  }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
+  public LocalDateTime getDate() {
+    return date;
+  }
 
-    public String getUserId() {
-        return userId;
-    }
+  public void setDate(LocalDateTime date) {
+    this.date = date;
+  }
 
-    public void setUserId(String id) {
-        this.userId = id;
-    }
+  public String getUserId() {
+    return userId;
+  }
 
-    public String getGender() {
-        return gender;
-    }
+  public void setUserId(String id) {
+    this.userId = id;
+  }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
+  public Boolean getGender() {
+    return gender;
+  }
 
-    public String getAge() {
-        return age;
-    }
+  public void setGender(Boolean gender) {
+    this.gender = gender;
+  }
 
-    public void setAge(String age) {
-        this.age = age;
-    }
+  public String getAge() {
+    return age;
+  }
 
-    public String getIncome() {
-        return income;
-    }
+  public void setAge(String age) {
+    this.age = age;
+  }
 
-    public void setIncome(String income) {
-        this.income = income;
-    }
+  public String getIncome() {
+    return income;
+  }
 
-    public String getContext() {
-        return context;
-    }
+  public void setIncome(String income) {
+    this.income = income;
+  }
 
-    public void setContext(String context) {
-        this.context = context;
-    }
+  public String getContext() {
+    return context;
+  }
 
-    public Double getImpressionCost() {
-        return impressionCost;
-    }
+  public void setContext(String context) {
+    this.context = context;
+  }
 
-    /**
-     *
-     * @param impressionCost: string to be converted to Double.
-     */
-    public void setImpressionCost(String impressionCost) {
-        this.impressionCost = Double.parseDouble(impressionCost);
-    }
+  public Double getImpressionCost() {
+    return impressionCost;
+  }
+
+  /**
+   * @param impressionCost: string to be converted to Double.
+   */
+  public void setImpressionCost(String impressionCost) {
+    this.impressionCost = Double.parseDouble(impressionCost);
+  }
 
 //    @Override
 //    public String toString() {

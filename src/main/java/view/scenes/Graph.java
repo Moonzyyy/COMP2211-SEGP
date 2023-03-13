@@ -1,5 +1,6 @@
 package view.scenes;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -8,10 +9,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.stage.Stage;
-import view.AppView;
 
 import javafx.embed.swing.SwingNode;
+import javafx.scene.layout.Region;
 import javax.swing.SwingUtilities;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -25,42 +25,60 @@ import java.util.Objects;
 
 public class Graph extends AbstractScene {
 
-  private final BorderPane layout;
+  private Button homeButton;
+  private Button printButton;
+  private Button compareButton;
+  private Button filterButton;
 
-  public Graph(Stage stage, AppView view) {
-    super(stage, view);
+  private final BorderPane layout;
+  /**
+   * The id of the metric that is being graphed.
+   */
+  private Integer metricId;
+
+  public Graph(Integer id) {
+    super();
     layout = new BorderPane();
-    createScene();
+    metricId = id;
+
   }
 
-  void createScene() {
-    scene = new Scene(layout, 1280, 720);
-    scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
-
+  public void createScene() {
     var topBar = new HBox();
     topBar.setAlignment(Pos.BOTTOM_CENTER);
+
     topBar.getStyleClass().add("topBar");
 
-    var homeButton = new Button("Home");
-    homeButton.setOnAction(e -> {
-      getStage().setScene(new Dashboard(getStage(), getView()).getScene());
-    });
+    homeButton = new Button("Home");
     homeButton.getStyleClass().add("button");
     HBox.setHgrow(homeButton, Priority.ALWAYS);
 
     var graphTitle = new Label("AdViz - Graph");
     graphTitle.getStyleClass().add("graphTitle");
-    HBox.setHgrow(graphTitle, Priority.ALWAYS);
+    //HBox.setHgrow(graphTitle, Priority.ALWAYS);
 
-    var printButton = new Button("Print");
+    printButton = new Button("Print");
     printButton.getStyleClass().add("button");
-    HBox.setHgrow(printButton, Priority.ALWAYS);
-    var compareButton = new Button("Compare");
-    compareButton.getStyleClass().add("button");
-    HBox.setHgrow(compareButton, Priority.ALWAYS);
+//    HBox.setHgrow(printButton, Priority.ALWAYS);
 
-    topBar.getChildren().addAll(homeButton, graphTitle, printButton, compareButton);
+    compareButton = new Button("Compare");
+    compareButton.getStyleClass().add("button");
+//    HBox.setHgrow(compareButton, Priority.ALWAYS);
+
+    topBar.getChildren().add(homeButton);
+    Region spacer = new Region();
+    HBox.setHgrow(spacer, Priority.ALWAYS);
+    topBar.getChildren().add(spacer);
+    topBar.getChildren().add(graphTitle);
+    Region spacer2 = new Region();
+    HBox.setHgrow(spacer2, Priority.ALWAYS);
+    topBar.getChildren().add(spacer2);
+    topBar.getChildren().add(printButton);
+    topBar.getChildren().add(compareButton);
+
     layout.setTop(topBar);
+
+    BorderPane.setMargin(topBar, new Insets(10, 10, 10, 10));
 
     TimeSeries clicksSeries = new TimeSeries("Clicks");
     TimeSeriesCollection dataset = new TimeSeriesCollection();
@@ -97,7 +115,12 @@ public class Graph extends AbstractScene {
       swingNode.setContent(chartPanel);
     });
 
-    layout.setCenter(swingNode);
+    var graphContainer = new HBox();
+    graphContainer.setAlignment(Pos.CENTER);
+    graphContainer.setPadding(new Insets(10, 10, 10, 10));
+    graphContainer.getChildren().add(swingNode);
+    layout.setCenter(graphContainer);
+
 
     var filterBar = new HBox();
     filterBar.setAlignment(Pos.CENTER);
@@ -106,7 +129,7 @@ public class Graph extends AbstractScene {
     var endDatePicker = new DatePicker();
 
 
-    var filterButton = new Button("Filter");
+    filterButton = new Button("Filter");
     filterButton.setOnAction(e -> {
       LocalDate startDate = startDatePicker.getValue();
       LocalDate endDate = endDatePicker.getValue();
@@ -127,6 +150,26 @@ public class Graph extends AbstractScene {
     });
     filterBar.getChildren().addAll( startDatePicker, endDatePicker, filterButton);
     layout.setBottom(filterBar);
+
+    scene = new Scene(layout, 1280, 720);
+    scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
+
+  }
+
+  public Button getHomeButton() {
+    return homeButton;
+  }
+
+  public Button getPrintButton() {
+    return printButton;
+  }
+
+  public Button getCompareButton() {
+    return compareButton;
+  }
+
+  public Button getFilterButton() {
+    return filterButton;
   }
 
 }

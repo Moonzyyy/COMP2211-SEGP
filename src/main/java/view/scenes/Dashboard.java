@@ -1,5 +1,6 @@
 package view.scenes;
 
+import java.util.List;
 import java.util.Objects;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
@@ -15,9 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.util.Duration;
-import view.AppView;
 import view.components.DashboardComp;
 
 /**
@@ -27,14 +26,15 @@ public class Dashboard extends AbstractScene {
 
   private final BorderPane layout;
 
-  public Dashboard(Stage stage, AppView view) {
-    super(stage, view);
+  public Dashboard() {
+    super();
     layout = new BorderPane();
-    createScene();
   }
 
-  void createScene() {
-
+  /**
+   * Creates all the components of the scene, and adds them to the layout.
+   */
+  public void createScene() {
     var titleBox = new HBox();
     titleBox.setAlignment(Pos.CENTER);
     var titleLabel = new Label("Dashboard");
@@ -42,15 +42,11 @@ public class Dashboard extends AbstractScene {
     titleLabel.getStyleClass().add("title");
     layout.setTop(titleBox);
 
-    var dashboard = new DashboardComp(this, stage);
+    var dashboard = new DashboardComp(this);
     dashboard.getStyleClass().add("dashboardComp");
     layout.setCenter(dashboard);
 
-    //Make it so that the back button is circular
     var backButton = new Button("<");
-    backButton.setOnAction(e -> {
-      stage.setScene(new StartMenu(stage, getView()).getScene());
-    });
     backButton.getStyleClass().add("backButton");
 
     // Sliding Menu Pane
@@ -80,8 +76,8 @@ public class Dashboard extends AbstractScene {
     menuImg.setFitWidth(20);
     menuButton.setGraphic(menuImg);
 
-    var menuTransition = new TranslateTransition(Duration.millis(200), menuBar);
     // Menu Animation
+    var menuTransition = new TranslateTransition(Duration.millis(200), menuBar);
     menuButton.setOnAction(e -> {
       if (layout.getLeft() == null) {
         menuTransition.setToX(0);
@@ -98,6 +94,8 @@ public class Dashboard extends AbstractScene {
         menuTransition.play();
       }
     });
+
+    // Title box positioning
     titleBox.getChildren().add(menuButton);
     Region spacer = new Region();
     HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -119,5 +117,15 @@ public class Dashboard extends AbstractScene {
     scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
     layout.setPrefHeight(scene.getHeight());
   }
+
+  public DashboardComp getDashboardComp() {
+    return (DashboardComp) layout.getCenter();
+  }
+
+  public Button getBackButton(){
+    return (Button) layout.getBottom();
+  }
+
+
 
 }
