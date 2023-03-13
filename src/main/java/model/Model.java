@@ -2,6 +2,7 @@ package model;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
+
 import javafx.util.Pair;
 
 public class Model {
@@ -78,7 +79,7 @@ public class Model {
   //TotalCost = Click Cost + Impression Cost
   public double totalCost()
   {
-    return Double.parseDouble(df.format(users.values().stream().map(User::getClicks).flatMap(List::stream).mapToDouble(cost -> cost.getValue()).sum() + users.values().stream().map(User::getImpressions).flatMap(List::stream).mapToDouble(cost -> cost.getValue()).sum()));
+    return Double.parseDouble(df.format(users.values().stream().map(User::getClicks).flatMap(List::stream).mapToDouble(Pair::getValue).sum() + users.values().stream().map(User::getImpressions).flatMap(List::stream).mapToDouble(Pair::getValue).sum()));
   }
 
   //Click-through-rate	(CTR):	The	average	number	of	clicks	per	impression

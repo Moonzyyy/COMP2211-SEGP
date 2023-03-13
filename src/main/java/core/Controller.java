@@ -72,7 +72,7 @@ public class Controller {
 
     // Predicates
     menu.getResumeButton()
-        .setVisible(model.getImpressions() != null && model.getMetrics().size() > 0);
+        .setVisible(model.getUsers() != null && model.getMetrics().size() > 0);
 
   }
 
