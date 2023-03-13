@@ -42,27 +42,15 @@ public class AdViz extends Application {
             {
                 System.out.println("Connection Established");
             }
-            conn.setAutoCommit(false);
             Statement stmt = conn.createStatement();
-
-            String agesTbl = "CREATE TABLE ages (id TINYINT IDENTITY PRIMARY KEY, label VARCHAR(5))";
-            String incomesTbl = "CREATE TABLE incomes (id TINYINT IDENTITY PRIMARY KEY, label VARCHAR(6))";
-            String contextsTbl = "CREATE TABLE contexts (id TINYINT IDENTITY PRIMARY KEY, label VARCHAR(12))";
-            String userTbl = "CREATE TABLE users (id BIGINT PRIMARY KEY, gender BOOLEAN, age TINYINT FOREIGN KEY REFERENCES ages, income TINYINT FOREIGN KEY REFERENCES incomes, context TINYINT FOREIGN KEY REFERENCES contexts)";
-            String impressionTbl = "CREATE TABLE impressions (id BIGINT FOREIGN KEY REFERENCES users, date TIMESTAMP, cost double)";
-            String clickTbl = "CREATE TABLE clicks (id BIGINT FOREIGN KEY REFERENCES users, date TIMESTAMP, cost double)";
-            String serverTbl = "CREATE TABLE server (id BIGINT FOREIGN KEY REFERENCES users, entryDate TIMESTAMP, exitDate TIMESTAMP, pagesViewed int, converted BOOLEAN)";
-            stmt.execute(agesTbl);
-            stmt.execute(incomesTbl);
-            stmt.execute(contextsTbl);
-            stmt.execute(userTbl);
+            conn.setAutoCommit(false);
+            String impressionTbl = "CREATE TABLE impressions (date VARCHAR(64) , id VARCHAR(64), gender VARCHAR(64), age VARCHAR(64), Income VARCHAR(64), context VARCHAR(64), ImpressionCost REAL)";
+            //String clickTbl = "CREATE TABLE clicks (id BIGINT FOREIGN KEY REFERENCES users, date TIMESTAMP, cost double)";
+            //String serverTbl = "CREATE TABLE server (id BIGINT FOREIGN KEY REFERENCES users, entryDate TIMESTAMP, exitDate TIMESTAMP, pagesViewed int, converted BOOLEAN)";
             stmt.execute(impressionTbl);
-            stmt.execute(clickTbl);
-            stmt.execute(serverTbl);
-            stmt.execute("INSERT INTO ages (label) VALUES ('<25'), ('25-34'), ('35-44'), ('45-54'), ('>54')");
-            stmt.execute("INSERT INTO incomes (label) VALUES ('Low'), ('Medium'), ('High')");
-            stmt.execute("INSERT INTO contexts (label) VALUES ('News'), ('Shopping'), ('Social Media'), ('Blog'), ('Hobbies'), ('Travel')");
-            stmt.execute("SET DATABASE SQL SYNTAX MYS TRUE");
+            //stmt.execute(clickTbl);
+            //stmt.execute(serverTbl);
+
 
             InputStream impression_log = AdViz.class.getResourceAsStream("/testData/impression_log.csv");
             BufferedReader br = new BufferedReader(new InputStreamReader(impression_log));
@@ -72,52 +60,31 @@ public class AdViz extends Application {
             final int batchSize = 50000;
 //            ArrayList<Long> existing = new ArrayList<Long>();
 
-            PreparedStatement users = conn.prepareStatement("INSERT IGNORE INTO users VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement impressions = conn.prepareStatement("INSERT INTO impressions VALUES (?, ?, ? , ?, ? , ?, ?)");
             int count = 0;
             String line;
 
             while ((line = br.readLine()) != null) {
-                String[] values = line.split(",");
-                int age = 0;
-                switch (values[3]) {
-                    case "<25" -> age = 0;
-                    case "25-34" -> age = 1;
-                    case "35-44" -> age = 2;
-                    case "45-54" -> age = 3;
-                    case ">54" -> age = 4;
-                }
+              String[] values = line.split(",");
 
-                int income = 0;
-                switch (values[4]) {
-                    case "Low" -> income = 0;
-                    case "Medium" -> income = 1;
-                    case "High" -> income = 2;
-                }
+              impressions.setString(1, values[0]);
+              impressions.setString(2, values[1]);
+              impressions.setString(3, values[2]);
+              impressions.setString(4, values[3]);
+              impressions.setString(5, values[4]);
+              impressions.setString(6, values[5]);
+              impressions.setString(7, values[6]);
 
-                int context = 0;
-                switch (values[5]) {
-                    case "News" -> context = 0;
-                    case "Shopping" -> context = 1;
-                    case "Social Media" -> context = 2;
-                    case "Blog" -> context = 3;
-                    case "Hobbies" -> context = 4;
-                    case "Travel" -> context = 5;
-                }
-                long id = Long.parseLong(values[1]);
-                users.setLong(1, id);
-                users.setBoolean(2, values[2].equals("male"));
-                users.setInt(3, age);
-                users.setInt(4, income);
-                users.setInt(5, context);
-                users.addBatch();
-                count++;
-                if (count % batchSize == 0) {
-                    users.executeBatch();
-                    count = 0;
-                }
+              impressions.addBatch();
+              count++;
+              if (count % batchSize == 0) {
+                impressions.executeBatch();
+                count = 0;
+              }
             }
+            System.out.println(stmt.executeQuery("SELECT Count(ID) FROM impressions"));
             stmt.close();
-            users.close();
+            impressions.close();
             conn.close();
             System.out.println("DONE!!!!");
 
