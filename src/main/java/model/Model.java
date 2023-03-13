@@ -52,7 +52,8 @@ public class Model {
     //Return number of Conversions; (Conversions which are true)
     public int numberOfConversions()
     {
-        return (int) serverInteractions.stream().filter(Server::getConversion).count();
+        return (int) users.values().stream().map(User::getServers).flatMap(List::stream).filter(Server::getConversion).count();
+//        return (int) serverInteractions.stream().filter(Server::getConversion).count();
     }
 
     //Bounce is defined by user in later sprints. For now keep it as number of page viewed = 1;
@@ -113,7 +114,7 @@ public class Model {
         metrics.add(Integer.toString(totalImpressions()));
         metrics.add(Integer.toString(totalClicks()));
 //        metrics.add(Integer.toString(numberOfBounces()));
-//        metrics.add(Integer.toString(numberOfConversions()));
+        metrics.add(Integer.toString(numberOfConversions()));
 //        metrics.add(Double.toString(totalCost()));
 //        metrics.add(Double.toString(clickThroughRate()));
 //        metrics.add(Double.toString(costPerAcquisition()));

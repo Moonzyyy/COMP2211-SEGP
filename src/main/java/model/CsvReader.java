@@ -3,17 +3,18 @@ package model;
 import javafx.util.Pair;
 
 import java.io.*;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CsvReader {
 
-    private HashMap<Long,User> users = new HashMap<Long, User>();
+    private final HashMap<Long,User> users = new HashMap<Long, User>();
 
     public CsvReader() {
         System.out.println("Loading, please wait...");
@@ -27,42 +28,36 @@ public class CsvReader {
                 String[] arr = split(line, ',');
                 User user = users.get(Long.parseLong(arr[1]));
                 if (user == null) {
-                    user = new User(arr, formatter);
+                    user = new User(arr);
                     users.put(user.getId(), user);
                 }
                 user.addImpression(new Pair<>(LocalDateTime.parse(arr[0], formatter), Double.parseDouble(arr[6])));
-                final User finalUser = user;
             });
             iReader.close();
 
             InputStream clickPath = getClass().getResourceAsStream("/testdata/click_log.csv");
             BufferedReader cReader = new BufferedReader(new InputStreamReader(clickPath));
-            List<String[]> tmp = splitArray(cReader).toList();
-            cReader.close();
+            Stream<String[]> tmp = splitArray(cReader);
 
             tmp.forEach(click -> {
                 final User user = users.get(Long.parseLong(click[1]));
-                var dt = LocalDateTime.parse(click[0], formatter);
                 user.addClick(new Pair<>(LocalDateTime.parse(click[0], formatter), Double.parseDouble(click[2])));
             });
+            cReader.close();
 
             InputStream serverPath = getClass().getResourceAsStream("/testdata/server_log.csv");
             BufferedReader sReader = new BufferedReader(new InputStreamReader(serverPath));
-            tmp = splitArray(sReader).toList();
-            sReader.close();
+            tmp = splitArray(sReader);
 
             tmp.forEach(interaction -> {
                 final User user = users.get(Long.parseLong(interaction[1]));
                 user.addServer(new Server(interaction, formatter));
             });
+            sReader.close();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public boolean containsId(final List<User> list, final long id){
-        return list.stream().anyMatch(o -> id == o.getId());
     }
 
     //DO NOT DELETE!!!!
@@ -72,10 +67,6 @@ public class CsvReader {
         InputStream inputFS = new FileInputStream(inputF);
         return new BufferedReader(new InputStreamReader(inputFS));
     }*/
-    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
-        Set<Object> seen = ConcurrentHashMap.newKeySet();
-        return t -> seen.add(keyExtractor.apply(t));
-    }
 
     private Stream<String[]> splitArray(BufferedReader br) {
         return br.lines().skip(1).map((line) -> split(line,','));

@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 public class Server {
     private LocalDateTime entryDate;
 
-    private Long userId;
+//    private Long userId;
 
     private int timeSpent;
 
@@ -22,9 +22,10 @@ public class Server {
      *                   It's a parameter to avoid re-initializing for every object.
      */
     public Server(String[] input, DateTimeFormatter formatter) {
-        setEntryDate(LocalDateTime.parse(input[0], formatter));
-        setUserId(input[1]);
-        setTimeSpent(LocalDateTime.parse(input[0], formatter), input[2], formatter);
+        LocalDateTime entry = LocalDateTime.parse(input[0], formatter);
+        setEntryDate(entry);
+//        setUserId(input[1]);
+        setTimeSpent(entry, input[2], formatter);
         setPagesViewed(input[3]);
         setConversion(input[4]);
     }
@@ -37,13 +38,13 @@ public class Server {
         this.entryDate = date;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
+//    public Long getUserId() {
+//        return userId;
+//    }
 
-    public void setUserId(String id) {
-        this.userId = Long.parseLong(id);
-    }
+//    public void setUserId(String id) {
+//        this.userId = Long.parseLong(id);
+//    }
 
     public int getTimeSpent() {
         return timeSpent;

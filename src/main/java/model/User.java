@@ -1,7 +1,6 @@
 package model;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javafx.util.Pair;
 import model.segments.Age;
@@ -17,7 +16,7 @@ public class User {
   /**
    * A list of pairs of a click date and click cost associated with this user.
    */
-  private final ArrayList<Pair<LocalDateTime, Double>> click;
+  private final ArrayList<Pair<LocalDateTime, Double>> clicks;
   private final ArrayList<Server> servers;
   private Long id;
   private Boolean gender;
@@ -25,9 +24,9 @@ public class User {
   private Context context;
   private Income income;
 
-  public User(String[] input, DateTimeFormatter formatter) {
+  public User(String[] input) {
     impressions = new ArrayList<>();
-    click = new ArrayList<>();
+    clicks = new ArrayList<>();
     servers = new ArrayList<>();
 
     setId(input[1]);
@@ -82,7 +81,7 @@ public class User {
   }
 
   public void addClick(Pair<LocalDateTime, Double> click) {
-    this.click.add(click);
+    this.clicks.add(click);
   }
 
   public void addServer(Server server) {
@@ -98,7 +97,7 @@ public class User {
   }
 
   public ArrayList<Pair<LocalDateTime, Double>> getClicks() {
-    return click;
+    return clicks;
   }
 
 //  @Override
