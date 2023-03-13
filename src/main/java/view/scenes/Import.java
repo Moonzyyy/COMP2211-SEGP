@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -45,28 +46,25 @@ public class Import extends AbstractScene {
 
     var clickDataBox = new VBox();
     var clickDataLabel = new Label("Click Data");
-    VBox.setVgrow(clickDataBox, Priority.NEVER);
     clickDataLabel.getStyleClass().add("text");
     importClicks = new Button("Import");
-    importClicks.getStyleClass().add("importButton");
-    clickDataBox.getStyleClass().add("importBox");
-    clickDataBox.getChildren().addAll(clickDataLabel, importClicks);
+    var importClicksTooltip = new Tooltip("Should be of the form click_log.csv");
+    importBoxFactory(clickDataBox, clickDataLabel, importClicksTooltip, importClicks);
 
-    var impressionDataBox = new VBox();
+    VBox impressionDataBox = new VBox();
     var impressionDataLabel = new Label("Impression Data");
     impressionDataLabel.getStyleClass().add("text");
     importImpressions = new Button("Import");
-    impressionDataBox.getChildren().addAll(impressionDataLabel, importImpressions);
-    importImpressions.getStyleClass().add("importButton");
-    impressionDataBox.getStyleClass().add("importBox");
+    var importImpressionsTooltip = new Tooltip("Should be of the form impression_log.csv");
+    importBoxFactory(impressionDataBox, impressionDataLabel, importImpressionsTooltip,
+        importImpressions);
 
-    var serverDataBox = new VBox();
+    VBox serverDataBox = new VBox();
     var serverDataLabel = new Label("Server Data");
     serverDataLabel.getStyleClass().add("text");
     importServer = new Button("Import");
-    serverDataBox.getChildren().addAll(serverDataLabel, importServer);
-    importServer.getStyleClass().add("importButton");
-    serverDataBox.getStyleClass().add("importBox");
+    var importServerTooltip = new Tooltip("Should be of the form server_log.csv");
+    importBoxFactory(serverDataBox, serverDataLabel, importServerTooltip, importServer);
 
     centreBox.getChildren().addAll(clickDataBox, impressionDataBox, serverDataBox);
     centreBox.setSpacing(20);
@@ -75,16 +73,15 @@ public class Import extends AbstractScene {
 
     loadButton = new Button("Load");
     loadButton.getStyleClass().add("button");
-    loadButton.setVisible(false);
+
 
     backButton = new Button("<");
     backButton.getStyleClass().add("backButton");
-    BorderPane.setMargin(backButton, new Insets(20, 0, 10, 10));
-    BorderPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
 
     var spacer = new Region();
     HBox.setHgrow(spacer, Priority.ALWAYS);
     bottomBar.getChildren().addAll(backButton, spacer, loadButton);
+    bottomBar.setPadding(new Insets(20));
     layout.setBottom(bottomBar);
 
     fileChooser = new FileChooser();
@@ -95,6 +92,18 @@ public class Import extends AbstractScene {
     scene.getStylesheets().add(getClass().getResource("/view/import.css").toExternalForm());
 
 
+  }
+
+  private void importBoxFactory(VBox clickDataBox, Label clickDataLabel,
+      Tooltip importClicksTooltip, Button importClicks) {
+    importClicksTooltip.setShowDelay(javafx.util.Duration.millis(500));
+    importClicksTooltip.setHideDelay(javafx.util.Duration.millis(100));
+    importClicks.setTooltip(importClicksTooltip);
+    clickDataBox.getChildren().addAll(clickDataLabel, importClicks);
+    importClicks.getStyleClass().add("importButton");
+    clickDataBox.getStyleClass().add("importBox");
+
+    var impressionDataBox = new VBox();
   }
 
   public Button getBackButton() {

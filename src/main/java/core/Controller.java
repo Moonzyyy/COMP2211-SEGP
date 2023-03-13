@@ -55,23 +55,7 @@ public class Controller {
     this.setCurrentScene(menu);
 
     //Add the action listeners
-//    menu.getImportButton().setOnAction((event) -> {
-//      //Load the data, switch to a loading screen, then switch to the dashboard
-//      Task<Void> task = new Task<>() {
-//        @Override
-//        public Void call() {
-//          model.importData();
-//          return null;
-//        }
-//      };
-//      setUpScene(new Loading());
-//      task.setOnSucceeded(e -> {
-//        setUpScene(new Dashboard());
-//      });
-//      Thread thread = new Thread(task);
-//      thread.start();
-//
-//    });
+
     menu.getImportButton().setOnAction((event) -> {
       setUpScene(new Import());
     });
@@ -87,8 +71,8 @@ public class Controller {
     });
 
     // Predicates
-    menu.getResumeButton().setVisible(
-        model.getImpressions() != null && model.getMetrics().size() > 0);
+    menu.getResumeButton()
+        .setVisible(model.getImpressions() != null && model.getMetrics().size() > 0);
 
 
   }
@@ -187,26 +171,29 @@ public class Controller {
 //      } else {
 //        importScene.getClicksTextField().setText("No file selected");
 //      }
-
-      importScene.getLoadButton().setVisible(
-          model.getClicksFile() != null && model.getImpressionsFile() != null
-              && model.getServerFile() != null);
+      importScene.getLoadButton().setDisable(
+          model.getClicksFile() == null || model.getImpressionsFile() == null
+              || model.getServerFile() == null);
 
     });
 
     importScene.getImportImpressions().setOnAction((event) -> {
       model.setImpressionsFile(importScene.getFileChooser().showOpenDialog(stage));
-      importScene.getLoadButton().setVisible(
-          model.getClicksFile() != null && model.getImpressionsFile() != null
-              && model.getServerFile() != null);
+      importScene.getLoadButton().setDisable(
+          model.getClicksFile() == null || model.getImpressionsFile() == null
+              || model.getServerFile() == null);
     });
 
     importScene.getImportServer().setOnAction((event) -> {
       model.setServerFile(importScene.getFileChooser().showOpenDialog(stage));
-      importScene.getLoadButton().setVisible(
-          model.getClicksFile() != null && model.getImpressionsFile() != null
-              && model.getServerFile() != null);
+      importScene.getLoadButton().setDisable(
+          model.getClicksFile() == null || model.getImpressionsFile() == null
+              || model.getServerFile() == null);
     });
+
+    importScene.getLoadButton().setDisable(
+        model.getClicksFile() == null || model.getImpressionsFile() == null
+            || model.getServerFile() == null);
 
     importScene.getLoadButton().setOnAction((event) -> {
       Task<Void> task = new Task<>() {
@@ -224,6 +211,4 @@ public class Controller {
       thread.start();
     });
   }
-
-
 }

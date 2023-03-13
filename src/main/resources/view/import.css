@@ -64,3 +64,8 @@
 .root {
   -fx-background-color: #121212;
 }
+
+.button:disabled {
+  -fx-background-color: #bfbfbf;
+  -fx-text-fill: #121212;
+}
