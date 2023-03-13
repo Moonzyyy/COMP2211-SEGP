@@ -99,7 +99,11 @@ public class Model {
     //return double in 3.dp
     public Double costPerAcquisition()
     {
-      return Double.parseDouble(df.format( totalCost() / (double) numberOfConversions()));
+      long in = System.currentTimeMillis();
+      Double lol = Double.parseDouble(df.format( totalCost() / (double) numberOfConversions()));
+      long out = System.currentTimeMillis();
+      System.out.print(out - in);
+      return lol;
     }
 
     //Cost-per-thousand-impressions(CPM): The average amount of money spent on an advertising campaign for every 1000 impressions.
