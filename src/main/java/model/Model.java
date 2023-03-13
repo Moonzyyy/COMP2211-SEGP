@@ -8,11 +8,13 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import javafx.util.Pair;
 
 public class Model {
     private HashMap<Long, User> users = null;
-    private List<Click> clicks = null;
-    private List<Server> serverInteractions = null;
+    //private List<Click> clicks = null;
+    //private List<Server> serverInteractions = null;
     private final DecimalFormat df = new DecimalFormat("#.###");
 
     public Model() {}
@@ -59,7 +61,7 @@ public class Model {
     //Bounce is defined by user in later sprints. For now keep it as number of page viewed = 1;
     public int numberOfBounces()
     {
-        return (int) serverInteractions.stream().filter(Server -> !Server.getConversion() && Server.getPagesViewed() <= 1).count();
+        return (int) users.values().stream().map(User::getServers).flatMap(List::stream).filter(server -> server.getPagesViewed() <= 1).count();
     }
 
     //Bounce Rate:	The	average	number of bounces per click
@@ -73,8 +75,7 @@ public class Model {
     //TotalCost = Click Cost + Impression Cost
     public double totalCost()
     {
-        return 0;
-//        return Double.parseDouble(df.format(users.values().stream().mapToDouble(User::getImpressionCost).sum() + clicks.stream().mapToDouble(Click::getClickCost).sum()));
+          return Double.parseDouble(df.format(users.values().stream().map(User::getClicks).flatMap(List::stream).mapToDouble(cost -> cost.getValue()).sum() + users.values().stream().map(User::getImpressions).flatMap(List::stream).mapToDouble(cost -> cost.getValue()).sum()));
     }
 
     //Click-through-rate	(CTR):	The	average	number	of	clicks	per	impression
@@ -82,7 +83,7 @@ public class Model {
     //return double in 3.dp
     public Double clickThroughRate()
     {
-        return Double.parseDouble(df.format((double) totalClicks() / (double) totalImpressions()));
+       return Double.parseDouble(df.format((double) totalClicks() / (double) totalImpressions()));
     }
 
     //Cost-per-click	(CPC):	The	average	amount	of	money spent	on	an	advertising	campaign	for	each click
@@ -90,7 +91,7 @@ public class Model {
     //return double in 3.dp
     public Double costPerClick()
     {
-        return Double.parseDouble(df.format(clicks.stream().mapToDouble(Click::getClickCost).sum() / (double) totalClicks()));
+      return Double.parseDouble(df.format(users.values().stream().map(User::getClicks).flatMap(List::stream).mapToDouble(cost -> cost.getValue()).sum() / (double) totalClicks()));
     }
 
     //Cost-per-acquisition	(CPA):	The	average	amount	of	money	spent	on	an	advertising	campaign for	each	acquisition	(i.e.,	conversion).
@@ -98,7 +99,7 @@ public class Model {
     //return double in 3.dp
     public Double costPerAcquisition()
     {
-        return Double.parseDouble(df.format(totalCost() / (double) serverInteractions.stream().filter(Server::getConversion).count()));
+      return Double.parseDouble(df.format( totalCost() / (double) numberOfConversions()));
     }
 
     //Cost-per-thousand-impressions(CPM): The average amount of money spent on an advertising campaign for every 1000 impressions.
@@ -113,14 +114,14 @@ public class Model {
         ArrayList<String> metrics = new ArrayList<String>();
         metrics.add(Integer.toString(totalImpressions()));
         metrics.add(Integer.toString(totalClicks()));
-//        metrics.add(Integer.toString(numberOfBounces()));
+        metrics.add(Integer.toString(numberOfBounces()));
         metrics.add(Integer.toString(numberOfConversions()));
-//        metrics.add(Double.toString(totalCost()));
-//        metrics.add(Double.toString(clickThroughRate()));
-//        metrics.add(Double.toString(costPerAcquisition()));
-//        metrics.add(Double.toString(costPerClick()));
-//        metrics.add(Double.toString(costPerThousandImps()));
-//        metrics.add(Double.toString(bounceRate()));
+        metrics.add(Double.toString(totalCost()));
+        metrics.add(Double.toString(clickThroughRate()));
+        metrics.add(Double.toString(costPerAcquisition()));
+        metrics.add(Double.toString(costPerClick()));
+        metrics.add(Double.toString(costPerThousandImps()));
+        metrics.add(Double.toString(bounceRate()));
         metrics.add(Integer.toString(numberOfUniques()));
         return metrics;
     }
