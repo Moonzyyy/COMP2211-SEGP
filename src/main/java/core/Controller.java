@@ -166,6 +166,7 @@ public class Controller {
     //When each button is pressed, open a file browser and set the corresponding text field
     importScene.getImportClicks().setOnAction((event) -> {
       var file = importScene.getFileChooser().showOpenDialog(stage);
+      importScene.getFileChooser().setInitialDirectory(file.getParentFile());
       model.setClicksFile(file);
       importScene.getClickFileName().setText(file.getName());
 //      if (clicksFile != null) {
@@ -181,6 +182,7 @@ public class Controller {
 
     importScene.getImportImpressions().setOnAction((event) -> {
       var file = importScene.getFileChooser().showOpenDialog(stage);
+      importScene.getFileChooser().setInitialDirectory(file.getParentFile());
       model.setImpressionsFile(file);
       importScene.getImpressionFileName().setText(file.getName());
       importScene.getLoadButton().setDisable(
@@ -190,6 +192,7 @@ public class Controller {
 
     importScene.getImportServer().setOnAction((event) -> {
       var file = importScene.getFileChooser().showOpenDialog(stage);
+      importScene.getFileChooser().setInitialDirectory(file.getParentFile());
       model.setServerFile(file);
       importScene.getServerFileName().setText(file.getName());
       importScene.getLoadButton().setDisable(

@@ -38,7 +38,9 @@
 .button:pressed{
   -fx-background-color: #bfbfbf;
   -fx-text-fill: #121212;
+  -fx-font-size: 23px;
 }
+
 
 .title {
   -fx-font-size: 40;
@@ -71,7 +73,7 @@
   -fx-text-fill: #121212;
 }
 
-.test {
+.fileNameText {
   -fx-font-size: 12px;
   -fx-fill: White;
   -fx-font-weight: 700;

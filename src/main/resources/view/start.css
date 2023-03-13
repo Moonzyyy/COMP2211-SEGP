@@ -32,6 +32,7 @@
 .startButton:pressed{
     -fx-background-color: #bfbfbf;
     -fx-text-fill: #121212;
+    -fx-font-size: 23px;
 }
 
 .title {

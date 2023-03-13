@@ -31,19 +31,25 @@
   -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.5), 0, 0, 5, 5);
 }
 
-.numberBox:hover {
+.numberBox:hover
+{
+  -fx-opacity: 1;
+  -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.5), 0, 0, 5, 5);
+}
+
+.numberBox:pressed {
   /*Material design hover effect*/
   -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.3), 0, 0, 2, 2);
 }
 
-.numberBox:hover .text {
+.numberBox:pressed .text {
   -fx-font-size: 20px;
   -fx-font-weight: bold;
   -fx-translate-x: -2;
   -fx-translate-y: -2;
 }
 
-.numberBox:hover .number {
+.numberBox:pressed .number {
   -fx-font-size: 30px;
   -fx-font-weight: bold;
   -fx-translate-x: -2;
