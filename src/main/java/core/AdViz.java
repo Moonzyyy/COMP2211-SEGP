@@ -43,6 +43,7 @@ public class AdViz {
         } else {
           System.out.println("Connection is open");
         }
+<<<<<<< HEAD
 
         Statement stmt = conn.createStatement();
         stmt.execute("DELETE FROM impressions");
@@ -55,6 +56,19 @@ public class AdViz {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         br.readLine();
         final int batchSize = 50000;
+=======
+        conn.setAutoCommit(false);
+
+        Statement stat = conn.createStatement();
+        stat.execute("DROP TABLE impressions");
+        stat.execute("create table impressions(Date TEXT, ID TEXT, Gender TEXT, Age TEXT, Income TEXT, Context TEXT, ImpressionCost REAL);");
+
+        PreparedStatement statement = conn.prepareStatement("INSERT INTO myDatabase VALUES(?,?,?,?,?,?,?)");
+        InputStream inputStream = AdViz.class.getResourceAsStream("/testData/impression_log.csv");
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        br.readLine();
+        final int batchSize = 10000;
+>>>>>>> e29efedeaaeedb3af25d28266b0164242122bb57
         int count = 0;
         String line;
         while ((line = br.readLine()) != null) {
@@ -67,18 +81,30 @@ public class AdViz {
           statement.setString(6, values[5]);
           statement.setString(7, values[6]);
           statement.addBatch();
+<<<<<<< HEAD
           count++;
           if (count % batchSize == 0) {
+=======
+          if (++count % batchSize == 0) {
+>>>>>>> e29efedeaaeedb3af25d28266b0164242122bb57
             statement.executeBatch();
             count = 0;
           }
         }
+<<<<<<< HEAD
         statement.executeBatch();
         conn.setAutoCommit(true);
         statement.close();
         br.close();
         conn.close();
         System.out.println("DONE!!");*/
+=======
+        stat.close();
+        statement.executeBatch();
+        statement.close();
+        br.close();
+        System.out.println("DONE!!");
+>>>>>>> e29efedeaaeedb3af25d28266b0164242122bb57
       }
       catch(Exception e)
       {
