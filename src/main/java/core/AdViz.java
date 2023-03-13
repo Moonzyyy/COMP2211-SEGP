@@ -36,7 +36,54 @@ public class AdViz extends Application {
      */
     public static void main(String[] args) {
 
-        try (Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:testDb", "sa", "");)
+      try {
+        Class.forName("org.sqlite.JDBC");
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:identifier.sqlite");
+        if (conn.isClosed()) {
+          System.out.println("Connection is closed");
+        } else {
+          System.out.println("Connection is open");
+        }
+        conn.setAutoCommit(false);
+
+        Statement stat = conn.createStatement();
+        stat.execute("DROP TABLE impressions");
+        stat.execute("create table impressions(Date TEXT, ID TEXT, Gender TEXT, Age TEXT, Income TEXT, Context TEXT, ImpressionCost REAL);");
+
+        PreparedStatement statement = conn.prepareStatement("INSERT INTO myDatabase VALUES(?,?,?,?,?,?,?)");
+        InputStream inputStream = AdViz.class.getResourceAsStream("/testData/impression_log.csv");
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        br.readLine();
+        final int batchSize = 10000;
+        int count = 0;
+        String line;
+        while ((line = br.readLine()) != null) {
+          String[] values = line.split(",");
+          statement.setString(1, values[0]);
+          statement.setString(2, values[1]);
+          statement.setString(3, values[2]);
+          statement.setString(4, values[3]);
+          statement.setString(5, values[4]);
+          statement.setString(6, values[5]);
+          statement.setString(7, values[6]);
+          statement.addBatch();
+          if (++count % batchSize == 0) {
+            statement.executeBatch();
+            count = 0;
+          }
+        }
+        stat.close();
+        statement.executeBatch();
+        statement.close();
+        br.close();
+        System.out.println("DONE!!");
+      }
+      catch(Exception e)
+      {
+
+      }
+
+        /*try (Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:testDb", "sa", "");)
         {
             if(!conn.isClosed())
             {
@@ -60,12 +107,9 @@ public class AdViz extends Application {
             final int batchSize = 50000;
 //            ArrayList<Long> existing = new ArrayList<Long>();
 
-<<<<<<< HEAD
             PreparedStatement impressions = conn.prepareStatement("INSERT INTO impressions VALUES (?, ?, ? , ?, ? , ?, ?)");
-=======
             PreparedStatement users = conn.prepareStatement("INSERT IGNORE INTO users VALUES (?, ?, ?, ?, ?)");
             PreparedStatement impressions = conn.prepareStatement("INSERT IGNORE INTO impressions VALUES (?, ?, ?)");
->>>>>>> 0018b75ada3afc3d92a0b6660eca9940b2351e7a
             int count = 0;
             String line;
 
@@ -80,14 +124,14 @@ public class AdViz extends Application {
               impressions.setString(6, values[5]);
               impressions.setString(7, values[6]);
 
-<<<<<<< HEAD
+
               impressions.addBatch();
               count++;
               if (count % batchSize == 0) {
                 impressions.executeBatch();
                 count = 0;
               }
-=======
+
                 int context = 0;
                 switch (values[5]) {
                     case "News" -> context = 0;
@@ -115,7 +159,6 @@ public class AdViz extends Application {
                     impressions.executeBatch();
                     count = 0;
                 }
->>>>>>> 0018b75ada3afc3d92a0b6660eca9940b2351e7a
             }
             System.out.println(stmt.executeQuery("SELECT Count(ID) FROM impressions"));
             stmt.close();
@@ -129,7 +172,7 @@ public class AdViz extends Application {
             throw new RuntimeException(e);
         }
 //        AdViz app = new AdViz();
-//        launch();
+//        launch();*/
     }
 
     /**
