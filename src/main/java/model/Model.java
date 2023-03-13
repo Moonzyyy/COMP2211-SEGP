@@ -3,6 +3,7 @@ package model;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,7 +11,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class Model {
-    private List<Impression> impressions = null;
+    private HashMap<Long, User> users = null;
     private List<Click> clicks = null;
     private List<Server> serverInteractions = null;
     private final DecimalFormat df = new DecimalFormat("#.###");
@@ -25,26 +26,26 @@ public class Model {
         //Get CSV data from all 3 log files (can be changed to for loop)
         CsvReader cr = new CsvReader(clicksFile, impressionsFile, serverFile);
         try {
-            this.impressions = cr.getImpressions();
-            this.clicks = cr.getClicks();
-            this.serverInteractions= cr.getServerInteractions();
+            this.users = cr.getUsers();
+//            this.clicks = cr.getClicks();
+//            this.serverInteractions= cr.getServerInteractions();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
     public int totalImpressions()
     {
-        return impressions.size();
+        return users.values().stream().reduce(0, (total, u) -> total + u.getImpressions().size(), Integer::sum);
     }
 
     public int totalClicks(){
-        return clicks.size();
+        return users.values().stream().reduce(0, (total, u) -> total + u.getClicks().size(), Integer::sum);
     }
 
     //Return number of uniques; (Distinct IDs from Click log)
     public int numberOfUniques()
     {
-        return (int) clicks.stream().filter(distinctByKey(Click::getUserId)).count();
+        return (int) users.values().stream().filter(u -> u.getClicks().size() > 0).count();
     }
 
     // predicate to filter the duplicates by the given key extractor
@@ -56,7 +57,8 @@ public class Model {
     //Return number of Conversions; (Conversions which are true)
     public int numberOfConversions()
     {
-        return (int) serverInteractions.stream().filter(Server::getConversion).count();
+        return (int) users.values().stream().map(User::getServers).flatMap(List::stream).filter(Server::getConversion).count();
+//        return (int) serverInteractions.stream().filter(Server::getConversion).count();
     }
 
     //Bounce is defined by user in later sprints. For now keep it as number of page viewed = 1;
@@ -76,7 +78,8 @@ public class Model {
     //TotalCost = Click Cost + Impression Cost
     public double totalCost()
     {
-        return Double.parseDouble(df.format(impressions.stream().mapToDouble(Impression::getImpressionCost).sum() + clicks.stream().mapToDouble(Click::getClickCost).sum()));
+        return 0;
+//        return Double.parseDouble(df.format(users.values().stream().mapToDouble(User::getImpressionCost).sum() + clicks.stream().mapToDouble(Click::getClickCost).sum()));
     }
 
     //Click-through-rate	(CTR):	The	average	number	of	clicks	per	impression
@@ -115,14 +118,14 @@ public class Model {
         ArrayList<String> metrics = new ArrayList<String>();
         metrics.add(Integer.toString(totalImpressions()));
         metrics.add(Integer.toString(totalClicks()));
-        metrics.add(Integer.toString(numberOfBounces()));
+//        metrics.add(Integer.toString(numberOfBounces()));
         metrics.add(Integer.toString(numberOfConversions()));
-        metrics.add(Double.toString(totalCost()));
-        metrics.add(Double.toString(clickThroughRate()));
-        metrics.add(Double.toString(costPerAcquisition()));
-        metrics.add(Double.toString(costPerClick()));
-        metrics.add(Double.toString(costPerThousandImps()));
-        metrics.add(Double.toString(bounceRate()));
+//        metrics.add(Double.toString(totalCost()));
+//        metrics.add(Double.toString(clickThroughRate()));
+//        metrics.add(Double.toString(costPerAcquisition()));
+//        metrics.add(Double.toString(costPerClick()));
+//        metrics.add(Double.toString(costPerThousandImps()));
+//        metrics.add(Double.toString(bounceRate()));
         metrics.add(Integer.toString(numberOfUniques()));
         return metrics;
     }

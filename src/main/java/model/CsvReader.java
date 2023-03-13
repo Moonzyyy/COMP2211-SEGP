@@ -1,15 +1,20 @@
 package model;
 
+import javafx.util.Pair;
+
 import java.io.*;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CsvReader {
 
-    private List<Impression> impressions = null;
-    private List<Click> clicks = null;
-    private List<Server> serverInteractions = null;
+    private final HashMap<Long,User> users = new HashMap<Long, User>();
 
     public CsvReader(File clicksFile, File impressionsFile, File serverFile) {
         System.out.println("Loading, please wait...");
@@ -19,19 +24,38 @@ public class CsvReader {
 //            InputStream impressionPath = getClass().getResourceAsStream(impressionsFile);
             InputStream impressionPath = new FileInputStream(impressionsFile);
             BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
-            impressions = splitArray(iReader).map((p) -> new Impression(p, formatter)).toList();
+
+            iReader.lines().skip(1).forEach(line -> {
+                String[] arr = split(line, ',');
+                User user = users.get(Long.parseLong(arr[1]));
+                if (user == null) {
+                    user = new User(arr);
+                    users.put(user.getId(), user);
+                }
+                user.addImpression(new Pair<>(LocalDateTime.parse(arr[0], formatter), Double.parseDouble(arr[6])));
+            });
             iReader.close();
 
 //            InputStream clickPath = getClass().getResourceAsStream(clicksFile);
             InputStream clickPath = new FileInputStream(clicksFile);
             BufferedReader cReader = new BufferedReader(new InputStreamReader(clickPath));
-            clicks = splitArray(cReader).map((p) -> new Click(p, formatter)).toList();
+            Stream<String[]> tmp = splitArray(cReader);
+
+            tmp.forEach(click -> {
+                final User user = users.get(Long.parseLong(click[1]));
+                user.addClick(new Pair<>(LocalDateTime.parse(click[0], formatter), Double.parseDouble(click[2])));
+            });
             cReader.close();
 
 //            InputStream serverPath = getClass().getResourceAsStream(serverFile);
             InputStream serverPath = new FileInputStream(serverFile);
             BufferedReader sReader = new BufferedReader(new InputStreamReader(serverPath));
-            serverInteractions = splitArray(sReader).map((p) -> new Server(p, formatter)).toList();
+            tmp = splitArray(sReader);
+
+            tmp.forEach(interaction -> {
+                final User user = users.get(Long.parseLong(interaction[1]));
+                user.addServer(new Server(interaction, formatter));
+            });
             sReader.close();
 
         } catch (Exception e) {
@@ -47,15 +71,14 @@ public class CsvReader {
         return new BufferedReader(new InputStreamReader(inputFS));
     }*/
 
-
     private Stream<String[]> splitArray(BufferedReader br) {
-        return br.lines().skip(1).parallel().map((line) -> split(line,','));
+        return br.lines().skip(1).map((line) -> split(line,','));
     }
 
     /**
-    Slightly more efficient than String.split()
-    @param line: the line to split
-    @param delimiter: the character by which to split the string
+     Slightly more efficient than String.split()
+     @param line: the line to split
+     @param delimiter: the character by which to split the string
      */
     public String[] split(final String line, final char delimiter)
     {
@@ -79,16 +102,8 @@ public class CsvReader {
         return result;
     }
 
-    public List<Impression> getImpressions() {
-        return impressions;
-    }
-
-    public List<Click> getClicks() {
-        return clicks;
-    }
-
-    public List<Server> getServerInteractions() {
-        return serverInteractions;
+    public HashMap<Long,User> getUsers() {
+        return users;
     }
 
 }
