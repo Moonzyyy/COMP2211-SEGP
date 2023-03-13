@@ -72,12 +72,7 @@ public class Controller {
 
     // Predicates
     menu.getResumeButton()
-<<<<<<< HEAD
-            .setVisible(model.getUsers() != null && model.getMetrics().size() > 0);
-=======
         .setVisible(model.getImpressions() != null && model.getMetrics().size() > 0);
->>>>>>> 7c91177 (Made the import scene more intuitive)
-
 
   }
 
