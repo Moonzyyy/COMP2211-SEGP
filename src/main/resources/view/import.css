@@ -65,7 +65,15 @@
   -fx-background-color: #121212;
 }
 
+
 .button:disabled {
   -fx-background-color: #bfbfbf;
   -fx-text-fill: #121212;
+}
+
+.test {
+  -fx-font-size: 12px;
+  -fx-fill: White;
+  -fx-font-weight: 700;
+
 }

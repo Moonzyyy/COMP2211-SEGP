@@ -165,7 +165,9 @@ public class Controller {
 
     //When each button is pressed, open a file browser and set the corresponding text field
     importScene.getImportClicks().setOnAction((event) -> {
-      model.setClicksFile(importScene.getFileChooser().showOpenDialog(stage));
+      var file = importScene.getFileChooser().showOpenDialog(stage);
+      model.setClicksFile(file);
+      importScene.getClickFileName().setText(file.getName());
 //      if (clicksFile != null) {
 //        importScene.getClicksTextField().setText(clicksFile.getName());
 //      } else {
@@ -178,14 +180,18 @@ public class Controller {
     });
 
     importScene.getImportImpressions().setOnAction((event) -> {
-      model.setImpressionsFile(importScene.getFileChooser().showOpenDialog(stage));
+      var file = importScene.getFileChooser().showOpenDialog(stage);
+      model.setImpressionsFile(file);
+      importScene.getImpressionFileName().setText(file.getName());
       importScene.getLoadButton().setDisable(
           model.getClicksFile() == null || model.getImpressionsFile() == null
               || model.getServerFile() == null);
     });
 
     importScene.getImportServer().setOnAction((event) -> {
-      model.setServerFile(importScene.getFileChooser().showOpenDialog(stage));
+      var file = importScene.getFileChooser().showOpenDialog(stage);
+      model.setServerFile(file);
+      importScene.getServerFileName().setText(file.getName());
       importScene.getLoadButton().setDisable(
           model.getClicksFile() == null || model.getImpressionsFile() == null
               || model.getServerFile() == null);
