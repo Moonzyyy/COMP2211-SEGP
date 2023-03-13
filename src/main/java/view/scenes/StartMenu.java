@@ -12,6 +12,8 @@ public class StartMenu extends AbstractScene {
   private Button importButton;
   private Button settingsButton;
 
+  private Button resumeButton;
+
   public StartMenu() {
     super();
 //    createScene();
@@ -28,6 +30,9 @@ public class StartMenu extends AbstractScene {
     settingsButton = new Button("Settings");
     settingsButton.getStyleClass().add("startButton");
 
+    resumeButton = new Button("Resume");
+    resumeButton.getStyleClass().add("startButton");
+
     var title = new Label("AdViz");
     title.getStyleClass().add("title");
 
@@ -36,7 +41,7 @@ public class StartMenu extends AbstractScene {
     startTitle.getChildren().add(title);
 
     var startButtonsVBox = new VBox();
-    startButtonsVBox.getChildren().addAll(importButton, settingsButton);
+    startButtonsVBox.getChildren().addAll(importButton, settingsButton, resumeButton);
     startButtonsVBox.setPrefSize(200, 200);
     startButtonsVBox.setSpacing(20);
     startButtonsVBox.setAlignment(Pos.CENTER);
@@ -55,5 +60,9 @@ public class StartMenu extends AbstractScene {
 
   public Button getSettingsButton() {
     return this.settingsButton;
+  }
+
+  public Button getResumeButton() {
+    return this.resumeButton;
   }
 }
