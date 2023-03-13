@@ -44,11 +44,14 @@ public class AdViz {
           System.out.println("Connection is open");
         }
 
-
         conn.setAutoCommit(false);
+        Statement stmt = conn.createStatement();
+        stmt.execute("DROP TABLE IF EXISTS impressions");
+        conn.commit();
+        stmt.execute("CREATE TABLE impressions (DATE TEXT, ID TEXT, GENDER TEXT, AGE TEXT, INCOME TEXT, CONTEXT TEXT, IMPRESSIONCOST TEXT)");
+        conn.commit();
 
-        PreparedStatement statement = conn.prepareStatement(
-            "INSERT INTO impressions VALUES(?,?,?,?,?,?,?)");
+        PreparedStatement statement = conn.prepareStatement("INSERT INTO impressions VALUES(?,?,?,?,?,?,?)");
         InputStream inputStream = getClass().getResourceAsStream("/testdata/impression_log.csv");
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         br.readLine();
@@ -68,11 +71,12 @@ public class AdViz {
           count++;
           if (count % batchSize == 0) {
             statement.executeBatch();
+            conn.commit();
             count = 0;
           }
         }
         statement.executeBatch();
-        conn.setAutoCommit(true);
+        conn.commit();
         statement.close();
         br.close();
         conn.close();
