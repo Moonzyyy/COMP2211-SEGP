@@ -72,7 +72,11 @@ public class Controller {
 
     // Predicates
     menu.getResumeButton()
+<<<<<<< HEAD
             .setVisible(model.getUsers() != null && model.getMetrics().size() > 0);
+=======
+        .setVisible(model.getImpressions() != null && model.getMetrics().size() > 0);
+>>>>>>> 7c91177 (Made the import scene more intuitive)
 
 
   }
@@ -172,28 +176,27 @@ public class Controller {
 //        importScene.getClicksTextField().setText("No file selected");
 //      }
       importScene.getLoadButton().setDisable(
-              model.getClicksFile() == null || model.getImpressionsFile() == null
-                      || model.getServerFile() == null);
-
+          model.getClicksFile() == null || model.getImpressionsFile() == null
+              || model.getServerFile() == null);
     });
 
     importScene.getImportImpressions().setOnAction((event) -> {
       model.setImpressionsFile(importScene.getFileChooser().showOpenDialog(stage));
       importScene.getLoadButton().setDisable(
-              model.getClicksFile() == null || model.getImpressionsFile() == null
-                      || model.getServerFile() == null);
+          model.getClicksFile() == null || model.getImpressionsFile() == null
+              || model.getServerFile() == null);
     });
 
     importScene.getImportServer().setOnAction((event) -> {
       model.setServerFile(importScene.getFileChooser().showOpenDialog(stage));
       importScene.getLoadButton().setDisable(
-              model.getClicksFile() == null || model.getImpressionsFile() == null
-                      || model.getServerFile() == null);
+          model.getClicksFile() == null || model.getImpressionsFile() == null
+              || model.getServerFile() == null);
     });
 
     importScene.getLoadButton().setDisable(
-            model.getClicksFile() == null || model.getImpressionsFile() == null
-                    || model.getServerFile() == null);
+        model.getClicksFile() == null || model.getImpressionsFile() == null
+            || model.getServerFile() == null);
 
     importScene.getLoadButton().setOnAction((event) -> {
       Task<Void> task = new Task<>() {
