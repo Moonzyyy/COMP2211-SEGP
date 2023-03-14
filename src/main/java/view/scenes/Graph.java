@@ -2,9 +2,12 @@ package view.scenes;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.time.LocalDate;
 import java.util.Objects;
 import javafx.embed.swing.SwingNode;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,12 +15,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javax.swing.SwingUtilities;
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartMouseEvent;
+import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.time.Day;
@@ -31,6 +37,8 @@ public class Graph extends AbstractScene {
   private Button printButton;
   private Button compareButton;
   private Button filterButton;
+
+
   /**
    * The id of the metric that is being graphed.
    */
@@ -138,7 +146,42 @@ public class Graph extends AbstractScene {
       chartPanel.getChart().getXYPlot().getRenderer()
           .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
       swingNode.setContent(chartPanel);
+
+      chartPanel.setMouseWheelEnabled(true);
+      chartPanel.setDomainZoomable(true);
+      chartPanel.setRangeZoomable(true);
+
+      chartPanel.setZoomTriggerDistance(Integer.MAX_VALUE);
+      chartPanel.setFillZoomRectangle(false);
+      chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
+
+
+
+       chartPanel.addMouseListener(new CustomListener());
+//      chartPanel.addChartMouseListener(new ChartMouseListener() {
+//        @Override
+//        public void chartMouseClicked(ChartMouseEvent cme) {
+//          chartMouseMoved(cme);
+//        }
+//
+//        //does not work, when you press button no work D:
+//        @Override
+//        public void chartMouseMoved(ChartMouseEvent cme) {
+//          if(cme.getTrigger().getButton() == 0)
+//          {
+//            System.out.println("Mouse is being moved while clicked");
+//          }
+//          else
+//          {
+//            System.out.println(cme.getTrigger().getButton());
+//          }
+//       }
+//
+//
+//      });
+
     });
+
 
     var graphContainer = new HBox();
     graphContainer.setAlignment(Pos.CENTER);
@@ -207,6 +250,7 @@ public class Graph extends AbstractScene {
 
   }
 
+
   public Button getHomeButton() {
     return homeButton;
   }
@@ -221,6 +265,35 @@ public class Graph extends AbstractScene {
 
   public Button getFilterButton() {
     return filterButton;
+  }
+
+  public class CustomListener implements MouseListener {
+
+
+    public void mouseClicked(MouseEvent e) {
+      //keep to null
+    }
+
+    public void mouseEntered(MouseEvent e) {
+      //keep to null
+    }
+
+    public void mouseExited(MouseEvent e) {
+      //keep to null
+    }
+
+    public void mousePressed(MouseEvent e) {
+      System.out.println("Mouse has been clicked");
+      e.getXOnScreen();
+      e.getYOnScreen();
+
+    }
+
+    public void mouseReleased(MouseEvent e) {
+      System.out.println("Mouse has been released");
+      e.getXOnScreen();
+      e.getYOnScreen();
+    }
   }
 
 }
