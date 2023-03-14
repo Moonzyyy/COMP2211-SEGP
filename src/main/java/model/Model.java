@@ -7,17 +7,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import javafx.util.Pair;
 
 public class Model {
-  private HashMap<Long, User> users = null;
-  private ArrayList<Pair<LocalDateTime, Double>> impressions;
-  private ArrayList<Pair<LocalDateTime, Double>> clicks;
-  private ArrayList<Server> servers;
+  private HashMap<Long, User> users;
+
+  private final ArrayList<Double> metrics = new ArrayList<>(11);
 
   private int bounces;
-  //private List<Click> clicks = null;
-  //private List<Server> serverInteractions = null;
   private final DecimalFormat df = new DecimalFormat("#.###");
   private double clickCost;
 
@@ -28,21 +27,30 @@ public class Model {
     CsvReader cr = new CsvReader();
     try {
       this.users = cr.getUsers();
-      this.impressions = users.values().stream().parallel().flatMap(u -> u.getImpressions().stream()).collect(Collectors.toCollection(ArrayList<Pair<LocalDateTime, Double>>::new));
-      this.clicks = users.values().stream().parallel().flatMap(u -> u.getClicks().stream()).collect(Collectors.toCollection(ArrayList<Pair<LocalDateTime, Double>>::new));;
-      this.servers = users.values().stream().parallel().flatMap(u -> u.getServers().stream()).collect(Collectors.toCollection(ArrayList<Server>::new));;
-      this.clickCost = clicks.stream().mapToDouble(Pair::getValue).sum();
+      this.clickCost = getClicks().mapToDouble(Pair::getValue).sum();
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
   }
+
+  public Stream<Pair<LocalDateTime, Double>> getImpressions() {
+    return users.values().stream().parallel().flatMap(u -> u.getImpressions().stream());
+  }
+
+  public Stream<Pair<LocalDateTime, Double>> getClicks() {
+    return users.values().stream().parallel().flatMap(u -> u.getClicks().stream());
+  }
+  public Stream<Server> getServers() {
+    return users.values().stream().parallel().flatMap(u -> u.getServers().stream());
+  }
   public int totalImpressions()
   {
-    return this.impressions.size();
+//    return this.impressions.size();
+    return (int) this.getImpressions().count();
   }
 
   public int totalClicks(){
-    return this.clicks.size();
+    return (int) getClicks().count();
   }
 
   //Return number of uniques; (Distinct IDs from Click log)
@@ -60,14 +68,14 @@ public class Model {
   //Return number of Conversions; (Conversions which are true)
   public int numberOfConversions()
   {
-    return (int) servers.stream().parallel().filter(Server::getConversion).count();
+    return (int) getServers().filter(Server::getConversion).count();
 //        return (int) serverInteractions.stream().filter(Server::getConversion).count();
   }
 
   //Bounce is defined by user in later sprints. For now keep it as number of page viewed = 1;
   public int numberOfBounces()
   {
-    this.bounces = (int) servers.stream().parallel().filter(server -> server.getPagesViewed() <= 1).count();
+    this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
     return this.bounces;
   }
 
@@ -76,13 +84,14 @@ public class Model {
   //return double in 3.dp
   public double bounceRate()
   {
-    return Double.parseDouble(df.format((double) this.bounces / (double) totalClicks()));
+    return Double.parseDouble(df.format((double) this.bounces / metrics.get(1)));
   }
 
   //TotalCost = Click Cost + Impression Cost
   public double totalCost()
   {
-    return Double.parseDouble(df.format(this.clickCost + impressions.stream().parallel().mapToDouble(Pair::getValue).sum()));
+//    return Double.parseDouble(df.format(this.clickCost + impressions.stream().parallel().mapToDouble(Pair::getValue).sum()));
+    return Double.parseDouble(df.format(this.clickCost + getImpressions().mapToDouble(Pair::getValue).sum()));
   }
 
   //Click-through-rate	(CTR):	The	average	number	of	clicks	per	impression
@@ -90,7 +99,7 @@ public class Model {
   //return double in 3.dp
   public Double clickThroughRate()
   {
-    return Double.parseDouble(df.format((double) totalClicks() / (double) totalImpressions()));
+    return Double.parseDouble(df.format(metrics.get(1) / metrics.get(0)));
   }
 
   //Cost-per-click	(CPC):	The	average	amount	of	money spent	on	an	advertising	campaign	for	each click
@@ -98,7 +107,7 @@ public class Model {
   //return double in 3.dp
   public Double costPerClick()
   {
-    return Double.parseDouble(df.format(this.clickCost / (double) totalClicks()));
+    return Double.parseDouble(df.format(this.clickCost / metrics.get(1)));
   }
 
   //Cost-per-acquisition	(CPA):	The	average	amount	of	money	spent	on	an	advertising	campaign for	each	acquisition	(i.e.,	conversion).
@@ -106,11 +115,7 @@ public class Model {
   //return double in 3.dp
   public Double costPerAcquisition()
   {
-//    long in = System.currentTimeMillis();
-    Double lol = Double.parseDouble(df.format( totalCost() / (double) numberOfConversions()));
-//    long out = System.currentTimeMillis();
-//    System.out.print(out - in);
-    return lol;
+    return Double.parseDouble(df.format( metrics.get(4) / (double) metrics.get(3)));
   }
 
   //Cost-per-thousand-impressions(CPM): The average amount of money spent on an advertising campaign for every 1000 impressions.
@@ -118,23 +123,23 @@ public class Model {
   //return double in 3.dp
   public Double costPerThousandImps()
   {
-    return Double.parseDouble(df.format(totalCost() / (double) totalImpressions()));
+    return Double.parseDouble(df.format(metrics.get(4) / (double) metrics.get(0)));
+//    return Double.parseDouble(df.format(metrics.get(4) / (double) metrics.get(0)));
   }
 
   public ArrayList<String> getMetrics() {
-    ArrayList<String> metrics = new ArrayList<String>();
-    metrics.add(Integer.toString(totalImpressions()));
-    metrics.add(Integer.toString(totalClicks()));
-    metrics.add(Integer.toString(numberOfBounces()));
-    metrics.add(Integer.toString(numberOfConversions()));
-    metrics.add(Double.toString(totalCost()));
-    metrics.add(Double.toString(clickThroughRate()));
-    metrics.add(Double.toString(costPerAcquisition()));
-    metrics.add(Double.toString(costPerClick()));
-    metrics.add(Double.toString(costPerThousandImps()));
-    metrics.add(Double.toString(bounceRate()));
-    metrics.add(Integer.toString(numberOfUniques()));
-    return metrics;
+    metrics.add((double) totalImpressions());
+    metrics.add((double) totalClicks());
+    metrics.add((double) numberOfBounces());
+    metrics.add((double) numberOfConversions());
+    metrics.add(totalCost());
+    metrics.add(clickThroughRate());
+    metrics.add(costPerAcquisition());
+    metrics.add(costPerClick());
+    metrics.add(costPerThousandImps());
+    metrics.add(bounceRate());
+    metrics.add((double) numberOfUniques());
+    return metrics.stream().map(m -> Double.toString(m)).collect(Collectors.toCollection(ArrayList::new));
   }
 
 }
