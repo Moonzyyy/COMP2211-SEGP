@@ -2,9 +2,12 @@ package model;
 
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -110,6 +113,38 @@ public class Model {
     {
         return Double.parseDouble(df.format(totalCost() / (double) totalImpressions()));
     }
+
+    public Map<Date, Double> loadImpressionData() {
+        Map<Date, Double> impressionCostsByDate = new HashMap<>();
+        for (Impression impression : impressions) {
+            LocalDate date = impression.getDate().toLocalDate();
+            Date dateWithoutTime = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Double impressionCost = impression.getImpressionCost();
+            if (impressionCostsByDate.containsKey(dateWithoutTime)) {
+                impressionCostsByDate.put(dateWithoutTime, impressionCostsByDate.get(dateWithoutTime) + impressionCost);
+            } else {
+                impressionCostsByDate.put(dateWithoutTime, impressionCost);
+            }
+        }
+        System.out.println(impressionCostsByDate);
+        return impressionCostsByDate;
+    }
+    public Map<Date, Double> loadClicksData() {
+        Map<Date, Double> clickCountsByDate = new HashMap<>();
+        for (Click click : clicks) {
+            LocalDateTime localDateTime = click.getDate();
+            LocalDate date = localDateTime.toLocalDate();
+            Date dateWithoutTime = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            if (clickCountsByDate.containsKey(dateWithoutTime)) {
+                clickCountsByDate.put(dateWithoutTime, clickCountsByDate.get(dateWithoutTime) + 1.0);
+            } else {
+                clickCountsByDate.put(dateWithoutTime, 1.0);
+            }
+        }
+        System.out.println(clickCountsByDate);
+        return clickCountsByDate;
+    }
+
 
     public ArrayList<String> getMetrics() {
         ArrayList<String> metrics = new ArrayList<String>();

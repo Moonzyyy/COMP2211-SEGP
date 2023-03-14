@@ -9,12 +9,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.geom.Rectangle2D;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
 import javafx.embed.swing.SwingNode;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -22,15 +22,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javax.swing.SwingUtilities;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartMouseEvent;
-import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.Pannable;
@@ -53,11 +50,19 @@ public class Graph extends AbstractScene {
    * The id of the metric that is being graphed.
    */
   private final Integer metricId;
+  Map<Date,Double> data;
+  String xAxisName;
+  String yAxisName;
+  String title;
 
-  public Graph(Integer id) {
+  public Graph(Integer id, String title,String xAxisName, String yAxisName,Map<Date, Double> data) {
     super();
     layout = new BorderPane();
     metricId = id;
+    this.data = data;
+    this.xAxisName = xAxisName;
+    this.yAxisName = yAxisName;
+    this.title = title;
 
   }
 
@@ -98,29 +103,21 @@ public class Graph extends AbstractScene {
 
     BorderPane.setMargin(topBar, new Insets(10, 10, 10, 10));
 
-    TimeSeries clicksSeries = new TimeSeries("Clicks");
-    TimeSeriesCollection dataset = new TimeSeriesCollection();
-    dataset.addSeries(clicksSeries);
 
-    clicksSeries.add(new Day(1, 1, 2023), 70);
-    clicksSeries.add(new Day(2, 1, 2023), 100);
-    clicksSeries.add(new Day(3, 1, 2023), 80);
-    clicksSeries.add(new Day(4, 1, 2023), 120);
-    clicksSeries.add(new Day(5, 1, 2023), 150);
-    clicksSeries.add(new Day(6, 1, 2023), 90);
-    clicksSeries.add(new Day(7, 1, 2023), 130);
-    clicksSeries.add(new Day(8, 1, 2023), 110);
-    clicksSeries.add(new Day(9, 1, 2023), 160);
-    clicksSeries.add(new Day(10, 1, 2023), 200);
-    clicksSeries.add(new Day(11, 1, 2023), 180);
-    clicksSeries.add(new Day(12, 1, 2023), 230);
-    clicksSeries.add(new Day(13, 1, 2023), 250);
-    clicksSeries.add(new Day(14, 1, 2023), 190);
+    TimeSeries dataSeries = new TimeSeries("Impressions");
+    TimeSeriesCollection dataset = new TimeSeriesCollection();
+    dataset.addSeries(dataSeries);
+
+    for (Map.Entry<Date, Double> entry : data.entrySet()) {
+      Date date = entry.getKey();
+      Day day = Day.parseDay(new SimpleDateFormat("yyyy-MM-dd").format(date));
+      dataSeries.addOrUpdate(day, entry.getValue());
+    }
 
     JFreeChart chart = ChartFactory.createTimeSeriesChart(
-        "Clicks over Time",
-        "Date",
-        "Clicks",
+        title,
+        xAxisName,
+        yAxisName,
         dataset,
         false,
         true,
@@ -214,14 +211,14 @@ public class Graph extends AbstractScene {
       if (startDate != null && endDate != null) {
 
         TimeSeries filteredSeries = new TimeSeries("Filtered Clicks");
-        for (int i = 0; i < clicksSeries.getItemCount(); i++) {
-          Day day = (Day) clicksSeries.getTimePeriod(i);
+        for (int i = 0; i < dataSeries.getItemCount(); i++) {
+          Day day = (Day) dataSeries.getTimePeriod(i);
           if (day.compareTo(
               new Day(startDate.getDayOfMonth(), startDate.getMonthValue(),
                   startDate.getYear())) >= 0
               && day.compareTo(
               new Day(endDate.getDayOfMonth(), endDate.getMonthValue(), endDate.getYear())) <= 0) {
-            filteredSeries.add(clicksSeries.getDataItem(i));
+            filteredSeries.add(dataSeries.getDataItem(i));
           }
         }
 
