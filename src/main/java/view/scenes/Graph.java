@@ -2,8 +2,15 @@ package view.scenes;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Robot;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.geom.Rectangle2D;
 import java.time.LocalDate;
 import java.util.Objects;
 import javafx.embed.swing.SwingNode;
@@ -26,6 +33,9 @@ import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.Pannable;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -157,31 +167,9 @@ public class Graph extends AbstractScene {
 
 
 
-       chartPanel.addMouseListener(new CustomListener());
-//      chartPanel.addChartMouseListener(new ChartMouseListener() {
-//        @Override
-//        public void chartMouseClicked(ChartMouseEvent cme) {
-//          chartMouseMoved(cme);
-//        }
-//
-//        //does not work, when you press button no work D:
-//        @Override
-//        public void chartMouseMoved(ChartMouseEvent cme) {
-//          if(cme.getTrigger().getButton() == 0)
-//          {
-//            System.out.println("Mouse is being moved while clicked");
-//          }
-//          else
-//          {
-//            System.out.println(cme.getTrigger().getButton());
-//          }
-//       }
-//
-//
-//      });
-
     });
-
+    chart.getXYPlot().setDomainPannable(true);
+    chart.getXYPlot().setRangePannable(true);
 
     var graphContainer = new HBox();
     graphContainer.setAlignment(Pos.CENTER);
