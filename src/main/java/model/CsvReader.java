@@ -25,7 +25,7 @@ public class CsvReader {
             BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
 
             iReader.lines().skip(1).forEach(line -> {
-                String[] arr = split(line, ',');
+                String[] arr = split(line.trim(), ',');
                 User user = users.get(Long.parseLong(arr[1]));
                 if (user == null) {
                     user = new User(arr);
@@ -69,7 +69,7 @@ public class CsvReader {
     }*/
 
     private Stream<String[]> splitArray(BufferedReader br) {
-        return br.lines().skip(1).map((line) -> split(line,','));
+        return br.lines().skip(1).map((line) -> split(line.trim(),','));
     }
 
     /**
