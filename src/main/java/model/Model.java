@@ -149,6 +149,7 @@ public class Model {
 //    return Double.parseDouble(df.format(metrics.get(4) / (double) metrics.get(0)));
     }
 
+<<<<<<< HEAD
     public void getTestCodeChecked() {
         var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:00");
         //var test = getImpressions().collect(Collectors.groupingBy( t -> t.getKey().format(formatter))).entrySet().stream().collect(Collectors.toMap(s -> LocalDateTime.parse(s.getKey(), formatter), s -> s.getValue().stream().mapToDouble(Pair::getValue).sum()));
@@ -163,6 +164,7 @@ public class Model {
                         Map.Entry::getValue,
                         Double::sum));
     }
+
     public Map<Date, Double> loadImpressionData() {
         Map<Date, Double> impressionCostsByDate = new HashMap<>();
         getImpressions().forEach(impression -> {
