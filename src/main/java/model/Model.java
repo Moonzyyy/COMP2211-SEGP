@@ -171,8 +171,7 @@ public class Model {
         getImpressions().forEach(impression -> {
             LocalDateTime dateTime = impression.getKey();
             Double impressionCost = impression.getValue();
-//            Date dateWithoutTime = Date.from(dateTime.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Date dateWithoutTime = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
+            Date dateWithoutTime = Date.from(dateTime.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
             if (impressionCostsByDate.containsKey(dateWithoutTime)) {
                 impressionCostsByDate.put(dateWithoutTime, impressionCostsByDate.get(dateWithoutTime) + impressionCost);
             } else {
