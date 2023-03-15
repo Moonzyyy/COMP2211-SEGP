@@ -131,13 +131,20 @@ public class Model {
 //    return Double.parseDouble(df.format(metrics.get(4) / (double) metrics.get(0)));
   }
 
-  public void getImpressionsTime()
+  public void getTestCodeChecked()
   {
-
-    var test = getImpressions().collect(Collectors.toMap(s -> LocalDateTime.parse(s.getKey().toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME), s -> s.getValue().stream().mapToDouble(Pair::getValue).sum()));
-    var lol = test.keySet();
-    //ArrayList<Double> lol1 = new ArrayList<>(test.values());
-    System.out.println(lol.size());
+    var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:00");
+    //var test = getImpressions().collect(Collectors.groupingBy( t -> t.getKey().format(formatter))).entrySet().stream().collect(Collectors.toMap(s -> LocalDateTime.parse(s.getKey(), formatter), s -> s.getValue().stream().mapToDouble(Pair::getValue).sum()));
+    var test = getImpressions()
+        .map(t -> {
+          var key = LocalDateTime.parse(t.getKey().toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME).format(formatter);
+          var value = t.getValue();
+          return new AbstractMap.SimpleEntry<>(key, value);
+        })
+        .collect(Collectors.toMap(
+            e -> LocalDateTime.parse(e.getKey(), formatter),
+            Map.Entry::getValue,
+            Double::sum));
 
   }
 
