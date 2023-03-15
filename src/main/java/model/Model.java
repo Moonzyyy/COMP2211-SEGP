@@ -1,5 +1,6 @@
 package model;
 
+import core.Controller;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -24,16 +25,29 @@ public class Model {
 
     public Model() {}
 
-    public void importData() {
-        //Get CSV data from all 3 log files (can be changed to for loop)
-        CsvReader cr = new CsvReader(clicksFile, impressionsFile, serverFile);
-        try {
-            this.impressions = cr.getImpressions();
-            this.clicks = cr.getClicks();
-            this.serverInteractions= cr.getServerInteractions();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+    public boolean importData() {
+      //Get CSV data from all 3 log files (can be changed to for loop)
+      CsvReader cr = new CsvReader(clicksFile, impressionsFile, serverFile);
+      this.impressions = cr.getImpressions();
+      this.clicks = cr.getClicks();
+      this.serverInteractions = cr.getServerInteractions();
+
+      if(clicks == null)
+      {
+        Controller.sendErrorMessage("There has been an error with processing your clicks file!");
+        return false;
+      }
+      else if(impressions == null)
+      {
+        Controller.sendErrorMessage("There has been an error with processing your impressions file!");
+        return false;
+      }
+      else if(serverInteractions == null)
+      {
+        Controller.sendErrorMessage("There has been an error with processing your server interactions file!");
+        return false;
+      }
+      return true;
     }
     public int totalImpressions()
     {

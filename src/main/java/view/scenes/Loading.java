@@ -1,6 +1,8 @@
 package view.scenes;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+import javafx.concurrent.Task;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -9,13 +11,14 @@ import javafx.scene.layout.VBox;
 
 public class Loading extends AbstractScene {
 
+  Label loadingLabel;
   public Loading() {
     super();
   }
 
   public void createScene() {
     var labelContainer = new VBox();
-    Label loadingLabel = new Label("Loading...");
+    loadingLabel = new Label("Loading...");
     loadingLabel.getStyleClass().add("title");
     labelContainer.getChildren().add(loadingLabel);
     labelContainer.setAlignment(Pos.CENTER);
@@ -29,4 +32,7 @@ public class Loading extends AbstractScene {
 
   }
 
+  public Label getLoadingLabel() {
+    return loadingLabel;
+  }
 }
