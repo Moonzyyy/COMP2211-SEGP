@@ -1,8 +1,12 @@
 package model;
 
+import java.awt.List;
+import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -127,6 +131,16 @@ public class Model {
 //    return Double.parseDouble(df.format(metrics.get(4) / (double) metrics.get(0)));
   }
 
+  public void getImpressionsTime()
+  {
+
+    var test = getImpressions().collect(Collectors.toMap(s -> LocalDateTime.parse(s.getKey().toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME), s -> s.getValue().stream().mapToDouble(Pair::getValue).sum()));
+    var lol = test.keySet();
+    //ArrayList<Double> lol1 = new ArrayList<>(test.values());
+    System.out.println(lol.size());
+
+  }
+
   public ArrayList<String> getMetrics() {
     metrics.add((double) totalImpressions());
     metrics.add((double) totalClicks());
@@ -139,6 +153,7 @@ public class Model {
     metrics.add(costPerThousandImps());
     metrics.add(bounceRate());
     metrics.add((double) numberOfUniques());
+    getImpressionsTime();
     return metrics.stream().map(m -> Double.toString(m)).collect(Collectors.toCollection(ArrayList::new));
   }
 
