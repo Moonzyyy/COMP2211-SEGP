@@ -53,7 +53,7 @@ public class Import extends AbstractScene {
     var clickDataLabel = new Label("Click Data");
     clickDataLabel.getStyleClass().add("text");
     importClicks = new Button("Import");
-    clickFileName = new Text("Null");
+    clickFileName = new Text("");
     clickFileName.getStyleClass().add("fileNameText");
     var importClicksTooltip = new Tooltip("Should be of the form click_log.csv");
     importBoxFactory(clickDataBox, clickDataLabel, importClicksTooltip, importClicks, clickFileName);
@@ -62,7 +62,7 @@ public class Import extends AbstractScene {
     var impressionDataLabel = new Label("Impression Data");
     impressionDataLabel.getStyleClass().add("text");
     importImpressions = new Button("Import");
-    impressionFileName = new Text("Null");
+    impressionFileName = new Text("");
     impressionFileName.getStyleClass().add("fileNameText");
     var importImpressionsTooltip = new Tooltip("Should be of the form impression_log.csv");
     importBoxFactory(impressionDataBox, impressionDataLabel, importImpressionsTooltip, importImpressions, impressionFileName);
@@ -71,7 +71,7 @@ public class Import extends AbstractScene {
     var serverDataLabel = new Label("Server Data");
     serverDataLabel.getStyleClass().add("text");
     importServer = new Button("Import");
-    serverFileName = new Text("Null");
+    serverFileName = new Text("");
     serverFileName.getStyleClass().add("fileNameText");
     var importServerTooltip = new Tooltip("Should be of the form server_log.csv");
     importBoxFactory(serverDataBox, serverDataLabel, importServerTooltip, importServer, serverFileName);

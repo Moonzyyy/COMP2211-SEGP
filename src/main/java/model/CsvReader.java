@@ -16,7 +16,7 @@ public class CsvReader {
         //Get CSV data from all 3 log files (can be changed to for loop)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
-//            InputStream impressionPath = getClass().getResourceAsStream(impressionsFile);
+//          InputStream impressionPath = getClass().getResourceAsStream(impressionsFile);
             InputStream impressionPath = new FileInputStream(impressionsFile);
             BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
             impressions = splitArray(iReader).map((p) -> new Impression(p, formatter)).toList();

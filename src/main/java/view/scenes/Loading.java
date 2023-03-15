@@ -1,6 +1,8 @@
 package view.scenes;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+import javafx.concurrent.Task;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -8,6 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 public class Loading extends AbstractScene {
+
 
   public Loading() {
     super();
@@ -28,5 +31,4 @@ public class Loading extends AbstractScene {
         Objects.requireNonNull(getClass().getResource("/view/start.css")).toExternalForm());
 
   }
-
 }

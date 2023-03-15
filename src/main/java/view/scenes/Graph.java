@@ -1,26 +1,12 @@
 package view.scenes;
 
-import javafx.embed.swing.SwingNode;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.time.Day;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Robot;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
@@ -28,6 +14,32 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
+import javafx.embed.swing.SwingNode;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.text.Text;
+import javax.swing.SwingUtilities;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.Pannable;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 
 public class Graph extends AbstractScene {
 
@@ -59,6 +71,7 @@ public class Graph extends AbstractScene {
   }
 
   public void createScene() {
+
     var topBar = new HBox();
     topBar.setAlignment(Pos.BOTTOM_CENTER);
 
@@ -219,11 +232,50 @@ public class Graph extends AbstractScene {
       }
     });
     filterBar.getChildren().addAll(startDatePicker, endDatePicker, filterButton);
-    layout.setBottom(filterBar);
 
+
+    createCheckBoxes();
+
+
+    layout.setBottom(filterBar);
     scene = new Scene(layout, 1280, 720);
     scene.getStylesheets()
         .add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
+
+  }
+
+  void createCheckBoxes()
+  {
+    Text genderText = new Text("Gender of Audience:");
+    CheckBox male = new CheckBox("Male");
+    CheckBox female = new CheckBox("Female");
+
+    Text ageText = new Text("Age of Audience:");
+    CheckBox under25 = new CheckBox("Under 25");
+    CheckBox under34 = new CheckBox("25 to 34");
+    CheckBox under44 = new CheckBox("35 to 44");
+    CheckBox under54 = new CheckBox("45 to 54");
+    CheckBox over54 = new CheckBox("Over 54");
+
+    Text incomeText = new Text("Income of Audience:");
+    CheckBox lowIncome = new CheckBox("Low Income");
+    CheckBox mediumIncome = new CheckBox("Medium Income");
+    CheckBox highIncome = new CheckBox("High Income");
+
+    Text contextText = new Text("Location of Ad Interaction:");
+    CheckBox blog = new CheckBox("Blog Site");
+    CheckBox news = new CheckBox("News Site");
+    CheckBox shopping = new CheckBox("Shopping Site");
+    CheckBox socialMedia = new CheckBox("Social Media");
+
+    ListView compareList = new ListView();
+    compareList.setMouseTransparent( true );
+    compareList.setFocusTraversable( false );
+    compareList.getItems().addAll(genderText, male, female, "",
+            ageText, under25, under34, under44, under54, over54, "",
+            incomeText, lowIncome, mediumIncome, highIncome, "",
+            contextText, blog, news, shopping, socialMedia);
+    layout.setRight(compareList);
 
   }
 
@@ -244,33 +296,6 @@ public class Graph extends AbstractScene {
     return filterButton;
   }
 
-  public class CustomListener implements MouseListener {
 
-
-    public void mouseClicked(MouseEvent e) {
-      //keep to null
-    }
-
-    public void mouseEntered(MouseEvent e) {
-      //keep to null
-    }
-
-    public void mouseExited(MouseEvent e) {
-      //keep to null
-    }
-
-    public void mousePressed(MouseEvent e) {
-      System.out.println("Mouse has been clicked");
-      e.getXOnScreen();
-      e.getYOnScreen();
-
-    }
-
-    public void mouseReleased(MouseEvent e) {
-      System.out.println("Mouse has been released");
-      e.getXOnScreen();
-      e.getYOnScreen();
-    }
-  }
 
 }
