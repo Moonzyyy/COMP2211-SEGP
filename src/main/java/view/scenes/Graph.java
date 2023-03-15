@@ -246,15 +246,35 @@ public class Graph extends AbstractScene {
 
   void createCheckBoxes()
   {
-    Text genderText = new Text("Gender");
+    Text genderText = new Text("Gender of Audience:");
     CheckBox male = new CheckBox("Male");
     CheckBox female = new CheckBox("Female");
-    Text ageText = new Text("Age");
+
+    Text ageText = new Text("Age of Audience:");
+    CheckBox under25 = new CheckBox("Under 25");
+    CheckBox under34 = new CheckBox("25 to 34");
+    CheckBox under44 = new CheckBox("35 to 44");
+    CheckBox under54 = new CheckBox("45 to 54");
+    CheckBox over54 = new CheckBox("Over 54");
+
+    Text incomeText = new Text("Income of Audience:");
+    CheckBox lowIncome = new CheckBox("Low Income");
+    CheckBox mediumIncome = new CheckBox("Medium Income");
+    CheckBox highIncome = new CheckBox("High Income");
+
+    Text contextText = new Text("Location of Ad Interaction:");
+    CheckBox blog = new CheckBox("Blog Site");
+    CheckBox news = new CheckBox("News Site");
+    CheckBox shopping = new CheckBox("Shopping Site");
+    CheckBox socialMedia = new CheckBox("Social Media");
 
     ListView compareList = new ListView();
     compareList.setMouseTransparent( true );
     compareList.setFocusTraversable( false );
-    compareList.getItems().addAll(genderText, male, female, "", ageText);
+    compareList.getItems().addAll(genderText, male, female, "",
+            ageText, under25, under34, under44, under54, over54, "",
+            incomeText, lowIncome, mediumIncome, highIncome, "",
+            contextText, blog, news, shopping, socialMedia);
     layout.setRight(compareList);
 
   }
