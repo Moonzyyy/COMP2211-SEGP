@@ -62,14 +62,14 @@ public class Model {
     }
 
     public Stream<Pair<LocalDateTime, Double>> getImpressions() {
-        return users.values().stream().parallel().flatMap(u -> u.getImpressions().stream());
+        return users != null ? users.values().stream().parallel().flatMap(u -> u.getImpressions().stream()) : null;
     }
 
     public Stream<Pair<LocalDateTime, Double>> getClicks() {
-        return users.values().stream().parallel().flatMap(u -> u.getClicks().stream());
+        return users != null ? users.values().stream().parallel().flatMap(u -> u.getClicks().stream()) : null;
     }
     public Stream<Server> getServers() {
-        return users.values().stream().parallel().flatMap(u -> u.getServers().stream());
+        return users != null ? users.values().stream().parallel().flatMap(u -> u.getServers().stream()) : null;
     }
     public int totalImpressions()
     {
@@ -164,12 +164,15 @@ public class Model {
                         Double::sum));
     }
 
+//    public Map<Date, Double> loadMetric(Stream dataset, )
+
     public Map<Date, Double> loadImpressionData() {
         Map<Date, Double> impressionCostsByDate = new HashMap<>();
         getImpressions().forEach(impression -> {
             LocalDateTime dateTime = impression.getKey();
             Double impressionCost = impression.getValue();
-            Date dateWithoutTime = Date.from(dateTime.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+//            Date dateWithoutTime = Date.from(dateTime.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date dateWithoutTime = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
             if (impressionCostsByDate.containsKey(dateWithoutTime)) {
                 impressionCostsByDate.put(dateWithoutTime, impressionCostsByDate.get(dateWithoutTime) + impressionCost);
             } else {
