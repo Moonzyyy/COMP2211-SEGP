@@ -194,6 +194,7 @@ public class Model {
         return conversionsByDate;
     }
 
+
     public Map<Date, Double> loadClickCostData() {
         Map<Date, Double> clickCostByDate = new HashMap<>();
         for (Click click: clicks) {
