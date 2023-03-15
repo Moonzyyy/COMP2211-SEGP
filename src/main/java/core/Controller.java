@@ -123,25 +123,25 @@ public class Controller {
             title = "Bounces Over Time";
             xAxisName = "Date";
             yAxisName = "Bounces";
-            data = new HashMap<>();
+            data = model.loadBouncesData();
             break;
           case 3:
             title = "Conversions Over Time";
             xAxisName = "Date";
             yAxisName = "Conversions";
-            data = new HashMap<>();
+            data = model.loadConversionData();
             break;
           case 4:
             title = "Click Cost Over Time";
             xAxisName = "Date";
             yAxisName = "Click Costs";
-            data = new HashMap<>();
+            data = model.loadClickCostData();
             break;
           case 5:
             title = "Click-through-rate Over Time";
             xAxisName = "Date";
             yAxisName = "Click-through-rate";
-            data = new HashMap<>();
+            data = model.loadCTRData();
             break;
           case 6:
             title = "Cost-per-acquisition Over Time";

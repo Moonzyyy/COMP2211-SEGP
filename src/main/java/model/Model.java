@@ -117,9 +117,9 @@ public class Model {
     public Map<Date, Double> loadImpressionData() {
         Map<Date, Double> impressionCostsByDate = new HashMap<>();
         for (Impression impression : impressions) {
-            LocalDate date = impression.getDate().toLocalDate();
-            Date dateWithoutTime = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            LocalDateTime dateTime = impression.getDate();
             Double impressionCost = impression.getImpressionCost();
+            Date dateWithoutTime = Date.from(dateTime.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
             if (impressionCostsByDate.containsKey(dateWithoutTime)) {
                 impressionCostsByDate.put(dateWithoutTime, impressionCostsByDate.get(dateWithoutTime) + impressionCost);
             } else {
@@ -129,6 +129,7 @@ public class Model {
         System.out.println(impressionCostsByDate);
         return impressionCostsByDate;
     }
+
     public Map<Date, Double> loadClicksData() {
         Map<Date, Double> clickCountsByDate = new HashMap<>();
         for (Click click : clicks) {
@@ -143,6 +144,73 @@ public class Model {
         }
         System.out.println(clickCountsByDate);
         return clickCountsByDate;
+    }
+
+    public Map<Date,Double> loadBouncesData() {
+        Map<Date, Double> bouncesByDate = new HashMap<>();
+        for (Server server : serverInteractions) {
+            LocalDateTime localDateTime = server.getEntryDate();
+            LocalDate date = localDateTime.toLocalDate();
+            Date dateWithoutTime = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            if (!server.getConversion() && bouncesByDate.containsKey(dateWithoutTime)) {
+                Double count = bouncesByDate.get(dateWithoutTime);
+                bouncesByDate.put(dateWithoutTime, count+1);
+            } else if (!server.getConversion()) {
+                bouncesByDate.put(dateWithoutTime, 1.0);
+            }
+        }
+        System.out.println(bouncesByDate);
+        return bouncesByDate;
+    }
+
+    public Map<Date, Double> loadConversionData() {
+        Map<Date,Double> conversionsByDate = new HashMap<>();
+        for (Server server : serverInteractions) {
+            LocalDateTime localDateTime = server.getEntryDate();
+            LocalDate date = localDateTime.toLocalDate();
+            Date dateWithoutTime = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            if (server.getConversion() && conversionsByDate.containsKey(dateWithoutTime)) {
+                Double count = conversionsByDate.get(dateWithoutTime);
+                conversionsByDate.put(dateWithoutTime, count+1);
+            } else if (server.getConversion()) {
+                conversionsByDate.put(dateWithoutTime, 1.0);
+            }
+        }
+        System.out.println(conversionsByDate);
+        return conversionsByDate;
+    }
+
+    public Map<Date, Double> loadClickCostData() {
+        Map<Date, Double> clickCostByDate = new HashMap<>();
+        for (Click click: clicks) {
+            LocalDateTime localDateTime = click.getDate();
+            LocalDate date = localDateTime.toLocalDate();
+            Double clickCost = click.getClickCost();
+            Date dateWithoutTime = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            if (clickCostByDate.containsKey(dateWithoutTime)) {
+                clickCostByDate.put(dateWithoutTime, clickCostByDate.get(dateWithoutTime) + clickCost);
+            } else {
+                clickCostByDate.put(dateWithoutTime, clickCost);
+            }
+        }
+        System.out.println(clickCostByDate);
+        return clickCostByDate;
+    }
+
+    public Map<Date, Double> loadCTRData() {
+        Map<Date, Double> ctrByDate = new HashMap<>();
+        Map<Date, Double> impressionCostsByDate = loadImpressionData();
+        Map<Date, Double> clickCountsByDate = loadClicksData();
+
+        for (Date date : impressionCostsByDate.keySet()) {
+            Double impressionCost = impressionCostsByDate.get(date);
+            Double clickCount = clickCountsByDate.getOrDefault(date, 0.0);
+            Double ctr = clickCount / impressionCost;
+            ctrByDate.put(date, ctr);
+        }
+
+        System.out.println(ctrByDate);
+        return ctrByDate;
     }
 
 
