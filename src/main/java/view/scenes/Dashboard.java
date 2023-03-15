@@ -38,7 +38,6 @@ public class Dashboard extends AbstractScene {
     var titleBox = new HBox();
     titleBox.setAlignment(Pos.CENTER);
     var titleLabel = new Label("Dashboard");
-    HBox.setHgrow(titleLabel, Priority.ALWAYS);
     titleLabel.getStyleClass().add("title");
     layout.setTop(titleBox);
 
@@ -105,6 +104,7 @@ public class Dashboard extends AbstractScene {
     HBox.setHgrow(spacer2, Priority.ALWAYS);
     titleBox.getChildren().add(spacer2);
     titleBox.getChildren().add(new Label(""));
+    titleBox.getStyleClass().add("titleBox");
 
     BorderPane.setMargin(backButton, new Insets(20, 0, 10, 10));
     BorderPane.setMargin(titleBox, new Insets(10, 0, 20, 10));

@@ -36,6 +36,11 @@
   -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.3), 0, 0, 2, 2);
 }
 
+.numberBox:pressed {
+  /*Material design pressed effect*/
+  -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0), 0, 0, 0, 0);
+}
+
 .numberBox:hover .text {
   -fx-font-size: 20px;
   -fx-font-weight: bold;

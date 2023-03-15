@@ -37,6 +37,130 @@
   -fx-pref-width: 100;
 }
 
+/* Set background color and font color for ListView */
+.list-cell {
+  -fx-background-color: #121212;
+  -fx-font-size: 14px;
+  -fx-text-fill: #ffffff;
+}
+
+
+/* Set background color and border color for CheckBox */
+.check-box {
+  -fx-border-color: #f5f5f5;
+  -fx-padding: 0 10 0 10;
+  -fx-alignment: center;
+  -fx-pref-width: 150;
+}
+
+.check-box:selected > .box> .mark {
+  -fx-background-color: #ffffff;
+  -fx-background-radius: 10px;
+  -fx-padding: 5;
+}
+
+/* Set background color for CheckBox when hovered */
+.check-box:hover {
+  -fx-background-color: #212121;
+}
+
+/* Set checkbox text color */
+.check-box > .text {
+  -fx-fill: #ffffff;
+}
+
+/* Set background color for CheckBox when selected */
+.check-box:selected {
+  -fx-background-color: #212121;
+}
+
+/* Set font color for CheckBox */
+.check-box .box {
+  -fx-background-color: transparent;
+  -fx-text-fill: #f5f5f5;
+}
+
+
+/* Set font color for ListView header */
+.list-view .column-header .label {
+  -fx-text-fill: #f5f5f5;
+}
+
+
+/* Set divider color for ListView */
+.list-view .virtual-flow .clipped-container {
+  -fx-background-color: #212121;
+}
+
+.list-cell-text {
+  -fx-text-fill: #ffffff;
+}
+
+.list-cell{
+  -fx-alignment: center;
+  -fx-spacing: 10;
+}
+
+/*Scroll bar styling*/
+.scroll-bar:vertical {
+  -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb {
+  -fx-background-color: #616161;
+  -fx-background-insets: 0, 1, 2;
+  -fx-background-radius: 10px;
+}
+
+.scroll-bar:vertical .thumb:hover {
+  -fx-background-color: #424242;
+}
+
+.scroll-bar:vertical .thumb:pressed {
+  -fx-background-color: #212121;
+}
+
+.scroll-bar:vertical .track {
+  -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .track-background {
+  -fx-background-color: #424242;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+  -fx-background-color: #212121;
+}
+
+.scroll-bar:vertical .increment-arrow:hover,
+.scroll-bar:vertical .decrement-arrow:hover {
+  -fx-background-color: #424242;
+}
+
+/*Date picker styling*/
+.start-date-picker, .end-date-picker {
+  -fx-font-size: 14px;
+  -fx-background-color: #424242;
+  -fx-text-fill: white;
+  -fx-highlight-text-fill: white;
+  -fx-highlight-fill: #9c27b0;
+}
+
+.start-date-picker .arrow, .end-date-picker .arrow {
+  -fx-background-color: #424242;
+}
+
+.start-date-picker .arrow-button:hover, .end-date-picker .arrow-button:hover {
+  -fx-background-color: #9c27b0;
+  -fx-text-fill: white;
+}
+
+.start-date-picker .arrow-button:pressed, .end-date-picker .arrow-button:pressed {
+  -fx-background-color: #9c27b0;
+  -fx-text-fill: white;
+}
+
 .root {
   -fx-background-color: #121212;
 }
