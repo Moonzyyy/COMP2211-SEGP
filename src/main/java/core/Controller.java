@@ -308,8 +308,6 @@ public class Controller {
         setUpScene(new Dashboard());
       });
       task.setOnFailed(e -> {new Import();});
-
-      //task.setOnRunning();
       Thread thread = new Thread(task);
       thread.start();
     });

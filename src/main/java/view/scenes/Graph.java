@@ -19,13 +19,17 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Text;
 import javax.swing.SwingUtilities;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -67,6 +71,7 @@ public class Graph extends AbstractScene {
   }
 
   public void createScene() {
+
     var topBar = new HBox();
     topBar.setAlignment(Pos.BOTTOM_CENTER);
 
@@ -227,11 +232,30 @@ public class Graph extends AbstractScene {
       }
     });
     filterBar.getChildren().addAll(startDatePicker, endDatePicker, filterButton);
-    layout.setBottom(filterBar);
 
+
+    createCheckBoxes();
+
+
+    layout.setBottom(filterBar);
     scene = new Scene(layout, 1280, 720);
     scene.getStylesheets()
         .add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
+
+  }
+
+  void createCheckBoxes()
+  {
+    Text genderText = new Text("Gender");
+    CheckBox male = new CheckBox("Male");
+    CheckBox female = new CheckBox("Female");
+    Text ageText = new Text("Age");
+
+    ListView compareList = new ListView();
+    compareList.setMouseTransparent( true );
+    compareList.setFocusTraversable( false );
+    compareList.getItems().addAll(genderText, male, female, "", ageText);
+    layout.setRight(compareList);
 
   }
 
@@ -252,33 +276,6 @@ public class Graph extends AbstractScene {
     return filterButton;
   }
 
-  public class CustomListener implements MouseListener {
 
-
-    public void mouseClicked(MouseEvent e) {
-      //keep to null
-    }
-
-    public void mouseEntered(MouseEvent e) {
-      //keep to null
-    }
-
-    public void mouseExited(MouseEvent e) {
-      //keep to null
-    }
-
-    public void mousePressed(MouseEvent e) {
-      System.out.println("Mouse has been clicked");
-      e.getXOnScreen();
-      e.getYOnScreen();
-
-    }
-
-    public void mouseReleased(MouseEvent e) {
-      System.out.println("Mouse has been released");
-      e.getXOnScreen();
-      e.getYOnScreen();
-    }
-  }
 
 }

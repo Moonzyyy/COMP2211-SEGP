@@ -11,14 +11,14 @@ import javafx.scene.layout.VBox;
 
 public class Loading extends AbstractScene {
 
-  Label loadingLabel;
+
   public Loading() {
     super();
   }
 
   public void createScene() {
     var labelContainer = new VBox();
-    loadingLabel = new Label("Loading...");
+    Label loadingLabel = new Label("Loading...");
     loadingLabel.getStyleClass().add("title");
     labelContainer.getChildren().add(loadingLabel);
     labelContainer.setAlignment(Pos.CENTER);
@@ -30,9 +30,5 @@ public class Loading extends AbstractScene {
     scene.getStylesheets().add(
         Objects.requireNonNull(getClass().getResource("/view/start.css")).toExternalForm());
 
-  }
-
-  public Label getLoadingLabel() {
-    return loadingLabel;
   }
 }
