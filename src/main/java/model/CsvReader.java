@@ -20,7 +20,7 @@ public class CsvReader {
     public CsvReader(File clicksFile, File impressionsFile, File serverFile) {
         System.out.println("Loading, please wait...");
         //Get CSV data from all 3 log files (can be changed to for loop)
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH");
         try {
 //          InputStream impressionPath = getClass().getResourceAsStream(impressionsFile);
             InputStream impressionPath = new FileInputStream(impressionsFile);
@@ -33,7 +33,8 @@ public class CsvReader {
                     user = new User(arr);
                     users.put(user.getId(), user);
                 }
-                user.addImpression(new Pair<>(LocalDateTime.parse(arr[0], formatter), Double.parseDouble(arr[6])));
+                String dateWithoutMS = arr[0].substring(0, 13);
+                user.addImpression(new Pair<>(LocalDateTime.parse(dateWithoutMS, formatter), Double.parseDouble(arr[6])));
             });
             iReader.close();
 
@@ -44,10 +45,10 @@ public class CsvReader {
 
             tmp.forEach(click -> {
                 final User user = users.get(Long.parseLong(click[1]));
-                user.addClick(new Pair<>(LocalDateTime.parse(click[0], formatter), Double.parseDouble(click[2])));
+              String dateWithoutMS = click[0].substring(0, 13);
+                user.addClick(new Pair<>(LocalDateTime.parse(dateWithoutMS, formatter), Double.parseDouble(click[2])));
             });
             cReader.close();
-
 //            InputStream clickPath = getClass().getResourceAsStream(serverFile);
             InputStream serverPath = new FileInputStream(serverFile);
             BufferedReader sReader = new BufferedReader(new InputStreamReader(serverPath));

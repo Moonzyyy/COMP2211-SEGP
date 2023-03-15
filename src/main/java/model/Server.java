@@ -22,10 +22,13 @@ public class Server {
      *                   It's a parameter to avoid re-initializing for every object.
      */
     public Server(String[] input, DateTimeFormatter formatter) {
-        LocalDateTime entry = LocalDateTime.parse(input[0], formatter);
+       String dateWithoutMS = input[0].substring(0, 13);
+        LocalDateTime entry = LocalDateTime.parse(dateWithoutMS, formatter);
         setEntryDate(entry);
 //        setUserId(input[1]);
-        setTimeSpent(entry, input[2], formatter);
+
+      //really messed up method which we can fix later
+        setTimeSpent(input[0], input[2]);
         setPagesViewed(input[3]);
         setConversion(input[4]);
     }
@@ -53,7 +56,9 @@ public class Server {
     /**
      * Gets the time spent on the website, or returns -1 if the user has not left (i.e. exitDate is n/a)
      */
-    public void setTimeSpent(LocalDateTime entryDate, String exitDate, DateTimeFormatter formatter) {
+    public void setTimeSpent(String entryDateString, String exitDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = LocalDateTime.parse(entryDateString, formatter);
         if (exitDate.equals("n/a")) {
             this.timeSpent = -1;
         } else {
