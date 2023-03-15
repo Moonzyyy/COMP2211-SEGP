@@ -168,7 +168,7 @@ public class Model {
 
     public Map<Date, Double> loadImpressionData() {
         Map<Date, Double> impressionCostsByDate = new HashMap<>();
-        getImpressions().forEach(impression -> {
+        getImpressions().sequential().forEach(impression -> {
             LocalDateTime dateTime = impression.getKey();
             Double impressionCost = impression.getValue();
             Date dateWithoutTime = Date.from(dateTime.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -184,7 +184,7 @@ public class Model {
 
     public Map<Date, Double> loadClicksData() {
         Map<Date, Double> clickCountsByDate = new HashMap<>();
-        getClicks().forEach(click -> {
+        getClicks().sequential().forEach(click -> {
             LocalDateTime localDateTime = click.getKey();
             LocalDate date = localDateTime.toLocalDate();
             Date dateWithoutTime = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -200,7 +200,7 @@ public class Model {
 
     public Map<Date,Double> loadBouncesData() {
         Map<Date, Double> bouncesByDate = new HashMap<>();
-        getServers().forEach(server -> {
+        getServers().sequential().forEach(server -> {
             LocalDateTime localDateTime = server.getEntryDate();
             LocalDate date = localDateTime.toLocalDate();
             Date dateWithoutTime = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -217,7 +217,7 @@ public class Model {
 
     public Map<Date, Double> loadConversionData() {
         Map<Date,Double> conversionsByDate = new HashMap<>();
-        getServers().forEach(server -> {
+        getServers().sequential().forEach(server -> {
             LocalDateTime localDateTime = server.getEntryDate();
             LocalDate date = localDateTime.toLocalDate();
             Date dateWithoutTime = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -235,7 +235,7 @@ public class Model {
 
     public Map<Date, Double> loadClickCostData() {
         Map<Date, Double> clickCostByDate = new HashMap<>();
-        getClicks().forEach(click -> {
+        getClicks().sequential().forEach(click -> {
             LocalDateTime localDateTime = click.getKey();
             LocalDate date = localDateTime.toLocalDate();
             Double clickCost = click.getValue();
