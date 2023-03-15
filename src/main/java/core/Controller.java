@@ -5,10 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javafx.concurrent.Task;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import model.Model;
@@ -34,6 +31,11 @@ public class Controller {
    */
   public Controller(Model model) {
     this.model = model;
+  }
+
+  public static void sendErrorMessage(String message) {
+    // Need to see if javafx has an alert object?
+    JOptionPane.showMessageDialog(null, message, "Error!", JOptionPane.ERROR_MESSAGE);
   }
 
   public void setStage(Stage stage) {
@@ -178,7 +180,7 @@ public class Controller {
           }
           default -> data = new HashMap<>();
         }
-        setUpScene(new Graph(finalI,title,xAxisName,yAxisName,data));
+        setUpScene(new Graph(finalI, title, xAxisName, yAxisName, data));
       });
     }
   }
@@ -218,6 +220,9 @@ public class Controller {
       System.out.print("Compare button pressed");
     });
 
+    graphScene.getPrintButton().setOnAction((event) -> {
+      System.out.print("Print button pressed");
+    });
   }
 
   public void setUpScene(Loading loading) {
@@ -244,45 +249,47 @@ public class Controller {
 
     //When each button is pressed, open a file browser and set the corresponding text field
     importScene.getImportClicks().setOnAction((event) -> {
-      try
-      {
-      File file = importScene.getFileChooser().showOpenDialog(stage);
-      importScene.getFileChooser().setInitialDirectory(file.getParentFile());
-      model.setClicksFile(file);
-      importScene.getClickFileName().setText(file.getName());
-      importScene.getLoadButton().setDisable(
-          model.getClicksFile() == null || model.getImpressionsFile() == null
-              || model.getServerFile() == null); } catch(Exception e)
-      {
+      try {
+        File file = importScene.getFileChooser().showOpenDialog(stage);
+        if (file != null) {
+          importScene.getFileChooser().setInitialDirectory(file.getParentFile());
+        }
+
+        model.setClicksFile(file);
+        importScene.getClickFileName().setText(file.getName());
+        importScene.getLoadButton().setDisable(
+            model.getClicksFile() == null || model.getImpressionsFile() == null
+                || model.getServerFile() == null);
+      } catch (Exception e) {
         sendErrorMessage("File selected is not of type .csv!");
       }
 
     });
 
     importScene.getImportImpressions().setOnAction((event) -> {
-      try{
-      var file = importScene.getFileChooser().showOpenDialog(stage);
-      importScene.getFileChooser().setInitialDirectory(file.getParentFile());
-      model.setImpressionsFile(file);
-      importScene.getImpressionFileName().setText(file.getName());
-      importScene.getLoadButton().setDisable(
-          model.getClicksFile() == null || model.getImpressionsFile() == null
-              || model.getServerFile() == null);}catch (Exception e)
-      {
+      try {
+        var file = importScene.getFileChooser().showOpenDialog(stage);
+        importScene.getFileChooser().setInitialDirectory(file.getParentFile());
+        model.setImpressionsFile(file);
+        importScene.getImpressionFileName().setText(file.getName());
+        importScene.getLoadButton().setDisable(
+            model.getClicksFile() == null || model.getImpressionsFile() == null
+                || model.getServerFile() == null);
+      } catch (Exception e) {
         sendErrorMessage("File selected is not of type .csv!");
       }
     });
 
     importScene.getImportServer().setOnAction((event) -> {
-      try{
-      var file = importScene.getFileChooser().showOpenDialog(stage);
-      importScene.getFileChooser().setInitialDirectory(file.getParentFile());
-      model.setServerFile(file);
-      importScene.getServerFileName().setText(file.getName());
-      importScene.getLoadButton().setDisable(
-          model.getClicksFile() == null || model.getImpressionsFile() == null
-              || model.getServerFile() == null);}catch (Exception e)
-      {
+      try {
+        var file = importScene.getFileChooser().showOpenDialog(stage);
+        importScene.getFileChooser().setInitialDirectory(file.getParentFile());
+        model.setServerFile(file);
+        importScene.getServerFileName().setText(file.getName());
+        importScene.getLoadButton().setDisable(
+            model.getClicksFile() == null || model.getImpressionsFile() == null
+                || model.getServerFile() == null);
+      } catch (Exception e) {
         sendErrorMessage("File selected is not of type .csv!");
       }
     });
@@ -295,8 +302,7 @@ public class Controller {
       Task<Void> task = new Task<>() {
         @Override
         public Void call() {
-          if(!model.importData())
-          {
+          if (!model.importData()) {
             failed();
           }
           return null;
@@ -306,14 +312,11 @@ public class Controller {
       task.setOnSucceeded(e -> {
         setUpScene(new Dashboard());
       });
-      task.setOnFailed(e -> {new Import();});
+      task.setOnFailed(e -> {
+        new Import();
+      });
       Thread thread = new Thread(task);
       thread.start();
     });
-  }
-
-  public static void sendErrorMessage(String message)
-  {
-    JOptionPane.showMessageDialog(null, message, "Error!", JOptionPane.ERROR_MESSAGE);
   }
 }

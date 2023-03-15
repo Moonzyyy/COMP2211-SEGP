@@ -21,11 +21,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.text.Text;
 import javax.swing.SwingUtilities;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -33,22 +33,22 @@ import org.jfree.data.time.TimeSeriesCollection;
 public class Graph extends AbstractScene {
 
   private final BorderPane layout;
-  private Button homeButton;
-  private Button printButton;
-  private Button compareButton;
-  private Button filterButton;
-
-
   /**
    * The id of the metric that is being graphed.
    */
   private final Integer metricId;
-  Map<Date,Double> data;
+  Map<Date, Double> data;
   String xAxisName;
   String yAxisName;
   String title;
+  private Button homeButton;
+  private Button printButton;
+  private Button compareButton;
+  private Button filterButton;
+  private JFreeChart chart;
 
-  public Graph(Integer id, String title,String xAxisName, String yAxisName,Map<Date, Double> data) {
+  public Graph(Integer id, String title, String xAxisName, String yAxisName,
+      Map<Date, Double> data) {
     super();
     layout = new BorderPane();
     metricId = id;
@@ -97,7 +97,6 @@ public class Graph extends AbstractScene {
 
     BorderPane.setMargin(topBar, new Insets(10, 10, 10, 10));
 
-
     TimeSeries dataSeries = new TimeSeries("Impressions");
     TimeSeriesCollection dataset = new TimeSeriesCollection();
     dataset.addSeries(dataSeries);
@@ -108,7 +107,7 @@ public class Graph extends AbstractScene {
       dataSeries.addOrUpdate(day, entry.getValue());
     }
 
-    JFreeChart chart = ChartFactory.createTimeSeriesChart(
+    chart = ChartFactory.createTimeSeriesChart(
         title,
         xAxisName,
         yAxisName,
@@ -117,6 +116,8 @@ public class Graph extends AbstractScene {
         true,
         false
     );
+
+    chart.getTitle().setPadding(0, 120, 0, 0);
 
     // Best way to style the chart unfortunately
     // I recommend looking at the docs for JFreeChart to see what you can do
@@ -157,7 +158,6 @@ public class Graph extends AbstractScene {
       chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
 
 
-
     });
     chart.getXYPlot().setDomainPannable(true);
     chart.getXYPlot().setRangePannable(true);
@@ -175,6 +175,8 @@ public class Graph extends AbstractScene {
 
     var startDatePicker = new DatePicker();
     var endDatePicker = new DatePicker();
+    startDatePicker.getStyleClass().add("start-date-picker");
+    endDatePicker.getStyleClass().add("end-date-picker");
 
     // set the maximum date of the first date picker to the selected date on the second date picker
     startDatePicker.setDayCellFactory(param -> new DateCell() {
@@ -222,9 +224,7 @@ public class Graph extends AbstractScene {
     });
     filterBar.getChildren().addAll(startDatePicker, endDatePicker, filterButton);
 
-
     createCheckBoxes();
-
 
     layout.setBottom(filterBar);
     scene = new Scene(layout, 1280, 720);
@@ -233,37 +233,62 @@ public class Graph extends AbstractScene {
 
   }
 
-  void createCheckBoxes()
-  {
-    Text genderText = new Text("Gender of Audience:");
+  /**
+   * Creates the checkboxes for the filter bar
+   */
+  void createCheckBoxes() {
+    //TODO: Add a "select all" checkbox for each category, and a select all for all categories
+    //TODO: Fix alignment of everything
+
+    var genderText = new Label("Gender of Audience:");
+    genderText.getStyleClass().add("list-cell-text");
     CheckBox male = new CheckBox("Male");
+    male.getStyleClass().add("checkbox");
     CheckBox female = new CheckBox("Female");
+    female.getStyleClass().add("checkbox");
 
-    Text ageText = new Text("Age of Audience:");
+    var ageText = new Label("Age of Audience:");
+    ageText.getStyleClass().add("list-cell-text");
     CheckBox under25 = new CheckBox("Under 25");
+    under25.getStyleClass().add("checkbox");
     CheckBox under34 = new CheckBox("25 to 34");
+    under34.getStyleClass().add("checkbox");
     CheckBox under44 = new CheckBox("35 to 44");
+    under44.getStyleClass().add("checkbox");
     CheckBox under54 = new CheckBox("45 to 54");
+    under54.getStyleClass().add("checkbox");
     CheckBox over54 = new CheckBox("Over 54");
+    over54.getStyleClass().add("checkbox");
 
-    Text incomeText = new Text("Income of Audience:");
+    var incomeText = new Label("Income of Audience:");
+    incomeText.getStyleClass().add("list-cell-text");
     CheckBox lowIncome = new CheckBox("Low Income");
+    lowIncome.getStyleClass().add("checkbox");
     CheckBox mediumIncome = new CheckBox("Medium Income");
+    mediumIncome.getStyleClass().add("checkbox");
     CheckBox highIncome = new CheckBox("High Income");
+    highIncome.getStyleClass().add("checkbox");
 
-    Text contextText = new Text("Location of Ad Interaction:");
+    var contextText = new Label("Location of Ad Interaction:");
+    contextText.getStyleClass().add("list-cell-text");
     CheckBox blog = new CheckBox("Blog Site");
+    blog.getStyleClass().add("checkbox");
     CheckBox news = new CheckBox("News Site");
+    news.getStyleClass().add("checkbox");
     CheckBox shopping = new CheckBox("Shopping Site");
+    shopping.getStyleClass().add("checkbox");
     CheckBox socialMedia = new CheckBox("Social Media");
+    socialMedia.getStyleClass().add("checkbox");
 
     ListView compareList = new ListView();
-    compareList.setMouseTransparent( true );
-    compareList.setFocusTraversable( false );
+
+    compareList.getStyleClass().add("list-cell");
+//    compareList.setMouseTransparent( true );
+//    compareList.setFocusTraversable( false );
     compareList.getItems().addAll(genderText, male, female, "",
-            ageText, under25, under34, under44, under54, over54, "",
-            incomeText, lowIncome, mediumIncome, highIncome, "",
-            contextText, blog, news, shopping, socialMedia);
+        ageText, under25, under34, under44, under54, over54, "",
+        incomeText, lowIncome, mediumIncome, highIncome, "",
+        contextText, blog, news, shopping, socialMedia);
     layout.setRight(compareList);
 
   }
@@ -285,6 +310,9 @@ public class Graph extends AbstractScene {
     return filterButton;
   }
 
+  public JFreeChart getChart() {
+    return chart;
+  }
 
 
 }
