@@ -54,7 +54,7 @@
 }
 
 .check-box:selected > .box> .mark {
-  -fx-background-color: #ffffff;
+  -fx-background-color: #000000;
   -fx-background-radius: 10px;
   -fx-padding: 5;
 }
@@ -71,7 +71,11 @@
 
 /* Set background color for CheckBox when selected */
 .check-box:selected {
-  -fx-background-color: #212121;
+  -fx-background-color: #ffffff;
+}
+
+.check-box:selected > .text {
+  -fx-fill: #000000;
 }
 
 /* Set font color for CheckBox */
