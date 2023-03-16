@@ -1,4 +1,4 @@
-package model.segments;
+package core.segments;
 
 import java.util.HashMap;
 import java.util.Map;
