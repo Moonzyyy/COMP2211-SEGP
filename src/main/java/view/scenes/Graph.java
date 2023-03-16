@@ -5,23 +5,21 @@ import java.awt.Font;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Objects;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javax.swing.SwingUtilities;
+
+import javafx.util.converter.IntegerStringConverter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -200,20 +198,32 @@ public class Graph extends AbstractScene {
       }
     });
 
+    Spinner<Integer> startTimeSpinner = new Spinner<>(0, 23, 0, 1);
+    Spinner<Integer> endTimeSpinner = new Spinner<>(0, 23, 23, 1);
+
+
+    startTimeSpinner.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0));
+    startTimeSpinner.setEditable(true);
+    endTimeSpinner.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0));
+    endTimeSpinner.setEditable(true);
+
     filterButton = new Button("Filter");
     filterButton.setOnAction(e -> {
       LocalDate startDate = startDatePicker.getValue();
       LocalDate endDate = endDatePicker.getValue();
+      int startTime = startTimeSpinner.getValue();
+      int endTime = endTimeSpinner.getValue();
       if (startDate != null && endDate != null) {
+        // Create start and end Date objects with selected times
+        Date startTimeDate = new GregorianCalendar(startDate.getYear(), startDate.getMonthValue() - 1, startDate.getDayOfMonth(), startTime, 0).getTime();
+        Date endTimeDate = new GregorianCalendar(endDate.getYear(), endDate.getMonthValue() - 1, endDate.getDayOfMonth(), endTime, 0).getTime();
 
-        TimeSeries filteredSeries = new TimeSeries("Filtered Clicks");
+        TimeSeries filteredSeries = new TimeSeries("Filtered Series");
         for (int i = 0; i < dataSeries.getItemCount(); i++) {
           Day day = (Day) dataSeries.getTimePeriod(i);
-          if (day.compareTo(
-              new Day(startDate.getDayOfMonth(), startDate.getMonthValue(),
-                  startDate.getYear())) >= 0
-              && day.compareTo(
-              new Day(endDate.getDayOfMonth(), endDate.getMonthValue(), endDate.getYear())) <= 0) {
+          Date date = day.getStart();
+          if (date.compareTo(startTimeDate) >= 0
+                  && date.compareTo(endTimeDate) <= 0) {
             filteredSeries.add(dataSeries.getDataItem(i));
           }
         }
@@ -222,7 +232,7 @@ public class Graph extends AbstractScene {
         dataset.addSeries(filteredSeries);
       }
     });
-    filterBar.getChildren().addAll(startDatePicker, endDatePicker, filterButton);
+    filterBar.getChildren().addAll(startTimeSpinner,startDatePicker, endTimeSpinner, endDatePicker, filterButton);
 
     createCheckBoxes();
 

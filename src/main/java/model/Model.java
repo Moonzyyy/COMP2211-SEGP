@@ -39,26 +39,11 @@ public class Model {
         this.users = cr.getUsers();
         this.clickCost = getClicks().mapToDouble(Pair::getValue).sum();
 
-//      if(clicks == null)
-//        {
-//            Controller.sendErrorMessage("There has been an error with processing your clicks file!");
-//            return false;
-//        }
-//        else if(impressions == null)
-//        {
-//            Controller.sendErrorMessage("There has been an error with processing your impressions file!");
-//            return false;
-//        }
-//        else if(serverInteractions == null)
-//        {
-//            Controller.sendErrorMessage("There has been an error with processing your server interactions file!");
-//            return false;
-//        }
         if (users == null) {
             Controller.sendErrorMessage("There has been an error with processing your clicks file!");
             return  false;
         }
-        return true;
+        return false;
     }
 
     public Stream<Pair<LocalDateTime, Double>> getImpressions() {
