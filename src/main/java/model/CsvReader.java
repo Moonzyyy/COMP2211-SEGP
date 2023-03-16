@@ -17,9 +17,14 @@ public class CsvReader {
 
     private final HashMap<Long,User> users = new HashMap<Long, User>();
 
+    /**
+     * Insert log files and create objects of Server, Click and Impression to put into lists in User
+     * @param clicksFile
+     * @param impressionsFile
+     * @param serverFile
+     */
     public CsvReader(File clicksFile, File impressionsFile, File serverFile) {
         System.out.println("Loading, please wait...");
-        //Get CSV data from all 3 log files (can be changed to for loop)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH");
         try {
 //          InputStream impressionPath = getClass().getResourceAsStream(impressionsFile);

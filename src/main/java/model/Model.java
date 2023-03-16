@@ -34,14 +34,14 @@ public class Model {
     public Model() {}
 
     public boolean importData() {
-      //Get CSV data from all 3 log files (can be changed to for loop)
+        //Get CSV data from all 3 log files
         CsvReader cr = new CsvReader(clicksFile, impressionsFile, serverFile);
         this.users = cr.getUsers();
         this.clickCost = getClicks().mapToDouble(Pair::getValue).sum();
 
         if (users == null) {
             Controller.sendErrorMessage("There has been an error with processing your clicks file!");
-            return  false;
+            return false;
         }
         return false;
     }
@@ -53,15 +53,18 @@ public class Model {
     public Stream<Pair<LocalDateTime, Double>> getClicks() {
         return users != null ? users.values().stream().parallel().flatMap(u -> u.getClicks().stream()) : null;
     }
+
     public Stream<Server> getServers() {
         return users != null ? users.values().stream().parallel().flatMap(u -> u.getServers().stream()) : null;
     }
+
+    //Return number of impressions
     public int totalImpressions()
     {
-    //      return this.impressions.size();
         return (int) this.getImpressions().count();
     }
 
+    //Return number of clicks
     public int totalClicks(){
         return (int) getClicks().count();
     }
@@ -251,6 +254,10 @@ public class Model {
         return ctrByDate;
     }
 
+    /**
+     * Create arraylist of metrics to persist after import
+     * @return
+     */
     public ArrayList<String> getMetrics() {
         metrics.add((double) totalImpressions());
         metrics.add((double) totalClicks());

@@ -16,6 +16,10 @@ public class Loading extends AbstractScene {
     super();
   }
 
+  /**
+   * Creates all the components of the scene, and adds them to the layout
+   * Loading scene while waiting for log files to be parsed
+   */
   public void createScene() {
     var labelContainer = new VBox();
     Label loadingLabel = new Label("Loading...");
@@ -29,6 +33,5 @@ public class Loading extends AbstractScene {
     scene = new Scene(loadingBorderPane, 1280, 720);
     scene.getStylesheets().add(
         Objects.requireNonNull(getClass().getResource("/view/start.css")).toExternalForm());
-
   }
 }
