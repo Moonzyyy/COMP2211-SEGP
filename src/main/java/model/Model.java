@@ -151,23 +151,20 @@ public class Model {
 
 //    public Map<Date, Double> loadMetric(Stream dataset, )
 
-    public Map<Date, Double> loadImpressionData() {
-        Map<Date, Double> impressionCostsByDate = new HashMap<>();
-        getImpressions().sequential().forEach(impression -> {
-            LocalDateTime dateTime = impression.getKey();
-            Double impressionCost = impression.getValue();
-            for (int hour = 0; hour < 24; hour++) {
-                LocalDateTime hourDateTime = dateTime.withHour(hour);
-                Date hourDate = Date.from(hourDateTime.atZone(ZoneId.systemDefault()).withMinute(0).withSecond(0).withNano(0).toInstant());
-                if (impressionCostsByDate.containsKey(hourDate)) {
-                    impressionCostsByDate.put(hourDate, impressionCostsByDate.get(hourDate) + impressionCost);
-                } else {
-                    impressionCostsByDate.put(hourDate, impressionCost);
-                }
-            }
-        });
-        System.out.println(impressionCostsByDate);
-        return impressionCostsByDate;
+    public Map<LocalDateTime, Double> loadImpressionData() {
+      var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:00");
+      //var test = getImpressions().collect(Collectors.groupingBy( t -> t.getKey().format(formatter))).entrySet().stream().collect(Collectors.toMap(s -> LocalDateTime.parse(s.getKey(), formatter), s -> s.getValue().stream().mapToDouble(Pair::getValue).sum()));
+      var test = getImpressions()
+          .map(t -> {
+            var key = LocalDateTime.parse(t.getKey().toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME).format(formatter);
+            var value = t.getValue();
+            return new AbstractMap.SimpleEntry<>(key, value);
+          })
+          .collect(Collectors.toMap(
+              e -> LocalDateTime.parse(e.getKey(), formatter),
+              Map.Entry::getValue,
+              Double::sum));
+      return test;
     }
 
     public Map<Date, Double> loadClicksData() {
@@ -238,21 +235,21 @@ public class Model {
         return clickCostByDate;
     }
 
-    public Map<Date, Double> loadCTRData() {
-        Map<Date, Double> ctrByDate = new HashMap<>();
-        Map<Date, Double> impressionCostsByDate = loadImpressionData();
-        Map<Date, Double> clickCountsByDate = loadClicksData();
-
-        for (Date date : impressionCostsByDate.keySet()) {
-            Double impressionCost = impressionCostsByDate.get(date);
-            Double clickCount = clickCountsByDate.getOrDefault(date, 0.0);
-            Double ctr = clickCount / impressionCost;
-            ctrByDate.put(date, ctr);
-        }
-
-        System.out.println(ctrByDate);
-        return ctrByDate;
-    }
+//    public Map<Date, Double> loadCTRData() {
+//        Map<Date, Double> ctrByDate = new HashMap<>();
+//        Map<Date, Double> impressionCostsByDate = loadImpressionData();
+//        Map<Date, Double> clickCountsByDate = loadClicksData();
+//
+//        for (Date date : impressionCostsByDate.keySet()) {
+//            Double impressionCost = impressionCostsByDate.get(date);
+//            Double clickCount = clickCountsByDate.getOrDefault(date, 0.0);
+//            Double ctr = clickCount / impressionCost;
+//            ctrByDate.put(date, ctr);
+//        }
+//
+//        System.out.println(ctrByDate);
+//        return ctrByDate;
+//    }
 
     public ArrayList<String> getMetrics() {
         metrics.add((double) totalImpressions());

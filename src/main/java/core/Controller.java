@@ -1,6 +1,7 @@
 package core;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -107,7 +108,7 @@ public class Controller {
     for (int i = 0; i < dashboardComp.getNumberBoxes().size(); i++) {
       int finalI = i;
       dashboardComp.getNumberBoxes().get(i).setOnMouseClicked((event) -> {
-        Map<Date, Double> data;
+        Map<LocalDateTime, Double> data;
         String title = "";
         String xAxisName = "";
         String yAxisName = "";
@@ -118,66 +119,66 @@ public class Controller {
             yAxisName = "Impressions";
             data = model.loadImpressionData();
           }
-          case 1 -> {
-            title = "Clicks Over Time";
-            xAxisName = "Date";
-            yAxisName = "Clicks";
-            data = model.loadClicksData();
-          }
-          case 2 -> {
-            title = "Bounces Over Time";
-            xAxisName = "Date";
-            yAxisName = "Bounces";
-            data = model.loadBouncesData();
-          }
-          case 3 -> {
-            title = "Conversions Over Time";
-            xAxisName = "Date";
-            yAxisName = "Conversions";
-            data = model.loadConversionData();
-          }
-          case 4 -> {
-            title = "Click Cost Over Time";
-            xAxisName = "Date";
-            yAxisName = "Click Costs";
-            data = model.loadClickCostData();
-          }
-          case 5 -> {
-            title = "Click-through-rate Over Time";
-            xAxisName = "Date";
-            yAxisName = "Click-through-rate";
-            data = model.loadCTRData();
-          }
-          case 6 -> {
-            title = "Cost-per-acquisition Over Time";
-            xAxisName = "Date";
-            yAxisName = "Cost-per-acquisition";
-            data = new HashMap<>();
-          }
-          case 7 -> {
-            title = "Cost-per-click Over Time";
-            xAxisName = "Date";
-            yAxisName = "Cost-per-click";
-            data = new HashMap<>();
-          }
-          case 8 -> {
-            title = "Cost-per-thousand impressions Over Time";
-            xAxisName = "Date";
-            yAxisName = "Cost-per-thousand impressions";
-            data = new HashMap<>();
-          }
-          case 9 -> {
-            title = "Bounce Rate Over Time";
-            xAxisName = "Date";
-            yAxisName = "Bounce Rate";
-            data = new HashMap<>();
-          }
-          case 10 -> {
-            title = "Uniques Over Time";
-            xAxisName = "Date";
-            yAxisName = "Uniques";
-            data = new HashMap<>();
-          }
+//          case 1 -> {
+//            title = "Clicks Over Time";
+//            xAxisName = "Date";
+//            yAxisName = "Clicks";
+//            data = model.loadClicksData();
+//          }
+//          case 2 -> {
+//            title = "Bounces Over Time";
+//            xAxisName = "Date";
+//            yAxisName = "Bounces";
+//            data = model.loadBouncesData();
+//          }
+//          case 3 -> {
+//            title = "Conversions Over Time";
+//            xAxisName = "Date";
+//            yAxisName = "Conversions";
+//            data = model.loadConversionData();
+//          }
+//          case 4 -> {
+//            title = "Click Cost Over Time";
+//            xAxisName = "Date";
+//            yAxisName = "Click Costs";
+//            data = model.loadClickCostData();
+//          }
+//          case 5 -> {
+//            title = "Click-through-rate Over Time";
+//            xAxisName = "Date";
+//            yAxisName = "Click-through-rate";
+//            data = model.loadCTRData();
+//          }
+//          case 6 -> {
+//            title = "Cost-per-acquisition Over Time";
+//            xAxisName = "Date";
+//            yAxisName = "Cost-per-acquisition";
+//            data = new HashMap<>();
+//          }
+//          case 7 -> {
+//            title = "Cost-per-click Over Time";
+//            xAxisName = "Date";
+//            yAxisName = "Cost-per-click";
+//            data = new HashMap<>();
+//          }
+//          case 8 -> {
+//            title = "Cost-per-thousand impressions Over Time";
+//            xAxisName = "Date";
+//            yAxisName = "Cost-per-thousand impressions";
+//            data = new HashMap<>();
+//          }
+//          case 9 -> {
+//            title = "Bounce Rate Over Time";
+//            xAxisName = "Date";
+//            yAxisName = "Bounce Rate";
+//            data = new HashMap<>();
+//          }
+//          case 10 -> {
+//            title = "Uniques Over Time";
+//            xAxisName = "Date";
+//            yAxisName = "Uniques";
+//            data = new HashMap<>();
+//          }
           default -> data = new HashMap<>();
         }
         setUpScene(new Graph(finalI, title, xAxisName, yAxisName, data));

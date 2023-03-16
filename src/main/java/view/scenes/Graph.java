@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import javafx.embed.swing.SwingNode;
@@ -25,6 +28,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.time.Day;
+import org.jfree.data.time.Hour;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
@@ -35,7 +39,7 @@ public class Graph extends AbstractScene {
    * The id of the metric that is being graphed.
    */
   private final Integer metricId;
-  Map<Date, Double> data;
+  Map<LocalDateTime, Double> data;
   String xAxisName;
   String yAxisName;
   String title;
@@ -46,7 +50,7 @@ public class Graph extends AbstractScene {
   private JFreeChart chart;
 
   public Graph(Integer id, String title, String xAxisName, String yAxisName,
-      Map<Date, Double> data) {
+      Map<LocalDateTime, Double> data) {
     super();
     layout = new BorderPane();
     metricId = id;
@@ -99,10 +103,12 @@ public class Graph extends AbstractScene {
     TimeSeriesCollection dataset = new TimeSeriesCollection();
     dataset.addSeries(dataSeries);
 
-    for (Map.Entry<Date, Double> entry : data.entrySet()) {
-      Date date = entry.getKey();
-      Day day = Day.parseDay(new SimpleDateFormat("yyyy-MM-dd").format(date));
-      dataSeries.addOrUpdate(day, entry.getValue());
+    for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
+      //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+      LocalDateTime date = entry.getKey();
+      //Day day = Day.parseDay(new SimpleDateFormat("yyyy-MM-dd").format(date));
+      Hour hour = new Hour(date.getHour(),date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+      dataSeries.addOrUpdate(hour, entry.getValue());
     }
 
     chart = ChartFactory.createTimeSeriesChart(

@@ -1,12 +1,11 @@
 package model;
 
+import core.segments.Age;
+import core.segments.Context;
+import core.segments.Income;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javafx.util.Pair;
-import model.segments.Age;
-import model.segments.Context;
-import model.segments.Income;
-
 public class User {
 
   /**
