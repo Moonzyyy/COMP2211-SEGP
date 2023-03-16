@@ -156,11 +156,14 @@ public class Model {
         getImpressions().sequential().forEach(impression -> {
             LocalDateTime dateTime = impression.getKey();
             Double impressionCost = impression.getValue();
-            Date dateWithoutTime = Date.from(dateTime.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            if (impressionCostsByDate.containsKey(dateWithoutTime)) {
-                impressionCostsByDate.put(dateWithoutTime, impressionCostsByDate.get(dateWithoutTime) + impressionCost);
-            } else {
-                impressionCostsByDate.put(dateWithoutTime, impressionCost);
+            for (int hour = 0; hour < 24; hour++) {
+                LocalDateTime hourDateTime = dateTime.withHour(hour);
+                Date hourDate = Date.from(hourDateTime.atZone(ZoneId.systemDefault()).withMinute(0).withSecond(0).withNano(0).toInstant());
+                if (impressionCostsByDate.containsKey(hourDate)) {
+                    impressionCostsByDate.put(hourDate, impressionCostsByDate.get(hourDate) + impressionCost);
+                } else {
+                    impressionCostsByDate.put(hourDate, impressionCost);
+                }
             }
         });
         System.out.println(impressionCostsByDate);
