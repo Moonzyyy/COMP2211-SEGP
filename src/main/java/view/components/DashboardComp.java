@@ -93,6 +93,10 @@ public class DashboardComp extends VBox {
     return numberBoxes;
   }
 
+  /**
+   *
+   * @param numbers
+   */
   public void updateNumberBoxes(List<String> numbers) {
     for (int i = 0; i < numbers.size(); i++) {
       final Label numberLabel = (Label) numberBoxes.get(i).getChildren().get(0);

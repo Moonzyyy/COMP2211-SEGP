@@ -224,6 +224,14 @@ public class Controller {
     graphScene.getPrintButton().setOnAction((event) -> {
       System.out.print("Print button pressed");
     });
+
+    //Checkbox Listener
+    graphScene.getMaleBox().setOnAction(e -> {
+      if (graphScene.getMaleBox().isSelected()) {
+        graphScene.getFemaleBox().setSelected(false);
+      }
+    });
+
   }
 
   public void setUpScene(Loading loading) {

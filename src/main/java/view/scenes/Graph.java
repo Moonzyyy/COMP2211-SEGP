@@ -29,8 +29,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Hour;
-import org.jfree.data.time.Month;
-import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
@@ -104,8 +102,14 @@ public class Graph extends AbstractScene {
     TimeSeries dataSeries = new TimeSeries("Impressions");
     TimeSeriesCollection dataset = new TimeSeriesCollection();
     dataset.addSeries(dataSeries);
-    dataSetter(dataSeries, "Day");
 
+    for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
+      //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+      LocalDateTime date = entry.getKey();
+      //Day day = Day.parseDay(new SimpleDateFormat("yyyy-MM-dd").format(date));
+      Hour hour = new Hour(date.getHour(),date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+      dataSeries.addOrUpdate(hour, entry.getValue());
+    }
     chart = ChartFactory.createTimeSeriesChart(
         title,
         xAxisName,
@@ -207,11 +211,11 @@ public class Graph extends AbstractScene {
         // Create start and end Date objects with selected times
         Date startTimeDate = new GregorianCalendar(startDate.getYear(), startDate.getMonthValue() - 1, startDate.getDayOfMonth()).getTime();
         Date endTimeDate = new GregorianCalendar(endDate.getYear(), endDate.getMonthValue() - 1, endDate.getDayOfMonth()).getTime();
-        dataSetter(dataSeries, timeFilter.getValue());
+
         TimeSeries filteredSeries = new TimeSeries("Filtered Series");
         for (int i = 0; i < dataSeries.getItemCount(); i++) {
-          var time = dataSeries.getTimePeriod(i);
-          Date date = time.getStart();
+          Hour hour = (Hour) dataSeries.getTimePeriod(i);
+          Date date = hour.getStart();
           if (date.compareTo(startTimeDate) >= 0
                   && date.compareTo(endTimeDate) <= 0) {
             filteredSeries.add(dataSeries.getDataItem(i));
@@ -230,45 +234,6 @@ public class Graph extends AbstractScene {
     scene = new Scene(layout, 1280, 720);
     scene.getStylesheets()
         .add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
-
-  }
-
-  void dataSetter(TimeSeries dataSeries, String timeChosen)
-  {
-    dataSeries.clear();
-    if(timeChosen.equals("Hour"))
-    {
-
-      for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
-        LocalDateTime date = entry.getKey();
-        Hour hour = new Hour(date.getHour(),date.getDayOfMonth(), date.getMonthValue(), date.getYear());
-        dataSeries.addOrUpdate(hour, entry.getValue());
-      }
-    } else if(timeChosen.equals("Day"))
-    {
-      for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
-        LocalDateTime date = entry.getKey();
-        Day day = new Day(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
-        dataSeries.addOrUpdate(day, entry.getValue());
-      }
-      /// TODO: 3/17/2023 need to do week 
-    } else if(timeChosen.equals("Week"))
-    {
-      for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
-        LocalDateTime date = entry.getKey();
-        Hour hour = new Hour(date.getHour(),date.getDayOfMonth(), date.getMonthValue(), date.getYear());
-        dataSeries.addOrUpdate(hour, entry.getValue());
-      }
-    }
-    else
-    {
-      for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
-        LocalDateTime date = entry.getKey();
-        Month month = new Month(date.getMonthValue(), date.getYear());
-        dataSeries.addOrUpdate(month, entry.getValue());
-      }
-    }
-
 
   }
 
