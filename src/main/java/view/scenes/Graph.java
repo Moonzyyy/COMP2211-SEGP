@@ -202,30 +202,19 @@ public class Graph extends AbstractScene {
       }
     });
 
-    Spinner<Integer> startTimeSpinner = new Spinner<>(0, 23, 0, 1);
-    Spinner<Integer> endTimeSpinner = new Spinner<>(0, 23, 23, 1);
-
-
-    startTimeSpinner.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0));
-    startTimeSpinner.setEditable(true);
-    endTimeSpinner.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0));
-    endTimeSpinner.setEditable(true);
-
     filterButton = new Button("Filter");
     filterButton.setOnAction(e -> {
       LocalDate startDate = startDatePicker.getValue();
       LocalDate endDate = endDatePicker.getValue();
-      int startTime = startTimeSpinner.getValue();
-      int endTime = endTimeSpinner.getValue();
       if (startDate != null && endDate != null) {
         // Create start and end Date objects with selected times
-        Date startTimeDate = new GregorianCalendar(startDate.getYear(), startDate.getMonthValue() - 1, startDate.getDayOfMonth(), startTime, 0).getTime();
-        Date endTimeDate = new GregorianCalendar(endDate.getYear(), endDate.getMonthValue() - 1, endDate.getDayOfMonth(), endTime, 0).getTime();
+        Date startTimeDate = new GregorianCalendar(startDate.getYear(), startDate.getMonthValue() - 1, startDate.getDayOfMonth()).getTime();
+        Date endTimeDate = new GregorianCalendar(endDate.getYear(), endDate.getMonthValue() - 1, endDate.getDayOfMonth()).getTime();
 
         TimeSeries filteredSeries = new TimeSeries("Filtered Series");
         for (int i = 0; i < dataSeries.getItemCount(); i++) {
-          Day day = (Day) dataSeries.getTimePeriod(i);
-          Date date = day.getStart();
+          Hour hour = (Hour) dataSeries.getTimePeriod(i);
+          Date date = hour.getStart();
           if (date.compareTo(startTimeDate) >= 0
                   && date.compareTo(endTimeDate) <= 0) {
             filteredSeries.add(dataSeries.getDataItem(i));
@@ -236,7 +225,7 @@ public class Graph extends AbstractScene {
         dataset.addSeries(filteredSeries);
       }
     });
-    filterBar.getChildren().addAll(startTimeSpinner,startDatePicker, endTimeSpinner, endDatePicker, filterButton);
+    filterBar.getChildren().addAll(startDatePicker, endDatePicker, filterButton);
 
     createCheckBoxes();
 
