@@ -2,6 +2,7 @@ package core;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +82,7 @@ public class Controller {
 
     // Predicates
     menu.getResumeButton()
-        .setVisible(model.getImpressions() != null && model.getMetrics().size() > 0);
+            .setVisible(model.getImpressions() != null && model.getMetrics().size() > 0);
 
 
   }
@@ -103,7 +104,6 @@ public class Controller {
     dashboard.getBackButton().setOnAction((event) -> {
       setUpScene(new StartMenu());
     });
-
     // All number box listeners
     for (int i = 0; i < dashboardComp.getNumberBoxes().size(); i++) {
       int finalI = i;
@@ -112,41 +112,43 @@ public class Controller {
         String title = "";
         String xAxisName = "";
         String yAxisName = "";
-        if (finalI == 0) {
-          title = "Impressions Over Time";
-          xAxisName = "Date";
-          yAxisName = "Impressions";
-          data = model.loadImpressionData();
-//          case 1 -> {
-//            title = "Clicks Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Clicks";
-//            data = model.loadClicksData();
-//          }
-//          case 2 -> {
-//            title = "Bounces Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Bounces";
-//            data = model.loadBouncesData();
-//          }
-//          case 3 -> {
-//            title = "Conversions Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Conversions";
-//            data = model.loadConversionData();
-//          }
-//          case 4 -> {
-//            title = "Click Cost Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Click Costs";
-//            data = model.loadClickCostData();
-//          }
-//          case 5 -> {
-//            title = "Click-through-rate Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Click-through-rate";
-//            data = model.loadCTRData();
-//          }
+        switch (finalI) {
+          case 0 -> {
+            title = "Impressions Over Time";
+            xAxisName = "Date";
+            yAxisName = "Impressions";
+            data = model.loadImpressionData();
+          }
+          case 1 -> {
+            title = "Clicks Over Time";
+            xAxisName = "Date";
+            yAxisName = "Clicks";
+            data = model.loadClicksData();
+          }
+          case 2 -> {
+            title = "Bounces Over Time";
+            xAxisName = "Date";
+            yAxisName = "Bounces";
+            data = model.loadBouncesData();
+          }
+          case 3 -> {
+            title = "Conversions Over Time";
+            xAxisName = "Date";
+            yAxisName = "Conversions";
+            data = model.loadConversionData();
+          }
+          case 4 -> {
+            title = "Click Cost Over Time";
+            xAxisName = "Date";
+            yAxisName = "Click Costs";
+            data = model.loadClickCostData();
+          }
+          case 5 -> {
+            title = "Click-Through-Rate Over Time";
+            xAxisName = "Date";
+            yAxisName = "Click-through-rate";
+            data = model.loadCTRData();
+          }
 //          case 6 -> {
 //            title = "Cost-per-acquisition Over Time";
 //            xAxisName = "Date";
@@ -177,8 +179,7 @@ public class Controller {
 //            yAxisName = "Uniques";
 //            data = new HashMap<>();
 //          }
-        } else {
-          data = new HashMap<>();
+          default -> data = new HashMap<>();
         }
         setUpScene(new Graph(finalI, title, xAxisName, yAxisName, data));
       });
@@ -266,8 +267,8 @@ public class Controller {
         model.setClicksFile(file);
         importScene.getClickFileName().setText(file.getName());
         importScene.getLoadButton().setDisable(
-            model.getClicksFile() == null || model.getImpressionsFile() == null
-                || model.getServerFile() == null);
+                model.getClicksFile() == null || model.getImpressionsFile() == null
+                        || model.getServerFile() == null);
       } catch (Exception e) {
         sendErrorMessage("File selected is not of type .csv!");
       }
@@ -281,8 +282,8 @@ public class Controller {
         model.setImpressionsFile(file);
         importScene.getImpressionFileName().setText(file.getName());
         importScene.getLoadButton().setDisable(
-            model.getClicksFile() == null || model.getImpressionsFile() == null
-                || model.getServerFile() == null);
+                model.getClicksFile() == null || model.getImpressionsFile() == null
+                        || model.getServerFile() == null);
       } catch (Exception e) {
         sendErrorMessage("File selected is not of type .csv!");
       }
@@ -295,16 +296,16 @@ public class Controller {
         model.setServerFile(file);
         importScene.getServerFileName().setText(file.getName());
         importScene.getLoadButton().setDisable(
-            model.getClicksFile() == null || model.getImpressionsFile() == null
-                || model.getServerFile() == null);
+                model.getClicksFile() == null || model.getImpressionsFile() == null
+                        || model.getServerFile() == null);
       } catch (Exception e) {
         sendErrorMessage("File selected is not of type .csv!");
       }
     });
 
     importScene.getLoadButton().setDisable(
-        model.getClicksFile() == null || model.getImpressionsFile() == null
-            || model.getServerFile() == null);
+            model.getClicksFile() == null || model.getImpressionsFile() == null
+                    || model.getServerFile() == null);
 
     importScene.getLoadButton().setOnAction((event) -> {
       Task<Void> task = new Task<>() {

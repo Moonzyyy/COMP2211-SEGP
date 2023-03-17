@@ -167,89 +167,86 @@ public class Model {
       return test;
     }
 
-    public Map<Date, Double> loadClicksData() {
-        Map<Date, Double> clickCountsByDate = new HashMap<>();
-        getClicks().sequential().forEach(click -> {
-            LocalDateTime localDateTime = click.getKey();
-            LocalDate date = localDateTime.toLocalDate();
-            Date dateWithoutTime = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            if (clickCountsByDate.containsKey(dateWithoutTime)) {
-                clickCountsByDate.put(dateWithoutTime, clickCountsByDate.get(dateWithoutTime) + 1.0);
-            } else {
-                clickCountsByDate.put(dateWithoutTime, 1.0);
-            }
-        });
-        System.out.println(clickCountsByDate);
-        return clickCountsByDate;
+    public Map<LocalDateTime, Double> loadClicksData() {
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:00");
+        //var test = getImpressions().collect(Collectors.groupingBy( t -> t.getKey().format(formatter))).entrySet().stream().collect(Collectors.toMap(s -> LocalDateTime.parse(s.getKey(), formatter), s -> s.getValue().stream().mapToDouble(Pair::getValue).sum()));
+        var test = getClicks()
+                .map(t -> {
+                    var key = LocalDateTime.parse(t.getKey().toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME).format(formatter);
+                    var value = t.getValue();
+                    return new AbstractMap.SimpleEntry<>(key, value);
+                })
+                .collect(Collectors.toMap(
+                        e -> LocalDateTime.parse(e.getKey(), formatter),
+                        Map.Entry::getValue,
+                        Double::sum));
+        return test;
     }
 
-    public Map<Date,Double> loadBouncesData() {
-        Map<Date, Double> bouncesByDate = new HashMap<>();
-        getServers().sequential().forEach(server -> {
-            LocalDateTime localDateTime = server.getEntryDate();
-            LocalDate date = localDateTime.toLocalDate();
-            Date dateWithoutTime = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            if (!server.getConversion() && bouncesByDate.containsKey(dateWithoutTime)) {
-                Double count = bouncesByDate.get(dateWithoutTime);
-                bouncesByDate.put(dateWithoutTime, count+1);
-            } else if (!server.getConversion()) {
-                bouncesByDate.put(dateWithoutTime, 1.0);
-            }
-        });
-        System.out.println(bouncesByDate);
-        return bouncesByDate;
+    public Map<LocalDateTime,Double> loadBouncesData() {
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:00");
+        //var test = getImpressions().collect(Collectors.groupingBy( t -> t.getKey().format(formatter))).entrySet().stream().collect(Collectors.toMap(s -> LocalDateTime.parse(s.getKey(), formatter), s -> s.getValue().stream().mapToDouble(Pair::getValue).sum()));
+        var test = getImpressions()
+                .map(t -> {
+                    var key = LocalDateTime.parse(t.getKey().toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME).format(formatter);
+                    var value = t.getValue();
+                    return new AbstractMap.SimpleEntry<>(key, value);
+                })
+                .collect(Collectors.toMap(
+                        e -> LocalDateTime.parse(e.getKey(), formatter),
+                        Map.Entry::getValue,
+                        Double::sum));
+        return test;
     }
 
-    public Map<Date, Double> loadConversionData() {
-        Map<Date,Double> conversionsByDate = new HashMap<>();
-        getServers().sequential().forEach(server -> {
-            LocalDateTime localDateTime = server.getEntryDate();
-            LocalDate date = localDateTime.toLocalDate();
-            Date dateWithoutTime = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            if (server.getConversion() && conversionsByDate.containsKey(dateWithoutTime)) {
-                Double count = conversionsByDate.get(dateWithoutTime);
-                conversionsByDate.put(dateWithoutTime, count+1);
-            } else if (server.getConversion()) {
-                conversionsByDate.put(dateWithoutTime, 1.0);
-            }
-        });
-        System.out.println(conversionsByDate);
-        return conversionsByDate;
+    public Map<LocalDateTime, Double> loadConversionData() {
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:00");
+        //var test = getImpressions().collect(Collectors.groupingBy( t -> t.getKey().format(formatter))).entrySet().stream().collect(Collectors.toMap(s -> LocalDateTime.parse(s.getKey(), formatter), s -> s.getValue().stream().mapToDouble(Pair::getValue).sum()));
+        var test = getImpressions()
+                .map(t -> {
+                    var key = LocalDateTime.parse(t.getKey().toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME).format(formatter);
+                    var value = t.getValue();
+                    return new AbstractMap.SimpleEntry<>(key, value);
+                })
+                .collect(Collectors.toMap(
+                        e -> LocalDateTime.parse(e.getKey(), formatter),
+                        Map.Entry::getValue,
+                        Double::sum));
+        return test;
     }
 
 
-    public Map<Date, Double> loadClickCostData() {
-        Map<Date, Double> clickCostByDate = new HashMap<>();
-        getClicks().sequential().forEach(click -> {
-            LocalDateTime localDateTime = click.getKey();
-            LocalDate date = localDateTime.toLocalDate();
-            Double clickCost = click.getValue();
-            Date dateWithoutTime = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            if (clickCostByDate.containsKey(dateWithoutTime)) {
-                clickCostByDate.put(dateWithoutTime, clickCostByDate.get(dateWithoutTime) + clickCost);
-            } else {
-                clickCostByDate.put(dateWithoutTime, clickCost);
-            }
-        });
-        System.out.println(clickCostByDate);
-        return clickCostByDate;
+    public Map<LocalDateTime, Double> loadClickCostData() {
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:00");
+        //var test = getImpressions().collect(Collectors.groupingBy( t -> t.getKey().format(formatter))).entrySet().stream().collect(Collectors.toMap(s -> LocalDateTime.parse(s.getKey(), formatter), s -> s.getValue().stream().mapToDouble(Pair::getValue).sum()));
+        var test = getImpressions()
+                .map(t -> {
+                    var key = LocalDateTime.parse(t.getKey().toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME).format(formatter);
+                    var value = t.getValue();
+                    return new AbstractMap.SimpleEntry<>(key, value);
+                })
+                .collect(Collectors.toMap(
+                        e -> LocalDateTime.parse(e.getKey(), formatter),
+                        Map.Entry::getValue,
+                        Double::sum));
+        return test;
     }
 
-//    public Map<Date, Double> loadCTRData() {
-//        Map<Date, Double> ctrByDate = new HashMap<>();
-//        Map<Date, Double> impressionCostsByDate = loadImpressionData();
-//        Map<Date, Double> clickCountsByDate = loadClicksData();
-//
-//        for (Date date : impressionCostsByDate.keySet()) {
-//            Double impressionCost = impressionCostsByDate.get(date);
-//            Double clickCount = clickCountsByDate.getOrDefault(date, 0.0);
-//            Double ctr = clickCount / impressionCost;
-//            ctrByDate.put(date, ctr);
-//        }
-//
-//        System.out.println(ctrByDate);
-//        return ctrByDate;
-//    }
+    public Map<LocalDateTime, Double> loadCTRData() {
+        Map<LocalDateTime, Double> ctrByDate = new HashMap<>();
+        Map<LocalDateTime, Double> impressionCostsByDate = loadImpressionData();
+        Map<LocalDateTime, Double> clickCountsByDate = loadClicksData();
+
+        for (LocalDateTime localDateTime : impressionCostsByDate.keySet()) {
+            Double impressionCost = impressionCostsByDate.get(localDateTime);
+            Double clickCount = clickCountsByDate.getOrDefault(localDateTime, 0.0);
+            Double ctr = clickCount / impressionCost;
+            ctrByDate.put(localDateTime, ctr);
+        }
+
+        System.out.println(ctrByDate);
+        return ctrByDate;
+    }
 
     public ArrayList<String> getMetrics() {
         metrics.clear();
