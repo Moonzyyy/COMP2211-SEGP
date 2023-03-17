@@ -18,10 +18,10 @@ public class CsvReader {
     private final HashMap<Long,User> users = new HashMap<Long, User>();
 
     /**
-     * Insert log files and create objects of Server, Click and Impression to put into lists in User
-     * @param clicksFile
-     * @param impressionsFile
-     * @param serverFile
+     * Insert log files and create objects of Server, Click and Impression types to put into lists in User
+     * @param clicksFile click log file in CSV format input by user
+     * @param impressionsFile click log file in CSV format input by user
+     * @param serverFile click log file in CSV format input by user
      */
     public CsvReader(File clicksFile, File impressionsFile, File serverFile) {
         System.out.println("Loading, please wait...");

@@ -46,95 +46,131 @@ public class Model {
         return false;
     }
 
+    /**
+     * Gets every impression by folding every impression from every user.
+     * @return stream of impressions
+     */
     public Stream<Pair<LocalDateTime, Double>> getImpressions() {
         return users != null ? users.values().stream().parallel().flatMap(u -> u.getImpressions().stream()) : null;
     }
 
+    /**
+     * Gets every impression by folding every click from every user.
+     * @return stream of click
+     */
     public Stream<Pair<LocalDateTime, Double>> getClicks() {
         return users != null ? users.values().stream().parallel().flatMap(u -> u.getClicks().stream()) : null;
     }
 
+    /**
+     * Gets every impression by folding every server from every user.
+     * @return stream of servers
+     */
     public Stream<Server> getServers() {
         return users != null ? users.values().stream().parallel().flatMap(u -> u.getServers().stream()) : null;
     }
 
-    //Return number of impressions
+    /**
+     * Counts every impression from the impression stream.
+     * @return total number of impressions
+     */
     public int totalImpressions()
     {
         return (int) this.getImpressions().count();
     }
 
-    //Return number of clicks
+    /**
+     * Counts every click from the click stream.
+     * @return total number of clicks
+     */
     public int totalClicks(){
-        return (int) getClicks().count();
+        return (int) this.getClicks().count();
     }
 
-    //Return number of uniques; (Distinct IDs from Click log)
+    /**
+     * Counts every unique ID from all the users.
+     * @return total number of unique users
+     */
     public int numberOfUniques()
     {
         return (int) users.values().stream().parallel().filter(u -> u.getClicks().size() > 0).count();
     }
 
-    //Return number of Conversions; (Conversions which are true)
-    public int numberOfConversions()
-    {
-        return (int) getServers().filter(Server::getConversion).count();
-    //          return (int) serverInteractions.stream().filter(Server::getConversion).count();
+    /**
+     * Counts every conversion from the server stream.
+     * @return total number of conversions
+     */
+    public int numberOfConversions() {
+        return (int) this.getServers().filter(Server::getConversion).count();
     }
 
-    //Bounce is defined by user in later sprints. For now keep it as number of page viewed = 1;
-    public int numberOfBounces()
-    {
-    this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
+    /**
+     * Gets the number of bounces from the server stream.
+     * Currently, bounce is defined as pages viewed <= 1,
+     * but this will be user defined later.
+     * @return total number of bounces
+     */
+    public int numberOfBounces() {
+        this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
         return this.bounces;
     }
 
-    //Bounce Rate:	The	average	number of bounces per click
-    //Convert ints to doubles before doing any calculations
-    //  return double in 3.dp
-    public double bounceRate()
-    {
+    /**
+     * Calculates the bounce rate, which is the average number of bounces per click.
+     * This is calculated by dividing number of bounces by total clicks.
+     * @return the bounce rate in 3 d.p.
+     */
+    public double bounceRate() {
         return Double.parseDouble(df.format((double) this.bounces / metrics.get(1)));
     }
 
-    //TotalCost = Click Cost + Impression Cost
-    public double totalCost()
-    {
-    //      return Double.parseDouble(df.format(this.clickCost + impressions.stream().parallel().mapToDouble(Pair::getValue).sum()));
+    /**
+     * Calculates the total cost.
+     * This is calculated by adding click and impression cost.
+     * @return the total cost in 3 d.p.
+     */
+    public double totalCost() {
         return Double.parseDouble(df.format(this.clickCost + getImpressions().mapToDouble(Pair::getValue).sum()));
     }
 
-    //Click-through-rate	(CTR):	The	average	number	of	clicks	per	impression
-    //Convert ints to doubles before doing any calculations
-    //return double in 3.dp
-    public Double clickThroughRate()
-    {
+    /**
+     * Calculates the click-through-rate, which is the average number of clicks per impression.
+     * This is calculated by dividing total number of clicks by total impressions.
+     * @return the click-through-rate in 3 d.p.
+     */
+    public Double clickThroughRate() {
         return Double.parseDouble(df.format(metrics.get(1) / metrics.get(0)));
     }
 
-    //Cost-per-click	(CPC):	The	average	amount	of	money spent	on	an	advertising	campaign	for	each click
-    //Convert ints to doubles before doing any calculations
-    //return double in 3.dp
-    public Double costPerClick()
-    {
+    /**
+     * Calculates the cost-per-click, which is the average amount
+     * of money spent on the campaign for each click.
+     * This is calculated by dividing click cost by total clicks.
+     * @return the cost-per-click in 3 d.p.
+     */
+    public Double costPerClick() {
         return Double.parseDouble(df.format(this.clickCost / metrics.get(1)));
     }
 
-    //Cost-per-acquisition	(CPA):	The	average	amount	of	money	spent	on	an	advertising	campaign for	each	acquisition	(i.e.,	conversion).
-    //Convert ints to doubles before doing any calculations
-    //return double in 3.dp
-    public Double costPerAcquisition()
-    {
+    /**
+     * Calculates the cost-per-acquisition, which is the average amount
+     * of money spent for each acquisition (also known as conversion).
+     * This is calculated by dividing the total cost by number of conversions.
+     * @return the cost-per-acquisition in 3 d.p.
+     */
+    public Double costPerAcquisition() {
         return Double.parseDouble(df.format( metrics.get(4) / (double) metrics.get(3)));
     }
 
-    //Cost-per-thousand-impressions(CPM): The average amount of money spent on an advertising campaign for every 1000 impressions.
-    //Convert ints to doubles before doing any calculations
-    //return double in 3.dp
+    /**
+     * Calculates the cost-per-thousand-impressions, which is the
+     * average amount of money spent for every thousand impressions.
+     * This is calculated by dividing the total cost by number of impressions x1000.
+     * @return the cost-per-thousand-impressions in 3 d.p.
+     */
     public Double costPerThousandImps()
     {
         return Double.parseDouble(df.format(metrics.get(4) / (double) metrics.get(0)));
-//    return Double.parseDouble(df.format(metrics.get(4) / (double) metrics.get(0)));
     }
 
     public void getTestCodeChecked() {
@@ -169,6 +205,7 @@ public class Model {
         System.out.println(impressionCostsByDate);
         return impressionCostsByDate;
     }
+
 
     public Map<Date, Double> loadClicksData() {
         Map<Date, Double> clickCountsByDate = new HashMap<>();
@@ -255,8 +292,8 @@ public class Model {
     }
 
     /**
-     * Create arraylist of metrics to persist after import
-     * @return
+     * Create arraylist of metrics from functions to persist after import
+     * @return arraylist of metrics
      */
     public ArrayList<String> getMetrics() {
         metrics.add((double) totalImpressions());
