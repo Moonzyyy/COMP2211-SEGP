@@ -110,7 +110,6 @@ public class Graph extends AbstractScene {
       Hour hour = new Hour(date.getHour(),date.getDayOfMonth(), date.getMonthValue(), date.getYear());
       dataSeries.addOrUpdate(hour, entry.getValue());
     }
-
     chart = ChartFactory.createTimeSeriesChart(
         title,
         xAxisName,
@@ -156,7 +155,6 @@ public class Graph extends AbstractScene {
       chartPanel.setMouseWheelEnabled(true);
       chartPanel.setDomainZoomable(true);
       chartPanel.setRangeZoomable(true);
-
       chartPanel.setZoomTriggerDistance(Integer.MAX_VALUE);
       chartPanel.setFillZoomRectangle(false);
       chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));

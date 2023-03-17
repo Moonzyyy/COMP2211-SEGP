@@ -252,6 +252,7 @@ public class Model {
 //    }
 
     public ArrayList<String> getMetrics() {
+        metrics.clear();
         metrics.add((double) totalImpressions());
         metrics.add((double) totalClicks());
         metrics.add((double) numberOfBounces());
