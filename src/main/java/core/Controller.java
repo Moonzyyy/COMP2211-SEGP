@@ -226,11 +226,11 @@ public class Controller {
     });
 
     //Checkbox Listener
-    graphScene.getMaleBox().setOnAction(e -> {
-      if (graphScene.getMaleBox().isSelected()) {
-        graphScene.getFemaleBox().setSelected(false);
-      }
-    });
+//    graphScene.getMaleBox().setOnAction(e -> {
+//      if (graphScene.getMaleBox().isSelected()) {
+//        graphScene.getFemaleBox().setSelected(false);
+//      }
+//    });
 
   }
 
