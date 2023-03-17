@@ -201,7 +201,8 @@ public class Graph extends AbstractScene {
         }
       }
     });
-
+    ComboBox<String> timeFilter = new ComboBox<>();
+    timeFilter.getItems().addAll("Hour", "Day", "Week", "Month");
     filterButton = new Button("Filter");
     filterButton.setOnAction(e -> {
       LocalDate startDate = startDatePicker.getValue();
@@ -225,7 +226,7 @@ public class Graph extends AbstractScene {
         dataset.addSeries(filteredSeries);
       }
     });
-    filterBar.getChildren().addAll(startDatePicker, endDatePicker, filterButton);
+    filterBar.getChildren().addAll(timeFilter,startDatePicker, endDatePicker, filterButton);
 
     createCheckBoxes();
 

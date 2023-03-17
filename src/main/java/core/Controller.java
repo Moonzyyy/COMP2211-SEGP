@@ -119,36 +119,36 @@ public class Controller {
             yAxisName = "Impressions";
             data = model.loadImpressionData();
           }
-//          case 1 -> {
-//            title = "Clicks Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Clicks";
-//            data = model.loadClicksData();
-//          }
-//          case 2 -> {
-//            title = "Bounces Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Bounces";
-//            data = model.loadBouncesData();
-//          }
-//          case 3 -> {
-//            title = "Conversions Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Conversions";
-//            data = model.loadConversionData();
-//          }
-//          case 4 -> {
-//            title = "Click Cost Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Click Costs";
-//            data = model.loadClickCostData();
-//          }
-//          case 5 -> {
-//            title = "Click-through-rate Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Click-through-rate";
-//            data = model.loadCTRData();
-//          }
+          case 1 -> {
+            title = "Clicks Over Time";
+            xAxisName = "Date";
+            yAxisName = "Clicks";
+            data = model.loadClicksData();
+          }
+          case 2 -> {
+            title = "Bounces Over Time";
+            xAxisName = "Date";
+            yAxisName = "Bounces";
+            data = model.loadBouncesData();
+          }
+          case 3 -> {
+            title = "Conversions Over Time";
+            xAxisName = "Date";
+            yAxisName = "Conversions";
+            data = model.loadConversionData();
+          }
+          case 4 -> {
+            title = "Click Cost Over Time";
+            xAxisName = "Date";
+            yAxisName = "Click Costs";
+            data = model.loadClickCostData();
+          }
+          case 5 -> {
+            title = "Click-Through-Rate Over Time";
+            xAxisName = "Date";
+            yAxisName = "Click-through-rate";
+            data = model.loadCTRData();
+          }
 //          case 6 -> {
 //            title = "Cost-per-acquisition Over Time";
 //            xAxisName = "Date";
