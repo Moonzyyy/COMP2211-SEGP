@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -32,6 +33,7 @@ import org.jfree.data.time.Hour;
 import org.jfree.data.time.Month;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.time.Week;
 
 public class Graph extends AbstractScene {
 
@@ -250,13 +252,14 @@ public class Graph extends AbstractScene {
         Day day = new Day(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
         dataSeries.addOrUpdate(day, entry.getValue());
       }
-      /// TODO: 3/17/2023 need to do week
+      /// TODO: 3/17/2023 check if this actually does it by week 
     } else if(timeChosen.equals("Week"))
     {
       for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
         LocalDateTime date = entry.getKey();
-        Hour hour = new Hour(date.getHour(),date.getDayOfMonth(), date.getMonthValue(), date.getYear());
-        dataSeries.addOrUpdate(hour, entry.getValue());
+        Date date1 = Date.from(date.toInstant(ZoneOffset.UTC));
+        Week week = new Week(date1);
+        dataSeries.addOrUpdate(week, entry.getValue());
       }
     }
     else
@@ -264,6 +267,7 @@ public class Graph extends AbstractScene {
       for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
         LocalDateTime date = entry.getKey();
         Month month = new Month(date.getMonthValue(), date.getYear());
+        System.out.println(month);
         dataSeries.addOrUpdate(month, entry.getValue());
       }
     }
