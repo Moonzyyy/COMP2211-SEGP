@@ -2,7 +2,6 @@ package core;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +81,7 @@ public class Controller {
 
     // Predicates
     menu.getResumeButton()
-            .setVisible(model.getImpressions() != null && model.getMetrics().size() > 0);
+        .setVisible(model.getImpressions() != null && model.getMetrics().size() > 0);
 
 
   }
@@ -104,6 +103,7 @@ public class Controller {
     dashboard.getBackButton().setOnAction((event) -> {
       setUpScene(new StartMenu());
     });
+
     // All number box listeners
     for (int i = 0; i < dashboardComp.getNumberBoxes().size(); i++) {
       int finalI = i;
@@ -112,13 +112,11 @@ public class Controller {
         String title = "";
         String xAxisName = "";
         String yAxisName = "";
-        switch (finalI) {
-          case 0 -> {
-            title = "Impressions Over Time";
-            xAxisName = "Date";
-            yAxisName = "Impressions";
-            data = model.loadImpressionData();
-          }
+        if (finalI == 0) {
+          title = "Impressions Over Time";
+          xAxisName = "Date";
+          yAxisName = "Impressions";
+          data = model.loadImpressionData();
 //          case 1 -> {
 //            title = "Clicks Over Time";
 //            xAxisName = "Date";
@@ -179,7 +177,8 @@ public class Controller {
 //            yAxisName = "Uniques";
 //            data = new HashMap<>();
 //          }
-          default -> data = new HashMap<>();
+        } else {
+          data = new HashMap<>();
         }
         setUpScene(new Graph(finalI, title, xAxisName, yAxisName, data));
       });
@@ -224,6 +223,14 @@ public class Controller {
     graphScene.getPrintButton().setOnAction((event) -> {
       System.out.print("Print button pressed");
     });
+
+    //Checkbox Listener
+    graphScene.getMaleBox().setOnAction(e -> {
+      if (graphScene.getMaleBox().isSelected()) {
+        graphScene.getFemaleBox().setSelected(false);
+      }
+    });
+
   }
 
   public void setUpScene(Loading loading) {
@@ -259,8 +266,8 @@ public class Controller {
         model.setClicksFile(file);
         importScene.getClickFileName().setText(file.getName());
         importScene.getLoadButton().setDisable(
-                model.getClicksFile() == null || model.getImpressionsFile() == null
-                        || model.getServerFile() == null);
+            model.getClicksFile() == null || model.getImpressionsFile() == null
+                || model.getServerFile() == null);
       } catch (Exception e) {
         sendErrorMessage("File selected is not of type .csv!");
       }
@@ -274,8 +281,8 @@ public class Controller {
         model.setImpressionsFile(file);
         importScene.getImpressionFileName().setText(file.getName());
         importScene.getLoadButton().setDisable(
-                model.getClicksFile() == null || model.getImpressionsFile() == null
-                        || model.getServerFile() == null);
+            model.getClicksFile() == null || model.getImpressionsFile() == null
+                || model.getServerFile() == null);
       } catch (Exception e) {
         sendErrorMessage("File selected is not of type .csv!");
       }
@@ -288,16 +295,16 @@ public class Controller {
         model.setServerFile(file);
         importScene.getServerFileName().setText(file.getName());
         importScene.getLoadButton().setDisable(
-                model.getClicksFile() == null || model.getImpressionsFile() == null
-                        || model.getServerFile() == null);
+            model.getClicksFile() == null || model.getImpressionsFile() == null
+                || model.getServerFile() == null);
       } catch (Exception e) {
         sendErrorMessage("File selected is not of type .csv!");
       }
     });
 
     importScene.getLoadButton().setDisable(
-            model.getClicksFile() == null || model.getImpressionsFile() == null
-                    || model.getServerFile() == null);
+        model.getClicksFile() == null || model.getImpressionsFile() == null
+            || model.getServerFile() == null);
 
     importScene.getLoadButton().setOnAction((event) -> {
       Task<Void> task = new Task<>() {

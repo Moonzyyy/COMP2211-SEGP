@@ -2,32 +2,30 @@ package view.scenes;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javax.swing.SwingUtilities;
-
-import javafx.util.converter.IntegerStringConverter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.ui.RectangleInsets;
-import org.jfree.data.time.Day;
 import org.jfree.data.time.Hour;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -48,6 +46,9 @@ public class Graph extends AbstractScene {
   private Button compareButton;
   private Button filterButton;
   private JFreeChart chart;
+  private CheckBox male;
+  private CheckBox female;
+  private ListView compareList;
 
   public Graph(Integer id, String title, String xAxisName, String yAxisName,
       Map<LocalDateTime, Double> data) {
@@ -107,18 +108,12 @@ public class Graph extends AbstractScene {
       //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
       LocalDateTime date = entry.getKey();
       //Day day = Day.parseDay(new SimpleDateFormat("yyyy-MM-dd").format(date));
-      Hour hour = new Hour(date.getHour(),date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+      Hour hour = new Hour(date.getHour(), date.getDayOfMonth(), date.getMonthValue(),
+          date.getYear());
       dataSeries.addOrUpdate(hour, entry.getValue());
     }
-    chart = ChartFactory.createTimeSeriesChart(
-        title,
-        xAxisName,
-        yAxisName,
-        dataset,
-        false,
-        true,
-        false
-    );
+    chart = ChartFactory.createTimeSeriesChart(title, xAxisName, yAxisName, dataset, false, true,
+        false);
 
     chart.getTitle().setPadding(0, 120, 0, 0);
 
@@ -208,15 +203,16 @@ public class Graph extends AbstractScene {
       LocalDate endDate = endDatePicker.getValue();
       if (startDate != null && endDate != null) {
         // Create start and end Date objects with selected times
-        Date startTimeDate = new GregorianCalendar(startDate.getYear(), startDate.getMonthValue() - 1, startDate.getDayOfMonth()).getTime();
-        Date endTimeDate = new GregorianCalendar(endDate.getYear(), endDate.getMonthValue() - 1, endDate.getDayOfMonth()).getTime();
+        Date startTimeDate = new GregorianCalendar(startDate.getYear(),
+            startDate.getMonthValue() - 1, startDate.getDayOfMonth()).getTime();
+        Date endTimeDate = new GregorianCalendar(endDate.getYear(), endDate.getMonthValue() - 1,
+            endDate.getDayOfMonth()).getTime();
 
         TimeSeries filteredSeries = new TimeSeries("Filtered Series");
         for (int i = 0; i < dataSeries.getItemCount(); i++) {
           Hour hour = (Hour) dataSeries.getTimePeriod(i);
           Date date = hour.getStart();
-          if (date.compareTo(startTimeDate) >= 0
-                  && date.compareTo(endTimeDate) <= 0) {
+          if (date.compareTo(startTimeDate) >= 0 && date.compareTo(endTimeDate) <= 0) {
             filteredSeries.add(dataSeries.getDataItem(i));
           }
         }
@@ -245,9 +241,9 @@ public class Graph extends AbstractScene {
 
     var genderText = new Label("Gender of Audience:");
     genderText.getStyleClass().add("list-cell-text");
-    CheckBox male = new CheckBox("Male");
+    male = new CheckBox("Male");
     male.getStyleClass().add("checkbox");
-    CheckBox female = new CheckBox("Female");
+    female = new CheckBox("Female");
     female.getStyleClass().add("checkbox");
 
     var ageText = new Label("Age of Audience:");
@@ -283,15 +279,15 @@ public class Graph extends AbstractScene {
     CheckBox socialMedia = new CheckBox("Social Media");
     socialMedia.getStyleClass().add("checkbox");
 
-    ListView compareList = new ListView();
+    compareList = new ListView();
 
     compareList.getStyleClass().add("list-cell");
 //    compareList.setMouseTransparent( true );
 //    compareList.setFocusTraversable( false );
-    compareList.getItems().addAll(genderText, male, female, "",
-        ageText, under25, under34, under44, under54, over54, "",
-        incomeText, lowIncome, mediumIncome, highIncome, "",
-        contextText, blog, news, shopping, socialMedia);
+    compareList.getItems()
+        .addAll(genderText, male, female, "", ageText, under25, under34, under44, under54, over54,
+            "", incomeText, lowIncome, mediumIncome, highIncome, "", contextText, blog, news,
+            shopping, socialMedia);
     layout.setRight(compareList);
 
   }
@@ -315,6 +311,17 @@ public class Graph extends AbstractScene {
 
   public JFreeChart getChart() {
     return chart;
+  }
+
+  public ListView getCompareList() {
+    return compareList;
+  }
+
+  public CheckBox getMaleBox() {
+    return male;
+  }
+  public CheckBox getFemaleBox(){
+    return female;
   }
 
 
