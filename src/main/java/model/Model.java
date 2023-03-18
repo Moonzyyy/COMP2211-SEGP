@@ -124,18 +124,18 @@ public class Model {
         return (int) users.values().stream().parallel().filter(u -> u.getClicks().size() > 0).count();
     }
 
-//  public Map<LocalDateTime, Double> loadNumberOfUniquesData() {
-//    Map<LocalDateTime, Double> numberOfUniquesByDate = new HashMap<>();
-//    users.sequential().forEach(click -> {
-//      LocalDateTime dateTime = click.getKey();
-//      if (clickCountsByDate.containsKey(dateTime)) {
-//        clickCountsByDate.put(dateTime, clickCountsByDate.get(dateTime) + 1.0);
-//      } else {
-//        clickCountsByDate.put(dateTime, 1.0);
-//      }
-//    });
-//    return numberOfUniquesByDate;
-//  }
+  public Map<LocalDateTime, Double> loadNumberOfUniquesData() {
+    Map<LocalDateTime, Double> numberOfUniquesByDate = new HashMap<>();
+    users.values().forEach(user -> {
+      LocalDateTime dateTime = user.getClicks().get(0).getKey();
+      if (numberOfUniquesByDate.containsKey(dateTime)) {
+        numberOfUniquesByDate.put(dateTime, numberOfUniquesByDate.get(dateTime) + 1.0);
+      } else {
+        numberOfUniquesByDate.put(dateTime, 1.0);
+      }
+    });
+    return numberOfUniquesByDate;
+  }
 
     /**
      * Counts every conversion from the server stream.
@@ -336,7 +336,6 @@ public class Model {
   }
 
 
-//    public Map<Date, Double> loadMetric(Stream dataset, )
 
 
     /**

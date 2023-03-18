@@ -149,36 +149,36 @@ public class Controller {
             yAxisName = "Click-through-rate";
             data = model.loadCTRData();
           }
-//          case 6 -> {
-//            title = "Cost-per-acquisition Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Cost-per-acquisition";
-//            data = new HashMap<>();
-//          }
-//          case 7 -> {
-//            title = "Cost-per-click Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Cost-per-click";
-//            data = new HashMap<>();
-//          }
-//          case 8 -> {
-//            title = "Cost-per-thousand impressions Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Cost-per-thousand impressions";
-//            data = new HashMap<>();
-//          }
-//          case 9 -> {
-//            title = "Bounce Rate Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Bounce Rate";
-//            data = new HashMap<>();
-//          }
-//          case 10 -> {
-//            title = "Uniques Over Time";
-//            xAxisName = "Date";
-//            yAxisName = "Uniques";
-//            data = new HashMap<>();
-//          }
+          case 6 -> {
+            title = "Cost-per-acquisition Over Time";
+            xAxisName = "Date";
+            yAxisName = "Cost-per-acquisition";
+            data = model.loadCPAData();
+          }
+          case 7 -> {
+            title = "Cost-per-click Over Time";
+            xAxisName = "Date";
+            yAxisName = "Cost-per-click";
+            data = model.loadClickCostData();
+          }
+          case 8 -> {
+            title = "Cost-per-thousand impressions Over Time";
+            xAxisName = "Date";
+            yAxisName = "Cost-per-thousand impressions";
+            data = model.loadCPTIData();
+          }
+          case 9 -> {
+            title = "Bounce Rate Over Time";
+            xAxisName = "Date";
+            yAxisName = "Bounce Rate";
+            data = model.loadBounceRateData();
+          }
+          case 10 -> {
+            title = "Uniques Over Time";
+            xAxisName = "Date";
+            yAxisName = "Uniques";
+            data = model.loadNumberOfUniquesData();
+          }
           default -> data = new HashMap<>();
         }
         setUpScene(new Graph(finalI, title, xAxisName, yAxisName, data));
