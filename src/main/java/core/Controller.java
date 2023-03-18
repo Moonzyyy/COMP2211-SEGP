@@ -253,8 +253,6 @@ public class Controller {
    * @param importScene the import scene
    */
   public void setUpScene(Import importScene) {
-    File impressionFile = null;
-    File costFile = null;
 
     importScene.createScene();
     this.setCurrentScene(importScene);
@@ -264,13 +262,20 @@ public class Controller {
       setUpScene(new StartMenu());
     });
 
+    if(model.getImpressionsFile() != null && model.getServerFile() != null && model.getClicksFile() != null)
+    {
+      importScene.getImpressionFileName().setText(model.getImpressionsFile().getName());
+      importScene.getClickFileName().setText(model.getClicksFile().getName());
+      importScene.getServerFileName().setText(model.getServerFile().getName());
+
+    }
+
     //When each button is pressed, open a file browser and set the corresponding text field
     importScene.getImportClicks().setOnAction((event) -> {
       try {
         File file = importScene.getFileChooser().showOpenDialog(stage);
-        if (file != null) {
-          importScene.getFileChooser().setInitialDirectory(file.getParentFile());
-        }
+        importScene.getFileChooser().setInitialDirectory(file.getParentFile());
+
 
         model.setClicksFile(file);
         importScene.getClickFileName().setText(file.getName());
