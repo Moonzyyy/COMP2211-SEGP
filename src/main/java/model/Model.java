@@ -39,8 +39,8 @@ public class Model {
         this.users = cr.getUsers();
         this.clickCost = getClicks().mapToDouble(Pair::getValue).sum();
 
-        if (users == null) {
-            Controller.sendErrorMessage("There has been an error with processing your clicks file!");
+        if (users.size() == 0) {
+            Controller.sendErrorMessage("There has been an error with processing the data!");
             return false;
         }
         return true;
