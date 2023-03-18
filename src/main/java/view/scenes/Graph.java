@@ -209,6 +209,7 @@ public class Graph extends AbstractScene {
     });
     ComboBox<String> timeFilter = new ComboBox<>();
     timeFilter.getItems().addAll("Hour", "Day", "Week", "Month");
+    timeFilter.setValue("Day");
     filterButton = new Button("Filter");
     filterButton.setOnAction(e -> {
       LocalDate startDate = startDatePicker.getValue();
