@@ -43,7 +43,7 @@ public class Model {
             Controller.sendErrorMessage("There has been an error with processing your clicks file!");
             return false;
         }
-        return false;
+        return true;
     }
 
     /**
@@ -283,6 +283,7 @@ public class Model {
      * @return arraylist of metrics
      */
     public ArrayList<String> getMetrics() {
+        metrics.clear();
         metrics.add((double) totalImpressions());
         metrics.add((double) totalClicks());
         metrics.add((double) numberOfBounces());
