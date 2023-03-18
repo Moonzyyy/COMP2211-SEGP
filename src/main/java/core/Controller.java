@@ -2,11 +2,12 @@ package core;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.concurrent.Task;
+import javafx.scene.control.CheckBox;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import model.Model;
@@ -82,7 +83,7 @@ public class Controller {
 
     // Predicates
     menu.getResumeButton()
-            .setVisible(model.getImpressions() != null && model.getMetrics().size() > 0);
+        .setVisible(model.getImpressions() != null && model.getMetrics().size() > 0);
 
 
   }
@@ -225,12 +226,19 @@ public class Controller {
       System.out.print("Print button pressed");
     });
 
-    //Checkbox Listener
-//    graphScene.getMaleBox().setOnAction(e -> {
-//      if (graphScene.getMaleBox().isSelected()) {
-//        graphScene.getFemaleBox().setSelected(false);
-//      }
-//    });
+    // Checkbox Listener
+    // When the filter button is pressed, get all the currently selected filters
+    // and update the graph
+    graphScene.getFilterButton().setOnAction((event) -> {
+      List<String> filters = new ArrayList<>();
+      for (CheckBox checkBox : graphScene.getCheckboxes()) {
+        if (checkBox.isSelected()) {
+          filters.add(checkBox.getText());
+        }
+      }
+      System.out.println(filters);
+    });
+
 
   }
 
@@ -267,8 +275,8 @@ public class Controller {
         model.setClicksFile(file);
         importScene.getClickFileName().setText(file.getName());
         importScene.getLoadButton().setDisable(
-                model.getClicksFile() == null || model.getImpressionsFile() == null
-                        || model.getServerFile() == null);
+            model.getClicksFile() == null || model.getImpressionsFile() == null
+                || model.getServerFile() == null);
       } catch (Exception e) {
         sendErrorMessage("File selected is not of type .csv!");
       }
@@ -282,8 +290,8 @@ public class Controller {
         model.setImpressionsFile(file);
         importScene.getImpressionFileName().setText(file.getName());
         importScene.getLoadButton().setDisable(
-                model.getClicksFile() == null || model.getImpressionsFile() == null
-                        || model.getServerFile() == null);
+            model.getClicksFile() == null || model.getImpressionsFile() == null
+                || model.getServerFile() == null);
       } catch (Exception e) {
         sendErrorMessage("File selected is not of type .csv!");
       }
@@ -296,16 +304,16 @@ public class Controller {
         model.setServerFile(file);
         importScene.getServerFileName().setText(file.getName());
         importScene.getLoadButton().setDisable(
-                model.getClicksFile() == null || model.getImpressionsFile() == null
-                        || model.getServerFile() == null);
+            model.getClicksFile() == null || model.getImpressionsFile() == null
+                || model.getServerFile() == null);
       } catch (Exception e) {
         sendErrorMessage("File selected is not of type .csv!");
       }
     });
 
     importScene.getLoadButton().setDisable(
-            model.getClicksFile() == null || model.getImpressionsFile() == null
-                    || model.getServerFile() == null);
+        model.getClicksFile() == null || model.getImpressionsFile() == null
+            || model.getServerFile() == null);
 
     importScene.getLoadButton().setOnAction((event) -> {
       Task<Void> task = new Task<>() {
