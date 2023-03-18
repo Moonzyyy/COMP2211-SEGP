@@ -79,13 +79,41 @@ public class Model {
         return (int) this.getImpressions().count();
     }
 
-    /**
+  public Map<LocalDateTime, Double> loadImpressionData() {
+    Map<LocalDateTime, Double> impressionCostsByDate = new HashMap<>();
+    getImpressions().sequential().forEach(impression -> {
+      LocalDateTime dateTime = impression.getKey();
+      Double impressionCost = impression.getValue();
+      if (impressionCostsByDate.containsKey(dateTime)) {
+        impressionCostsByDate.put(dateTime, impressionCostsByDate.get(dateTime) + 1.0);
+      } else {
+        impressionCostsByDate.put(dateTime, impressionCost);
+      }
+    });
+    return impressionCostsByDate;
+  }
+
+
+  /**
      * Counts every click from the click stream.
      * @return total number of clicks
      */
     public int totalClicks(){
         return (int) this.getClicks().count();
     }
+
+  public Map<LocalDateTime, Double> loadClicksData() {
+    Map<LocalDateTime, Double> clickCountsByDate = new HashMap<>();
+    getClicks().sequential().forEach(click -> {
+      LocalDateTime dateTime = click.getKey();
+      if (clickCountsByDate.containsKey(dateTime)) {
+        clickCountsByDate.put(dateTime, clickCountsByDate.get(dateTime) + 1.0);
+      } else {
+        clickCountsByDate.put(dateTime, 1.0);
+      }
+    });
+    return clickCountsByDate;
+  }
 
     /**
      * Counts every unique ID from all the users.
@@ -96,6 +124,19 @@ public class Model {
         return (int) users.values().stream().parallel().filter(u -> u.getClicks().size() > 0).count();
     }
 
+//  public Map<LocalDateTime, Double> loadNumberOfUniquesData() {
+//    Map<LocalDateTime, Double> numberOfUniquesByDate = new HashMap<>();
+//    users.sequential().forEach(click -> {
+//      LocalDateTime dateTime = click.getKey();
+//      if (clickCountsByDate.containsKey(dateTime)) {
+//        clickCountsByDate.put(dateTime, clickCountsByDate.get(dateTime) + 1.0);
+//      } else {
+//        clickCountsByDate.put(dateTime, 1.0);
+//      }
+//    });
+//    return numberOfUniquesByDate;
+//  }
+
     /**
      * Counts every conversion from the server stream.
      * @return total number of conversions
@@ -103,6 +144,21 @@ public class Model {
     public int numberOfConversions() {
         return (int) this.getServers().filter(Server::getConversion).count();
     }
+
+  public Map<LocalDateTime, Double> loadConversionData() {
+    Map<LocalDateTime,Double> conversionsByDate = new HashMap<>();
+    getServers().sequential().forEach(server -> {
+      LocalDateTime dateTime = server.getEntryDate();
+      if (server.getConversion() && conversionsByDate.containsKey(dateTime)) {
+        Double count = conversionsByDate.get(dateTime);
+        conversionsByDate.put(dateTime, count+1);
+      } else if (server.getConversion()) {
+        conversionsByDate.put(dateTime, 1.0);
+      }
+    });
+    return conversionsByDate;
+  }
+
 
     /**
      * Gets the number of bounces from the server stream.
@@ -114,6 +170,19 @@ public class Model {
         this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
         return this.bounces;
     }
+  public Map<LocalDateTime,Double> loadBouncesData() {
+    Map<LocalDateTime, Double> bouncesByDate = new HashMap<>();
+    getServers().sequential().forEach(server -> {
+      LocalDateTime dateTime = server.getEntryDate();
+      if (!server.getConversion() && bouncesByDate.containsKey(dateTime)) {
+        Double count = bouncesByDate.get(dateTime);
+        bouncesByDate.put(dateTime, count+1);
+      } else if (!server.getConversion()) {
+        bouncesByDate.put(dateTime, 1.0);
+      }
+    });
+    return bouncesByDate;
+  }
 
     /**
      * Calculates the bounce rate, which is the average number of bounces per click.
@@ -133,6 +202,29 @@ public class Model {
         return Double.parseDouble(df.format(this.clickCost + getImpressions().mapToDouble(Pair::getValue).sum()));
     }
 
+  public Map<LocalDateTime, Double> loadTotalCostData() {
+    Map<LocalDateTime, Double> totalCostByDate = new HashMap<>();
+    Map<LocalDateTime, Double> clickCountsByDate = loadClicksData();
+    Map<LocalDateTime, Double> impressionCostByDate = new HashMap<>();
+    getImpressions().sequential().forEach(impression -> {
+      LocalDateTime dateTime = impression.getKey();
+      Double clickCost = impression.getValue();
+      if (impressionCostByDate.containsKey(dateTime)) {
+        impressionCostByDate.put(dateTime, impressionCostByDate.get(dateTime) + clickCost);
+      } else {
+        impressionCostByDate.put(dateTime, clickCost);
+      }
+    });
+
+    for (LocalDateTime date : impressionCostByDate.keySet()) {
+      Double impressionCost = impressionCostByDate.getOrDefault(date, 0.0);
+      Double clickCount = clickCountsByDate.getOrDefault(date, 0.0);
+      Double totalCost = clickCount + impressionCost;
+      totalCostByDate.put(date, totalCost);
+    }
+    return totalCostByDate;
+  }
+
     /**
      * Calculates the click-through-rate, which is the average number of clicks per impression.
      * This is calculated by dividing total number of clicks by total impressions.
@@ -141,6 +233,20 @@ public class Model {
     public Double clickThroughRate() {
         return Double.parseDouble(df.format(metrics.get(1) / metrics.get(0)));
     }
+
+  public Map<LocalDateTime, Double> loadCTRData() {
+    Map<LocalDateTime, Double> ctrByDate = new HashMap<>();
+    Map<LocalDateTime, Double> impressionData = loadImpressionData();
+    Map<LocalDateTime, Double> clickCountsByDate = loadClicksData();
+
+    for (LocalDateTime date : impressionData.keySet()) {
+      Double impressionCost = impressionData.getOrDefault(date, 0.0);
+      Double clickCount = clickCountsByDate.getOrDefault(date, 0.0);
+      Double ctr = clickCount / impressionCost;
+      ctrByDate.put(date, ctr);
+    }
+    return ctrByDate;
+  }
 
     /**
      * Calculates the cost-per-click, which is the average amount
@@ -151,6 +257,20 @@ public class Model {
     public Double costPerClick() {
         return Double.parseDouble(df.format(this.clickCost / metrics.get(1)));
     }
+
+  public Map<LocalDateTime, Double> loadClickCostData() {
+    Map<LocalDateTime, Double> clickCostByDate = new HashMap<>();
+    getClicks().sequential().forEach(click -> {
+      LocalDateTime dateTime = click.getKey();
+      Double clickCost = click.getValue();
+      if (clickCostByDate.containsKey(dateTime)) {
+        clickCostByDate.put(dateTime, clickCostByDate.get(dateTime) + clickCost);
+      } else {
+        clickCostByDate.put(dateTime, clickCost);
+      }
+    });
+    return clickCostByDate;
+  }
 
     /**
      * Calculates the cost-per-acquisition, which is the average amount
@@ -190,93 +310,6 @@ public class Model {
 
 //    public Map<Date, Double> loadMetric(Stream dataset, )
 
-    public Map<LocalDateTime, Double> loadImpressionData() {
-        Map<LocalDateTime, Double> impressionCostsByDate = new HashMap<>();
-        getImpressions().sequential().forEach(impression -> {
-            LocalDateTime dateTime = impression.getKey();
-            Double impressionCost = impression.getValue();
-            if (impressionCostsByDate.containsKey(dateTime)) {
-                impressionCostsByDate.put(dateTime, impressionCostsByDate.get(dateTime) + impressionCost);
-            } else {
-                impressionCostsByDate.put(dateTime, impressionCost);
-            }
-        });
-        return impressionCostsByDate;
-    }
-
-
-    public Map<LocalDateTime, Double> loadClicksData() {
-        Map<LocalDateTime, Double> clickCountsByDate = new HashMap<>();
-        getClicks().sequential().forEach(click -> {
-            LocalDateTime dateTime = click.getKey();
-            if (clickCountsByDate.containsKey(dateTime)) {
-                clickCountsByDate.put(dateTime, clickCountsByDate.get(dateTime) + 1.0);
-            } else {
-                clickCountsByDate.put(dateTime, 1.0);
-            }
-        });
-        return clickCountsByDate;
-    }
-
-    public Map<LocalDateTime,Double> loadBouncesData() {
-        Map<LocalDateTime, Double> bouncesByDate = new HashMap<>();
-        getServers().sequential().forEach(server -> {
-            LocalDateTime dateTime = server.getEntryDate();
-            if (!server.getConversion() && bouncesByDate.containsKey(dateTime)) {
-                Double count = bouncesByDate.get(dateTime);
-                bouncesByDate.put(dateTime, count+1);
-            } else if (!server.getConversion()) {
-                bouncesByDate.put(dateTime, 1.0);
-            }
-        });
-        return bouncesByDate;
-    }
-
-    public Map<LocalDateTime, Double> loadConversionData() {
-        Map<LocalDateTime,Double> conversionsByDate = new HashMap<>();
-        getServers().sequential().forEach(server -> {
-            LocalDateTime dateTime = server.getEntryDate();
-            if (server.getConversion() && conversionsByDate.containsKey(dateTime)) {
-                Double count = conversionsByDate.get(dateTime);
-                conversionsByDate.put(dateTime, count+1);
-            } else if (server.getConversion()) {
-                conversionsByDate.put(dateTime, 1.0);
-            }
-        });
-        return conversionsByDate;
-    }
-
-
-    public Map<LocalDateTime, Double> loadClickCostData() {
-        Map<LocalDateTime, Double> clickCostByDate = new HashMap<>();
-        getClicks().sequential().forEach(click -> {
-            LocalDateTime dateTime = click.getKey();
-            Double clickCost = click.getValue();
-            if (clickCostByDate.containsKey(dateTime)) {
-                clickCostByDate.put(dateTime, clickCostByDate.get(dateTime) + clickCost);
-            } else {
-                clickCostByDate.put(dateTime, clickCost);
-            }
-        });
-        System.out.println(clickCostByDate);
-        return clickCostByDate;
-    }
-
-    public Map<LocalDateTime, Double> loadCTRData() {
-        Map<LocalDateTime, Double> ctrByDate = new HashMap<>();
-        Map<LocalDateTime, Double> impressionCostsByDate = loadImpressionData();
-        Map<LocalDateTime, Double> clickCountsByDate = loadClicksData();
-
-        for (LocalDateTime date : impressionCostsByDate.keySet()) {
-            Double impressionCost = impressionCostsByDate.get(date);
-            Double clickCount = clickCountsByDate.getOrDefault(date, 0.0);
-            Double ctr = clickCount / impressionCost;
-            ctrByDate.put(date, ctr);
-        }
-
-        System.out.println(ctrByDate);
-        return ctrByDate;
-    }
 
     /**
      * Create arraylist of metrics from functions to persist after import
