@@ -23,6 +23,10 @@ public class User {
   private Context context;
   private Income income;
 
+  /**
+   * Every unique user, gathered by ID, with their attributes,
+   * including clicks, impressions and servers
+   */
   public User(String[] input) {
     impressions = new ArrayList<>();
     clicks = new ArrayList<>();

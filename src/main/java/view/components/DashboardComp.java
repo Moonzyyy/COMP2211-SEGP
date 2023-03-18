@@ -40,6 +40,11 @@ public class DashboardComp extends VBox {
     }
   }
 
+  /**
+   * Text labels for all metrics to use in buttons
+   * @param number that denotes metric
+   * @return metric text
+   */
   private String getLabelText(int number) {
     switch (number) {
       case 1:
@@ -69,6 +74,13 @@ public class DashboardComp extends VBox {
     }
   }
 
+  /**
+   * Button for each metric, with the name and value of each metric
+   * @param number, the metric value
+   * @param text, the name of the metric
+   * @param scene
+   * @return metric button
+   */
   private VBox createNumberBox(int number, String text, AbstractScene scene) {
     final Label numberLabel = new Label(Integer.toString(number));
     numberLabel.getStyleClass().add("number");

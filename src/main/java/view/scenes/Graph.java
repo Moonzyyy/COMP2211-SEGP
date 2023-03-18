@@ -38,9 +38,10 @@ import org.jfree.data.time.Week;
 public class Graph extends AbstractScene {
 
   private final BorderPane layout;
+
   /**
    * The id of the metric that is being graphed.
-   */
+   * */
   private final Integer metricId;
   Map<LocalDateTime, Double> data;
   String xAxisName;
@@ -64,6 +65,9 @@ public class Graph extends AbstractScene {
 
   }
 
+  /**
+   * Creates all the components of the scene, and adds them to the layout
+   */
   public void createScene() {
 
     var topBar = new HBox();
@@ -340,7 +344,6 @@ public class Graph extends AbstractScene {
     layout.setRight(compareList);
 
   }
-
 
   public Button getHomeButton() {
     return homeButton;

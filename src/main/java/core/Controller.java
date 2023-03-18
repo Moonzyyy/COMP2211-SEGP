@@ -312,7 +312,7 @@ public class Controller {
         @Override
         public Void call() {
           if (!model.importData()) {
-            failed();
+            this.cancel();
           }
           return null;
         }
@@ -321,8 +321,8 @@ public class Controller {
       task.setOnSucceeded(e -> {
         setUpScene(new Dashboard());
       });
-      task.setOnFailed(e -> {
-        new Import();
+      task.setOnCancelled(e -> {
+        setUpScene(new Import());
       });
       Thread thread = new Thread(task);
       thread.start();

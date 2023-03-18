@@ -37,6 +37,11 @@ public class Import extends AbstractScene {
     layout = new BorderPane();
   }
 
+  /**
+   * Creates all the components of the scene, and adds them to the layout
+   * Import scene with 3 buttons that allow adding log files
+   * Once a log file has been added it is shown
+   */
   public void createScene() {
     var importTitle = new HBox();
     var title = new Label("Import");
@@ -100,8 +105,6 @@ public class Import extends AbstractScene {
 
     scene = new Scene(layout, 1280, 720);
     scene.getStylesheets().add(getClass().getResource("/view/import.css").toExternalForm());
-
-
   }
 
   private void importBoxFactory(VBox clickDataBox, Label clickDataLabel,
@@ -112,7 +115,6 @@ public class Import extends AbstractScene {
     clickDataBox.getChildren().addAll(clickDataLabel, importClicks, fileName);
     importClicks.getStyleClass().add("importButton");
     clickDataBox.getStyleClass().add("importBox");
-
   }
 
   public Button getBackButton() {
