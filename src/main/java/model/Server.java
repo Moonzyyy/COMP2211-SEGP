@@ -7,8 +7,6 @@ import java.time.temporal.ChronoUnit;
 public class Server {
     private LocalDateTime entryDate;
 
-//    private Long userId;
-
     private int timeSpent;
 
     private int pagesViewed;
@@ -40,14 +38,6 @@ public class Server {
     public void setEntryDate(LocalDateTime date) {
         this.entryDate = date;
     }
-
-//    public Long getUserId() {
-//        return userId;
-//    }
-
-//    public void setUserId(String id) {
-//        this.userId = Long.parseLong(id);
-//    }
 
     public int getTimeSpent() {
         return timeSpent;
