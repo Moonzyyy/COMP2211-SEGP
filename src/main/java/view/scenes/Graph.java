@@ -177,6 +177,11 @@ public class Graph extends AbstractScene {
     startDatePicker.getStyleClass().add("start-date-picker");
     endDatePicker.getStyleClass().add("end-date-picker");
 
+    Map.Entry<LocalDateTime, Double> entry = data.entrySet().iterator().next();
+
+    startDatePicker.setValue(LocalDate.from(entry.getKey()).minusDays(10));
+    endDatePicker.setValue(LocalDate.from(entry.getKey()));
+
     // set the maximum date of the first date picker to the selected date on the second date picker
     startDatePicker.setDayCellFactory(param -> new DateCell() {
       @Override
