@@ -128,10 +128,11 @@ public class Graph extends AbstractScene {
     dataset.addSeries(dataSeries);
 
     dataSetter(dataSeries, "Day");
-    chart = ChartFactory.createTimeSeriesChart(title, xAxisName, yAxisName, dataset, false, true,
+    chart = ChartFactory.createTimeSeriesChart(title, xAxisName, yAxisName, dataset, true, true,
         false);
 
     chart.getTitle().setPadding(0, 120, 0, 0);
+    chart.getLegend().setPadding(0, 120, 0, 0);
 
     // Best way to style the chart unfortunately
     // I recommend looking at the docs for JFreeChart to see what you can do
@@ -163,10 +164,16 @@ public class Graph extends AbstractScene {
           .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
       swingNode.setContent(chartPanel);
 
+      chartPanel.getChart().getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
+      chartPanel.getChart().getLegend().setItemPaint(Color.WHITE);
+      chartPanel.getChart().getLegend().setBackgroundPaint(Color.decode("#121212"));
+
       chartPanel.setMouseWheelEnabled(true);
       chartPanel.setDomainZoomable(true);
       chartPanel.setRangeZoomable(true);
       chartPanel.setZoomTriggerDistance(Integer.MAX_VALUE);
+      chartPanel.zoomOutBoth(0, 0);
+      chartPanel.restoreAutoBounds();
       chartPanel.setFillZoomRectangle(false);
       chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
 
@@ -220,6 +227,8 @@ public class Graph extends AbstractScene {
     ComboBox<String> timeFilter = new ComboBox<>();
     timeFilter.getItems().addAll("Hour", "Day", "Week", "Month");
     timeFilter.setValue("Day");
+    timeFilter.getStyleClass().add("time-filter");
+
     filterButton = new Button("Filter");
     filterButton.setOnAction(e -> {
       LocalDate startDate = startDatePicker.getValue();
@@ -370,63 +379,6 @@ public class Graph extends AbstractScene {
     return compareButton;
   }
 
-  // All the getters for the checkboxes
-  public CheckBox getMale() {
-    return male;
-  }
-
-  public CheckBox getFemale() {
-    return female;
-  }
-
-  public CheckBox getUnder25() {
-    return under25;
-  }
-
-  public CheckBox getUnder34() {
-    return under34;
-  }
-
-  public CheckBox getUnder44() {
-    return under44;
-  }
-
-  public CheckBox getUnder54() {
-    return under54;
-  }
-
-  public CheckBox getOver54() {
-    return over54;
-  }
-
-  public CheckBox getLowIncome() {
-    return lowIncome;
-  }
-
-  public CheckBox getMediumIncome() {
-    return mediumIncome;
-  }
-
-  public CheckBox getHighIncome() {
-    return highIncome;
-  }
-
-  public CheckBox getBlog() {
-    return blog;
-  }
-
-  public CheckBox getNews() {
-    return news;
-  }
-
-  public CheckBox getShopping() {
-    return shopping;
-  }
-
-  public CheckBox getSocialMedia() {
-    return socialMedia;
-  }
-
   public ArrayList<CheckBox> getCheckboxes() {
     var checkboxList = new ArrayList<CheckBox>();
     //From a ListView, get all the checkboxes
@@ -440,10 +392,6 @@ public class Graph extends AbstractScene {
 
   public Button getFilterButton() {
     return filterButton;
-  }
-
-  public JFreeChart getChart() {
-    return chart;
   }
 
 
