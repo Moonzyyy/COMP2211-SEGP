@@ -2,32 +2,33 @@ package view.scenes;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javax.swing.SwingUtilities;
-
-import javafx.util.converter.IntegerStringConverter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Hour;
 import org.jfree.data.time.Month;
@@ -41,7 +42,7 @@ public class Graph extends AbstractScene {
 
   /**
    * The id of the metric that is being graphed.
-   * */
+   */
   private final Integer metricId;
   Map<LocalDateTime, Double> data;
   String xAxisName;
@@ -51,6 +52,22 @@ public class Graph extends AbstractScene {
   private Button printButton;
   private Button compareButton;
   private Button filterButton;
+  private CheckBox male;
+  private CheckBox female;
+  private CheckBox under25;
+  private CheckBox under34;
+  private CheckBox under44;
+  private CheckBox under54;
+  private CheckBox over54;
+  private CheckBox lowIncome;
+  private CheckBox mediumIncome;
+  private CheckBox highIncome;
+  private CheckBox blog;
+  private CheckBox news;
+  private CheckBox socialMedia;
+  private CheckBox shopping;
+
+  private ListView compareList;
   private JFreeChart chart;
 
   public Graph(Integer id, String title, String xAxisName, String yAxisName,
@@ -111,15 +128,8 @@ public class Graph extends AbstractScene {
     dataset.addSeries(dataSeries);
 
     dataSetter(dataSeries, "Day");
-    chart = ChartFactory.createTimeSeriesChart(
-        title,
-        xAxisName,
-        yAxisName,
-        dataset,
-        false,
-        true,
-        false
-    );
+    chart = ChartFactory.createTimeSeriesChart(title, xAxisName, yAxisName, dataset, false, true,
+        false);
 
     chart.getTitle().setPadding(0, 120, 0, 0);
 
@@ -183,7 +193,7 @@ public class Graph extends AbstractScene {
 
     Map.Entry<LocalDateTime, Double> entry = data.entrySet().iterator().next();
 
-    startDatePicker.setValue(LocalDate.from(entry.getKey()).minusDays(10));
+    startDatePicker.setValue(LocalDate.from(entry.getKey()).minusDays(14));
     endDatePicker.setValue(LocalDate.from(entry.getKey()));
 
     // set the maximum date of the first date picker to the selected date on the second date picker
@@ -209,21 +219,23 @@ public class Graph extends AbstractScene {
     });
     ComboBox<String> timeFilter = new ComboBox<>();
     timeFilter.getItems().addAll("Hour", "Day", "Week", "Month");
+    timeFilter.setValue("Day");
     filterButton = new Button("Filter");
     filterButton.setOnAction(e -> {
       LocalDate startDate = startDatePicker.getValue();
       LocalDate endDate = endDatePicker.getValue();
       if (startDate != null && endDate != null) {
         // Create start and end Date objects with selected times
-        Date startTimeDate = new GregorianCalendar(startDate.getYear(), startDate.getMonthValue() - 1, startDate.getDayOfMonth()).getTime();
-        Date endTimeDate = new GregorianCalendar(endDate.getYear(), endDate.getMonthValue() - 1, endDate.getDayOfMonth()).getTime();
+        Date startTimeDate = new GregorianCalendar(startDate.getYear(),
+            startDate.getMonthValue() - 1, startDate.getDayOfMonth()).getTime();
+        Date endTimeDate = new GregorianCalendar(endDate.getYear(), endDate.getMonthValue() - 1,
+            endDate.getDayOfMonth()).getTime();
         dataSetter(dataSeries, timeFilter.getValue());
         TimeSeries filteredSeries = new TimeSeries("Filtered Series");
         for (int i = 0; i < dataSeries.getItemCount(); i++) {
           var time = dataSeries.getTimePeriod(i);
           Date date = time.getStart();
-          if (date.compareTo(startTimeDate) >= 0
-                  && date.compareTo(endTimeDate) <= 0) {
+          if (date.compareTo(startTimeDate) >= 0 && date.compareTo(endTimeDate) <= 0) {
             filteredSeries.add(dataSeries.getDataItem(i));
           }
         }
@@ -232,7 +244,7 @@ public class Graph extends AbstractScene {
         dataset.addSeries(filteredSeries);
       }
     });
-    filterBar.getChildren().addAll(timeFilter,startDatePicker, endDatePicker, filterButton);
+    filterBar.getChildren().addAll(timeFilter, startDatePicker, endDatePicker, filterButton);
 
     createCheckBoxes();
 
@@ -243,36 +255,37 @@ public class Graph extends AbstractScene {
 
   }
 
-  void dataSetter(TimeSeries dataSeries, String timeChosen)
-  {
+  /**
+   * Sets the data of the graph via time period
+   *
+   * @param dataSeries The series to add the data to
+   * @param timeChosen The time period to filter by
+   */
+  void dataSetter(TimeSeries dataSeries, String timeChosen) {
     dataSeries.clear();
-    if(timeChosen.equals("Hour"))
-    {
+    if (timeChosen.equals("Hour")) {
 
       for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
         LocalDateTime date = entry.getKey();
-        Hour hour = new Hour(date.getHour(),date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+        Hour hour = new Hour(date.getHour(), date.getDayOfMonth(), date.getMonthValue(),
+            date.getYear());
         dataSeries.addOrUpdate(hour, entry.getValue());
       }
-    } else if(timeChosen.equals("Day"))
-    {
+    } else if (timeChosen.equals("Day")) {
       for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
         LocalDateTime date = entry.getKey();
         Day day = new Day(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
         dataSeries.addOrUpdate(day, entry.getValue());
       }
       /// TODO: 3/17/2023 check if this actually does it by week 
-    } else if(timeChosen.equals("Week"))
-    {
+    } else if (timeChosen.equals("Week")) {
       for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
         LocalDateTime date = entry.getKey();
         Date date1 = Date.from(date.toInstant(ZoneOffset.UTC));
         Week week = new Week(date1);
         dataSeries.addOrUpdate(week, entry.getValue());
       }
-    }
-    else
-    {
+    } else {
       for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
         LocalDateTime date = entry.getKey();
         Month month = new Month(date.getMonthValue(), date.getYear());
@@ -294,53 +307,53 @@ public class Graph extends AbstractScene {
 
     var genderText = new Label("Gender of Audience:");
     genderText.getStyleClass().add("list-cell-text");
-    CheckBox male = new CheckBox("Male");
+    male = new CheckBox("Male");
     male.getStyleClass().add("checkbox");
-    CheckBox female = new CheckBox("Female");
+    female = new CheckBox("Female");
     female.getStyleClass().add("checkbox");
 
     var ageText = new Label("Age of Audience:");
     ageText.getStyleClass().add("list-cell-text");
-    CheckBox under25 = new CheckBox("Under 25");
+    under25 = new CheckBox("Under 25");
     under25.getStyleClass().add("checkbox");
-    CheckBox under34 = new CheckBox("25 to 34");
+    under34 = new CheckBox("25 to 34");
     under34.getStyleClass().add("checkbox");
-    CheckBox under44 = new CheckBox("35 to 44");
+    under44 = new CheckBox("35 to 44");
     under44.getStyleClass().add("checkbox");
-    CheckBox under54 = new CheckBox("45 to 54");
+    under54 = new CheckBox("45 to 54");
     under54.getStyleClass().add("checkbox");
-    CheckBox over54 = new CheckBox("Over 54");
+    over54 = new CheckBox("Over 54");
     over54.getStyleClass().add("checkbox");
 
     var incomeText = new Label("Income of Audience:");
     incomeText.getStyleClass().add("list-cell-text");
-    CheckBox lowIncome = new CheckBox("Low Income");
+    lowIncome = new CheckBox("Low Income");
     lowIncome.getStyleClass().add("checkbox");
-    CheckBox mediumIncome = new CheckBox("Medium Income");
+    mediumIncome = new CheckBox("Medium Income");
     mediumIncome.getStyleClass().add("checkbox");
-    CheckBox highIncome = new CheckBox("High Income");
+    highIncome = new CheckBox("High Income");
     highIncome.getStyleClass().add("checkbox");
 
     var contextText = new Label("Location of Ad Interaction:");
     contextText.getStyleClass().add("list-cell-text");
-    CheckBox blog = new CheckBox("Blog Site");
+    blog = new CheckBox("Blog Site");
     blog.getStyleClass().add("checkbox");
-    CheckBox news = new CheckBox("News Site");
+    news = new CheckBox("News Site");
     news.getStyleClass().add("checkbox");
-    CheckBox shopping = new CheckBox("Shopping Site");
+    shopping = new CheckBox("Shopping Site");
     shopping.getStyleClass().add("checkbox");
-    CheckBox socialMedia = new CheckBox("Social Media");
+    socialMedia = new CheckBox("Social Media");
     socialMedia.getStyleClass().add("checkbox");
 
-    ListView compareList = new ListView();
+    compareList = new ListView();
 
     compareList.getStyleClass().add("list-cell");
 //    compareList.setMouseTransparent( true );
 //    compareList.setFocusTraversable( false );
-    compareList.getItems().addAll(genderText, male, female, "",
-        ageText, under25, under34, under44, under54, over54, "",
-        incomeText, lowIncome, mediumIncome, highIncome, "",
-        contextText, blog, news, shopping, socialMedia);
+    compareList.getItems()
+        .addAll(genderText, male, female, "", ageText, under25, under34, under44, under54, over54,
+            "", incomeText, lowIncome, mediumIncome, highIncome, "", contextText, blog, news,
+            shopping, socialMedia);
     layout.setRight(compareList);
 
   }
@@ -355,6 +368,74 @@ public class Graph extends AbstractScene {
 
   public Button getCompareButton() {
     return compareButton;
+  }
+
+  // All the getters for the checkboxes
+  public CheckBox getMale() {
+    return male;
+  }
+
+  public CheckBox getFemale() {
+    return female;
+  }
+
+  public CheckBox getUnder25() {
+    return under25;
+  }
+
+  public CheckBox getUnder34() {
+    return under34;
+  }
+
+  public CheckBox getUnder44() {
+    return under44;
+  }
+
+  public CheckBox getUnder54() {
+    return under54;
+  }
+
+  public CheckBox getOver54() {
+    return over54;
+  }
+
+  public CheckBox getLowIncome() {
+    return lowIncome;
+  }
+
+  public CheckBox getMediumIncome() {
+    return mediumIncome;
+  }
+
+  public CheckBox getHighIncome() {
+    return highIncome;
+  }
+
+  public CheckBox getBlog() {
+    return blog;
+  }
+
+  public CheckBox getNews() {
+    return news;
+  }
+
+  public CheckBox getShopping() {
+    return shopping;
+  }
+
+  public CheckBox getSocialMedia() {
+    return socialMedia;
+  }
+
+  public ArrayList<CheckBox> getCheckboxes() {
+    var checkboxList = new ArrayList<CheckBox>();
+    //From a ListView, get all the checkboxes
+    compareList.getItems().forEach(item -> {
+      if (item instanceof CheckBox) {
+        checkboxList.add((CheckBox) item);
+      }
+    });
+    return checkboxList;
   }
 
   public Button getFilterButton() {
