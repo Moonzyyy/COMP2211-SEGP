@@ -193,6 +193,19 @@ public class Model {
         return Double.parseDouble(df.format((double) this.bounces / metrics.get(1)));
     }
 
+  public Map<LocalDateTime, Double> loadBounceRateData() {
+    Map<LocalDateTime, Double> bounceRateByDate = new HashMap<>();
+    Map<LocalDateTime, Double> clicksByDate = loadClicksData();
+    Map<LocalDateTime, Double> bounceByDate = loadBouncesData();
+    for (LocalDateTime date : clicksByDate.keySet()) {
+      Double clicks = clicksByDate.getOrDefault(date, 1.0);
+      Double bounces = bounceByDate.getOrDefault(date, 0.0);
+      Double bounceRate = bounces / clicks;
+      bounceByDate.put(date, bounceRate);
+    }
+    return bounceByDate;
+    }
+
     /**
      * Calculates the total cost.
      * This is calculated by adding click and impression cost.
@@ -282,6 +295,21 @@ public class Model {
         return Double.parseDouble(df.format( metrics.get(4) / (double) metrics.get(3)));
     }
 
+  // TODO: 3/18/2023 Check if CPA would be total cost or 0 if conversion 0
+  public Map<LocalDateTime, Double> loadCPAData() {
+    Map<LocalDateTime, Double> cpaByDate = new HashMap<>();
+    Map<LocalDateTime, Double> conversionData = loadConversionData();
+    Map<LocalDateTime, Double> totalCostData = loadTotalCostData();
+
+    for (LocalDateTime date : totalCostData.keySet()) {
+      Double conversion = conversionData.getOrDefault(date, 1.0);
+      Double totalCost = totalCostData.getOrDefault(date, 0.0);
+      Double cpa = totalCost / conversion;
+      cpaByDate.put(date, cpa);
+    }
+    return cpaByDate;
+  }
+
     /**
      * Calculates the cost-per-thousand-impressions, which is the
      * average amount of money spent for every thousand impressions.
@@ -290,23 +318,23 @@ public class Model {
      */
     public Double costPerThousandImps()
     {
-        return Double.parseDouble(df.format(metrics.get(4) / (double) metrics.get(0)));
+        return Double.parseDouble(df.format((metrics.get(4) / (double) metrics.get(0) * 1000d)));
     }
 
-    public void getTestCodeChecked() {
-        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:00");
-        //var test = getImpressions().collect(Collectors.groupingBy( t -> t.getKey().format(formatter))).entrySet().stream().collect(Collectors.toMap(s -> LocalDateTime.parse(s.getKey(), formatter), s -> s.getValue().stream().mapToDouble(Pair::getValue).sum()));
-        var test = getImpressions()
-                .map(t -> {
-                    var key = LocalDateTime.parse(t.getKey().toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME).format(formatter);
-                    var value = t.getValue();
-                    return new AbstractMap.SimpleEntry<>(key, value);
-                })
-                .collect(Collectors.toMap(
-                        e -> LocalDateTime.parse(e.getKey(), formatter),
-                        Map.Entry::getValue,
-                        Double::sum));
+  public Map<LocalDateTime, Double> loadCPTIData() {
+    Map<LocalDateTime, Double> cptiByDate = new HashMap<>();
+    Map<LocalDateTime, Double> impressionData = loadImpressionData();
+    Map<LocalDateTime, Double> totalCostData = loadTotalCostData();
+
+    for (LocalDateTime date : impressionData.keySet()) {
+      Double impression = impressionData.getOrDefault(date, 1.0);
+      Double totalCost = totalCostData.getOrDefault(date, 0.0);
+      Double cpa = (totalCost / impression) * 1000d;
+      cptiByDate.put(date, cpa);
     }
+    return cptiByDate;
+  }
+
 
 //    public Map<Date, Double> loadMetric(Stream dataset, )
 
