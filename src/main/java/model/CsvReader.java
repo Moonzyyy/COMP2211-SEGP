@@ -1,5 +1,6 @@
 package model;
 
+import core.Controller;
 import javafx.util.Pair;
 
 import java.io.*;
@@ -24,50 +25,78 @@ public class CsvReader {
      * @param serverFile click log file in CSV format input by user
      */
     public CsvReader(File clicksFile, File impressionsFile, File serverFile) {
-        System.out.println("Loading, please wait...");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH");
-        try {
-//          InputStream impressionPath = getClass().getResourceAsStream(impressionsFile);
-            InputStream impressionPath = new FileInputStream(impressionsFile);
-            BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
+      System.out.println("Loading, please wait...");
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH");
+      try {
+        String columnsChecker = "";
 
-            iReader.lines().skip(1).forEach(line -> {
-                String[] arr = split(line.trim(), ',');
-                User user = users.get(Long.parseLong(arr[1]));
-                if (user == null) {
-                    user = new User(arr);
-                    users.put(user.getId(), user);
-                }
-                String dateWithoutMS = arr[0].substring(0, 13);
-                user.addImpression(new Pair<>(LocalDateTime.parse(dateWithoutMS, formatter), Double.parseDouble(arr[6])));
-            });
-            iReader.close();
-
-//            InputStream clickPath = getClass().getResourceAsStream(clicksFile);
-            InputStream clickPath = new FileInputStream(clicksFile);
-            BufferedReader cReader = new BufferedReader(new InputStreamReader(clickPath));
-            Stream<String[]> tmp = splitArray(cReader);
-
-            tmp.forEach(click -> {
-                final User user = users.get(Long.parseLong(click[1]));
-              String dateWithoutMS = click[0].substring(0, 13);
-                user.addClick(new Pair<>(LocalDateTime.parse(dateWithoutMS, formatter), Double.parseDouble(click[2])));
-            });
-            cReader.close();
-//            InputStream clickPath = getClass().getResourceAsStream(serverFile);
-            InputStream serverPath = new FileInputStream(serverFile);
-            BufferedReader sReader = new BufferedReader(new InputStreamReader(serverPath));
-            tmp = splitArray(sReader);
-
-            tmp.forEach(interaction -> {
-                final User user = users.get(Long.parseLong(interaction[1]));
-                user.addServer(new Server(interaction, formatter));
-            });
-            sReader.close();
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        InputStream impressionPath = new FileInputStream(impressionsFile);
+        BufferedReader iReader = new BufferedReader(new InputStreamReader(impressionPath));
+        columnsChecker = iReader.readLine().replace(" ", "");
+        if (!columnsChecker.equals("Date,ID,Gender,Age,Income,Context,ImpressionCost")) {
+          Controller.sendErrorMessage(
+              "Error! CSV file put into Impressions does not have the correct columns!"
+                  + "\nColumns Needed: Date,ID,Gender,Age,Income,Context,ImpressionCost"
+                  + "\nColumns Given: " + columnsChecker);
+          throw new Exception("CSV file put into Impressions does not have the correct columns!");
         }
+
+        InputStream clickPath = new FileInputStream(clicksFile);
+        BufferedReader cReader = new BufferedReader(new InputStreamReader(clickPath));
+        columnsChecker = cReader.readLine().replace(" ", "");
+        if (!columnsChecker.equals("Date,ID,ClickCost")) {
+          Controller.sendErrorMessage(
+              "Error! CSV file put into Clicks does not have the correct columns!"
+                  + "\nColumns Needed: Date,ID,ClickCost"
+                  + "\nColumns Given: " + columnsChecker);
+          throw new Exception("CSV file put into Clicks does not have the correct columns!");
+        }
+
+        InputStream serverPath = new FileInputStream(serverFile);
+        BufferedReader sReader = new BufferedReader(new InputStreamReader(serverPath));
+        columnsChecker = sReader.readLine().replace(" ", "");
+        if (!columnsChecker.equals("EntryDate,ID,ExitDate,PagesViewed,Conversion")) {
+          System.out.println(columnsChecker);
+          Controller.sendErrorMessage(
+              "Error! CSV file put into Server does not have the correct columns!"
+                  + "\nColumns Needed: EntryDate,ID,ExitDate,PagesViewed,Conversion"
+                  + "\nColumns Given: " + columnsChecker);
+          throw new Exception("CSV file put into Server does not have the correct columns!");
+        }
+
+        iReader.lines().forEach(line -> {
+          String[] arr = split(line.trim(), ',');
+          User user = users.get(Long.parseLong(arr[1]));
+          if (user == null) {
+            user = new User(arr);
+            users.put(user.getId(), user);
+          }
+          String dateWithoutMS = arr[0].substring(0, 13);
+          user.addImpression(new Pair<>(LocalDateTime.parse(dateWithoutMS, formatter),
+              Double.parseDouble(arr[6])));
+        });
+        iReader.close();
+
+        Stream<String[]> tmp = splitArray(cReader);
+        tmp.forEach(click -> {
+          final User user = users.get(Long.parseLong(click[1]));
+          String dateWithoutMS = click[0].substring(0, 13);
+          user.addClick(new Pair<>(LocalDateTime.parse(dateWithoutMS, formatter),
+              Double.parseDouble(click[2])));
+        });
+        cReader.close();
+
+        tmp = splitArray(sReader);
+
+        tmp.forEach(interaction -> {
+          final User user = users.get(Long.parseLong(interaction[1]));
+          user.addServer(new Server(interaction, formatter));
+        });
+        sReader.close();
+
+      } catch (Exception e) {
+        System.out.println(e.getMessage());
+      }
     }
 
     //DO NOT DELETE!!!!
@@ -79,7 +108,7 @@ public class CsvReader {
     }*/
 
     private Stream<String[]> splitArray(BufferedReader br) {
-        return br.lines().skip(1).map((line) -> split(line.trim(),','));
+        return br.lines().map((line) -> split(line.trim(),','));
     }
 
     /**
