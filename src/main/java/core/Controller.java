@@ -244,6 +244,10 @@ public class Controller {
 //      System.out.println(filters);
 //    });
 
+    graphScene.getFilterButton().setOnAction(e -> {
+      graphModel.updateDateFilters(graphScene.getStartDatePicker().getValue(), graphScene.getEndDatePicker().getValue());
+    });
+
     graphScene.getTimeFilter().setOnAction(event -> {
       graphModel.dataSetter(graphScene.getTimeFilter().getValue());
     });

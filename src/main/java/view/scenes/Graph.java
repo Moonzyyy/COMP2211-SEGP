@@ -203,32 +203,7 @@ public class Graph extends AbstractScene {
     compareControl.setValue("No Filter");
     compareControl.getStyleClass().add("time-filter");
 
-
-
     filterButton = new Button("Filter");
-    filterButton.setOnAction(e -> {
-      LocalDate startDate = startDatePicker.getValue();
-      LocalDate endDate = endDatePicker.getValue();
-      if (startDate != null && endDate != null) {
-        // Create start and end Date objects with selected times
-        Date startTimeDate = new GregorianCalendar(startDate.getYear(),
-            startDate.getMonthValue() - 1, startDate.getDayOfMonth()).getTime();
-        Date endTimeDate = new GregorianCalendar(endDate.getYear(), endDate.getMonthValue() - 1,
-            endDate.getDayOfMonth()).getTime();
-//        dataSetter(dataSeries, timeFilter.getValue());
-        TimeSeries filteredSeries = new TimeSeries("Filtered Series");
-        for (int i = 0; i < dataSeries.getItemCount(); i++) {
-          var time = dataSeries.getTimePeriod(i);
-          Date date = time.getStart();
-          if (date.compareTo(startTimeDate) >= 0 && date.compareTo(endTimeDate) <= 0) {
-            filteredSeries.add(dataSeries.getDataItem(i));
-          }
-        }
-
-        dataset.removeAllSeries();
-        dataset.addSeries(filteredSeries);
-      }
-    });
     filterBar.getChildren().addAll(compareControl,timeFilter, startDatePicker, endDatePicker, filterButton);
 
     createCheckBoxes();
@@ -239,73 +214,6 @@ public class Graph extends AbstractScene {
         .add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
 
   }
-
-  /**
-   * Sets the data of the graph via time period
-   *
-   * @param dataSeries The series to add the data to
-   * @param timeChosen The time period to filter by
-   */
-  void dataSetter(TimeSeries dataSeries, String timeChosen) {
-    dataSeries.clear();
-    if (timeChosen.equals("Hour")) {
-
-      for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
-        LocalDateTime date = entry.getKey();
-        Hour hour = new Hour(date.getHour(), date.getDayOfMonth(), date.getMonthValue(),
-            date.getYear());
-        if(dataSeries.getDataItem(hour) == null)
-        {
-          dataSeries.add(hour, entry.getValue());
-        } else
-        {
-          dataSeries.update(hour, dataSeries.getValue(hour).doubleValue() + entry.getValue());
-        }
-      }
-    } else if (timeChosen.equals("Day")) {
-      for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
-        LocalDateTime date = entry.getKey();
-        Day day = new Day(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
-        System.out.println(day + " " + entry.getValue());
-        if(dataSeries.getDataItem(day) == null)
-        {
-          dataSeries.add(day, entry.getValue());
-        } else
-        {
-          dataSeries.update(day, dataSeries.getValue(day).doubleValue() + entry.getValue());
-        }
-      }
-      /// TODO: 3/17/2023 check if this actually does it by week 
-    } else if (timeChosen.equals("Week")) {
-      for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
-        LocalDateTime date = entry.getKey();
-        Date date1 = Date.from(date.toInstant(ZoneOffset.UTC));
-        Week week = new Week(date1);
-        if(dataSeries.getDataItem(week) == null)
-        {
-          dataSeries.add(week, entry.getValue());
-        } else
-        {
-          dataSeries.update(week, dataSeries.getValue(week).doubleValue() + entry.getValue());
-        }
-      }
-    } else {
-      for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
-        LocalDateTime date = entry.getKey();
-        Month month = new Month(date.getMonthValue(), date.getYear());;
-        if(dataSeries.getDataItem(month) == null)
-        {
-          dataSeries.add(month, entry.getValue());
-        } else
-        {
-          dataSeries.update(month, dataSeries.getValue(month).doubleValue() + entry.getValue());
-        }
-      }
-    }
-
-
-  }
-
 
   /**
    * Creates the checkboxes for the filter bar
@@ -384,10 +292,6 @@ public class Graph extends AbstractScene {
 
   public Button getFilterButton() {
     return filterButton;
-  }
-
-  public JFreeChart getChart() {
-    return chart;
   }
 
   public ComboBox<String> getTimeFilter() {

@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Map;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -135,5 +136,24 @@ public class GraphModel {
                 }
             }
         });
+    }
+
+    public void updateDateFilters(LocalDate startDate, LocalDate endDate) {
+      if (startDate != null && endDate != null) {
+        // Create start and end Date objects with selected times
+        Date startTimeDate = new GregorianCalendar(startDate.getYear(),startDate.getMonthValue() - 1, startDate.getDayOfMonth()).getTime();
+        Date endTimeDate = new GregorianCalendar(endDate.getYear(), endDate.getMonthValue() - 1, endDate.getDayOfMonth()).getTime();
+        TimeSeries filteredSeries = new TimeSeries("Filtered Series");
+        for (int i = 0; i < dataSeries.getItemCount(); i++) {
+          var time = dataSeries.getTimePeriod(i);
+          Date date = time.getStart();
+          if (date.compareTo(startTimeDate) >= 0 && date.compareTo(endTimeDate) <= 0) {
+            filteredSeries.add(dataSeries.getDataItem(i));
+          }
+        }
+
+        dataSet.removeAllSeries();
+        dataSet.addSeries(filteredSeries);
+      }
     }
 }
