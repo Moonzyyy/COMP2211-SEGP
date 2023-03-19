@@ -229,15 +229,15 @@ public class Controller {
     // Checkbox Listener
     // When the filter button is pressed, get all the currently selected filters
     // and update the graph
-    graphScene.getFilterButton().setOnAction((event) -> {
-      List<String> filters = new ArrayList<>();
-      for (CheckBox checkBox : graphScene.getCheckboxes()) {
-        if (checkBox.isSelected()) {
-          filters.add(checkBox.getText());
-        }
-      }
-      System.out.println(filters);
-    });
+//    graphScene.getFilterButton().setOnAction((event) -> {
+//      List<String> filters = new ArrayList<>();
+//      for (CheckBox checkBox : graphScene.getCheckboxes()) {
+//        if (checkBox.isSelected()) {
+//          filters.add(checkBox.getText());
+//        }
+//      }
+//      System.out.println(filters);
+//    });
 
 
   }

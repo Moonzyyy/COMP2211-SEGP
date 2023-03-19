@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import view.scenes.AbstractScene;
-import view.scenes.Graph;
 
 public class DashboardComp extends VBox {
 
@@ -42,6 +41,7 @@ public class DashboardComp extends VBox {
 
   /**
    * Text labels for all metrics to use in buttons
+   *
    * @param number that denotes metric
    * @return metric text
    */
@@ -76,8 +76,9 @@ public class DashboardComp extends VBox {
 
   /**
    * Button for each metric, with the name and value of each metric
+   *
    * @param number, the metric value
-   * @param text, the name of the metric
+   * @param text,   the name of the metric
    * @param scene
    * @return metric button
    */
@@ -106,8 +107,9 @@ public class DashboardComp extends VBox {
   }
 
   /**
+   * Loops through all the number boxes and updates the text with the new values
    *
-   * @param numbers
+   * @param numbers list of new values
    */
   public void updateNumberBoxes(List<String> numbers) {
     for (int i = 0; i < numbers.size(); i++) {
