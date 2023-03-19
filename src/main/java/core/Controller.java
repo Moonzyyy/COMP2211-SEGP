@@ -39,7 +39,7 @@ public class Controller {
 
   public static void sendErrorMessage(String message) {
     // Need to see if javafx has an alert object?
-    JOptionPane.showMessageDialog(null, message, "Error!", JOptionPane.ERROR_MESSAGE);
+//    JOptionPane.showMessageDialog(null, message, "Error!", JOptionPane.ERROR_MESSAGE);
   }
 
   public void setStage(Stage stage) {

@@ -16,6 +16,7 @@ import core.segments.Income;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -53,9 +54,10 @@ public class Graph extends AbstractScene {
   private Button printButton;
   private Button compareButton;
   private Button filterButton;
-  private ListView compareList;
+  private ListView<Node> compareList;
   private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
   private ComboBox<String> timeFilter;
+  private ComboBox<String> compareControl;
   private final JFreeChart chart;
   private final LocalDateTime startDate;
 
@@ -158,6 +160,11 @@ public class Graph extends AbstractScene {
       chartPanel.restoreAutoBounds();
       chartPanel.setFillZoomRectangle(false);
       chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
+      chartPanel.setZoomInFactor(1.0);
+      chartPanel.setZoomOutFactor(1.0);
+
+
+
 
     });
     chart.getXYPlot().setDomainPannable(true);
@@ -175,6 +182,7 @@ public class Graph extends AbstractScene {
     filterBar.setPadding(new Insets(10, 10, 10, 10));
     filterBar.setSpacing(10);
 
+    // Creates the date pickers
     var startDatePicker = new DatePicker();
     var endDatePicker = new DatePicker();
     startDatePicker.getStyleClass().add("start-date-picker");
@@ -209,6 +217,13 @@ public class Graph extends AbstractScene {
     timeFilter.setValue("Day");
     timeFilter.getStyleClass().add("time-filter");
 
+    compareControl = new ComboBox<>();
+    compareControl.getItems().addAll("No Filter");
+    compareControl.setValue("No Filter");
+    compareControl.getStyleClass().add("time-filter");
+
+
+
     filterButton = new Button("Filter");
     filterButton.setOnAction(e -> {
       LocalDate startDate = startDatePicker.getValue();
@@ -233,7 +248,7 @@ public class Graph extends AbstractScene {
         dataset.addSeries(filteredSeries);
       }
     });
-    filterBar.getChildren().addAll(timeFilter, startDatePicker, endDatePicker, filterButton);
+    filterBar.getChildren().addAll(compareControl,timeFilter, startDatePicker, endDatePicker, filterButton);
 
     createCheckBoxes();
 
@@ -318,7 +333,7 @@ public class Graph extends AbstractScene {
     //TODO: Add a "select all" checkbox for each category, and a select all for all categories
     //TODO: Fix alignment of everything
 
-    compareList = new ListView();
+    compareList = new ListView<>();
 
     var genderText = new Label("Gender of Audience:");
     genderText.getStyleClass().add("list-cell-text");
@@ -343,6 +358,7 @@ public class Graph extends AbstractScene {
 
     var incomeText = new Label("Income of Audience:");
     incomeText.getStyleClass().add("list-cell-text");
+    compareList.getItems().add(incomeText);
     for (Income i : Income.values()) {
       CheckBox box = new CheckBox(i.label);
       compareList.getItems().add(box);
@@ -351,6 +367,7 @@ public class Graph extends AbstractScene {
 
     var contextText = new Label("Location of Ad Interaction:");
     contextText.getStyleClass().add("list-cell-text");
+    compareList.getItems().add(contextText);
     for (Context c : Context.values()) {
       CheckBox box = new CheckBox(c.label);
       compareList.getItems().add(box);
