@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import model.GraphModel;
@@ -108,7 +110,6 @@ public class Controller {
     for (int i = 0; i < dashboardComp.getNumberBoxes().size(); i++) {
       int finalI = i;
       dashboardComp.getNumberBoxes().get(i).setOnMouseClicked((event) -> {
-        Map<LocalDateTime, Double> data;
         String title = "";
         String xAxisName = "";
         String yAxisName = "";
@@ -117,71 +118,59 @@ public class Controller {
             title = "Impressions Over Time";
             xAxisName = "Date";
             yAxisName = "Impressions";
-            data = model.loadImpressionData();
           }
           case 1 -> {
             title = "Clicks Over Time";
             xAxisName = "Date";
             yAxisName = "Clicks";
-            data = model.loadClicksData();
           }
           case 2 -> {
             title = "Bounces Over Time";
             xAxisName = "Date";
             yAxisName = "Bounces";
-            data = model.loadBouncesData();
           }
           case 3 -> {
             title = "Conversions Over Time";
             xAxisName = "Date";
             yAxisName = "Conversions";
-            data = model.loadConversionData();
           }
           case 4 -> {
-            title = "Click Cost Over Time";
+            title = "Total Cost Over Time";
             xAxisName = "Date";
-            yAxisName = "Click Costs";
-            data = model.loadClickCostData();
+            yAxisName = "Total Cost";
           }
           case 5 -> {
             title = "Click-Through-Rate Over Time";
             xAxisName = "Date";
             yAxisName = "Click-through-rate";
-            data = model.loadCTRData();
           }
           case 6 -> {
             title = "Cost-per-acquisition Over Time";
             xAxisName = "Date";
             yAxisName = "Cost-per-acquisition";
-            data = model.loadCPAData();
           }
           case 7 -> {
             title = "Cost-per-click Over Time";
             xAxisName = "Date";
             yAxisName = "Cost-per-click";
-            data = model.loadClickCostData();
           }
           case 8 -> {
             title = "Cost-per-thousand impressions Over Time";
             xAxisName = "Date";
             yAxisName = "Cost-per-thousand impressions";
-            data = model.loadCPTIData();
           }
           case 9 -> {
             title = "Bounce Rate Over Time";
             xAxisName = "Date";
             yAxisName = "Bounce Rate";
-            data = model.loadBounceRateData();
           }
           case 10 -> {
             title = "Uniques Over Time";
             xAxisName = "Date";
             yAxisName = "Uniques";
-            data = model.loadNumberOfUniquesData();
           }
-          default -> data = new HashMap<>();
         }
-        GraphModel gm = new GraphModel(title, xAxisName, yAxisName, data);
+        GraphModel gm = new GraphModel(model, title, xAxisName, yAxisName, finalI);
         setUpScene(new Graph(finalI, gm.getChart(), gm.getStartDate()), gm);
       });
     }
@@ -215,6 +204,7 @@ public class Controller {
 
     //Button action listeners
     graphScene.getHomeButton().setOnAction((event) -> {
+      model.setPredicate(null);
       setUpScene(new Dashboard());
     });
 
@@ -226,28 +216,20 @@ public class Controller {
       System.out.print("Print button pressed");
     });
 
-    graphModel.configureDatePickers(graphScene.getStartDatePicker(), graphScene.getEndDatePicker());
+    graphModel.configureDatePickers(graphScene.getStartDatePicker(), graphScene.getEndDatePicker(), graphScene.getDateFilterButton());
 
     // Checkbox Listener
     // When the filter button is pressed, get all the currently selected filters
     // and update the graph
-//    graphScene.getFilterButton().setOnAction((event) -> {
-//      List<String> filters = new ArrayList<>();
-//      for (CheckBox checkBox : graphScene.getCheckboxes()) {
-//        if (checkBox.isSelected()) {
-//          filters.add(checkBox.getText());
-//        }
-//      }
-//      System.out.println(filters);
-//    });
+    graphScene.getCompareButton().setOnAction((event) -> graphModel.updateFilters(graphScene.getCheckboxes()));
 
-    graphScene.getFilterButton().setOnAction(e -> {
-      graphModel.updateDateFilters(graphScene.getStartDatePicker().getValue(),
-          graphScene.getEndDatePicker().getValue());
+    graphScene.getDateFilterButton().setOnAction(e -> {
+      graphModel.updateDateFilters(graphScene.getStartDatePicker().getValue(), graphScene.getEndDatePicker().getValue());
+      graphScene.getDateFilterButton().setDisable(true);
     });
 
     graphScene.getTimeFilter().setOnAction(event -> {
-      graphModel.dataSetter(graphScene.getTimeFilter().getValue());
+      graphModel.updateGraphGranularity(graphScene.getTimeFilter().getValue(), null);
     });
 
     // compareController listener

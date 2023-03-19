@@ -1,5 +1,11 @@
 package view.scenes;
 
+import java.awt.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
 import core.segments.Age;
 import core.segments.Context;
 import core.segments.Income;
@@ -43,7 +49,7 @@ public class Graph extends AbstractScene {
   private Button homeButton;
   private Button printButton;
   private Button compareButton;
-  private Button filterButton;
+  private Button dateFilterButton;
   private ListView<Node> compareList;
   private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
   private ComboBox<String> timeFilter;
@@ -200,7 +206,9 @@ public class Graph extends AbstractScene {
     compareControlFactory(compareControl2);
     compareControlFactory(compareControl3);
 
-    filterButton = new Button("Filter");
+    dateFilterButton = new Button("Filter");
+    dateFilterButton.setDisable(true);
+
 
     var compareSpacer = new Region();
     compareSpacer.setPadding(new Insets(0, 0, 0, 20));
@@ -209,7 +217,7 @@ public class Graph extends AbstractScene {
 
     filterBar.getChildren()
         .addAll(compareControl1, compareControl2, compareControl3, compareSpacer, timeFilter,
-            startDatePicker, endDatePicker, filterButton, compareSpacer2, new Label(""));
+            startDatePicker, endDatePicker, dateFilterButton, compareSpacer2, new Label(""));
 
     createCheckBoxes();
 
@@ -248,8 +256,10 @@ public class Graph extends AbstractScene {
     genderText.getStyleClass().add("list-cell-text");
     CheckBox male = new CheckBox("Male");
     male.getStyleClass().add("checkbox");
+    male.setId("male_1");
     CheckBox female = new CheckBox("Female");
     female.getStyleClass().add("checkbox");
+    female.setId("female_1");
     this.checkboxes.add(male);
     this.checkboxes.add(female);
 
@@ -261,6 +271,7 @@ public class Graph extends AbstractScene {
     compareList.getItems().add(ageText);
     for (Age a : Age.values()) {
       CheckBox box = new CheckBox(a.label);
+      box.setId("age_" + a.idx);
       compareList.getItems().add(box);
       this.checkboxes.add(box);
     }
@@ -270,6 +281,7 @@ public class Graph extends AbstractScene {
     compareList.getItems().add(incomeText);
     for (Income i : Income.values()) {
       CheckBox box = new CheckBox(i.label);
+      box.setId("income_" + i.idx);
       compareList.getItems().add(box);
       this.checkboxes.add(box);
     }
@@ -279,6 +291,7 @@ public class Graph extends AbstractScene {
     compareList.getItems().add(contextText);
     for (Context c : Context.values()) {
       CheckBox box = new CheckBox(c.label);
+      box.setId("context_" + c.idx);
       compareList.getItems().add(box);
       this.checkboxes.add(box);
     }
@@ -300,18 +313,11 @@ public class Graph extends AbstractScene {
   }
 
   public ArrayList<CheckBox> getCheckboxes() {
-    var checkboxList = new ArrayList<CheckBox>();
-    //From a ListView, get all the checkboxes
-    compareList.getItems().forEach(item -> {
-      if (item instanceof CheckBox) {
-        checkboxList.add((CheckBox) item);
-      }
-    });
-    return checkboxList;
+    return checkboxes;
   }
 
-  public Button getFilterButton() {
-    return filterButton;
+  public Button getDateFilterButton() {
+    return dateFilterButton;
   }
 
   public ComboBox<String> getTimeFilter() {
