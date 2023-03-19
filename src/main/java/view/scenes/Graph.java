@@ -29,6 +29,8 @@ import javax.swing.SwingUtilities;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.data.RangeType;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Hour;
 import org.jfree.data.time.Month;
@@ -177,10 +179,10 @@ public class Graph extends AbstractScene {
       chartPanel.setFillZoomRectangle(false);
       chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
 
-
     });
     chart.getXYPlot().setDomainPannable(true);
     chart.getXYPlot().setRangePannable(true);
+
 
     var graphContainer = new HBox();
     graphContainer.setAlignment(Pos.CENTER);
@@ -278,13 +280,26 @@ public class Graph extends AbstractScene {
         LocalDateTime date = entry.getKey();
         Hour hour = new Hour(date.getHour(), date.getDayOfMonth(), date.getMonthValue(),
             date.getYear());
-        dataSeries.addOrUpdate(hour, entry.getValue());
+        if(dataSeries.getDataItem(hour) == null)
+        {
+          dataSeries.add(hour, entry.getValue());
+        } else
+        {
+          dataSeries.update(hour, dataSeries.getValue(hour).doubleValue() + entry.getValue());
+        }
       }
     } else if (timeChosen.equals("Day")) {
       for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
         LocalDateTime date = entry.getKey();
         Day day = new Day(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
-        dataSeries.addOrUpdate(day, entry.getValue());
+        System.out.println(day + " " + entry.getValue());
+        if(dataSeries.getDataItem(day) == null)
+        {
+          dataSeries.add(day, entry.getValue());
+        } else
+        {
+          dataSeries.update(day, dataSeries.getValue(day).doubleValue() + entry.getValue());
+        }
       }
       /// TODO: 3/17/2023 check if this actually does it by week 
     } else if (timeChosen.equals("Week")) {
@@ -292,14 +307,25 @@ public class Graph extends AbstractScene {
         LocalDateTime date = entry.getKey();
         Date date1 = Date.from(date.toInstant(ZoneOffset.UTC));
         Week week = new Week(date1);
-        dataSeries.addOrUpdate(week, entry.getValue());
+        if(dataSeries.getDataItem(week) == null)
+        {
+          dataSeries.add(week, entry.getValue());
+        } else
+        {
+          dataSeries.update(week, dataSeries.getValue(week).doubleValue() + entry.getValue());
+        }
       }
     } else {
       for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
         LocalDateTime date = entry.getKey();
-        Month month = new Month(date.getMonthValue(), date.getYear());
-        System.out.println(month);
-        dataSeries.addOrUpdate(month, entry.getValue());
+        Month month = new Month(date.getMonthValue(), date.getYear());;
+        if(dataSeries.getDataItem(month) == null)
+        {
+          dataSeries.add(month, entry.getValue());
+        } else
+        {
+          dataSeries.update(month, dataSeries.getValue(month).doubleValue() + entry.getValue());
+        }
       }
     }
 
