@@ -3,16 +3,19 @@ package view.scenes;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Objects;
-
 import core.segments.Age;
 import core.segments.Context;
 import core.segments.Income;
+import java.awt.Color;
+import java.awt.Font;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,7 +24,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -32,14 +34,8 @@ import javafx.scene.layout.Region;
 import javax.swing.SwingUtilities;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.data.RangeType;
-import org.jfree.data.time.Day;
-import org.jfree.data.time.Hour;
-import org.jfree.data.time.Month;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.time.Week;
 
 public class Graph extends AbstractScene {
 
@@ -53,19 +49,19 @@ public class Graph extends AbstractScene {
   private Button homeButton;
   private Button printButton;
   private Button compareButton;
-  private Button filterButton;
+  private Button dateFilterButton;
   private ListView<Node> compareList;
   private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
   private ComboBox<String> timeFilter;
-  private ComboBox<String> compareControl;
+  private ComboBox<String> compareControl1;
+  private ComboBox<String> compareControl2;
+  private ComboBox<String> compareControl3;
   private final JFreeChart chart;
   private final LocalDateTime startDate;
 
   private final DatePicker startDatePicker;
   private final DatePicker endDatePicker;
 
-
-//  public Graph(Integer id, String title, String xAxisName, String yAxisName,
   public Graph(Integer id, JFreeChart chart, LocalDateTime startDate) {
     super();
     layout = new BorderPane();
@@ -170,12 +166,9 @@ public class Graph extends AbstractScene {
       chartPanel.setZoomOutFactor(1.0);
 
 
-
-
     });
     chart.getXYPlot().setDomainPannable(true);
     chart.getXYPlot().setRangePannable(true);
-
 
     var graphContainer = new HBox();
     graphContainer.setAlignment(Pos.CENTER);
@@ -199,13 +192,31 @@ public class Graph extends AbstractScene {
     timeFilter.setValue("Day");
     timeFilter.getStyleClass().add("time-filter");
 
-    compareControl = new ComboBox<>();
-    compareControl.getItems().addAll("No Filter");
-    compareControl.setValue("No Filter");
-    compareControl.getStyleClass().add("time-filter");
+    compareControl1 = new ComboBox<>();
+    compareControl1.setStyle("-fx-background-color: #FFFFFF");
+    compareControl2 = new ComboBox<>();
+    compareControl2.setVisible(false);
+    compareControl2.setStyle("-fx-background-color: #1C7C54");
+    compareControl3 = new ComboBox<>();
+    compareControl3.setVisible(false);
+    compareControl3.setStyle("-fx-background-color: #CC2936");
 
-    filterButton = new Button("Filter");
-    filterBar.getChildren().addAll(compareControl,timeFilter, startDatePicker, endDatePicker, filterButton);
+    compareControlFactory(compareControl1);
+    compareControlFactory(compareControl2);
+    compareControlFactory(compareControl3);
+
+    dateFilterButton = new Button("Filter");
+    dateFilterButton.setDisable(true);
+
+
+    var compareSpacer = new Region();
+    compareSpacer.setPadding(new Insets(0, 0, 0, 20));
+    var compareSpacer2 = new Region();
+    HBox.setHgrow(compareSpacer2, Priority.ALWAYS);
+
+    filterBar.getChildren()
+        .addAll(compareControl1, compareControl2, compareControl3, compareSpacer, timeFilter,
+            startDatePicker, endDatePicker, dateFilterButton, compareSpacer2, new Label(""));
 
     createCheckBoxes();
 
@@ -214,6 +225,21 @@ public class Graph extends AbstractScene {
     scene.getStylesheets()
         .add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
 
+  }
+
+  private void compareControlFactory(ComboBox<String> compareControl) {
+    compareControl.getItems().addAll("No Filter", "Male", "Female");
+    for (Age age : Age.values()) {
+      compareControl.getItems().add(age.label);
+    }
+    for (Income income : Income.values()) {
+      compareControl.getItems().add(income.label);
+    }
+    for (Context context : Context.values()) {
+      compareControl.getItems().add(context.label);
+    }
+    compareControl.getStyleClass().add("time-filter");
+    compareControl.setValue("No Filter");
   }
 
   /**
@@ -229,8 +255,10 @@ public class Graph extends AbstractScene {
     genderText.getStyleClass().add("list-cell-text");
     CheckBox male = new CheckBox("Male");
     male.getStyleClass().add("checkbox");
+    male.setId("male_1");
     CheckBox female = new CheckBox("Female");
     female.getStyleClass().add("checkbox");
+    female.setId("female_1");
     this.checkboxes.add(male);
     this.checkboxes.add(female);
 
@@ -242,6 +270,7 @@ public class Graph extends AbstractScene {
     compareList.getItems().add(ageText);
     for (Age a : Age.values()) {
       CheckBox box = new CheckBox(a.label);
+      box.setId("age_" + a.idx);
       compareList.getItems().add(box);
       this.checkboxes.add(box);
     }
@@ -251,6 +280,7 @@ public class Graph extends AbstractScene {
     compareList.getItems().add(incomeText);
     for (Income i : Income.values()) {
       CheckBox box = new CheckBox(i.label);
+      box.setId("income_" + i.idx);
       compareList.getItems().add(box);
       this.checkboxes.add(box);
     }
@@ -260,6 +290,7 @@ public class Graph extends AbstractScene {
     compareList.getItems().add(contextText);
     for (Context c : Context.values()) {
       CheckBox box = new CheckBox(c.label);
+      box.setId("context_" + c.idx);
       compareList.getItems().add(box);
       this.checkboxes.add(box);
     }
@@ -281,18 +312,11 @@ public class Graph extends AbstractScene {
   }
 
   public ArrayList<CheckBox> getCheckboxes() {
-    var checkboxList = new ArrayList<CheckBox>();
-    //From a ListView, get all the checkboxes
-    compareList.getItems().forEach(item -> {
-      if (item instanceof CheckBox) {
-        checkboxList.add((CheckBox) item);
-      }
-    });
-    return checkboxList;
+    return checkboxes;
   }
 
-  public Button getFilterButton() {
-    return filterButton;
+  public Button getDateFilterButton() {
+    return dateFilterButton;
   }
 
   public ComboBox<String> getTimeFilter() {
@@ -305,5 +329,17 @@ public class Graph extends AbstractScene {
 
   public DatePicker getEndDatePicker() {
     return endDatePicker;
+  }
+
+  public ComboBox<String> getCompareControl1() {
+    return compareControl1;
+  }
+
+  public ComboBox<String> getCompareControl2() {
+    return compareControl2;
+  }
+
+  public ComboBox<String> getCompareControl3() {
+    return compareControl3;
   }
 }
