@@ -1,13 +1,8 @@
 package core;
 
 import java.io.File;
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import model.GraphModel;
@@ -216,15 +211,18 @@ public class Controller {
       System.out.print("Print button pressed");
     });
 
-    graphModel.configureDatePickers(graphScene.getStartDatePicker(), graphScene.getEndDatePicker(), graphScene.getDateFilterButton());
+    graphModel.configureDatePickers(graphScene.getStartDatePicker(), graphScene.getEndDatePicker(),
+        graphScene.getDateFilterButton());
 
     // Checkbox Listener
     // When the filter button is pressed, get all the currently selected filters
     // and update the graph
-    graphScene.getCompareButton().setOnAction((event) -> graphModel.updateFilters(graphScene.getCheckboxes()));
+    graphScene.getCompareButton()
+        .setOnAction((event) -> graphModel.updateFilters(graphScene.getCheckboxes()));
 
     graphScene.getDateFilterButton().setOnAction(e -> {
-      graphModel.updateDateFilters(graphScene.getStartDatePicker().getValue(), graphScene.getEndDatePicker().getValue());
+      graphModel.updateDateFilters(graphScene.getStartDatePicker().getValue(),
+          graphScene.getEndDatePicker().getValue());
       graphScene.getDateFilterButton().setDisable(true);
     });
 
@@ -251,13 +249,25 @@ public class Controller {
         graphScene.getCompareControl3().setVisible(false);
         graphScene.getCompareControl3().setValue("No Filter");
       }
-      if(!graphScene.getCompareControl3().isVisible()){
+      if (!graphScene.getCompareControl3().isVisible()) {
         graphScene.getCompareControl3().setVisible(false);
       }
     });
 
     graphScene.getCompareControl3().setOnAction(event -> {
       System.out.println("Compare Control 3: " + graphScene.getCompareControl3().getValue());
+    });
+
+    //Checkbox listeners
+    graphScene.getMaleCheckBox().setOnAction(event -> {
+      if (graphScene.getFemaleCheckBox().isSelected()) {
+        graphScene.getFemaleCheckBox().setSelected(false);
+      }
+    });
+    graphScene.getFemaleCheckBox().setOnAction(event -> {
+      if (graphScene.getMaleCheckBox().isSelected()) {
+        graphScene.getMaleCheckBox().setSelected(false);
+      }
     });
 
 

@@ -1,11 +1,5 @@
 package view.scenes;
 
-import java.awt.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
 import core.segments.Age;
 import core.segments.Context;
 import core.segments.Income;
@@ -61,6 +55,9 @@ public class Graph extends AbstractScene {
 
   private final DatePicker startDatePicker;
   private final DatePicker endDatePicker;
+
+  private CheckBox maleCheckBox;
+  private CheckBox femaleCheckBox;
 
   //  public Graph(Integer id, String title, String xAxisName, String yAxisName,
   public Graph(Integer id, JFreeChart chart, LocalDateTime startDate) {
@@ -209,7 +206,6 @@ public class Graph extends AbstractScene {
     dateFilterButton = new Button("Filter");
     dateFilterButton.setDisable(true);
 
-
     var compareSpacer = new Region();
     compareSpacer.setPadding(new Insets(0, 0, 0, 20));
     var compareSpacer2 = new Region();
@@ -254,17 +250,17 @@ public class Graph extends AbstractScene {
 
     var genderText = new Label("Gender of Audience:");
     genderText.getStyleClass().add("list-cell-text");
-    CheckBox male = new CheckBox("Male");
-    male.getStyleClass().add("checkbox");
-    male.setId("male_1");
-    CheckBox female = new CheckBox("Female");
-    female.getStyleClass().add("checkbox");
-    female.setId("female_1");
-    this.checkboxes.add(male);
-    this.checkboxes.add(female);
+    maleCheckBox = new CheckBox("Male");
+    maleCheckBox.getStyleClass().add("checkbox");
+    maleCheckBox.setId("male_1");
+    femaleCheckBox = new CheckBox("Female");
+    femaleCheckBox.getStyleClass().add("checkbox");
+    femaleCheckBox.setId("female_1");
+    this.checkboxes.add(maleCheckBox);
+    this.checkboxes.add(femaleCheckBox);
 
     compareList.getStyleClass().add("list-cell");
-    compareList.getItems().addAll(genderText, male, female);
+    compareList.getItems().addAll(genderText, maleCheckBox, femaleCheckBox);
 
     var ageText = new Label("Age of Audience:");
     ageText.getStyleClass().add("list-cell-text");
@@ -342,5 +338,13 @@ public class Graph extends AbstractScene {
 
   public ComboBox<String> getCompareControl3() {
     return compareControl3;
+  }
+
+  public CheckBox getMaleCheckBox() {
+    return maleCheckBox;
+  }
+
+  public CheckBox getFemaleCheckBox() {
+    return femaleCheckBox;
   }
 }
