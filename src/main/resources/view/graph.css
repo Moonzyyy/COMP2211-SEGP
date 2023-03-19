@@ -169,6 +169,7 @@
 .time-filter{
   -fx-background-color: #424242;
   -fx-text-fill: white;
+  -fx-pref-width: 100;
   -fx-highlight-text-fill: white;
   -fx-highlight-fill: #424242;
 }
@@ -195,7 +196,7 @@
 }
 
 .time-filter .arrow {
-  -fx-background-color: WHITE;
+  -fx-background-color: BLACK;
 }
 
 

@@ -2,15 +2,12 @@ package core;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javafx.concurrent.Task;
-import javafx.scene.control.CheckBox;
 import javafx.stage.Stage;
-import javax.swing.JOptionPane;
-
 import model.GraphModel;
 import model.Model;
 import view.components.DashboardComp;
@@ -245,11 +242,40 @@ public class Controller {
 //    });
 
     graphScene.getFilterButton().setOnAction(e -> {
-      graphModel.updateDateFilters(graphScene.getStartDatePicker().getValue(), graphScene.getEndDatePicker().getValue());
+      graphModel.updateDateFilters(graphScene.getStartDatePicker().getValue(),
+          graphScene.getEndDatePicker().getValue());
     });
 
     graphScene.getTimeFilter().setOnAction(event -> {
       graphModel.dataSetter(graphScene.getTimeFilter().getValue());
+    });
+
+    // compareController listener
+    graphScene.getCompareControl1().setOnAction(event -> {
+      if (!Objects.equals(graphScene.getCompareControl1().getValue(), "No Filter")) {
+        graphScene.getCompareControl2().setVisible(true);
+      } else {
+        graphScene.getCompareControl2().setVisible(false);
+        graphScene.getCompareControl2().setValue("No Filter");
+        graphScene.getCompareControl3().setVisible(false);
+        graphScene.getCompareControl3().setValue("No Filter");
+      }
+    });
+
+    graphScene.getCompareControl2().setOnAction(event -> {
+      if (!Objects.equals(graphScene.getCompareControl2().getValue(), "No Filter")) {
+        graphScene.getCompareControl3().setVisible(true);
+      } else {
+        graphScene.getCompareControl3().setVisible(false);
+        graphScene.getCompareControl3().setValue("No Filter");
+      }
+      if(!graphScene.getCompareControl3().isVisible()){
+        graphScene.getCompareControl3().setVisible(false);
+      }
+    });
+
+    graphScene.getCompareControl3().setOnAction(event -> {
+      System.out.println("Compare Control 3: " + graphScene.getCompareControl3().getValue());
     });
 
 
@@ -275,8 +301,8 @@ public class Controller {
       setUpScene(new StartMenu());
     });
 
-    if(model.getImpressionsFile() != null && model.getServerFile() != null && model.getClicksFile() != null)
-    {
+    if (model.getImpressionsFile() != null && model.getServerFile() != null
+        && model.getClicksFile() != null) {
       importScene.getImpressionFileName().setText(model.getImpressionsFile().getName());
       importScene.getClickFileName().setText(model.getClicksFile().getName());
       importScene.getServerFileName().setText(model.getServerFile().getName());
@@ -288,7 +314,6 @@ public class Controller {
       try {
         File file = importScene.getFileChooser().showOpenDialog(stage);
         importScene.getFileChooser().setInitialDirectory(file.getParentFile());
-
 
         model.setClicksFile(file);
         importScene.getClickFileName().setText(file.getName());
