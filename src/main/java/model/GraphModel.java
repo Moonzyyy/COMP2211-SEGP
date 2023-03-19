@@ -1,5 +1,13 @@
 package model;
 
+import javafx.scene.chart.Chart;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.time.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
@@ -101,8 +109,31 @@ public class GraphModel {
       }
     }
   }
+    public JFreeChart getChart() {
+        return chart;
+    }
 
-  public JFreeChart getChart() {
-    return chart;
-  }
+    public void configureDatePickers(DatePicker startDatePicker, DatePicker endDatePicker) {
+        // set the maximum date of the first date picker to the selected date on the second date picker
+        startDatePicker.setDayCellFactory(param -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (endDatePicker.getValue() != null) {
+                    setDisable(item.isAfter(endDatePicker.getValue()));
+                }
+            }
+        });
+
+        // set the minimum date of the second date picker to the selected date on the first date picker
+        endDatePicker.setDayCellFactory(param -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (startDatePicker.getValue() != null) {
+                    setDisable(item.isBefore(startDatePicker.getValue()));
+                }
+            }
+        });
+    }
 }

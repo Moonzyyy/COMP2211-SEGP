@@ -229,6 +229,8 @@ public class Controller {
       System.out.print("Print button pressed");
     });
 
+    graphModel.configureDatePickers(graphScene.getStartDatePicker(), graphScene.getEndDatePicker());
+
     // Checkbox Listener
     // When the filter button is pressed, get all the currently selected filters
     // and update the graph

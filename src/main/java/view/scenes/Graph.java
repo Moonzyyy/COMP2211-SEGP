@@ -61,6 +61,9 @@ public class Graph extends AbstractScene {
   private final JFreeChart chart;
   private final LocalDateTime startDate;
 
+  private final DatePicker startDatePicker;
+  private final DatePicker endDatePicker;
+
 //  public Graph(Integer id, String title, String xAxisName, String yAxisName,
   public Graph(Integer id, JFreeChart chart, LocalDateTime startDate) {
     super();
@@ -68,6 +71,8 @@ public class Graph extends AbstractScene {
     metricId = id;
     this.chart = chart;
     this.startDate = startDate;
+    this.startDatePicker = new DatePicker();
+    this.endDatePicker = new DatePicker();
   }
 
   /**
@@ -182,36 +187,12 @@ public class Graph extends AbstractScene {
     filterBar.setPadding(new Insets(10, 10, 10, 10));
     filterBar.setSpacing(10);
 
-    // Creates the date pickers
-    var startDatePicker = new DatePicker();
-    var endDatePicker = new DatePicker();
     startDatePicker.getStyleClass().add("start-date-picker");
     endDatePicker.getStyleClass().add("end-date-picker");
 
     startDatePicker.setValue(LocalDate.from(startDate).minusDays(14));
     endDatePicker.setValue(LocalDate.from(startDate));
 
-    // set the maximum date of the first date picker to the selected date on the second date picker
-    startDatePicker.setDayCellFactory(param -> new DateCell() {
-      @Override
-      public void updateItem(LocalDate item, boolean empty) {
-        super.updateItem(item, empty);
-        if (endDatePicker.getValue() != null) {
-          setDisable(item.isAfter(endDatePicker.getValue()));
-        }
-      }
-    });
-
-    // set the minimum date of the second date picker to the selected date on the first date picker
-    endDatePicker.setDayCellFactory(param -> new DateCell() {
-      @Override
-      public void updateItem(LocalDate item, boolean empty) {
-        super.updateItem(item, empty);
-        if (startDatePicker.getValue() != null) {
-          setDisable(item.isBefore(startDatePicker.getValue()));
-        }
-      }
-    });
     timeFilter = new ComboBox<>();
     timeFilter.getItems().addAll("Hour", "Day", "Week", "Month");
     timeFilter.setValue("Day");
@@ -411,5 +392,13 @@ public class Graph extends AbstractScene {
 
   public ComboBox<String> getTimeFilter() {
     return timeFilter;
+  }
+
+  public DatePicker getStartDatePicker() {
+    return startDatePicker;
+  }
+
+  public DatePicker getEndDatePicker() {
+    return endDatePicker;
   }
 }
