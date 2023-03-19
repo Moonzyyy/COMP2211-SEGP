@@ -33,13 +33,16 @@ public class GraphModel {
 
   public JFreeChart chart;
 
+  private boolean needDivisionForChangingTime = false;
+
   public GraphModel(String title, String xAxisName, String yAxisName,
-      Map<LocalDateTime, Double> data) {
+      Map<LocalDateTime, Double> data, boolean needDivisionForChangingTime) {
     this.dataSeries = new TimeSeries(title);
     this.dataSet = new TimeSeriesCollection();
     this.dataSet.addSeries(this.dataSeries);
     this.data = data;
     this.timeFilterVal = "Month";
+    this.needDivisionForChangingTime = needDivisionForChangingTime;
     chart = ChartFactory.createTimeSeriesChart(title, xAxisName, yAxisName, this.dataSet, true,
         true, false);
     dataSetter("Day");
@@ -67,7 +70,11 @@ public class GraphModel {
                 date.getYear());
             if (dataSeries.getDataItem(hour) == null) {
               dataSeries.add(hour, entry.getValue());
-            } else {
+            } if(needDivisionForChangingTime)
+            {
+              dataSeries.update(hour, (dataSeries.getValue(hour).doubleValue() + entry.getValue()) / 2.0);
+            } else
+            {
               dataSeries.update(hour, dataSeries.getValue(hour).doubleValue() + entry.getValue());
             }
           }
@@ -79,7 +86,14 @@ public class GraphModel {
             if (dataSeries.getDataItem(day) == null) {
               dataSeries.add(day, entry.getValue());
             } else {
-              dataSeries.update(day, dataSeries.getValue(day).doubleValue() + entry.getValue());
+              if(needDivisionForChangingTime)
+              {
+                dataSeries.update(day, (dataSeries.getValue(day).doubleValue() + entry.getValue()) / 2.0);
+              } else
+              {
+                dataSeries.update(day, dataSeries.getValue(day).doubleValue() + entry.getValue());
+              }
+
             }
           }
         }
@@ -92,7 +106,14 @@ public class GraphModel {
             if (dataSeries.getDataItem(week) == null) {
               dataSeries.add(week, entry.getValue());
             } else {
-              dataSeries.update(week, dataSeries.getValue(week).doubleValue() + entry.getValue());
+              if(needDivisionForChangingTime)
+              {
+                dataSeries.update(week, (dataSeries.getValue(week).doubleValue() + entry.getValue()) / 2.0);
+              } else
+              {
+                dataSeries.update(week, dataSeries.getValue(week).doubleValue() + entry.getValue());
+              }
+
             }
           }
         }
@@ -103,7 +124,14 @@ public class GraphModel {
             if (dataSeries.getDataItem(month) == null) {
               dataSeries.add(month, entry.getValue());
             } else {
-              dataSeries.update(month, dataSeries.getValue(month).doubleValue() + entry.getValue());
+              if(needDivisionForChangingTime)
+              {
+                dataSeries.update(month, (dataSeries.getValue(month).doubleValue() + entry.getValue()) / 2.0);
+              } else
+              {
+                dataSeries.update(month, dataSeries.getValue(month).doubleValue() + entry.getValue());
+              }
+
             }
           }
         }

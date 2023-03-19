@@ -115,76 +115,88 @@ public class Controller {
         String title = "";
         String xAxisName = "";
         String yAxisName = "";
+        boolean needDivisionForChangeTime = false;
         switch (finalI) {
           case 0 -> {
             title = "Impressions Over Time";
             xAxisName = "Date";
             yAxisName = "Impressions";
             data = model.loadImpressionData();
+            needDivisionForChangeTime = false;
           }
           case 1 -> {
             title = "Clicks Over Time";
             xAxisName = "Date";
             yAxisName = "Clicks";
             data = model.loadClicksData();
+            needDivisionForChangeTime = false;
           }
           case 2 -> {
             title = "Bounces Over Time";
             xAxisName = "Date";
             yAxisName = "Bounces";
             data = model.loadBouncesData();
+            needDivisionForChangeTime = false;
           }
           case 3 -> {
             title = "Conversions Over Time";
             xAxisName = "Date";
             yAxisName = "Conversions";
             data = model.loadConversionData();
+            needDivisionForChangeTime = false;
           }
           case 4 -> {
             title = "Click Cost Over Time";
             xAxisName = "Date";
             yAxisName = "Click Costs";
             data = model.loadClickCostData();
+            needDivisionForChangeTime = false;
           }
           case 5 -> {
             title = "Click-Through-Rate Over Time";
             xAxisName = "Date";
             yAxisName = "Click-through-rate";
             data = model.loadCTRData();
+            needDivisionForChangeTime = true;
           }
           case 6 -> {
             title = "Cost-per-acquisition Over Time";
             xAxisName = "Date";
             yAxisName = "Cost-per-acquisition";
             data = model.loadCPAData();
+            needDivisionForChangeTime = true;
           }
           case 7 -> {
             title = "Cost-per-click Over Time";
             xAxisName = "Date";
             yAxisName = "Cost-per-click";
             data = model.loadClickCostData();
+            needDivisionForChangeTime = true;
           }
           case 8 -> {
             title = "Cost-per-thousand impressions Over Time";
             xAxisName = "Date";
             yAxisName = "Cost-per-thousand impressions";
             data = model.loadCPTIData();
+            needDivisionForChangeTime = true;
           }
           case 9 -> {
             title = "Bounce Rate Over Time";
             xAxisName = "Date";
             yAxisName = "Bounce Rate";
             data = model.loadBounceRateData();
+            needDivisionForChangeTime = true;
           }
           case 10 -> {
             title = "Uniques Over Time";
             xAxisName = "Date";
             yAxisName = "Uniques";
             data = model.loadNumberOfUniquesData();
+            needDivisionForChangeTime = false;
           }
           default -> data = new HashMap<>();
         }
-        GraphModel gm = new GraphModel(title, xAxisName, yAxisName, data);
+        GraphModel gm = new GraphModel(title, xAxisName, yAxisName, data, needDivisionForChangeTime);
         setUpScene(new Graph(finalI, gm.getChart(), gm.getStartDate()), gm);
       });
     }

@@ -64,6 +64,7 @@ public class Graph extends AbstractScene {
   private final DatePicker startDatePicker;
   private final DatePicker endDatePicker;
 
+
 //  public Graph(Integer id, String title, String xAxisName, String yAxisName,
   public Graph(Integer id, JFreeChart chart, LocalDateTime startDate) {
     super();

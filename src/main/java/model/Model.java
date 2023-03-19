@@ -127,7 +127,7 @@ public class Model {
   public Map<LocalDateTime, Double> loadNumberOfUniquesData() {
     Map<LocalDateTime, Double> numberOfUniquesByDate = new HashMap<>();
     users.values().forEach(user -> {
-      LocalDateTime dateTime = user.getClicks().get(0).getKey();
+      LocalDateTime dateTime = user.getImpressions().get(0).getKey();
       if (numberOfUniquesByDate.containsKey(dateTime)) {
         numberOfUniquesByDate.put(dateTime, numberOfUniquesByDate.get(dateTime) + 1.0);
       } else {
@@ -201,9 +201,11 @@ public class Model {
             Double clicks = clicksByDate.getOrDefault(date, 1.0);
             Double bounces = bounceByDate.getOrDefault(date, 0.0);
             Double bounceRate = bounces / clicks;
-            bounceByDate.put(date, bounceRate);
+            System.out.println(bounceRate);
+            bounceRateByDate.put(date, bounceRate);
         }
-        return bounceByDate;
+        System.out.println( "Testing: " + (double) this.bounces / metrics.get(1));
+        return bounceRateByDate;
     }
 
     /**
