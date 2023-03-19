@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum Context {
-    NEWS(1, "News"), SHOPPING(2, "Shopping"), SOCIAL(3, "Social"), MEDIA(4, "Media"), BLOG(5, "Blog"), HOBBIES(6, "Hobbies"), TRAVEL(7, "Travel");
+    NEWS(1, "News"), SHOPPING(2, "Shopping"), SOCIAL(3, "Social Media"), BLOG(4, "Blog"), HOBBIES(5, "Hobbies"), TRAVEL(6, "Travel");
 
     public final int idx;
     public final String label;

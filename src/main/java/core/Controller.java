@@ -10,6 +10,8 @@ import javafx.concurrent.Task;
 import javafx.scene.control.CheckBox;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
+
+import model.GraphModel;
 import model.Model;
 import view.components.DashboardComp;
 import view.scenes.AbstractScene;
@@ -182,7 +184,8 @@ public class Controller {
           }
           default -> data = new HashMap<>();
         }
-        setUpScene(new Graph(finalI, title, xAxisName, yAxisName, data));
+        GraphModel gm = new GraphModel(title, xAxisName, yAxisName, data);
+        setUpScene(new Graph(finalI, gm.getChart(), gm.getStartDate()), gm);
       });
     }
   }
@@ -209,7 +212,7 @@ public class Controller {
    *
    * @param graphScene the graph scene
    */
-  public void setUpScene(Graph graphScene) {
+  public void setUpScene(Graph graphScene, GraphModel graphModel) {
     graphScene.createScene();
     this.setCurrentScene(graphScene);
 
@@ -238,6 +241,10 @@ public class Controller {
 //      }
 //      System.out.println(filters);
 //    });
+
+    graphScene.getTimeFilter().setOnAction(event -> {
+      graphModel.dataSetter(graphScene.getTimeFilter().getValue());
+    });
 
 
   }
