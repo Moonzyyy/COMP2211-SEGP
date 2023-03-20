@@ -51,7 +51,6 @@ public class Graph extends AbstractScene {
   private ComboBox<String> compareControl2;
   private ComboBox<String> compareControl3;
   private final JFreeChart chart;
-  private final LocalDateTime startDate;
 
   private final DatePicker startDatePicker;
   private final DatePicker endDatePicker;
@@ -67,12 +66,11 @@ public class Graph extends AbstractScene {
    * @param chart the chart
    * @param startDate the start date
    */
-  public Graph(Integer id, JFreeChart chart, LocalDateTime startDate) {
+  public Graph(Integer id, JFreeChart chart) {
     super();
     layout = new BorderPane();
     metricId = id;
     this.chart = chart;
-    this.startDate = startDate;
     this.startDatePicker = new DatePicker();
     this.endDatePicker = new DatePicker();
   }

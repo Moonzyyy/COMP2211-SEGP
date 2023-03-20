@@ -4,7 +4,6 @@ import core.segments.Age;
 import core.segments.Context;
 import core.segments.Income;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DateCell;
@@ -29,11 +28,8 @@ import org.jfree.data.time.Week;
 
 public class GraphModel {
 
-  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
   private final int id;
-  private TimeSeries initialSeries = null;
-  private TimeSeries dataSeries;
+  private final TimeSeries dataSeries;
   private final TimeSeriesCollection dataSet;
   private final Map<LocalDateTime, Double> data;
 
@@ -69,17 +65,11 @@ public class GraphModel {
     this.dataSeries = new TimeSeries(title);
     this.dataSet = new TimeSeriesCollection();
     this.dataSet.addSeries(this.dataSeries);
-    this.timeFilterVal = "Month";
     this.needDivisionForChangingTime = needDivisionForChangingTime;
     chart = ChartFactory.createTimeSeriesChart(title, xAxisName, yAxisName, this.dataSet, true,
             true, false);
     updateGraphData("Day", this.data);
 
-  }
-
-  public LocalDateTime getStartDate() {
-    Map.Entry<LocalDateTime, Double> entry = data.entrySet().iterator().next();
-    return entry.getKey();
   }
 
   /**
@@ -165,15 +155,24 @@ public class GraphModel {
         }
       }
     }
-//    if (this.initialSeries == null) {
-//      this.initialSeries = dataSeries;
-//    }
     updateDateFilters(currentStart, currentEnd);
   }
+
+  /**
+   * Getter for the Chart
+   * @return The Graphs chart
+   */
   public JFreeChart getChart() {
     return chart;
   }
 
+  /**
+   * The initial configuration for the datepickers.
+   * Includes setting their initial values, the update handlers for each cell and the min/max values for each picker.
+   * @param startDatePicker Date picker for the start date
+   * @param endDatePicker Date picker for the end date
+   * @param dateFilterButton Button responsible for starting date filtering
+   */
   public void configureDatePickers(DatePicker startDatePicker, DatePicker endDatePicker, Button dateFilterButton) {
     Date startDate = dataSeries.getTimePeriod(0).getStart();
     LocalDate localStart = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -209,10 +208,20 @@ public class GraphModel {
     });
   }
 
+  /**
+   * Convert LocalDate to Date
+   * @param date: LocalDate object to be converted
+   * @return Returns the new Date object
+   */
   private Date convertDate(LocalDate date) {
     return new GregorianCalendar(date.getYear(),date.getMonthValue() - 1, date.getDayOfMonth()).getTime();
   }
 
+  /**
+   * Filter the current TimeSeries between two dates
+   * @param startDate: lower bound of the dates to filter by
+   * @param endDate: upper bound of the dates to filter by
+   */
   public void updateDateFilters(LocalDate startDate, LocalDate endDate) {
     if (startDate != null && endDate != null) {
       // Create start and end Date objects with selected times
@@ -234,6 +243,9 @@ public class GraphModel {
     }
   }
 
+  /**
+   * Initialise the predicates used for filtering by audience segment.
+   */
   public void initPredicates() {
     agePredicates = new HashMap<>();
     contextPredicates = new HashMap<>();
@@ -259,19 +271,10 @@ public class GraphModel {
     femalePredicate = new FilterPredicate(u -> !u.getGender());
   }
 
-  public Predicate<User> combinePredicates() {
-    var ages = agePredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
-    var contexts = contextPredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
-    var incomes = incomePredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
-    Predicate<User> gender = u -> true;
-    if (malePredicate.isEnabled()) {
-      gender = malePredicate.getPredicate();
-    } else if (femalePredicate.isEnabled()) {
-      gender = femalePredicate.getPredicate();
-    }
-    return ages.and(contexts).and(incomes).and(gender);
-  }
-
+  /**
+   * Update the enabled predicates for filtering by audience segment
+   * @param checkboxes: A list of checkboxes from view.Graph
+   */
   public void updateFilters(ArrayList<CheckBox> checkboxes) {
     Pattern p = Pattern.compile("(.*)_(.*)");
     agePredicates.get(0).setEnabled(true);
@@ -305,5 +308,22 @@ public class GraphModel {
       }
     }
     this.updateGraphData("Day", model.loadData(id, this.combinePredicates()));
+  }
+
+  /**
+   * Combine the lists of predicates for filtering by audience segments
+   * @return The combined list of predicates - "and"-ed together
+   */
+  public Predicate<User> combinePredicates() {
+    var ages = agePredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
+    var contexts = contextPredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
+    var incomes = incomePredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
+    Predicate<User> gender = u -> true;
+    if (malePredicate.isEnabled()) {
+      gender = malePredicate.getPredicate();
+    } else if (femalePredicate.isEnabled()) {
+      gender = femalePredicate.getPredicate();
+    }
+    return ages.and(contexts).and(incomes).and(gender);
   }
 }

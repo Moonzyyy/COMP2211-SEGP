@@ -197,7 +197,7 @@ public class Controller {
           }
         }
         GraphModel gm = new GraphModel(model, title, xAxisName, yAxisName, finalI, needDivisionForChangeTime);
-        setUpScene(new Graph(finalI, gm.getChart(), gm.getStartDate()), gm);
+        setUpScene(new Graph(finalI, gm.getChart()), gm);
       });
     }
   }
