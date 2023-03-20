@@ -16,6 +16,9 @@ public class AdViz extends Application {
     private final Model theModel;
     private final Controller theController;
 
+  /**
+   * Creates model and controller class, passing the model class through controller.
+   */
     public AdViz() {
       logger.info("Starting AdViz");
         this.theModel = new Model();

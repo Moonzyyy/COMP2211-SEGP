@@ -37,6 +37,11 @@ public class Controller {
     this.model = model;
   }
 
+
+  /**
+   * Pops up an alert to the user
+   * @param message send the error message that you want to show the user
+   */
   public static void sendErrorMessage(String message) {
     logger.error("Error Occurred!");
     Platform.runLater(() ->
@@ -47,6 +52,10 @@ public class Controller {
 
   }
 
+
+  /**
+   * @param stage Sets the stage within the class
+   */
   public void setStage(Stage stage) {
     this.stage = stage;
   }
@@ -297,6 +306,10 @@ public class Controller {
 
   }
 
+
+  /**
+   * @param loading Loading Scene
+   */
   public void setUpScene(Loading loading) {
     loading.createScene();
     this.setCurrentScene(loading);

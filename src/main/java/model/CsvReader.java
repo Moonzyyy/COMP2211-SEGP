@@ -119,6 +119,10 @@ public class CsvReader {
         return new BufferedReader(new InputStreamReader(inputFS));
     }*/
 
+  /**
+   * @param br the buffered reader containing the lines of the
+   * @return
+   */
     private Stream<String[]> splitArray(BufferedReader br) {
         return br.lines().map((line) -> split(line.trim(),','));
     }

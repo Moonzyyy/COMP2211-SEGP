@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Click {
+
     private LocalDateTime date;
 
     private String userId;
@@ -22,26 +23,47 @@ public class Click {
         setClickCost(input[2]);
     }
 
+  /**
+   * @return return the date
+   */
     public LocalDateTime getDate() {
         return date;
     }
 
+  /**
+   * @param date set the date
+   */
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
+  /**
+   * @return get the userID
+   */
     public String getUserId() {
         return userId;
     }
 
+
+  /**
+   * @param id set the userID
+   */
     public void setUserId(String id) {
         this.userId = id;
     }
 
+
+  /**
+   * @param clickCost set the click cost
+   */
     public void setClickCost(String clickCost) {
         this.clickCost = Double.parseDouble(clickCost);
     }
 
+
+  /**
+   * @return get the click cost
+   */
     public Double getClickCost() {
         return clickCost;
     }
