@@ -8,8 +8,6 @@ import org.apache.logging.log4j.Logger;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import model.GraphModel;
 import model.Model;
@@ -260,7 +258,7 @@ public class Controller {
     });
 
     graphScene.getTimeFilter().setOnAction(event -> {
-      graphModel.updateGraphGranularity(graphScene.getTimeFilter().getValue(), null);
+      graphModel.updateGraphData(graphScene.getTimeFilter().getValue(), null);
     });
 
     // compareController listener

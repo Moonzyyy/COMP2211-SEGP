@@ -32,7 +32,8 @@ public class GraphModel {
   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
   private final int id;
-  private final TimeSeries dataSeries;
+  private TimeSeries initialSeries = null;
+  private TimeSeries dataSeries;
   private final TimeSeriesCollection dataSet;
   private final Map<LocalDateTime, Double> data;
 
@@ -48,6 +49,9 @@ public class GraphModel {
   private Map<Integer, FilterPredicate> incomePredicates;
   private FilterPredicate malePredicate;
   private FilterPredicate femalePredicate;
+
+  private LocalDate currentStart;
+  private LocalDate currentEnd;
 
   /**
    * @param model take in the model class
@@ -68,8 +72,8 @@ public class GraphModel {
     this.timeFilterVal = "Month";
     this.needDivisionForChangingTime = needDivisionForChangingTime;
     chart = ChartFactory.createTimeSeriesChart(title, xAxisName, yAxisName, this.dataSet, true,
-        true, false);
-    updateGraphGranularity("Day", this.data);
+            true, false);
+    updateGraphData("Day", this.data);
 
   }
 
@@ -83,7 +87,7 @@ public class GraphModel {
    *
    * @param timeChosen The time period to filter by
    */
-  public void updateGraphGranularity(String timeChosen, Map<LocalDateTime, Double> incomingData) {
+  public void updateGraphData(String timeChosen, Map<LocalDateTime, Double> incomingData) {
     var data = incomingData != null ? incomingData : this.data;
     this.dataSeries.clear();
     this.timeFilterVal = timeChosen;
@@ -161,100 +165,112 @@ public class GraphModel {
         }
       }
     }
+//    if (this.initialSeries == null) {
+//      this.initialSeries = dataSeries;
+//    }
+    updateDateFilters(currentStart, currentEnd);
   }
-    public JFreeChart getChart() {
-        return chart;
-    }
+  public JFreeChart getChart() {
+    return chart;
+  }
 
-    public void configureDatePickers(DatePicker startDatePicker, DatePicker endDatePicker, Button dateFilterButton) {
-        // set the maximum date of the first date picker to the selected date on the second date picker
-        startDatePicker.setDayCellFactory(param -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                dateFilterButton.setDisable(false);
-                if (endDatePicker.getValue() != null) {
-                    setDisable(item.isAfter(endDatePicker.getValue()));
-                }
-            }
-        });
+  public void configureDatePickers(DatePicker startDatePicker, DatePicker endDatePicker, Button dateFilterButton) {
+    Date startDate = dataSeries.getTimePeriod(0).getStart();
+    LocalDate localStart = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    currentStart = localStart;
+    startDatePicker.setValue(localStart);
 
-        Date startDate = dataSeries.getTimePeriod(0).getStart();
-        startDatePicker.setValue(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+    Date endDate = dataSeries.getTimePeriod(dataSeries.getItemCount() - 1).getEnd();
+    LocalDate localEnd = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    currentEnd = localEnd;
+    endDatePicker.setValue(localEnd);
 
-        // set the minimum date of the second date picker to the selected date on the first date picker
-        endDatePicker.setDayCellFactory(param -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                dateFilterButton.setDisable(false);
-                if (startDatePicker.getValue() != null) {
-                    setDisable(item.isBefore(startDatePicker.getValue()));
-                }
-            }
-        });
+    // set the maximum date of the first date picker to the selected date on the second date picker
+    startDatePicker.setDayCellFactory(param -> new DateCell() {
+      @Override
+      public void updateItem(LocalDate item, boolean empty) {
+        super.updateItem(item, empty);
+        dateFilterButton.setDisable(false);
+        boolean end = endDatePicker.getValue() != null ? item.isAfter(endDatePicker.getValue()) : item.isAfter(localEnd);
+        setDisable(end || item.isBefore(localStart));
+      }
+    });
 
-      Date endDate = dataSeries.getTimePeriod(dataSeries.getItemCount() - 1).getEnd();
-      endDatePicker.setValue(endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
-    }
+    // set the minimum date of the second date picker to the selected date on the first date picker
+    endDatePicker.setDayCellFactory(param -> new DateCell() {
+      @Override
+      public void updateItem(LocalDate item, boolean empty) {
+        super.updateItem(item, empty);
+        dateFilterButton.setDisable(false);
+        boolean start = startDatePicker.getValue() != null ? item.isBefore(startDatePicker.getValue()) : item.isBefore(localStart);
+        setDisable(start || item.isAfter(localEnd));
+      }
+    });
+  }
 
-    public void updateDateFilters(LocalDate startDate, LocalDate endDate) {
-      if (startDate != null && endDate != null) {
-        // Create start and end Date objects with selected times
-        Date startTimeDate = new GregorianCalendar(startDate.getYear(),startDate.getMonthValue() - 1, startDate.getDayOfMonth()).getTime();
-        Date endTimeDate = new GregorianCalendar(endDate.getYear(), endDate.getMonthValue() - 1, endDate.getDayOfMonth()).getTime();
-        TimeSeries filteredSeries = new TimeSeries("Filtered Series");
-        for (int i = 0; i < dataSeries.getItemCount(); i++) {
-          var time = dataSeries.getTimePeriod(i);
-          Date date = time.getStart();
-          if (date.compareTo(startTimeDate) >= 0 && date.compareTo(endTimeDate) <= 0) {
-            filteredSeries.add(dataSeries.getDataItem(i));
-          }
+  private Date convertDate(LocalDate date) {
+    return new GregorianCalendar(date.getYear(),date.getMonthValue() - 1, date.getDayOfMonth()).getTime();
+  }
+
+  public void updateDateFilters(LocalDate startDate, LocalDate endDate) {
+    if (startDate != null && endDate != null) {
+      // Create start and end Date objects with selected times
+      Date startTimeDate = convertDate(startDate);
+      Date endTimeDate = convertDate(endDate);
+      TimeSeries filteredSeries = new TimeSeries(dataSeries.getKey());
+      for (int i = 0; i < dataSeries.getItemCount(); i++) {
+        var time = dataSeries.getTimePeriod(i);
+        Date date = time.getStart();
+        if (date.compareTo(startTimeDate) >= 0 && date.compareTo(endTimeDate) <= 0) {
+          filteredSeries.add(dataSeries.getDataItem(i));
         }
-
-        dataSet.removeAllSeries();
-        dataSet.addSeries(filteredSeries);
       }
+
+      dataSet.removeAllSeries();
+      dataSet.addSeries(filteredSeries);
+      currentStart = startDate;
+      currentEnd = endDate;
+    }
+  }
+
+  public void initPredicates() {
+    agePredicates = new HashMap<>();
+    contextPredicates = new HashMap<>();
+    incomePredicates = new HashMap<>();
+    agePredicates.put(0, new FilterPredicate(u -> true, true));
+    for (Age a : Age.values()) {
+      Predicate<User> p = u -> u.getAge() == a;
+      agePredicates.put(a.idx, new FilterPredicate(p));
     }
 
-    public void initPredicates() {
-      agePredicates = new HashMap<>();
-      contextPredicates = new HashMap<>();
-      incomePredicates = new HashMap<>();
-      agePredicates.put(0, new FilterPredicate(u -> true, true));
-      for (Age a : Age.values()) {
-        Predicate<User> p = u -> u.getAge() == a;
-        agePredicates.put(a.idx, new FilterPredicate(p));
-      }
-
-      contextPredicates.put(0, new FilterPredicate(u -> true, true));
-      for (Context c : Context.values()) {
-        Predicate<User> p = u -> u.getContext() == c;
-        contextPredicates.put(c.idx, new FilterPredicate(p));
-      }
-
-      incomePredicates.put(0, new FilterPredicate(u -> true, true));
-      for (Income i : Income.values()) {
-        Predicate<User> p = u -> u.getIncome() == i;
-        incomePredicates.put(i.idx, new FilterPredicate(p));
-      }
-      malePredicate = new FilterPredicate(User::getGender);
-      femalePredicate = new FilterPredicate(u -> !u.getGender());
+    contextPredicates.put(0, new FilterPredicate(u -> true, true));
+    for (Context c : Context.values()) {
+      Predicate<User> p = u -> u.getContext() == c;
+      contextPredicates.put(c.idx, new FilterPredicate(p));
     }
 
-    public Predicate<User> combinePredicates() {
-      var ages = agePredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
-      var contexts = contextPredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
-      var incomes = incomePredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
-      Predicate<User> gender = u -> true;
-      if (malePredicate.isEnabled()) {
-        gender = malePredicate.getPredicate();
-      } else if (femalePredicate.isEnabled()) {
-        gender = femalePredicate.getPredicate();
-      }
-      return ages.and(contexts).and(incomes).and(gender);
+    incomePredicates.put(0, new FilterPredicate(u -> true, true));
+    for (Income i : Income.values()) {
+      Predicate<User> p = u -> u.getIncome() == i;
+      incomePredicates.put(i.idx, new FilterPredicate(p));
     }
+    malePredicate = new FilterPredicate(User::getGender);
+    femalePredicate = new FilterPredicate(u -> !u.getGender());
+  }
+
+  public Predicate<User> combinePredicates() {
+    var ages = agePredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
+    var contexts = contextPredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
+    var incomes = incomePredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
+    Predicate<User> gender = u -> true;
+    if (malePredicate.isEnabled()) {
+      gender = malePredicate.getPredicate();
+    } else if (femalePredicate.isEnabled()) {
+      gender = femalePredicate.getPredicate();
+    }
+    return ages.and(contexts).and(incomes).and(gender);
+  }
 
   public void updateFilters(ArrayList<CheckBox> checkboxes) {
     Pattern p = Pattern.compile("(.*)_(.*)");
@@ -288,6 +304,6 @@ public class GraphModel {
         }
       }
     }
-    this.updateGraphGranularity("Day", model.loadData(id, this.combinePredicates()));
+    this.updateGraphData("Day", model.loadData(id, this.combinePredicates()));
   }
 }
