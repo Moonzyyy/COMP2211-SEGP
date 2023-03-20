@@ -1,5 +1,7 @@
 package model;
 
+import com.opencsv.CSVReader;
+import core.AdViz;
 import core.Controller;
 import javafx.util.Pair;
 
@@ -13,9 +15,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.List;
 import java.util.stream.Stream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class CsvReader {
-
+    private static final Logger logger = LogManager.getLogger(CSVReader.class);
     private final HashMap<Long,User> users = new HashMap<Long, User>();
 
     /**
@@ -25,9 +29,10 @@ public class CsvReader {
      * @param serverFile click log file in CSV format input by user
      */
     public CsvReader(File clicksFile, File impressionsFile, File serverFile) {
-      System.out.println("Loading, please wait...");
+
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH");
       try {
+        logger.info("Reading CSV Files...");
         String columnsChecker = "";
 
         InputStream impressionPath = new FileInputStream(impressionsFile);
@@ -64,6 +69,7 @@ public class CsvReader {
           throw new Exception("CSV file put into Server does not have the correct columns!");
         }
 
+        logger.info("Processing CSV Files...");
 
         iReader.lines().forEach(line -> {
 
@@ -98,9 +104,10 @@ public class CsvReader {
           user.addServer(new Server(interaction, formatter));
         });
         sReader.close();
+        logger.info("Done processing CSV Files!");
 
       } catch (Exception e) {
-        System.out.println(e.getMessage());
+        logger.error(e.getMessage());
       }
     }
 

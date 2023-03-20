@@ -38,6 +38,7 @@ public class Controller {
   }
 
   public static void sendErrorMessage(String message) {
+    logger.error("Error Occurred!");
     Platform.runLater(() ->
     {
       Alert alert = new Alert(Alert.AlertType.ERROR, message);
@@ -56,7 +57,7 @@ public class Controller {
    * @param newScene the new scene to be set
    */
   private void setCurrentScene(AbstractScene newScene) {
-    logger.info("Setting Scene");
+    logger.info("Creating Scene: " + newScene.getClass().getSimpleName());
     stage.setScene(newScene.getScene());
     this.currentScene = newScene;
     stage.show();

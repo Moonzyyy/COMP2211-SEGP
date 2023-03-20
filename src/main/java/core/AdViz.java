@@ -17,7 +17,6 @@ public class AdViz extends Application {
     private final Controller theController;
 
     public AdViz() {
-
       logger.info("Starting AdViz");
         this.theModel = new Model();
 //        this.theView = new AppView();

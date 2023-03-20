@@ -1,5 +1,6 @@
 package model;
 
+import core.AdViz;
 import core.Controller;
 import java.io.File;
 import java.text.DecimalFormat;
@@ -17,8 +18,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Model {
+
+  private static final Logger logger = LogManager.getLogger(Model.class);
+
     private HashMap<Long, User> users;
 
     private final ArrayList<Double> metrics = new ArrayList<>(11);
@@ -35,10 +41,11 @@ public class Model {
 
     public boolean importData() {
         //Get CSV data from all 3 log files
+        logger.info("Importing Data From CSV Files");
         CsvReader cr = new CsvReader(clicksFile, impressionsFile, serverFile);
         this.users = cr.getUsers();
         this.clickCost = getClicks().mapToDouble(Pair::getValue).sum();
-
+        logger.info("Done Importing Data From CSV Files!");
         if (users.size() == 0) {
             return false;
         }
