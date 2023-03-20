@@ -3,8 +3,8 @@ package core;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
@@ -24,7 +24,7 @@ import view.scenes.StartMenu;
 
 public class Controller {
 
-  //private static final Logger logger = LogManager.getLogger(Controller.class);
+  private static final Logger logger = LogManager.getLogger(Controller.class);
   private final Model model;
   private AbstractScene currentScene;
   private Stage stage;

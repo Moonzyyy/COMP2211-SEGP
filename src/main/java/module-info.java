@@ -6,6 +6,7 @@ module com.adviz {
   requires javafx.graphics;
   requires javafx.controls;
   requires javafx.swing;
+  requires org.apache.logging.log4j;
 
   opens view to javafx.fxml;
   opens core to javafx.fxml;
