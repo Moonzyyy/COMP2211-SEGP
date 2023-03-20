@@ -40,7 +40,6 @@ public class Model {
         this.clickCost = getClicks().mapToDouble(Pair::getValue).sum();
 
         if (users.size() == 0) {
-            Controller.sendErrorMessage("There has been an error with processing the data!");
             return false;
         }
         return true;

@@ -3,7 +3,13 @@ package core;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import model.GraphModel;
 import model.Model;
@@ -18,10 +24,10 @@ import view.scenes.StartMenu;
 
 public class Controller {
 
+  //private static final Logger logger = LogManager.getLogger(Controller.class);
   private final Model model;
   private AbstractScene currentScene;
   private Stage stage;
-
   /**
    * The constructor of the controller.
    *
@@ -32,8 +38,12 @@ public class Controller {
   }
 
   public static void sendErrorMessage(String message) {
-    // Need to see if javafx has an alert object?
-//    JOptionPane.showMessageDialog(null, message, "Error!", JOptionPane.ERROR_MESSAGE);
+    Platform.runLater(() ->
+    {
+      Alert alert = new Alert(Alert.AlertType.ERROR, message);
+      alert.showAndWait();
+    });
+
   }
 
   public void setStage(Stage stage) {
