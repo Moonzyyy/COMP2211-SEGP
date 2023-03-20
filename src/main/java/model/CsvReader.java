@@ -64,8 +64,11 @@ public class CsvReader {
           throw new Exception("CSV file put into Server does not have the correct columns!");
         }
 
+
         iReader.lines().forEach(line -> {
-          String[] arr = split(line.trim(), ',');
+
+          String[] arr = split(line, ',');
+          Arrays.stream(arr).forEach( string -> string.trim());
           User user = users.get(Long.parseLong(arr[1]));
           if (user == null) {
             user = new User(arr);
@@ -79,6 +82,7 @@ public class CsvReader {
 
         Stream<String[]> tmp = splitArray(cReader);
         tmp.forEach(click -> {
+          Arrays.stream(click).forEach(string -> string.trim());
           final User user = users.get(Long.parseLong(click[1]));
           String dateWithoutMS = click[0].substring(0, 13);
           user.addClick(new Pair<>(LocalDateTime.parse(dateWithoutMS, formatter),
@@ -89,6 +93,7 @@ public class CsvReader {
         tmp = splitArray(sReader);
 
         tmp.forEach(interaction -> {
+          Arrays.stream(interaction).forEach(string -> string.trim());
           final User user = users.get(Long.parseLong(interaction[1]));
           user.addServer(new Server(interaction, formatter));
         });
