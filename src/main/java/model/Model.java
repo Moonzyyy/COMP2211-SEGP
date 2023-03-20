@@ -215,10 +215,8 @@ public class Model {
             Double clicks = clicksByDate.getOrDefault(date, 1.0);
             Double bounces = bounceByDate.getOrDefault(date, 0.0);
             Double bounceRate = bounces / clicks;
-            System.out.println(bounceRate);
             bounceRateByDate.put(date, bounceRate);
         }
-        System.out.println( "Testing: " + (double) this.bounces / metrics.get(1));
         return bounceRateByDate;
     }
 
@@ -353,7 +351,6 @@ public class Model {
 
     protected Map<LocalDateTime, Double> loadData(int id, Predicate<User> predicate) {
         this.predicate = predicate;
-        System.out.println(this.getUsers().count());
         Map<LocalDateTime, Double> data;
         switch (id) {
             case 0 -> data = this.loadImpressionData();
