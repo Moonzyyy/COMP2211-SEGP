@@ -56,6 +56,7 @@ public class Controller {
    * @param newScene the new scene to be set
    */
   private void setCurrentScene(AbstractScene newScene) {
+    logger.log(logger.getLevel(), "Setting Scene: ");
     stage.setScene(newScene.getScene());
     this.currentScene = newScene;
     stage.show();
@@ -335,7 +336,7 @@ public class Controller {
             model.getClicksFile() == null || model.getImpressionsFile() == null
                 || model.getServerFile() == null);
       } catch (Exception e) {
-        sendErrorMessage("File selected is not of type .csv!");
+
       }
 
     });
@@ -350,7 +351,7 @@ public class Controller {
             model.getClicksFile() == null || model.getImpressionsFile() == null
                 || model.getServerFile() == null);
       } catch (Exception e) {
-        sendErrorMessage("File selected is not of type .csv!");
+
       }
     });
 
@@ -364,7 +365,7 @@ public class Controller {
             model.getClicksFile() == null || model.getImpressionsFile() == null
                 || model.getServerFile() == null);
       } catch (Exception e) {
-        sendErrorMessage("File selected is not of type .csv!");
+
       }
     });
 
