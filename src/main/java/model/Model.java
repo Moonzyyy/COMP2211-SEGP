@@ -24,7 +24,8 @@ public class Model {
     private final ArrayList<Double> metrics = new ArrayList<>(11);
 
     private int bounces;
-    private final DecimalFormat df = new DecimalFormat("#.###");
+    private final DecimalFormat df3 = new DecimalFormat("#.###");
+    private final DecimalFormat df2 = new DecimalFormat("#.##");
     private double clickCost;
 
     private File clicksFile;
@@ -121,7 +122,7 @@ public class Model {
      * @return the bounce rate in 3 d.p.
      */
     public double bounceRate() {
-        return Double.parseDouble(df.format((double) this.bounces / metrics.get(1)));
+        return Double.parseDouble(df3.format((double) this.bounces / metrics.get(1)));
     }
 
     /**
@@ -130,7 +131,7 @@ public class Model {
      * @return the total cost in 3 d.p.
      */
     public double totalCost() {
-        return Double.parseDouble(df.format(this.clickCost + getImpressions().mapToDouble(Pair::getValue).sum()));
+        return Double.parseDouble(df2.format(this.clickCost + getImpressions().mapToDouble(Pair::getValue).sum()));
     }
 
     /**
@@ -139,7 +140,7 @@ public class Model {
      * @return the click-through-rate in 3 d.p.
      */
     public Double clickThroughRate() {
-        return Double.parseDouble(df.format(metrics.get(1) / metrics.get(0)));
+        return Double.parseDouble(df3.format(metrics.get(1) / metrics.get(0)));
     }
 
     /**
@@ -149,7 +150,7 @@ public class Model {
      * @return the cost-per-click in 3 d.p.
      */
     public Double costPerClick() {
-        return Double.parseDouble(df.format(this.clickCost / metrics.get(1)));
+        return Double.parseDouble(df2.format(this.clickCost / metrics.get(1)));
     }
 
     /**
@@ -159,7 +160,7 @@ public class Model {
      * @return the cost-per-acquisition in 3 d.p.
      */
     public Double costPerAcquisition() {
-        return Double.parseDouble(df.format( metrics.get(4) / (double) metrics.get(3)));
+        return Double.parseDouble(df2.format( metrics.get(4) / (double) metrics.get(3)));
     }
 
     /**
@@ -170,7 +171,7 @@ public class Model {
      */
     public Double costPerThousandImps()
     {
-        return Double.parseDouble(df.format(metrics.get(4) / (double) metrics.get(0)));
+        return Double.parseDouble(df2.format(metrics.get(4) / (double) metrics.get(0)));
     }
 
     public void getTestCodeChecked() {
