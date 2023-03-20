@@ -6,6 +6,7 @@ module com.adviz {
   requires javafx.graphics;
   requires javafx.controls;
   requires javafx.swing;
+  requires org.apache.logging.log4j;
 
   opens view to javafx.fxml;
   opens core to javafx.fxml;
@@ -13,5 +14,6 @@ module com.adviz {
   //exports view;
   exports model;
   exports view.scenes;
+  exports core.segments;
   opens view.scenes to javafx.fxml;
 }

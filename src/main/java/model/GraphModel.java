@@ -1,20 +1,24 @@
 package model;
 
-import javafx.scene.chart.Chart;
+import core.segments.Age;
+import core.segments.Context;
+import core.segments.Income;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.util.Pair;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.data.time.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Map;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Hour;
 import org.jfree.data.time.Month;
@@ -24,25 +28,37 @@ import org.jfree.data.time.Week;
 
 public class GraphModel {
 
-  public TimeSeries dataSeries;
-  public TimeSeriesCollection dataSet;
-
-  Map<LocalDateTime, Double> data;
+  private final int id;
+  private TimeSeries dataSeries;
+  private TimeSeriesCollection dataSet;
+  private Map<LocalDateTime, Double> data;
 
   public String timeFilterVal;
 
-  public JFreeChart chart;
+  private final JFreeChart chart;
 
-  public GraphModel(String title, String xAxisName, String yAxisName,
-      Map<LocalDateTime, Double> data) {
+  private boolean needDivisionForChangingTime = false;
+  private final Model model;
+
+  private Map<Integer, FilterPredicate> agePredicates;
+  private Map<Integer, FilterPredicate> contextPredicates;
+  private Map<Integer, FilterPredicate> incomePredicates;
+  private FilterPredicate malePredicate;
+  private FilterPredicate femalePredicate;
+
+  public GraphModel(Model model, String title, String xAxisName, String yAxisName, int id, boolean needDivisionForChangingTime) {
+    this.id = id;
+    this.model = model;
+    initPredicates();
+    this.data = model.loadData(id, null);
     this.dataSeries = new TimeSeries(title);
     this.dataSet = new TimeSeriesCollection();
     this.dataSet.addSeries(this.dataSeries);
-    this.data = data;
     this.timeFilterVal = "Month";
+    this.needDivisionForChangingTime = needDivisionForChangingTime;
     chart = ChartFactory.createTimeSeriesChart(title, xAxisName, yAxisName, this.dataSet, true,
         true, false);
-    dataSetter("Day");
+    updateGraphGranularity("Day", this.data);
   }
 
   public LocalDateTime getStartDate() {
@@ -55,7 +71,8 @@ public class GraphModel {
    *
    * @param timeChosen The time period to filter by
    */
-  public void dataSetter(String timeChosen) {
+  public void updateGraphGranularity(String timeChosen, Map<LocalDateTime, Double> incomingData) {
+    var data = incomingData != null ? incomingData : this.data;
     this.dataSeries.clear();
     if (!timeFilterVal.equals(timeChosen)) {
       this.timeFilterVal = timeChosen;
@@ -67,7 +84,11 @@ public class GraphModel {
                 date.getYear());
             if (dataSeries.getDataItem(hour) == null) {
               dataSeries.add(hour, entry.getValue());
-            } else {
+            } if(needDivisionForChangingTime)
+            {
+              dataSeries.update(hour, (dataSeries.getValue(hour).doubleValue() + entry.getValue()) / 2.0);
+            } else
+            {
               dataSeries.update(hour, dataSeries.getValue(hour).doubleValue() + entry.getValue());
             }
           }
@@ -79,7 +100,14 @@ public class GraphModel {
             if (dataSeries.getDataItem(day) == null) {
               dataSeries.add(day, entry.getValue());
             } else {
-              dataSeries.update(day, dataSeries.getValue(day).doubleValue() + entry.getValue());
+              if(needDivisionForChangingTime)
+              {
+                dataSeries.update(day, (dataSeries.getValue(day).doubleValue() + entry.getValue()) / 2.0);
+              } else
+              {
+                dataSeries.update(day, dataSeries.getValue(day).doubleValue() + entry.getValue());
+              }
+
             }
           }
         }
@@ -92,7 +120,14 @@ public class GraphModel {
             if (dataSeries.getDataItem(week) == null) {
               dataSeries.add(week, entry.getValue());
             } else {
-              dataSeries.update(week, dataSeries.getValue(week).doubleValue() + entry.getValue());
+              if(needDivisionForChangingTime)
+              {
+                dataSeries.update(week, (dataSeries.getValue(week).doubleValue() + entry.getValue()) / 2.0);
+              } else
+              {
+                dataSeries.update(week, dataSeries.getValue(week).doubleValue() + entry.getValue());
+              }
+
             }
           }
         }
@@ -103,7 +138,14 @@ public class GraphModel {
             if (dataSeries.getDataItem(month) == null) {
               dataSeries.add(month, entry.getValue());
             } else {
-              dataSeries.update(month, dataSeries.getValue(month).doubleValue() + entry.getValue());
+              if(needDivisionForChangingTime)
+              {
+                dataSeries.update(month, (dataSeries.getValue(month).doubleValue() + entry.getValue()) / 2.0);
+              } else
+              {
+                dataSeries.update(month, dataSeries.getValue(month).doubleValue() + entry.getValue());
+              }
+
             }
           }
         }
@@ -114,12 +156,13 @@ public class GraphModel {
         return chart;
     }
 
-    public void configureDatePickers(DatePicker startDatePicker, DatePicker endDatePicker) {
+    public void configureDatePickers(DatePicker startDatePicker, DatePicker endDatePicker, Button dateFilterButton) {
         // set the maximum date of the first date picker to the selected date on the second date picker
         startDatePicker.setDayCellFactory(param -> new DateCell() {
             @Override
             public void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
+                dateFilterButton.setDisable(false);
                 if (endDatePicker.getValue() != null) {
                     setDisable(item.isAfter(endDatePicker.getValue()));
                 }
@@ -131,6 +174,7 @@ public class GraphModel {
             @Override
             public void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
+                dateFilterButton.setDisable(false);
                 if (startDatePicker.getValue() != null) {
                     setDisable(item.isBefore(startDatePicker.getValue()));
                 }
@@ -156,4 +200,72 @@ public class GraphModel {
         dataSet.addSeries(filteredSeries);
       }
     }
+
+    public void initPredicates() {
+      agePredicates = new HashMap<>();
+      contextPredicates = new HashMap<>();
+      incomePredicates = new HashMap<>();
+      agePredicates.put(0, new FilterPredicate(u -> true, true));
+      for (Age a : Age.values()) {
+        Predicate<User> p = u -> u.getAge() == a;
+        agePredicates.put(a.idx, new FilterPredicate(p));
+      }
+
+      contextPredicates.put(0, new FilterPredicate(u -> true, true));
+      for (Context c : Context.values()) {
+        Predicate<User> p = u -> u.getContext() == c;
+        contextPredicates.put(c.idx, new FilterPredicate(p));
+      }
+
+      incomePredicates.put(0, new FilterPredicate(u -> true, true));
+      for (Income i : Income.values()) {
+        Predicate<User> p = u -> u.getIncome() == i;
+        incomePredicates.put(i.idx, new FilterPredicate(p));
+      }
+      malePredicate = new FilterPredicate(User::getGender);
+      femalePredicate = new FilterPredicate(u -> !u.getGender());
+    }
+
+    public Predicate<User> combinePredicates() {
+      var ages = agePredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
+      var contexts = contextPredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
+      var incomes = incomePredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
+      var gender = malePredicate.isEnabled() ? malePredicate.getPredicate() : femalePredicate.getPredicate();
+      return ages.and(contexts).and(incomes).and(gender);
+    }
+
+  public void updateFilters(ArrayList<CheckBox> checkboxes) {
+    Pattern p = Pattern.compile("(.*)_(.*)");
+    agePredicates.get(0).setEnabled(true);
+    contextPredicates.get(0).setEnabled(true);
+    incomePredicates.get(0).setEnabled(true);
+    for (CheckBox checkBox : checkboxes) {
+      Matcher m = p.matcher(checkBox.getId());
+      if (m.find()) {
+        switch (m.group(1)) {
+          case "age" -> {
+            if (checkBox.isSelected()) {
+              agePredicates.get(0).setEnabled(false);
+            }
+            agePredicates.get(Integer.parseInt(m.group(2))).setEnabled(checkBox.isSelected());
+          }
+          case "context" -> {
+            if (checkBox.isSelected()) {
+              contextPredicates.get(0).setEnabled(false);
+            }
+            contextPredicates.get(Integer.parseInt(m.group(2))).setEnabled(checkBox.isSelected());
+          }
+          case "income" -> {
+            if (checkBox.isSelected()) {
+              incomePredicates.get(0).setEnabled(false);
+            }
+            incomePredicates.get(Integer.parseInt(m.group(2))).setEnabled(checkBox.isSelected());
+          }
+          case "male" -> malePredicate.setEnabled(checkBox.isSelected());
+          default -> femalePredicate.setEnabled(checkBox.isSelected());
+        }
+      }
+    }
+    this.updateGraphGranularity("Day", model.loadData(id, this.combinePredicates()));
+  }
 }

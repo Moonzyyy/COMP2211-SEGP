@@ -3,16 +3,21 @@ package core;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.Model;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import view.scenes.StartMenu;
 
 /**
  * The main class of the application.
  */
 public class AdViz extends Application {
+
+  private static final Logger logger = LogManager.getLogger(AdViz.class);
     private final Model theModel;
     private final Controller theController;
 
     public AdViz() {
+      logger.info("Starting AdViz");
         this.theModel = new Model();
 //        this.theView = new AppView();
         this.theController = new Controller(theModel);
@@ -24,7 +29,6 @@ public class AdViz extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        AdViz app = new AdViz();
         launch();
     }
 

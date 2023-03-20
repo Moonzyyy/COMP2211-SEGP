@@ -1,16 +1,16 @@
 package core;
 
 import java.io.File;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
-import javax.swing.JOptionPane;
-
 import model.GraphModel;
 import model.Model;
 import view.components.DashboardComp;
@@ -24,10 +24,10 @@ import view.scenes.StartMenu;
 
 public class Controller {
 
+  private static final Logger logger = LogManager.getLogger(Controller.class);
   private final Model model;
   private AbstractScene currentScene;
   private Stage stage;
-
   /**
    * The constructor of the controller.
    *
@@ -38,8 +38,13 @@ public class Controller {
   }
 
   public static void sendErrorMessage(String message) {
-    // Need to see if javafx has an alert object?
-//    JOptionPane.showMessageDialog(null, message, "Error!", JOptionPane.ERROR_MESSAGE);
+    logger.error("Error Occurred!");
+    Platform.runLater(() ->
+    {
+      Alert alert = new Alert(Alert.AlertType.ERROR, message);
+      alert.showAndWait();
+    });
+
   }
 
   public void setStage(Stage stage) {
@@ -52,6 +57,7 @@ public class Controller {
    * @param newScene the new scene to be set
    */
   private void setCurrentScene(AbstractScene newScene) {
+    logger.info("Creating Scene: " + newScene.getClass().getSimpleName());
     stage.setScene(newScene.getScene());
     this.currentScene = newScene;
     stage.show();
@@ -111,80 +117,79 @@ public class Controller {
     for (int i = 0; i < dashboardComp.getNumberBoxes().size(); i++) {
       int finalI = i;
       dashboardComp.getNumberBoxes().get(i).setOnMouseClicked((event) -> {
-        Map<LocalDateTime, Double> data;
         String title = "";
         String xAxisName = "";
         String yAxisName = "";
+        boolean needDivisionForChangeTime = false;
         switch (finalI) {
           case 0 -> {
             title = "Impressions Over Time";
             xAxisName = "Date";
             yAxisName = "Impressions";
-            data = model.loadImpressionData();
+            needDivisionForChangeTime = false;
           }
           case 1 -> {
             title = "Clicks Over Time";
             xAxisName = "Date";
             yAxisName = "Clicks";
-            data = model.loadClicksData();
+            needDivisionForChangeTime = false;
           }
           case 2 -> {
             title = "Bounces Over Time";
             xAxisName = "Date";
             yAxisName = "Bounces";
-            data = model.loadBouncesData();
+            needDivisionForChangeTime = false;
           }
           case 3 -> {
             title = "Conversions Over Time";
             xAxisName = "Date";
             yAxisName = "Conversions";
-            data = model.loadConversionData();
+            needDivisionForChangeTime = false;
           }
           case 4 -> {
-            title = "Click Cost Over Time";
+            title = "Total Cost Over Time";
             xAxisName = "Date";
             yAxisName = "Click Costs";
-            data = model.loadClickCostData();
+            needDivisionForChangeTime = false;
           }
           case 5 -> {
             title = "Click-Through-Rate Over Time";
             xAxisName = "Date";
             yAxisName = "Click-through-rate";
-            data = model.loadCTRData();
+            needDivisionForChangeTime = true;
           }
           case 6 -> {
             title = "Cost-per-acquisition Over Time";
             xAxisName = "Date";
             yAxisName = "Cost-per-acquisition";
-            data = model.loadCPAData();
+            needDivisionForChangeTime = true;
           }
           case 7 -> {
             title = "Cost-per-click Over Time";
             xAxisName = "Date";
             yAxisName = "Cost-per-click";
-            data = model.loadClickCostData();
+            needDivisionForChangeTime = true;
           }
           case 8 -> {
             title = "Cost-per-thousand impressions Over Time";
             xAxisName = "Date";
             yAxisName = "Cost-per-thousand impressions";
-            data = model.loadCPTIData();
+            needDivisionForChangeTime = true;
           }
           case 9 -> {
             title = "Bounce Rate Over Time";
             xAxisName = "Date";
             yAxisName = "Bounce Rate";
-            data = model.loadBounceRateData();
+            needDivisionForChangeTime = true;
           }
           case 10 -> {
             title = "Uniques Over Time";
             xAxisName = "Date";
             yAxisName = "Uniques";
-            data = model.loadNumberOfUniquesData();
+            needDivisionForChangeTime = false;
           }
-          default -> data = new HashMap<>();
         }
-        GraphModel gm = new GraphModel(title, xAxisName, yAxisName, data);
+        GraphModel gm = new GraphModel(model, title, xAxisName, yAxisName, finalI, needDivisionForChangeTime);
         setUpScene(new Graph(finalI, gm.getChart(), gm.getStartDate()), gm);
       });
     }
@@ -218,6 +223,7 @@ public class Controller {
 
     //Button action listeners
     graphScene.getHomeButton().setOnAction((event) -> {
+      model.setPredicate(null);
       setUpScene(new Dashboard());
     });
 
@@ -229,27 +235,63 @@ public class Controller {
       System.out.print("Print button pressed");
     });
 
-    graphModel.configureDatePickers(graphScene.getStartDatePicker(), graphScene.getEndDatePicker());
+    graphModel.configureDatePickers(graphScene.getStartDatePicker(), graphScene.getEndDatePicker(),
+        graphScene.getDateFilterButton());
 
     // Checkbox Listener
     // When the filter button is pressed, get all the currently selected filters
     // and update the graph
-//    graphScene.getFilterButton().setOnAction((event) -> {
-//      List<String> filters = new ArrayList<>();
-//      for (CheckBox checkBox : graphScene.getCheckboxes()) {
-//        if (checkBox.isSelected()) {
-//          filters.add(checkBox.getText());
-//        }
-//      }
-//      System.out.println(filters);
-//    });
+    graphScene.getCompareButton()
+        .setOnAction((event) -> graphModel.updateFilters(graphScene.getCheckboxes()));
 
-    graphScene.getFilterButton().setOnAction(e -> {
-      graphModel.updateDateFilters(graphScene.getStartDatePicker().getValue(), graphScene.getEndDatePicker().getValue());
+    graphScene.getDateFilterButton().setOnAction(e -> {
+      graphModel.updateDateFilters(graphScene.getStartDatePicker().getValue(),
+          graphScene.getEndDatePicker().getValue());
+      graphScene.getDateFilterButton().setDisable(true);
     });
 
     graphScene.getTimeFilter().setOnAction(event -> {
-      graphModel.dataSetter(graphScene.getTimeFilter().getValue());
+      graphModel.updateGraphGranularity(graphScene.getTimeFilter().getValue(), null);
+    });
+
+    // compareController listener
+    graphScene.getCompareControl1().setOnAction(event -> {
+      if (!Objects.equals(graphScene.getCompareControl1().getValue(), "No Filter")) {
+        graphScene.getCompareControl2().setVisible(true);
+      } else {
+        graphScene.getCompareControl2().setVisible(false);
+        graphScene.getCompareControl2().setValue("No Filter");
+        graphScene.getCompareControl3().setVisible(false);
+        graphScene.getCompareControl3().setValue("No Filter");
+      }
+    });
+
+    graphScene.getCompareControl2().setOnAction(event -> {
+      if (!Objects.equals(graphScene.getCompareControl2().getValue(), "No Filter")) {
+        graphScene.getCompareControl3().setVisible(true);
+      } else {
+        graphScene.getCompareControl3().setVisible(false);
+        graphScene.getCompareControl3().setValue("No Filter");
+      }
+      if (!graphScene.getCompareControl3().isVisible()) {
+        graphScene.getCompareControl3().setVisible(false);
+      }
+    });
+
+    graphScene.getCompareControl3().setOnAction(event -> {
+      System.out.println("Compare Control 3: " + graphScene.getCompareControl3().getValue());
+    });
+
+    //Checkbox listeners
+    graphScene.getMaleCheckBox().setOnAction(event -> {
+      if (graphScene.getFemaleCheckBox().isSelected()) {
+        graphScene.getFemaleCheckBox().setSelected(false);
+      }
+    });
+    graphScene.getFemaleCheckBox().setOnAction(event -> {
+      if (graphScene.getMaleCheckBox().isSelected()) {
+        graphScene.getMaleCheckBox().setSelected(false);
+      }
     });
 
 
@@ -275,8 +317,8 @@ public class Controller {
       setUpScene(new StartMenu());
     });
 
-    if(model.getImpressionsFile() != null && model.getServerFile() != null && model.getClicksFile() != null)
-    {
+    if (model.getImpressionsFile() != null && model.getServerFile() != null
+        && model.getClicksFile() != null) {
       importScene.getImpressionFileName().setText(model.getImpressionsFile().getName());
       importScene.getClickFileName().setText(model.getClicksFile().getName());
       importScene.getServerFileName().setText(model.getServerFile().getName());
@@ -289,14 +331,13 @@ public class Controller {
         File file = importScene.getFileChooser().showOpenDialog(stage);
         importScene.getFileChooser().setInitialDirectory(file.getParentFile());
 
-
         model.setClicksFile(file);
         importScene.getClickFileName().setText(file.getName());
         importScene.getLoadButton().setDisable(
             model.getClicksFile() == null || model.getImpressionsFile() == null
                 || model.getServerFile() == null);
       } catch (Exception e) {
-        sendErrorMessage("File selected is not of type .csv!");
+
       }
 
     });
@@ -311,7 +352,7 @@ public class Controller {
             model.getClicksFile() == null || model.getImpressionsFile() == null
                 || model.getServerFile() == null);
       } catch (Exception e) {
-        sendErrorMessage("File selected is not of type .csv!");
+
       }
     });
 
@@ -325,7 +366,7 @@ public class Controller {
             model.getClicksFile() == null || model.getImpressionsFile() == null
                 || model.getServerFile() == null);
       } catch (Exception e) {
-        sendErrorMessage("File selected is not of type .csv!");
+
       }
     });
 

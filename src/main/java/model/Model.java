@@ -1,5 +1,6 @@
 package model;
 
+import core.AdViz;
 import core.Controller;
 import java.io.File;
 import java.text.DecimalFormat;
@@ -17,8 +18,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Model {
+
+  private static final Logger logger = LogManager.getLogger(Model.class);
+
     private HashMap<Long, User> users;
 
     private final ArrayList<Double> metrics = new ArrayList<>(11);
@@ -26,24 +32,32 @@ public class Model {
     private int bounces;
     private final DecimalFormat df = new DecimalFormat("#.###");
     private double clickCost;
-
     private File clicksFile;
     private File impressionsFile;
     private File serverFile;
+    private Predicate<User> predicate;
 
     public Model() {}
 
     public boolean importData() {
         //Get CSV data from all 3 log files
+        logger.info("Importing Data From CSV Files");
         CsvReader cr = new CsvReader(clicksFile, impressionsFile, serverFile);
         this.users = cr.getUsers();
         this.clickCost = getClicks().mapToDouble(Pair::getValue).sum();
-
+        logger.info("Done Importing Data From CSV Files!");
         if (users.size() == 0) {
-            Controller.sendErrorMessage("There has been an error with processing the data!");
             return false;
         }
         return true;
+    }
+
+    public Stream<User> getUsers() {
+        if (this.predicate != null) {
+            return users != null ? users.values().stream().parallel().filter(this.predicate) : null;
+        } else {
+            return users != null ? users.values().stream().parallel() : null;
+        }
     }
 
     /**
@@ -51,7 +65,7 @@ public class Model {
      * @return stream of impressions
      */
     public Stream<Pair<LocalDateTime, Double>> getImpressions() {
-        return users != null ? users.values().stream().parallel().flatMap(u -> u.getImpressions().stream()) : null;
+        return users != null ? getUsers().flatMap(u -> u.getImpressions().stream()) : null;
     }
 
     /**
@@ -59,7 +73,7 @@ public class Model {
      * @return stream of click
      */
     public Stream<Pair<LocalDateTime, Double>> getClicks() {
-        return users != null ? users.values().stream().parallel().flatMap(u -> u.getClicks().stream()) : null;
+        return users != null ? getUsers().flatMap(u -> u.getClicks().stream()) : null;
     }
 
     /**
@@ -67,7 +81,7 @@ public class Model {
      * @return stream of servers
      */
     public Stream<Server> getServers() {
-        return users != null ? users.values().stream().parallel().flatMap(u -> u.getServers().stream()) : null;
+        return users != null ? getUsers().flatMap(u -> u.getServers().stream()) : null;
     }
 
     /**
@@ -127,7 +141,7 @@ public class Model {
   public Map<LocalDateTime, Double> loadNumberOfUniquesData() {
     Map<LocalDateTime, Double> numberOfUniquesByDate = new HashMap<>();
     users.values().forEach(user -> {
-      LocalDateTime dateTime = user.getClicks().get(0).getKey();
+      LocalDateTime dateTime = user.getImpressions().get(0).getKey();
       if (numberOfUniquesByDate.containsKey(dateTime)) {
         numberOfUniquesByDate.put(dateTime, numberOfUniquesByDate.get(dateTime) + 1.0);
       } else {
@@ -201,9 +215,11 @@ public class Model {
             Double clicks = clicksByDate.getOrDefault(date, 1.0);
             Double bounces = bounceByDate.getOrDefault(date, 0.0);
             Double bounceRate = bounces / clicks;
-            bounceByDate.put(date, bounceRate);
+            System.out.println(bounceRate);
+            bounceRateByDate.put(date, bounceRate);
         }
-        return bounceByDate;
+        System.out.println( "Testing: " + (double) this.bounces / metrics.get(1));
+        return bounceRateByDate;
     }
 
     /**
@@ -335,6 +351,26 @@ public class Model {
         return cptiByDate;
     }
 
+    protected Map<LocalDateTime, Double> loadData(int id, Predicate<User> predicate) {
+        this.predicate = predicate;
+        System.out.println(this.getUsers().count());
+        Map<LocalDateTime, Double> data;
+        switch (id) {
+            case 0 -> data = this.loadImpressionData();
+            case 1 -> data = this.loadClicksData();
+            case 2 -> data = this.loadBouncesData();
+            case 3 -> data = this.loadConversionData();
+            case 4 -> data = this.loadTotalCostData();
+            case 5 -> data = this.loadCTRData();
+            case 6 -> data = this.loadCPAData();
+            case 7 -> data = this.loadClickCostData();
+            case 8 -> data = this.loadCPTIData();
+            case 9 -> data = this.loadBounceRateData();
+            case 10 -> data = this.loadNumberOfUniquesData();
+            default -> data = new HashMap<>();
+        }
+        return data;
+    }
 
 
 
@@ -378,4 +414,7 @@ public class Model {
         return serverFile;
     }
 
+    public void setPredicate(Predicate<User> predicate) {
+        this.predicate = predicate;
+    }
 }
