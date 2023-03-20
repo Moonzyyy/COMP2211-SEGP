@@ -23,7 +23,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Model {
 
-  private static final Logger logger = LogManager.getLogger(Model.class);
+    private static final Logger logger = LogManager.getLogger(Model.class);
 
     private HashMap<Long, User> users;
 
@@ -138,18 +138,18 @@ public class Model {
         return (int) users.values().stream().parallel().filter(u -> u.getClicks().size() > 0).count();
     }
 
-  public Map<LocalDateTime, Double> loadNumberOfUniquesData() {
-    Map<LocalDateTime, Double> numberOfUniquesByDate = new HashMap<>();
-    users.values().forEach(user -> {
-      LocalDateTime dateTime = user.getImpressions().get(0).getKey();
-      if (numberOfUniquesByDate.containsKey(dateTime)) {
-        numberOfUniquesByDate.put(dateTime, numberOfUniquesByDate.get(dateTime) + 1.0);
-      } else {
-        numberOfUniquesByDate.put(dateTime, 1.0);
-      }
-    });
-    return numberOfUniquesByDate;
-  }
+    public Map<LocalDateTime, Double> loadNumberOfUniquesData() {
+        Map<LocalDateTime, Double> numberOfUniquesByDate = new HashMap<>();
+        users.values().forEach(user -> {
+            LocalDateTime dateTime = user.getImpressions().get(0).getKey();
+            if (numberOfUniquesByDate.containsKey(dateTime)) {
+                numberOfUniquesByDate.put(dateTime, numberOfUniquesByDate.get(dateTime) + 1.0);
+            } else {
+                numberOfUniquesByDate.put(dateTime, 1.0);
+            }
+        });
+        return numberOfUniquesByDate;
+    }
 
     /**
      * Counts every conversion from the server stream.

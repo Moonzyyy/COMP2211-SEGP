@@ -74,79 +74,77 @@ public class GraphModel {
   public void updateGraphGranularity(String timeChosen, Map<LocalDateTime, Double> incomingData) {
     var data = incomingData != null ? incomingData : this.data;
     this.dataSeries.clear();
-    if (!timeFilterVal.equals(timeChosen)) {
-      this.timeFilterVal = timeChosen;
-      switch (timeChosen) {
-        case "Hour" -> {
-          for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
-            LocalDateTime date = entry.getKey();
-            Hour hour = new Hour(date.getHour(), date.getDayOfMonth(), date.getMonthValue(),
-                date.getYear());
-            if (dataSeries.getDataItem(hour) == null) {
-              dataSeries.add(hour, entry.getValue());
-            } if(needDivisionForChangingTime)
+    this.timeFilterVal = timeChosen;
+    switch (timeChosen) {
+      case "Hour" -> {
+        for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
+          LocalDateTime date = entry.getKey();
+          Hour hour = new Hour(date.getHour(), date.getDayOfMonth(), date.getMonthValue(),
+                  date.getYear());
+          if (dataSeries.getDataItem(hour) == null) {
+            dataSeries.add(hour, entry.getValue());
+          } if(needDivisionForChangingTime)
+          {
+            dataSeries.update(hour, (dataSeries.getValue(hour).doubleValue() + entry.getValue()) / 2.0);
+          } else
+          {
+            dataSeries.update(hour, dataSeries.getValue(hour).doubleValue() + entry.getValue());
+          }
+        }
+      }
+      case "Day" -> {
+        for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
+          LocalDateTime date = entry.getKey();
+          Day day = new Day(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+          if (dataSeries.getDataItem(day) == null) {
+            dataSeries.add(day, entry.getValue());
+          } else {
+            if(needDivisionForChangingTime)
             {
-              dataSeries.update(hour, (dataSeries.getValue(hour).doubleValue() + entry.getValue()) / 2.0);
+              dataSeries.update(day, (dataSeries.getValue(day).doubleValue() + entry.getValue()) / 2.0);
             } else
             {
-              dataSeries.update(hour, dataSeries.getValue(hour).doubleValue() + entry.getValue());
+              dataSeries.update(day, dataSeries.getValue(day).doubleValue() + entry.getValue());
             }
+
           }
         }
-        case "Day" -> {
-          for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
-            LocalDateTime date = entry.getKey();
-            Day day = new Day(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
-            if (dataSeries.getDataItem(day) == null) {
-              dataSeries.add(day, entry.getValue());
-            } else {
-              if(needDivisionForChangingTime)
-              {
-                dataSeries.update(day, (dataSeries.getValue(day).doubleValue() + entry.getValue()) / 2.0);
-              } else
-              {
-                dataSeries.update(day, dataSeries.getValue(day).doubleValue() + entry.getValue());
-              }
-
+      }
+      /// TODO: 3/17/2023 check if this actually does it by week
+      case "Week" -> {
+        for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
+          LocalDateTime date = entry.getKey();
+          Date date1 = Date.from(date.toInstant(ZoneOffset.UTC));
+          Week week = new Week(date1);
+          if (dataSeries.getDataItem(week) == null) {
+            dataSeries.add(week, entry.getValue());
+          } else {
+            if(needDivisionForChangingTime)
+            {
+              dataSeries.update(week, (dataSeries.getValue(week).doubleValue() + entry.getValue()) / 2.0);
+            } else
+            {
+              dataSeries.update(week, dataSeries.getValue(week).doubleValue() + entry.getValue());
             }
+
           }
         }
-        /// TODO: 3/17/2023 check if this actually does it by week
-        case "Week" -> {
-          for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
-            LocalDateTime date = entry.getKey();
-            Date date1 = Date.from(date.toInstant(ZoneOffset.UTC));
-            Week week = new Week(date1);
-            if (dataSeries.getDataItem(week) == null) {
-              dataSeries.add(week, entry.getValue());
-            } else {
-              if(needDivisionForChangingTime)
-              {
-                dataSeries.update(week, (dataSeries.getValue(week).doubleValue() + entry.getValue()) / 2.0);
-              } else
-              {
-                dataSeries.update(week, dataSeries.getValue(week).doubleValue() + entry.getValue());
-              }
-
+      }
+      default -> {
+        for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
+          LocalDateTime date = entry.getKey();
+          Month month = new Month(date.getMonthValue(), date.getYear());
+          if (dataSeries.getDataItem(month) == null) {
+            dataSeries.add(month, entry.getValue());
+          } else {
+            if(needDivisionForChangingTime)
+            {
+              dataSeries.update(month, (dataSeries.getValue(month).doubleValue() + entry.getValue()) / 2.0);
+            } else
+            {
+              dataSeries.update(month, dataSeries.getValue(month).doubleValue() + entry.getValue());
             }
-          }
-        }
-        default -> {
-          for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
-            LocalDateTime date = entry.getKey();
-            Month month = new Month(date.getMonthValue(), date.getYear());
-            if (dataSeries.getDataItem(month) == null) {
-              dataSeries.add(month, entry.getValue());
-            } else {
-              if(needDivisionForChangingTime)
-              {
-                dataSeries.update(month, (dataSeries.getValue(month).doubleValue() + entry.getValue()) / 2.0);
-              } else
-              {
-                dataSeries.update(month, dataSeries.getValue(month).doubleValue() + entry.getValue());
-              }
 
-            }
           }
         }
       }

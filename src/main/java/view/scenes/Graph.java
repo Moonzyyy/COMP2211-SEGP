@@ -111,9 +111,9 @@ public class Graph extends AbstractScene {
 
     BorderPane.setMargin(topBar, new Insets(10, 10, 10, 10));
 
-    TimeSeries dataSeries = new TimeSeries("Impressions");
-    TimeSeriesCollection dataset = new TimeSeriesCollection();
-    dataset.addSeries(dataSeries);
+//    TimeSeries dataSeries = new TimeSeries("Impressions");
+//    TimeSeriesCollection dataset = new TimeSeriesCollection();
+//    dataset.addSeries(dataSeries);
 
     chart.getTitle().setPadding(0, 120, 0, 0);
     chart.getLegend().setPadding(0, 120, 0, 0);
