@@ -56,7 +56,7 @@ public class Controller {
    * @param newScene the new scene to be set
    */
   private void setCurrentScene(AbstractScene newScene) {
-    logger.log(logger.getLevel(), "Setting Scene: ");
+    logger.info("Setting Scene");
     stage.setScene(newScene.getScene());
     this.currentScene = newScene;
     stage.show();
