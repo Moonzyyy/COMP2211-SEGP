@@ -227,7 +227,12 @@ public class GraphModel {
       var ages = agePredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
       var contexts = contextPredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
       var incomes = incomePredicates.values().stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
-      var gender = malePredicate.isEnabled() ? malePredicate.getPredicate() : femalePredicate.getPredicate();
+      Predicate<User> gender = u -> true;
+      if (malePredicate.isEnabled()) {
+        gender = malePredicate.getPredicate();
+      } else if (femalePredicate.isEnabled()) {
+        gender = femalePredicate.getPredicate();
+      }
       return ages.and(contexts).and(incomes).and(gender);
     }
 
