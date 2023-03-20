@@ -3,6 +3,8 @@ package model;
 import core.segments.Age;
 import core.segments.Context;
 import core.segments.Income;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DateCell;
@@ -26,6 +28,8 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.Week;
 
 public class GraphModel {
+
+  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
   private final int id;
   private final TimeSeries dataSeries;
@@ -66,6 +70,7 @@ public class GraphModel {
     chart = ChartFactory.createTimeSeriesChart(title, xAxisName, yAxisName, this.dataSet, true,
         true, false);
     updateGraphGranularity("Day", this.data);
+
   }
 
   public LocalDateTime getStartDate() {
@@ -174,6 +179,9 @@ public class GraphModel {
             }
         });
 
+        Date startDate = dataSeries.getTimePeriod(0).getStart();
+        startDatePicker.setValue(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
         // set the minimum date of the second date picker to the selected date on the first date picker
         endDatePicker.setDayCellFactory(param -> new DateCell() {
             @Override
@@ -185,6 +193,10 @@ public class GraphModel {
                 }
             }
         });
+
+      Date endDate = dataSeries.getTimePeriod(dataSeries.getItemCount() - 1).getEnd();
+      endDatePicker.setValue(endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
     }
 
     public void updateDateFilters(LocalDate startDate, LocalDate endDate) {

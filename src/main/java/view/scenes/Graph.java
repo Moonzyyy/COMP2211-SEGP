@@ -103,6 +103,7 @@ public class Graph extends AbstractScene {
     compareButton.getStyleClass().add("button");
 
 
+
     topBar.getChildren().add(homeButton);
     Region spacer = new Region();
     HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -185,8 +186,6 @@ public class Graph extends AbstractScene {
     startDatePicker.getStyleClass().add("start-date-picker");
     endDatePicker.getStyleClass().add("end-date-picker");
 
-    startDatePicker.setValue(LocalDate.from(startDate).minusDays(14));
-    endDatePicker.setValue(LocalDate.from(startDate));
 
     timeFilter = new ComboBox<>();
     timeFilter.getItems().addAll("Hour", "Day", "Week", "Month");
