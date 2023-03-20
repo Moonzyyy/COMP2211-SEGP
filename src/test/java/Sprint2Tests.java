@@ -1,13 +1,29 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
+import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import model.*;
+
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Sprint2Tests {
 
+    private static Model model;
     @BeforeAll
     static void prep() {
         //Do not know filter class used yet
+        model = new Model();
+        model.setClicksFile(new File("src/test/TestData/clicks.csv"));
+        model.setImpressionsFile(new File("src/test/TestData/impressions.csv"));
+        model.setServerFile(new File("src/test/TestData/servers.csv"));
+        model.importData();
     }
 
     @Test
@@ -78,5 +94,29 @@ public class Sprint2Tests {
     @Test
     void UserStory19SM() {
         assertEquals(138095, 19, "Filtered for Social Media");
+    }
+    @Test
+    public void testTotalImpressions() {
+        assertEquals(13, model.totalImpressions(),"Tests if TotalImpressions counts properly");
+    }
+
+    @Test
+    public void testLoadImpressionData() {
+        Map<LocalDateTime,Double> impressionData = model.loadImpressionData();
+        assertEquals(12, impressionData.size(), "Testing if the output has the correct size");
+        assertEquals(1.0,impressionData.get(LocalDateTime.parse("2015-01-03T12:00")),"Checks if the data is mapped correctly");
+        assertEquals(2.0,impressionData.get(LocalDateTime.parse("2015-01-01T12:00")), "Checks if it calculates the data correctly");
+    }
+
+    @Test
+    public void testTotalClicks() {
+        assertEquals(12, model.totalClicks(),"Tests if TotalClicks counts properly");
+    }
+    @Test
+    public void testLoadClicksData() {
+        Map<LocalDateTime,Double> clicksData = model.loadClicksData();
+        assertEquals(12,clicksData.size(), "Testing if the output has the correct size");
+        assertEquals(1.0,clicksData.get(LocalDateTime.parse("2015-01-03T12:00")),"Checks if the data is mapped correctly");
+        assertEquals(2.0,clicksData.get(LocalDateTime.parse("2015-01-01T12:00")), "Checks if it calculates the data correctly");
     }
 }

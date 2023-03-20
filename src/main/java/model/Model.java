@@ -80,17 +80,17 @@ public class Model {
     }
 
     public Map<LocalDateTime, Double> loadImpressionData() {
-        Map<LocalDateTime, Double> impressionCostsByDate = new HashMap<>();
+        Map<LocalDateTime, Double> impressionsByDate = new HashMap<>();
         getImpressions().sequential().forEach(impression -> {
             LocalDateTime dateTime = impression.getKey();
-            Double impressionCost = impression.getValue();
-            if (impressionCostsByDate.containsKey(dateTime)) {
-                impressionCostsByDate.put(dateTime, impressionCostsByDate.get(dateTime) + 1.0);
+            Double impressions = impression.getValue();
+            if (impressionsByDate.containsKey(dateTime)) {
+                impressionsByDate.put(dateTime, impressionsByDate.get(dateTime) + 1.0);
             } else {
-                impressionCostsByDate.put(dateTime, impressionCost);
+                impressionsByDate.put(dateTime, impressions);
             }
         });
-        return impressionCostsByDate;
+        return impressionsByDate;
     }
 
 
