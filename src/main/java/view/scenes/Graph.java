@@ -28,6 +28,8 @@ import javafx.scene.layout.Region;
 import javax.swing.SwingUtilities;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
@@ -64,7 +66,6 @@ public class Graph extends AbstractScene {
    *
    * @param id the metric ID
    * @param chart the chart
-   * @param startDate the start date
    */
   public Graph(Integer id, JFreeChart chart) {
     super();
@@ -164,8 +165,6 @@ public class Graph extends AbstractScene {
       chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
       chartPanel.setZoomInFactor(1.0);
       chartPanel.setZoomOutFactor(1.0);
-
-
     });
     chart.getXYPlot().setDomainPannable(true);
     chart.getXYPlot().setRangePannable(true);

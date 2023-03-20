@@ -133,31 +133,26 @@ public class Controller {
             title = "Impressions Over Time";
             xAxisName = "Date";
             yAxisName = "Impressions";
-            needDivisionForChangeTime = false;
           }
           case 1 -> {
             title = "Clicks Over Time";
             xAxisName = "Date";
             yAxisName = "Clicks";
-            needDivisionForChangeTime = false;
           }
           case 2 -> {
             title = "Bounces Over Time";
             xAxisName = "Date";
             yAxisName = "Bounces";
-            needDivisionForChangeTime = false;
           }
           case 3 -> {
             title = "Conversions Over Time";
             xAxisName = "Date";
             yAxisName = "Conversions";
-            needDivisionForChangeTime = false;
           }
           case 4 -> {
             title = "Total Cost Over Time";
             xAxisName = "Date";
             yAxisName = "Click Costs";
-            needDivisionForChangeTime = false;
           }
           case 5 -> {
             title = "Click-Through-Rate Over Time";
@@ -193,7 +188,6 @@ public class Controller {
             title = "Uniques Over Time";
             xAxisName = "Date";
             yAxisName = "Uniques";
-            needDivisionForChangeTime = false;
           }
         }
         GraphModel gm = new GraphModel(model, title, xAxisName, yAxisName, finalI, needDivisionForChangeTime);
