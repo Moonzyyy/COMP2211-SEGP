@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
-import javafx.util.Pair;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 
@@ -29,9 +28,9 @@ import org.jfree.data.time.Week;
 public class GraphModel {
 
   private final int id;
-  private TimeSeries dataSeries;
-  private TimeSeriesCollection dataSet;
-  private Map<LocalDateTime, Double> data;
+  private final TimeSeries dataSeries;
+  private final TimeSeriesCollection dataSet;
+  private final Map<LocalDateTime, Double> data;
 
   public String timeFilterVal;
 
