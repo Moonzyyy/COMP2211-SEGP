@@ -23,6 +23,10 @@ public class Settings extends AbstractScene {
     createScene();
   }
 
+  /**
+   * Creates all the components of the scene, and adds them to the layout
+   * Scene which contains settings to change the software visually
+   */
   @Override
   public void createScene() {
     BorderPane settingsPane = new BorderPane();

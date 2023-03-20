@@ -34,54 +34,93 @@ public class Impression {
     setImpressionCost(input[6]);
   }
 
+  /**
+   * @return get the date
+   */
   public LocalDateTime getDate() {
     return date;
   }
 
+  /**
+   * @param date set the date
+   */
   public void setDate(LocalDateTime date) {
     this.date = date;
   }
 
+  /**
+   * @return get the user ID
+   */
   public String getUserId() {
     return userId;
   }
 
+  /**
+   * @param id set the user ID
+   */
   public void setUserId(String id) {
     this.userId = id;
   }
 
+  /**
+   * @return get the gender
+   */
   public Boolean getGender() {
     return gender;
   }
 
+  /**
+   * @param gender set the gender
+   */
   public void setGender(Boolean gender) {
     this.gender = gender;
   }
 
+  /**
+   * @return get the age
+   */
   public String getAge() {
     return age;
   }
 
+  /**
+   * @param age set the age
+   */
   public void setAge(String age) {
     this.age = age;
   }
 
+  /**
+   * @return get the income
+   */
   public String getIncome() {
     return income;
   }
 
+  /**
+   * @param income set the income
+   */
   public void setIncome(String income) {
     this.income = income;
   }
 
+  /**
+   * @return get context
+   */
   public String getContext() {
     return context;
   }
 
+  /**
+   * @param context set the context
+   */
   public void setContext(String context) {
     this.context = context;
   }
 
+  /**
+   * @return get the impression cost
+   */
   public Double getImpressionCost() {
     return impressionCost;
   }
@@ -93,8 +132,4 @@ public class Impression {
     this.impressionCost = Double.parseDouble(impressionCost);
   }
 
-//    @Override
-//    public String toString() {
-//        return "ID: " + getId() + "; Gender: " + getGender() + "; Age: " + getAge() + ";";
-//    }
 }

@@ -107,6 +107,13 @@ public class Import extends AbstractScene {
     scene.getStylesheets().add(getClass().getResource("/view/import.css").toExternalForm());
   }
 
+  /**
+   * @param clickDataBox
+   * @param clickDataLabel
+   * @param importClicksTooltip
+   * @param importClicks
+   * @param fileName
+   */
   private void importBoxFactory(VBox clickDataBox, Label clickDataLabel,
       Tooltip importClicksTooltip, Button importClicks, Text fileName) {
     importClicksTooltip.setShowDelay(javafx.util.Duration.millis(500));
@@ -117,34 +124,62 @@ public class Import extends AbstractScene {
     clickDataBox.getStyleClass().add("importBox");
   }
 
+  /**
+   * @return get back button
+   */
   public Button getBackButton() {
     return backButton;
   }
 
+  /**
+   * @return get the button for import Clicks
+   */
   public Button getImportClicks() {
     return importClicks;
   }
 
+  /**
+   * @return get the button for importing Impressions
+   */
   public Button getImportImpressions() {
     return importImpressions;
   }
 
+
+  /**
+   * @return get the button for importing Server Interactions
+   */
   public Button getImportServer() {
     return importServer;
   }
 
+  /**
+   * @return get the file chooser
+   */
   public FileChooser getFileChooser() {
     return fileChooser;
   }
 
+  /**
+   * @return get the load button
+   */
   public Button getLoadButton() {
     return loadButton;
   }
 
+  /**
+   * @return get the text containing the clicks file names
+   */
   public Text getClickFileName() {return clickFileName;}
 
+  /**
+   * @return get the text containing the impressions file name
+   */
   public Text getImpressionFileName() {return impressionFileName;}
 
+  /**
+   * @return get the text containing the server interactions file name
+   */
   public Text getServerFileName() {return serverFileName;}
 
 }

@@ -59,7 +59,14 @@ public class Graph extends AbstractScene {
   private CheckBox maleCheckBox;
   private CheckBox femaleCheckBox;
 
-  //  public Graph(Integer id, String title, String xAxisName, String yAxisName,
+
+  /**
+   * Class Constructor
+   *
+   * @param id the metric ID
+   * @param chart the chart
+   * @param startDate the start date
+   */
   public Graph(Integer id, JFreeChart chart, LocalDateTime startDate) {
     super();
     layout = new BorderPane();
@@ -86,15 +93,15 @@ public class Graph extends AbstractScene {
 
     var graphTitle = new Label("AdViz - Graph");
     graphTitle.getStyleClass().add("graphTitle");
-    //HBox.setHgrow(graphTitle, Priority.ALWAYS);
+
 
     printButton = new Button("Print");
     printButton.getStyleClass().add("button");
-//    HBox.setHgrow(printButton, Priority.ALWAYS);
+
 
     compareButton = new Button("Compare");
     compareButton.getStyleClass().add("button");
-//    HBox.setHgrow(compareButton, Priority.ALWAYS);
+
 
     topBar.getChildren().add(homeButton);
     Region spacer = new Region();
@@ -111,15 +118,11 @@ public class Graph extends AbstractScene {
 
     BorderPane.setMargin(topBar, new Insets(10, 10, 10, 10));
 
-//    TimeSeries dataSeries = new TimeSeries("Impressions");
-//    TimeSeriesCollection dataset = new TimeSeriesCollection();
-//    dataset.addSeries(dataSeries);
 
     chart.getTitle().setPadding(0, 120, 0, 0);
     chart.getLegend().setPadding(0, 120, 0, 0);
 
-    // Best way to style the chart unfortunately
-    // I recommend looking at the docs for JFreeChart to see what you can do
+
     SwingNode swingNode = new SwingNode();
     SwingUtilities.invokeLater(() -> {
       ChartPanel chartPanel = new ChartPanel(chart);
@@ -224,6 +227,10 @@ public class Graph extends AbstractScene {
 
   }
 
+
+  /**
+   * @param compareControl
+   */
   private void compareControlFactory(ComboBox<String> compareControl) {
     compareControl.getItems().addAll("No Filter", "Male", "Female");
     for (Age age : Age.values()) {
@@ -296,38 +303,65 @@ public class Graph extends AbstractScene {
 
   }
 
+  /**
+   * @return get home button
+   */
   public Button getHomeButton() {
     return homeButton;
   }
 
+  /**
+   * @return get print button
+   */
   public Button getPrintButton() {
     return printButton;
   }
 
+  /**
+   * @return get compare button
+   */
   public Button getCompareButton() {
     return compareButton;
   }
 
+  /**
+   * @return get the list of check boxes
+   */
   public ArrayList<CheckBox> getCheckboxes() {
     return checkboxes;
   }
 
+  /**
+   * @return get the date filter button
+   */
   public Button getDateFilterButton() {
     return dateFilterButton;
   }
 
+  /**
+   * @return get the box of time filters
+   */
   public ComboBox<String> getTimeFilter() {
     return timeFilter;
   }
 
+  /**
+   * @return get the start date picker
+   */
   public DatePicker getStartDatePicker() {
     return startDatePicker;
   }
 
+  /**
+   * @return get the end date picker
+   */
   public DatePicker getEndDatePicker() {
     return endDatePicker;
   }
 
+  /**
+   * @return
+   */
   public ComboBox<String> getCompareControl1() {
     return compareControl1;
   }
@@ -340,10 +374,16 @@ public class Graph extends AbstractScene {
     return compareControl3;
   }
 
+  /**
+   * @return get the male check box
+   */
   public CheckBox getMaleCheckBox() {
     return maleCheckBox;
   }
 
+  /**
+   * @return get the female check box
+   */
   public CheckBox getFemaleCheckBox() {
     return femaleCheckBox;
   }

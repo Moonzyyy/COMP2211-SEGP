@@ -111,14 +111,6 @@ public class CsvReader {
       }
     }
 
-    //DO NOT DELETE!!!!
-    /*private BufferedReader getReader(String filepath) throws FileNotFoundException {
-        //Can not be included in a jar file, might need to be re-used later on
-        File inputF = new File(filepath);
-        InputStream inputFS = new FileInputStream(inputF);
-        return new BufferedReader(new InputStreamReader(inputFS));
-    }*/
-
   /**
    * @param br the buffered reader containing the lines of the
    * @return
@@ -154,6 +146,9 @@ public class CsvReader {
         return result;
     }
 
+  /**
+   * @return the users
+   */
     public HashMap<Long,User> getUsers() {
         return users;
     }

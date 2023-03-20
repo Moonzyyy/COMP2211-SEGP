@@ -23,22 +23,29 @@ public class Server {
        String dateWithoutMS = input[0].substring(0, 13);
         LocalDateTime entry = LocalDateTime.parse(dateWithoutMS, formatter);
         setEntryDate(entry);
-//        setUserId(input[1]);
 
-      //really messed up method which we can fix later
         setTimeSpent(input[0], input[2]);
         setPagesViewed(input[3]);
         setConversion(input[4]);
     }
 
+  /**
+   * @return get the entry date
+   */
     public LocalDateTime getEntryDate() {
         return entryDate;
     }
 
+  /**
+   * @param date set the entry date
+   */
     public void setEntryDate(LocalDateTime date) {
         this.entryDate = date;
     }
 
+  /**
+   * @return get the amount of time user spent
+   */
     public int getTimeSpent() {
         return timeSpent;
     }
@@ -56,14 +63,23 @@ public class Server {
         }
     }
 
+  /**
+   * @return get the amount of pages viewed
+   */
     public int getPagesViewed() {
         return pagesViewed;
     }
 
+  /**
+   * @param pagesViewed set the amount of pages viewed
+   */
     public void setPagesViewed(String pagesViewed) {
         this.pagesViewed = Integer.parseInt(pagesViewed);
     }
 
+  /**
+   * @return get the conversion
+   */
     public boolean getConversion() {
         return conversion;
     }

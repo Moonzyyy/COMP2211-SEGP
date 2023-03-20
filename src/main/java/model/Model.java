@@ -116,6 +116,9 @@ public class Model {
         return (int) this.getClicks().count();
     }
 
+  /**
+   * @return load the click data by Date
+   */
     public Map<LocalDateTime, Double> loadClicksData() {
         Map<LocalDateTime, Double> clickCountsByDate = new HashMap<>();
         getClicks().sequential().forEach(click -> {
@@ -138,6 +141,9 @@ public class Model {
         return (int) users.values().stream().parallel().filter(u -> u.getClicks().size() > 0).count();
     }
 
+  /**
+   * @return load number of uniques by date
+   */
     public Map<LocalDateTime, Double> loadNumberOfUniquesData() {
         Map<LocalDateTime, Double> numberOfUniquesByDate = new HashMap<>();
         users.values().forEach(user -> {
@@ -159,6 +165,9 @@ public class Model {
         return (int) this.getServers().filter(Server::getConversion).count();
     }
 
+  /**
+   * @return load number of conversions by date
+   */
     public Map<LocalDateTime, Double> loadConversionData() {
         Map<LocalDateTime,Double> conversionsByDate = new HashMap<>();
         getServers().sequential().forEach(server -> {
@@ -184,6 +193,10 @@ public class Model {
         this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
         return this.bounces;
     }
+
+  /**
+   * @return load bounces by date
+   */
     public Map<LocalDateTime,Double> loadBouncesData() {
         Map<LocalDateTime, Double> bouncesByDate = new HashMap<>();
         getServers().sequential().forEach(server -> {
@@ -207,6 +220,9 @@ public class Model {
         return Double.parseDouble(df.format((double) this.bounces / metrics.get(1)));
     }
 
+  /**
+   * @return Load Bounce Rate by date
+   */
     public Map<LocalDateTime, Double> loadBounceRateData() {
         Map<LocalDateTime, Double> bounceRateByDate = new HashMap<>();
         Map<LocalDateTime, Double> clicksByDate = loadClicksData();
@@ -229,6 +245,9 @@ public class Model {
         return Double.parseDouble(df.format(this.clickCost + getImpressions().mapToDouble(Pair::getValue).sum()));
     }
 
+  /**
+   * @return Load the total cost by date
+   */
     public Map<LocalDateTime, Double> loadTotalCostData() {
         Map<LocalDateTime, Double> totalCostByDate = new HashMap<>();
         Map<LocalDateTime, Double> clickCountsByDate = loadClicksData();
@@ -261,6 +280,9 @@ public class Model {
         return Double.parseDouble(df.format(metrics.get(1) / metrics.get(0)));
     }
 
+  /**
+   * @return load the CTR by date
+   */
     public Map<LocalDateTime, Double> loadCTRData() {
         Map<LocalDateTime, Double> ctrByDate = new HashMap<>();
         Map<LocalDateTime, Double> impressionData = loadImpressionData();
@@ -285,7 +307,10 @@ public class Model {
         return Double.parseDouble(df.format(this.clickCost / metrics.get(1)));
     }
 
-    public Map<LocalDateTime, Double> loadClickCostData() {
+  /**
+   * @return load the cost per click by date
+   */
+    public Map<LocalDateTime, Double> loadCostPerClickData() {
         Map<LocalDateTime, Double> clickCostByDate = new HashMap<>();
         getClicks().sequential().forEach(click -> {
             LocalDateTime dateTime = click.getKey();
@@ -309,7 +334,10 @@ public class Model {
         return Double.parseDouble(df.format( metrics.get(4) / (double) metrics.get(3)));
     }
 
-    // TODO: 3/18/2023 Check if CPA would be total cost or 0 if conversion 0
+
+  /**
+   * @return load the CPA by date
+   */
     public Map<LocalDateTime, Double> loadCPAData() {
         Map<LocalDateTime, Double> cpaByDate = new HashMap<>();
         Map<LocalDateTime, Double> conversionData = loadConversionData();
@@ -335,6 +363,9 @@ public class Model {
         return Double.parseDouble(df.format((metrics.get(4) / (double) metrics.get(0) * 1000d)));
     }
 
+  /**
+   * @return load by CPTI by date
+   */
     public Map<LocalDateTime, Double> loadCPTIData() {
         Map<LocalDateTime, Double> cptiByDate = new HashMap<>();
         Map<LocalDateTime, Double> impressionData = loadImpressionData();
@@ -349,6 +380,11 @@ public class Model {
         return cptiByDate;
     }
 
+  /**
+   * @param id The ID of the data that will get returned
+   * @param predicate //Todo
+   * @return the data in a map containing the date and value
+   */
     protected Map<LocalDateTime, Double> loadData(int id, Predicate<User> predicate) {
         this.predicate = predicate;
         Map<LocalDateTime, Double> data;
@@ -360,7 +396,7 @@ public class Model {
             case 4 -> data = this.loadTotalCostData();
             case 5 -> data = this.loadCTRData();
             case 6 -> data = this.loadCPAData();
-            case 7 -> data = this.loadClickCostData();
+            case 7 -> data = this.loadCostPerClickData();
             case 8 -> data = this.loadCPTIData();
             case 9 -> data = this.loadBounceRateData();
             case 10 -> data = this.loadNumberOfUniquesData();

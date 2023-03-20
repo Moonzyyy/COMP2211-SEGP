@@ -26,6 +26,9 @@ public class Dashboard extends AbstractScene {
 
   private final BorderPane layout;
 
+  /**
+   * The Dashboard constructor
+   */
   public Dashboard() {
     super();
     layout = new BorderPane();
@@ -118,10 +121,16 @@ public class Dashboard extends AbstractScene {
     layout.setPrefHeight(scene.getHeight());
   }
 
+  /**
+   * @return get the dashboard components
+   */
   public DashboardComp getDashboardComp() {
     return (DashboardComp) layout.getCenter();
   }
 
+  /**
+   * @return get the back button
+   */
   public Button getBackButton(){
     return (Button) layout.getBottom();
   }

@@ -12,14 +12,23 @@ abstract public class AbstractScene {
   AbstractScene() {
   }
 
+  /**
+   * @return get the scene
+   */
   public Scene getScene() {
     return scene;
   }
 
+  /**
+   * @param scene set the scene
+   */
   public void setScene(Scene scene) {
     this.scene = scene;
   }
 
+  /**
+   * create the scene
+   */
   abstract void createScene();
 
 }

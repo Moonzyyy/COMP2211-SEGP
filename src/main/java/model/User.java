@@ -18,6 +18,12 @@ public class User {
   private final ArrayList<Pair<LocalDateTime, Double>> clicks;
   private final ArrayList<Server> servers;
   private Long id;
+
+
+  /**
+   * Male = True
+   * Female = False
+   */
   private Boolean gender;
   private Age age;
   private Context context;
@@ -39,82 +45,117 @@ public class User {
     setContext(input[5]);
   }
 
+  /**
+   * @return get the ID
+   */
   public Long getId() {
     return id;
   }
 
+  /**
+   * @param id set the ID
+   */
   public void setId(String id) {
     this.id = Long.parseLong(id);
   }
 
+  /**
+   * @return get the gender
+   */
   public Boolean getGender() {
     return gender;
   }
 
+  /**
+   * @param gender set the gender
+   */
   public void setGender(Boolean gender) {
     this.gender = gender;
   }
 
+  /**
+   * @return get the age
+   */
   public Age getAge() {
     return age;
   }
 
+  /**
+   * @param age set the age
+   */
   public void setAge(String age) {
     this.age = Age.valueOfLabel(age);
   }
 
+  /**
+   * @param income set the income
+   */
   public void setIncome(String income) {
     this.income = Income.valueOf(income.toUpperCase());
   }
 
+  /**
+   * @return get the income
+   */
   public Income getIncome() {
     return income;
   }
 
+  /**
+   * @return get the context
+   */
   public Context getContext() {
     return context;
   }
 
+  /**
+   * @param context set the context
+   */
   public void setContext(String context) {
     this.context = Context.valueOfLabel(context);
   }
 
+  /**
+   * @param impression add the impression into the list of impressions
+   */
   public void addImpression(Pair<LocalDateTime, Double> impression) {
     impressions.add(impression);
   }
 
+  /**
+   * @param click add the click into the list of clicks
+   */
   public void addClick(Pair<LocalDateTime, Double> click) {
     this.clicks.add(click);
   }
 
+  /**
+   * @param server add the server to the list of servers
+   */
   public void addServer(Server server) {
     servers.add(server);
   }
 
+  /**
+   * @return get the list of servers
+   */
   public ArrayList<Server> getServers() {
     return servers;
   }
 
+  /**
+   * @return get the list of impressions
+   */
   public ArrayList<Pair<LocalDateTime, Double>> getImpressions() {
     return impressions;
   }
 
+  /**
+   * @return get the list of clicks
+   */
   public ArrayList<Pair<LocalDateTime, Double>> getClicks() {
     return clicks;
   }
 
-//  @Override
-//  public boolean equals(Object o) {
-//    if (this == o) return true;
-//    if (o == null || getClass() != o.getClass()) return false;
-//
-//    User that = (User) o;
-//
-//    return id.equals(that.id);
-//  }
-//
-//  @Override
-//  public int hashCode() {
-//    return Long.hashCode(id);
-//  }
+
 }

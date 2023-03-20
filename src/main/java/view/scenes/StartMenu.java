@@ -16,7 +16,6 @@ public class StartMenu extends AbstractScene {
 
   public StartMenu() {
     super();
-//    createScene();
 
   }
 
@@ -54,14 +53,23 @@ public class StartMenu extends AbstractScene {
     scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
   }
 
+  /**
+   * @return get the Import button
+   */
   public Button getImportButton() {
     return this.importButton;
   }
 
+  /**
+   * @return get the Settings button
+   */
   public Button getSettingsButton() {
     return this.settingsButton;
   }
 
+  /**
+   * @return get the Resume Button
+   */
   public Button getResumeButton() {
     return this.resumeButton;
   }

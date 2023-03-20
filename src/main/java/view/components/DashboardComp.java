@@ -12,6 +12,11 @@ public class DashboardComp extends VBox {
 
   private final List<VBox> numberBoxes = new ArrayList<>();
 
+  /**
+   * Sets up the dashboard component by the amount of boxes per row, the total amount of boxes and making sure boxes don't clash
+   *
+   * @param scene The scene to setup the Dashboard Components in
+   */
   public DashboardComp(AbstractScene scene) {
     setAlignment(Pos.CENTER);
     setSpacing(20);

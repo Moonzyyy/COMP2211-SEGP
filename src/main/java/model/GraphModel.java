@@ -45,6 +45,14 @@ public class GraphModel {
   private FilterPredicate malePredicate;
   private FilterPredicate femalePredicate;
 
+  /**
+   * @param model take in the model class
+   * @param title title of the graph
+   * @param xAxisName the X axis of the graph
+   * @param yAxisName the Y axis of the graph
+   * @param id the ID of the graph
+   * @param needDivisionForChangingTime does the data need to have any division needed to show data correctly
+   */
   public GraphModel(Model model, String title, String xAxisName, String yAxisName, int id, boolean needDivisionForChangingTime) {
     this.id = id;
     this.model = model;
