@@ -87,6 +87,7 @@ public class GraphModel {
       case "Hour" -> fun = d -> new Hour(d.getHour(), d.getDayOfMonth(), d.getMonthValue(), d.getYear());
       case "Day" -> fun = d -> new Day(d.getDayOfMonth(), d.getMonthValue(), d.getYear());
       /// TODO: 3/17/2023 check if this actually does it by week
+      /// TODO: 3/20/2023 Def not doing what it's supposed to
       case "Week" ->
         fun = d -> {
           Date date1 = Date.from(d.toInstant(ZoneOffset.UTC));
