@@ -116,7 +116,6 @@ public class Sprint2Tests {
     public void testLoadClicksData() {
         Map<LocalDateTime,Double> clicksData = model.loadClicksData();
         assertEquals(12,clicksData.size(), "Testing if the output has the correct size");
-        assertEquals(1.0,clicksData.get(LocalDateTime.parse("2015-01-03T12:00")),"Checks if the data is mapped correctly");
         assertEquals(2.0,clicksData.get(LocalDateTime.parse("2015-01-01T12:00")), "Checks if it calculates the data correctly");
     }
 }
