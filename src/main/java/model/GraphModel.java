@@ -20,6 +20,7 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.*;
 
@@ -66,7 +67,6 @@ public class GraphModel {
     chart = ChartFactory.createTimeSeriesChart(title, xAxisName, yAxisName, this.dataSet, true,
             true, false);
     updateGraphData("Day", this.data);
-
   }
 
   /**
@@ -102,11 +102,9 @@ public class GraphModel {
       if (dataSeries.getDataItem(rtp) == null) {
         dataSeries.add(rtp, entry.getValue());
       } else {
-        if(needDivisionForChangingTime)
-        {
+        if (needDivisionForChangingTime) {
           dataSeries.update(rtp, (dataSeries.getValue(rtp).doubleValue() + entry.getValue()) / 2.0);
-        } else
-        {
+        } else {
           dataSeries.update(rtp, dataSeries.getValue(rtp).doubleValue() + entry.getValue());
         }
 
@@ -198,6 +196,9 @@ public class GraphModel {
       dataSet.addSeries(filteredSeries);
       currentStart = startDate;
       currentEnd = endDate;
+      XYPlot xyPlot = (XYPlot) chart.getPlot();
+      xyPlot.getDomainAxis().setAutoRange(true);
+      xyPlot.getRangeAxis().setAutoRange(true);
     }
   }
 
