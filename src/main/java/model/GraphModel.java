@@ -27,13 +27,13 @@ import org.jfree.data.time.*;
 public class GraphModel {
 
   private final int id;
-  private final TimeSeries dataSeries;
+  private TimeSeries dataSeries;
   private final TimeSeriesCollection dataSet;
   private Map<LocalDateTime, Double> data;
 
   public String timeFilterVal;
 
-  private final JFreeChart chart;
+  private JFreeChart chart;
 
   private final boolean needDivisionForChangingTime;
   private final Model model;
@@ -78,7 +78,7 @@ public class GraphModel {
     var data = incomingData != null ? incomingData : this.data;
     XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) chart.getXYPlot().getRenderer();
     renderer.setSeriesShapesVisible(0, !timeChosen.equals("Hour"));
-    this.dataSeries.clear();
+    dataSeries.clear();
     this.timeFilterVal = timeChosen;
     System.out.println(timeChosen);
 
@@ -110,7 +110,13 @@ public class GraphModel {
 
       }
     }
-    updateDateFilters(currentStart, currentEnd);
+    if (timeChosen.equals("Week")) {
+      LocalDate startDate = dataSeries.getTimePeriod(0).getStart().toInstant().atZone(ZoneOffset.UTC).toLocalDate();
+      LocalDate endDate = dataSeries.getTimePeriod(dataSeries.getItemCount() - 1).getStart().toInstant().atZone(ZoneOffset.UTC).toLocalDate();
+      updateDateFilters(startDate, endDate);
+    } else {
+      updateDateFilters(currentStart, currentEnd);
+    }
     this.data = data;
   }
 
@@ -194,8 +200,10 @@ public class GraphModel {
 
       dataSet.removeAllSeries();
       dataSet.addSeries(filteredSeries);
-      currentStart = startDate;
-      currentEnd = endDate;
+      if (!Objects.equals(this.timeFilterVal, "Week")) {
+        currentStart = startDate;
+        currentEnd = endDate;
+      }
       XYPlot xyPlot = (XYPlot) chart.getPlot();
       xyPlot.getDomainAxis().setAutoRange(true);
       xyPlot.getRangeAxis().setAutoRange(true);
