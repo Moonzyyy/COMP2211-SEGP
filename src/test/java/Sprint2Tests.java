@@ -16,19 +16,22 @@ import java.util.Map;
 public class Sprint2Tests {
 
     private static Model model;
+    private static GraphModel graphModel;
     @BeforeAll
     static void prep() {
-        //Do not know filter class used yet
         model = new Model();
-        model.setClicksFile(new File("src/test/TestData/clicks.csv"));
-        model.setImpressionsFile(new File("src/test/TestData/impressions.csv"));
-        model.setServerFile(new File("src/test/TestData/servers.csv"));
+        model.setClicksFile(new File("src/test/TestData/click_log.csv"));
+        model.setImpressionsFile(new File("src/test/TestData/impression_log.csv"));
+        model.setServerFile(new File("src/test/TestData/server_log.csv"));
         model.importData();
+        model.getMetrics();
     }
 
     @Test
     void UserStory18Au25() {
-        assertEquals(97050, 19, "Filtered for ages <24");
+        graphModel = new GraphModel(model, "Impression", "Date", "Impression", 0, false);
+        //add age filter
+        assertEquals(97050, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for ages <24");
     }
 
     @Test

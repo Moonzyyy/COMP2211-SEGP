@@ -29,6 +29,7 @@ public class GraphModel {
   private final int id;
   private TimeSeries dataSeries;
   private final TimeSeriesCollection dataSet;
+
   private Map<LocalDateTime, Double> data;
 
   public String timeFilterVal;
@@ -293,4 +294,9 @@ public class GraphModel {
     }
     return ages.and(contexts).and(incomes).and(gender);
   }
+
+  public Map<LocalDateTime, Double> getData() {
+    return data;
+  }
+
 }
