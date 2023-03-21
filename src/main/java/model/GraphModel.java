@@ -28,7 +28,7 @@ public class GraphModel {
   private final int id;
   private final TimeSeries dataSeries;
   private final TimeSeriesCollection dataSet;
-  private final Map<LocalDateTime, Double> data;
+  private Map<LocalDateTime, Double> data;
 
   public String timeFilterVal;
 
@@ -80,6 +80,7 @@ public class GraphModel {
     renderer.setSeriesShapesVisible(0, !timeChosen.equals("Hour"));
     this.dataSeries.clear();
     this.timeFilterVal = timeChosen;
+    System.out.println(timeChosen);
 
 
     Function<LocalDateTime, RegularTimePeriod> fun;
@@ -112,6 +113,7 @@ public class GraphModel {
       }
     }
     updateDateFilters(currentStart, currentEnd);
+    this.data = data;
   }
 
   /**
@@ -263,7 +265,7 @@ public class GraphModel {
         }
       }
     }
-    this.updateGraphData("Day", model.loadData(id, this.combinePredicates()));
+    this.updateGraphData(this.timeFilterVal, model.loadData(id, this.combinePredicates()));
   }
 
   /**
