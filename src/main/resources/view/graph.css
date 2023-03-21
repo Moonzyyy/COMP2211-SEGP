@@ -72,6 +72,7 @@
 /* Set background color for CheckBox when selected */
 .check-box:selected {
   -fx-background-color: #ffffff;
+  -fx-opacity: 0.85;
 }
 
 .check-box:selected > .text {

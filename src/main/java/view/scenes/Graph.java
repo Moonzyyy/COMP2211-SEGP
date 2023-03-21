@@ -3,6 +3,7 @@ package view.scenes;
 import core.segments.Age;
 import core.segments.Context;
 import core.segments.Income;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.time.LocalDate;
@@ -59,6 +60,8 @@ public class Graph extends AbstractScene {
 
   private CheckBox maleCheckBox;
   private CheckBox femaleCheckBox;
+
+  private ChartPanel chartPanel;
 
 
   /**
@@ -125,7 +128,7 @@ public class Graph extends AbstractScene {
 
     SwingNode swingNode = new SwingNode();
     SwingUtilities.invokeLater(() -> {
-      ChartPanel chartPanel = new ChartPanel(chart);
+      chartPanel = new ChartPanel(chart);
       chartPanel.getChart().setBackgroundPaint(new Color(18, 18, 18));
       chart.getTitle().setPaint(Color.WHITE);
       chart.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
@@ -149,6 +152,7 @@ public class Graph extends AbstractScene {
 
       chartPanel.getChart().getXYPlot().getRenderer()
           .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
+      chartPanel.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
       swingNode.setContent(chartPanel);
 
       chartPanel.getChart().getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
@@ -297,6 +301,10 @@ public class Graph extends AbstractScene {
     this.checkboxes.forEach(c -> c.getStyleClass().add("checkbox"));
     layout.setRight(compareList);
 
+  }
+
+  public ChartPanel getChart() {
+    return chartPanel;
   }
 
   /**

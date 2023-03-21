@@ -3,14 +3,14 @@ package core;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import model.GraphModel;
 import model.Model;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import view.components.DashboardComp;
 import view.scenes.AbstractScene;
 import view.scenes.Dashboard;
@@ -26,6 +26,7 @@ public class Controller {
   private final Model model;
   private AbstractScene currentScene;
   private Stage stage;
+
   /**
    * The constructor of the controller.
    *
@@ -38,6 +39,7 @@ public class Controller {
 
   /**
    * Pops up an alert to the user
+   *
    * @param message send the error message that you want to show the user
    */
   public static void sendErrorMessage(String message) {
@@ -190,7 +192,8 @@ public class Controller {
             yAxisName = "Uniques";
           }
         }
-        GraphModel gm = new GraphModel(model, title, xAxisName, yAxisName, finalI, needDivisionForChangeTime);
+        GraphModel gm = new GraphModel(model, title, xAxisName, yAxisName, finalI,
+            needDivisionForChangeTime);
         setUpScene(new Graph(finalI, gm.getChart()), gm);
       });
     }
@@ -227,13 +230,10 @@ public class Controller {
       model.setPredicate(null);
       setUpScene(new Dashboard());
     });
-
-    graphScene.getCompareButton().setOnAction((event) -> {
-      System.out.print("Compare button pressed");
-    });
-
+    // Creates a print job, works for physical printers, not PDFs
     graphScene.getPrintButton().setOnAction((event) -> {
-      System.out.print("Print button pressed");
+//      graphScene.getChart().createChartPrintJob();
+
     });
 
     graphModel.configureDatePickers(graphScene.getStartDatePicker(), graphScene.getEndDatePicker(),
