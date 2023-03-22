@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import core.segments.Age;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -93,7 +94,7 @@ public class Model {
             if (impressionsByDate.containsKey(dateTime)) {
                 impressionsByDate.put(dateTime, impressionsByDate.get(dateTime) + 1.0);
             } else {
-                impressionsByDate.put(dateTime, impressions);
+                impressionsByDate.put(dateTime, 1.0);
             }
         });
         return impressionsByDate;
@@ -165,8 +166,7 @@ public class Model {
         getServers().sequential().forEach(server -> {
             LocalDateTime dateTime = server.getEntryDate();
             if (server.getConversion() && conversionsByDate.containsKey(dateTime)) {
-                Double count = conversionsByDate.get(dateTime);
-                conversionsByDate.put(dateTime, count+1);
+                conversionsByDate.put(dateTime, conversionsByDate.get(dateTime) + 1);
             } else if (server.getConversion()) {
                 conversionsByDate.put(dateTime, 1.0);
             }
@@ -194,8 +194,7 @@ public class Model {
         getServers().sequential().forEach(server -> {
             LocalDateTime dateTime = server.getEntryDate();
             if (!server.getConversion() && bouncesByDate.containsKey(dateTime)) {
-                Double count = bouncesByDate.get(dateTime);
-                bouncesByDate.put(dateTime, count+1);
+                bouncesByDate.put(dateTime, bouncesByDate.get(dateTime) + 1);
             } else if (!server.getConversion()) {
                 bouncesByDate.put(dateTime, 1.0);
             }
