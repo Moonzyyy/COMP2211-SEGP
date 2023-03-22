@@ -286,6 +286,16 @@ public class GraphModel {
     this.updateGraphData(this.timeFilterVal, model.loadData(id, this.combinePredicates()));
   }
 
+  public void resetFilters() {
+    agePredicates.forEach((key, fp) -> fp.setEnabled(false));
+    contextPredicates.forEach((key, fp) -> fp.setEnabled(false));
+    incomePredicates.forEach((key, fp) -> fp.setEnabled(false));
+    agePredicates.get(0).setEnabled(true);
+    contextPredicates.get(0).setEnabled(true);
+    incomePredicates.get(0).setEnabled(true);
+    this.updateGraphData(this.timeFilterVal, model.loadData(id, this.combinePredicates()));
+  }
+
   /**
    * Combine the lists of predicates for filtering by audience segments
    * @return The combined list of predicates - "and"-ed together

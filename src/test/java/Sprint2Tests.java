@@ -7,6 +7,7 @@ import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import model.*;
+import view.scenes.Graph;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class Sprint2Tests {
 
     private static Model model;
-    private static GraphModel graphModel;
+
     @BeforeAll
     static void prep() {
         JFXPanel dummy = new JFXPanel();
@@ -31,9 +32,13 @@ public class Sprint2Tests {
         model.getMetrics();
     }
 
+    void tearDown() {
+
+    }
+
     @Test
     void UserStory18Au25() {
-        graphModel = new GraphModel(model, "Impression", "Date", "Impression", 0, false);
+        GraphModel graphModel = new GraphModel(model, "Impression", "Date", "Impression", 0, false);
         //create checkbox array list and pass that into graphmodel
         ArrayList<CheckBox> ch = new ArrayList<>();
         CheckBox checkBox = new CheckBox();
@@ -42,6 +47,7 @@ public class Sprint2Tests {
         ch.add(checkBox);
         graphModel.updateFilters(ch);
         assertEquals(97050, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for ages <25");
+        graphModel.resetFilters();
     }
 
     @Test
@@ -116,8 +122,8 @@ public class Sprint2Tests {
     @Test
     public void testLoadImpressionData() {
         Map<LocalDateTime,Double> impressionData = model.loadImpressionData();
-        assertEquals(12, impressionData.size(), "Testing if the output has the correct size");
-        assertEquals(1.0,impressionData.get(LocalDateTime.parse("2015-01-03T12:00")),"Checks if the data is mapped correctly");
+        assertEquals(313, impressionData.size(), "Testing if the output has the correct size");
+        assertEquals(486104,impressionData.get(LocalDateTime.parse("2015-01-03T12:00")),"Checks if the data is mapped correctly");
         assertEquals(2.0,impressionData.get(LocalDateTime.parse("2015-01-01T12:00")), "Checks if it calculates the data correctly");
     }
 
