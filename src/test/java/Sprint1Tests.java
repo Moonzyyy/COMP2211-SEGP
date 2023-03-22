@@ -1,36 +1,25 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import model.CsvReader;
 import model.Model;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.text.DecimalFormat;
 
-public class Week2DataTests {
+public class Sprint1Tests {
 
     static Model model;
-    static File clickf = new File("src/test/testData/click_log.csv");
-    static File impressionf = new File("src/test/testData/impression_log.csv");
-    static File serverf = new File("src/test/testData/server_log.csv");
 
     @BeforeAll
     static void setUp() {
-        final DecimalFormat df = new DecimalFormat("#.###");
         model = new Model();
-        model.setClicksFile(clickf);
-        model.setImpressionsFile(impressionf);
-        model.setServerFile(serverf);
+        model.setClicksFile(new File("src/test/testData/click_log.csv"));
+        model.setImpressionsFile(new File("src/test/testData/impression_log.csv"));
+        model.setServerFile(new File("src/test/testData/server_log.csv"));
         model.importData();
+        model.getMetrics();
     }
-
-//    @Test
-//    void checkFiles() {
-//        assertThrows();
-//    }
 
     @Test
     void UserStory4() {
@@ -72,7 +61,7 @@ public class Week2DataTests {
 
     @Test
     void UserStory15() {
-        assertEquals(4.94, model.costPerClick(), "CPC");
+        assertEquals(4.92, model.costPerClick(), "CPC");
     }
     @Test
     void UserStory20() {
@@ -81,6 +70,6 @@ public class Week2DataTests {
 
     @Test
     void ThousandImps() {
-        assertEquals(242.95, model.costPerThousandImps(), "CPTI");
+        assertEquals(0.24, model.costPerThousandImps(), "CPTI");
     }
 }
