@@ -2,6 +2,13 @@
     -fx-background-color: #171515;
 }
 
+.title {
+    -fx-padding: 100 0 0 0;
+    -fx-font-size: 100px;
+    -fx-font-family: "Roboto";
+    -fx-text-fill: #f2e9e4;
+}
+
 .button {
     -fx-background-color: #4c4c4c;
     -fx-text-fill: #ffffff;

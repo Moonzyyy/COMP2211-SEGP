@@ -87,7 +87,7 @@ public class Settings extends AbstractScene {
     controls.setSpacing(20);
     settingsPane.setCenter(controls);
 
-    backButton = new Button("<");
+    backButton = new Button("Back");
     backButton.getStyleClass().add("backButton");
     settingsPane.setBottom(backButton);
     BorderPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
