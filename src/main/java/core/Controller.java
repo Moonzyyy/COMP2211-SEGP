@@ -1,6 +1,7 @@
 package core;
 
 import java.io.File;
+import java.util.List;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -114,9 +115,9 @@ public class Controller {
     dashboard.createScene();
     this.setCurrentScene(dashboard);
 
-//    List<String> metrics = model.getMetrics();
+    List<String> metrics = model.getMetrics();
     DashboardComp dashboardComp = dashboard.getDashboardComp();
-//    dashboardComp.updateNumberBoxes(metrics);
+    dashboardComp.updateNumberBoxes(metrics);
 
     //Button action listeners
     dashboard.getBackButton().setOnAction((event) -> {
