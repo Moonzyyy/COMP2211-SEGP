@@ -1,5 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import core.segments.Age;
+import javafx.scene.control.CheckBox;
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -30,7 +32,13 @@ public class Sprint2Tests {
     @Test
     void UserStory18Au25() {
         graphModel = new GraphModel(model, "Impression", "Date", "Impression", 0, false);
-        //add age filter
+        //create checkbox array list and pass that into graphmodel
+        ArrayList<CheckBox> ch = new ArrayList<>();
+        CheckBox checkBox = new CheckBox();
+        checkBox.setId("age_1");
+        checkBox.setSelected(true);
+        ch.add(checkBox);
+        graphModel.updateFilters(ch);
         assertEquals(97050, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for ages <24");
     }
 
