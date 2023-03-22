@@ -293,6 +293,8 @@ public class GraphModel {
     agePredicates.get(0).setEnabled(true);
     contextPredicates.get(0).setEnabled(true);
     incomePredicates.get(0).setEnabled(true);
+    malePredicate.setEnabled(false);
+    femalePredicate.setEnabled(false);
     this.updateGraphData(this.timeFilterVal, model.loadData(id, this.combinePredicates()));
   }
 
