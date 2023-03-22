@@ -90,7 +90,7 @@ public class Import extends AbstractScene {
     loadButton.getStyleClass().add("button");
 
 
-    backButton = new Button("<");
+    backButton = new Button("Back");
     backButton.getStyleClass().add("backButton");
 
     var spacer = new Region();

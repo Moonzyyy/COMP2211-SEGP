@@ -35,12 +35,10 @@
     -fx-font-size: 23px;
 }
 
-.title {
+.loading {
     -fx-font-size: 100px;
     -fx-font-family: "Roboto";
     -fx-text-fill: #f2e9e4;
-    -fx-padding: 100 0 0 0;
-
 }
 
 .root {

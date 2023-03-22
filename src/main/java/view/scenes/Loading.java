@@ -23,12 +23,10 @@ public class Loading extends AbstractScene {
    */
   public void createScene() {
     Label loadingLabel = new Label("Loading...");
-    loadingLabel.getStyleClass().add("title");
+    loadingLabel.getStyleClass().add("loading");
 
     var loadingPane = new StackPane();
     loadingPane.getChildren().add(loadingLabel);
-    loadingLabel.setTranslateX(-loadingLabel.getWidth()/2 );
-    loadingLabel.setTranslateY(-loadingLabel.getHeight()/2 );
     StackPane.setAlignment(loadingPane, Pos.CENTER);
     scene = new Scene(loadingPane, 1280, 720);
     scene.getStylesheets().add(
