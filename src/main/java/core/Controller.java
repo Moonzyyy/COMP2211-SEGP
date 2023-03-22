@@ -253,6 +253,7 @@ public class Controller {
 
     graphScene.getTimeFilter().setOnAction(event -> {
       graphModel.updateGraphData(graphScene.getTimeFilter().getValue(), null);
+      graphScene.getChart().restoreAutoBounds();
     });
 
     // compareController listener
