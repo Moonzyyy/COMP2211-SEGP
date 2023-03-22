@@ -108,11 +108,12 @@ public class Import extends AbstractScene {
   }
 
   /**
-   * @param clickDataBox
-   * @param clickDataLabel
-   * @param importClicksTooltip
-   * @param importClicks
-   * @param fileName
+   * Creates the box for the import buttons
+   * @param clickDataBox - the box to add the elements to
+   * @param clickDataLabel - the label for the box
+   * @param importClicksTooltip - the tooltip for the import button
+   * @param importClicks - the import button
+   * @param fileName - the text to show the file name
    */
   private void importBoxFactory(VBox clickDataBox, Label clickDataLabel,
       Tooltip importClicksTooltip, Button importClicks, Text fileName) {

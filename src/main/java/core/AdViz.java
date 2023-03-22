@@ -1,7 +1,10 @@
 package core;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import model.Model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,39 +16,44 @@ import view.scenes.StartMenu;
 public class AdViz extends Application {
 
   private static final Logger logger = LogManager.getLogger(AdViz.class);
-    private final Model theModel;
-    private final Controller theController;
+  private final Model theModel;
+  private final Controller theController;
 
   /**
    * Creates model and controller class, passing the model class through controller.
    */
-    public AdViz() {
-      logger.info("Starting AdViz");
-        this.theModel = new Model();
+  public AdViz() {
+    logger.info("Starting AdViz");
+    this.theModel = new Model();
 //        this.theView = new AppView();
-        this.theController = new Controller(theModel);
+    this.theController = new Controller(theModel);
 //        this.theView.setController(theController);
-    }
+  }
 
-    /**
-     * The main method of the application.
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch();
-    }
+  /**
+   * The main method of the application.
+   *
+   * @param args the command line arguments
+   */
+  public static void main(String[] args) {
+    launch();
+  }
 
-    /**
-     * The start method of the application.
-     * @param stage the stage of the application
-     * @throws Exception if an exception occurs
-     */
-    @Override
-    public void start(Stage stage) throws Exception {
-        stage.setTitle("AdViz");
-        StartMenu sm = new StartMenu();
-        theController.setStage(stage);
-        theController.setUpScene(sm);
-//        this.theController.setHandler((StartMenu) theView.getCurrentScene());
-    }
+  /**
+   * The start method of the application.
+   *
+   * @param stage the stage of the application
+   * @throws Exception if an exception occurs
+   */
+  @Override
+  public void start(Stage stage) throws Exception {
+    stage.setTitle("AdViz");
+    StartMenu sm = new StartMenu();
+    theController.setStage(stage);
+    theController.setUpScene(sm);
+    stage.setOnCloseRequest(t -> {
+      Platform.exit();
+      System.exit(0);
+    });
+  }
 }
