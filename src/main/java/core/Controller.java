@@ -294,8 +294,6 @@ public class Controller {
         graphScene.getMaleCheckBox().setSelected(false);
       }
     });
-
-
   }
 
 
