@@ -101,9 +101,8 @@ public class Graph extends AbstractScene {
     printButton.getStyleClass().add("button");
 
 
-    compareButton = new Button("Compare");
+    compareButton = new Button("Filter");
     compareButton.getStyleClass().add("button");
-
 
 
     topBar.getChildren().add(homeButton);
@@ -193,6 +192,9 @@ public class Graph extends AbstractScene {
     timeFilter.setValue("Day");
     timeFilter.getStyleClass().add("time-filter");
 
+    dateFilterButton = new Button("Apply");
+    dateFilterButton.setDisable(true);
+
     compareControl1 = new ComboBox<>();
     compareControl1.setStyle("-fx-background-color: #FFFFFF");
     compareControl2 = new ComboBox<>();
@@ -206,17 +208,16 @@ public class Graph extends AbstractScene {
     compareControlFactory(compareControl2);
     compareControlFactory(compareControl3);
 
-    dateFilterButton = new Button("Filter");
-    dateFilterButton.setDisable(true);
-
     var compareSpacer = new Region();
     compareSpacer.setPadding(new Insets(0, 0, 0, 20));
     var compareSpacer2 = new Region();
     HBox.setHgrow(compareSpacer2, Priority.ALWAYS);
 
     filterBar.getChildren()
-        .addAll(compareControl1, compareControl2, compareControl3, compareSpacer, timeFilter,
-            startDatePicker, endDatePicker, dateFilterButton, compareSpacer2, new Label(""));
+        .addAll(timeFilter,startDatePicker, endDatePicker, dateFilterButton);
+//    filterBar.getChildren()
+//        .addAll(compareControl1, compareControl2, compareControl3, compareSpacer, timeFilter,
+//            startDatePicker, endDatePicker, dateFilterButton, compareSpacer2, new Label(""));
 
     createCheckBoxes();
 
