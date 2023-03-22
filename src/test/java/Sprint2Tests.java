@@ -41,7 +41,7 @@ public class Sprint2Tests {
         checkBox.setSelected(true);
         ch.add(checkBox);
         graphModel.updateFilters(ch);
-        assertEquals(97050, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for ages <24");
+        assertEquals(97050, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for ages <25");
     }
 
     @Test
