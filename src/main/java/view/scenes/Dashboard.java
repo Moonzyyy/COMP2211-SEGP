@@ -9,13 +9,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.Shadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import view.components.DashboardComp;
 
@@ -24,14 +23,22 @@ import view.components.DashboardComp;
  */
 public class Dashboard extends AbstractScene {
 
+  private final StackPane root;
   private final BorderPane layout;
+  private VBox menuBar;
+  private boolean menuOpen = false;
+  private DashboardComp dashboardComp;
+  private Button backButton;
 
   /**
    * The Dashboard constructor
    */
   public Dashboard() {
     super();
+    root = new StackPane();
+    root.setAlignment(Pos.BOTTOM_LEFT);
     layout = new BorderPane();
+//    root.getChildren().add(layout);
   }
 
   /**
@@ -44,26 +51,36 @@ public class Dashboard extends AbstractScene {
     titleLabel.getStyleClass().add("title");
     layout.setTop(titleBox);
 
-    var dashboard = new DashboardComp(this);
-    dashboard.getStyleClass().add("dashboardComp");
-    layout.setCenter(dashboard);
+    dashboardComp = new DashboardComp(this);
+    dashboardComp.getStyleClass().add("dashboardComp");
+    var inner = new BorderPane();
+    inner.setCenter(dashboardComp);
+    var wrapper = new StackPane(inner);
+    layout.setCenter(wrapper);
+    wrapper.setAlignment(Pos.BOTTOM_LEFT);
 
-    var backButton = new Button("<");
+    backButton = new Button("<");
     backButton.getStyleClass().add("backButton");
 
+
+
     // Sliding Menu Pane
-    var menuBar = new VBox();
+    menuBar = new VBox();
     menuBar.getStyleClass().add("menu");
     VBox.setVgrow(menuBar, Priority.ALWAYS);
     VBox.setMargin(menuBar, new Insets(20, 0, 30, 0));
-    menuBar.setPrefWidth(200);
-    layout.setLeft(null);
+    menuBar.setMaxWidth(350);
+    System.out.println(menuBar.getWidth());
+    wrapper.getChildren().add(menuBar);
+//    menuBar.setEffect(new Shadow(1, new Color(1.0, 1.0, 1.0, 0.3)));
+
+//    layout.setLeft(null);
 
     // Placeholder for menu items
     var menuPlaceholder = new Label("Dev Text");
     menuPlaceholder.getStyleClass().add("text");
     menuBar.getChildren().addAll(menuPlaceholder);
-    menuBar.setAlignment(Pos.CENTER);
+    menuBar.setAlignment(Pos.BOTTOM_LEFT);
 
     // Menu Button
     var menuButton = new Button();
@@ -81,20 +98,21 @@ public class Dashboard extends AbstractScene {
     // Menu Animation
     var menuTransition = new TranslateTransition(Duration.millis(200), menuBar);
     menuButton.setOnAction(e -> {
-      if (layout.getLeft() == null) {
+      if (menuOpen) {
+        menuTransition.setToX(-menuBar.getWidth());
+        menuTransition.setFromX(0);
+        menuTransition.setOnFinished(evt -> layout.setLeft(null));
+        menuTransition.play();
+      } else {
         menuTransition.setToX(0);
         menuTransition.setFromX(-200);
         menuTransition.setOnFinished(evt -> {
           menuBar.translateXProperty().set(0);
         });
         menuTransition.play();
-        layout.setLeft(menuBar);
-      } else {
-        menuTransition.setToX(-menuBar.getWidth());
-        menuTransition.setFromX(0);
-        menuTransition.setOnFinished(evt -> layout.setLeft(null));
-        menuTransition.play();
+//        layout.setLeft(menuBar);
       }
+      menuOpen = !menuOpen;
     });
 
     // Title box positioning
@@ -110,10 +128,10 @@ public class Dashboard extends AbstractScene {
     titleBox.getStyleClass().add("titleBox");
 
     BorderPane.setMargin(backButton, new Insets(20, 0, 10, 10));
-    BorderPane.setMargin(titleBox, new Insets(10, 0, 20, 10));
+    BorderPane.setMargin(titleBox, new Insets(10, 0, 0, 10));
     BorderPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
-    BorderPane.setAlignment(dashboard, Pos.CENTER);
-    layout.setBottom(backButton);
+    BorderPane.setAlignment(dashboardComp, Pos.CENTER);
+    inner.setBottom(backButton);
 
     scene = new Scene(layout, 1280, 720);
     scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
@@ -121,20 +139,22 @@ public class Dashboard extends AbstractScene {
     layout.setPrefHeight(scene.getHeight());
   }
 
+  public void postShowEdits() {
+    menuBar.setTranslateX(-menuBar.getWidth());
+  }
+
   /**
    * @return get the dashboard components
    */
   public DashboardComp getDashboardComp() {
-    return (DashboardComp) layout.getCenter();
+    return this.dashboardComp;
   }
 
   /**
    * @return get the back button
    */
   public Button getBackButton(){
-    return (Button) layout.getBottom();
+    return this.backButton;
   }
-
-
 
 }

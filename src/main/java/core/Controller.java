@@ -2,7 +2,7 @@ package core;
 
 import java.io.File;
 import java.util.List;
-import java.util.Objects;
+
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
@@ -70,6 +70,7 @@ public class Controller {
     stage.setScene(newScene.getScene());
     this.currentScene = newScene;
     stage.show();
+    newScene.postShowEdits();
   }
 
   /**

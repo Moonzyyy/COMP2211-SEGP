@@ -31,4 +31,6 @@ abstract public class AbstractScene {
    */
   abstract void createScene();
 
+  public void postShowEdits() {
+  }
 }
