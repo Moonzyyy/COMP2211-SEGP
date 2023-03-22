@@ -61,7 +61,6 @@ public class CsvReader {
         BufferedReader sReader = new BufferedReader(new InputStreamReader(serverPath));
         columnsChecker = sReader.readLine().replace(" ", "");
         if (!columnsChecker.equals("EntryDate,ID,ExitDate,PagesViewed,Conversion")) {
-          System.out.println(columnsChecker);
           Controller.sendErrorMessage(
               "Error! CSV file put into Server does not have the correct columns!"
                   + "\nColumns Needed: EntryDate,ID,ExitDate,PagesViewed,Conversion"

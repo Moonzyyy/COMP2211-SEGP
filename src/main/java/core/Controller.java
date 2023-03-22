@@ -257,34 +257,6 @@ public class Controller {
       graphScene.getChart().restoreAutoBounds();
     });
 
-    // compareController listener
-//    graphScene.getCompareControl1().setOnAction(event -> {
-//      if (!Objects.equals(graphScene.getCompareControl1().getValue(), "No Filter")) {
-//        graphScene.getCompareControl2().setVisible(true);
-//      } else {
-//        graphScene.getCompareControl2().setVisible(false);
-//        graphScene.getCompareControl2().setValue("No Filter");
-//        graphScene.getCompareControl3().setVisible(false);
-//        graphScene.getCompareControl3().setValue("No Filter");
-//      }
-//    });
-//
-//    graphScene.getCompareControl2().setOnAction(event -> {
-//      if (!Objects.equals(graphScene.getCompareControl2().getValue(), "No Filter")) {
-//        graphScene.getCompareControl3().setVisible(true);
-//      } else {
-//        graphScene.getCompareControl3().setVisible(false);
-//        graphScene.getCompareControl3().setValue("No Filter");
-//      }
-//      if (!graphScene.getCompareControl3().isVisible()) {
-//        graphScene.getCompareControl3().setVisible(false);
-//      }
-//    });
-//
-//    graphScene.getCompareControl3().setOnAction(event -> {
-//      System.out.println("Compare Control 3: " + graphScene.getCompareControl3().getValue());
-//    });
-
     //Checkbox listeners
     graphScene.getMaleCheckBox().setOnAction(event -> {
       if (graphScene.getFemaleCheckBox().isSelected()) {

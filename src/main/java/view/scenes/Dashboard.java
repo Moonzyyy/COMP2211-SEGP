@@ -70,11 +70,7 @@ public class Dashboard extends AbstractScene {
     VBox.setVgrow(menuBar, Priority.ALWAYS);
     VBox.setMargin(menuBar, new Insets(20, 0, 30, 0));
     menuBar.setMaxWidth(350);
-    System.out.println(menuBar.getWidth());
     wrapper.getChildren().add(menuBar);
-//    menuBar.setEffect(new Shadow(1, new Color(1.0, 1.0, 1.0, 0.3)));
-
-//    layout.setLeft(null);
 
     // Placeholder for menu items
     var menuPlaceholder = new Label("Dev Text");

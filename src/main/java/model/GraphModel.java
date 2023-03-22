@@ -81,15 +81,11 @@ public class GraphModel {
     renderer.setSeriesShapesVisible(0, !timeChosen.equals("Hour"));
     dataSeries.clear();
     this.timeFilterVal = timeChosen;
-    System.out.println(timeChosen);
-
 
     Function<LocalDateTime, RegularTimePeriod> fun;
     switch (timeChosen) {
       case "Hour" -> fun = d -> new Hour(d.getHour(), d.getDayOfMonth(), d.getMonthValue(), d.getYear());
       case "Day" -> fun = d -> new Day(d.getDayOfMonth(), d.getMonthValue(), d.getYear());
-      /// TODO: 3/17/2023 check if this actually does it by week
-      /// TODO: 3/20/2023 Def not doing what it's supposed to
       case "Week" ->
         fun = d -> {
           Date date1 = Date.from(d.toInstant(ZoneOffset.UTC));
@@ -97,6 +93,7 @@ public class GraphModel {
         };
       default -> fun = d -> new Month(d.getMonthValue(), d.getYear());
     }
+
     for (Map.Entry<LocalDateTime, Double> entry : data.entrySet()) {
       LocalDateTime date = entry.getKey();
       RegularTimePeriod rtp = fun.apply(date);
@@ -111,13 +108,8 @@ public class GraphModel {
 
       }
     }
-//    if (timeChosen.equals("Week")) {
-//      LocalDate startDate = dataSeries.getTimePeriod(0).getStart().toInstant().atZone(ZoneOffset.UTC).toLocalDate();
-//      LocalDate endDate = dataSeries.getTimePeriod(dataSeries.getItemCount() - 1).getStart().toInstant().atZone(ZoneOffset.UTC).toLocalDate();
-//      updateDateFilters(startDate, endDate);
-//    } else {
       updateDateFilters(currentStart, currentEnd);
-//    }
+
     this.data = data;
   }
 
@@ -211,7 +203,6 @@ public class GraphModel {
         Week endWeek = new Week(java.sql.Date.valueOf(endDate));
         for (int i = 0; i < dataSeries.getItemCount(); i++) {
           RegularTimePeriod compWeek = dataSeries.getDataItem(i).getPeriod();
-          System.out.println(compWeek);
           if (compWeek.compareTo(startWeek) >= 0 && compWeek.compareTo(endWeek) <= 0) {
             filteredSeries.add(dataSeries.getDataItem(i));
           }

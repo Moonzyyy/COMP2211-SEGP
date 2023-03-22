@@ -215,9 +215,6 @@ public class Graph extends AbstractScene {
 
     filterBar.getChildren()
         .addAll(timeFilter,startDatePicker, endDatePicker, dateFilterButton);
-//    filterBar.getChildren()
-//        .addAll(compareControl1, compareControl2, compareControl3, compareSpacer, timeFilter,
-//            startDatePicker, endDatePicker, dateFilterButton, compareSpacer2, new Label(""));
 
     createCheckBoxes();
 
@@ -251,8 +248,6 @@ public class Graph extends AbstractScene {
    * Creates the checkboxes for the filter bar
    */
   void createCheckBoxes() {
-    //TODO: Add a "select all" checkbox for each category, and a select all for all categories
-    //TODO: Fix alignment of everything
 
     compareList = new ListView<>();
 

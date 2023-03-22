@@ -21,7 +21,8 @@ public class Model {
     private final ArrayList<Double> metrics = new ArrayList<>(11);
 
     private int bounces;
-    private final DecimalFormat df = new DecimalFormat("#.###");
+    private final DecimalFormat df3 = new DecimalFormat("#.###");
+  private final DecimalFormat df2 = new DecimalFormat("#.##");
     private double clickCost;
     private File clicksFile;
     private File impressionsFile;
@@ -208,7 +209,7 @@ public class Model {
      * @return the bounce rate in 3 d.p.
      */
     public double bounceRate() {
-        return Double.parseDouble(df.format((double) this.bounces / metrics.get(1)));
+        return Double.parseDouble(df3.format((double) this.bounces / metrics.get(1)));
     }
 
   /**
@@ -230,10 +231,10 @@ public class Model {
     /**
      * Calculates the total cost.
      * This is calculated by adding click and impression cost.
-     * @return the total cost in 3 d.p.
+     * @return the total cost in 2 d.p.
      */
     public double totalCost() {
-        return Double.parseDouble(df.format(this.clickCost + getImpressions().mapToDouble(Pair::getValue).sum()));
+        return Double.parseDouble(df2.format(this.clickCost + getImpressions().mapToDouble(Pair::getValue).sum()));
     }
 
   /**
@@ -268,7 +269,7 @@ public class Model {
      * @return the click-through-rate in 3 d.p.
      */
     public Double clickThroughRate() {
-        return Double.parseDouble(df.format(metrics.get(1) / metrics.get(0)));
+        return Double.parseDouble(df3.format(metrics.get(1) / metrics.get(0)));
     }
 
   /**
@@ -292,10 +293,10 @@ public class Model {
      * Calculates the cost-per-click, which is the average amount
      * of money spent on the campaign for each click.
      * This is calculated by dividing click cost by total clicks.
-     * @return the cost-per-click in 3 d.p.
+     * @return the cost-per-click in 2 d.p.
      */
     public Double costPerClick() {
-        return Double.parseDouble(df.format(this.clickCost / metrics.get(1)));
+        return Double.parseDouble(df2.format(this.clickCost / metrics.get(1)));
     }
 
   /**
@@ -319,10 +320,10 @@ public class Model {
      * Calculates the cost-per-acquisition, which is the average amount
      * of money spent for each acquisition (also known as conversion).
      * This is calculated by dividing the total cost by number of conversions.
-     * @return the cost-per-acquisition in 3 d.p.
+     * @return the cost-per-acquisition in 2 d.p.
      */
     public Double costPerAcquisition() {
-        return Double.parseDouble(df.format( metrics.get(4) / (double) metrics.get(3)));
+        return Double.parseDouble(df2.format( metrics.get(4) / (double) metrics.get(3)));
     }
 
 
@@ -347,11 +348,11 @@ public class Model {
      * Calculates the cost-per-thousand-impressions, which is the
      * average amount of money spent for every thousand impressions.
      * This is calculated by dividing the total cost by number of impressions x1000.
-     * @return the cost-per-thousand-impressions in 3 d.p.
+     * @return the cost-per-thousand-impressions in 2 d.p.
      */
     public Double costPerThousandImps()
     {
-        return Double.parseDouble(df.format((metrics.get(4) / (double) metrics.get(0) * 1000d)));
+        return Double.parseDouble(df2.format((metrics.get(4) / (double) metrics.get(0) * 1000d)));
     }
 
   /**
@@ -373,7 +374,7 @@ public class Model {
 
   /**
    * @param id The ID of the data that will get returned
-   * @param predicate //Todo
+   * @param predicate what we use for filtering
    * @return the data in a map containing the date and value
    */
     protected Map<LocalDateTime, Double> loadData(int id, Predicate<User> predicate) {

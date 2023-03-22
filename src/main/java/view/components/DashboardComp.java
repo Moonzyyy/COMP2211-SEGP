@@ -100,9 +100,6 @@ public class DashboardComp extends VBox {
     numberBox.setPrefWidth(USE_COMPUTED_SIZE);
     numberBox.setPrefHeight(USE_COMPUTED_SIZE);
 
-    numberBox.setOnMouseClicked(e -> {
-      System.out.println("Button:" + text + " clicked");
-    });
 
     return numberBox;
   }
