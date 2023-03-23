@@ -139,12 +139,14 @@ public class Model {
    */
     public Map<LocalDateTime, Double> loadNumberOfUniquesData() {
         Map<LocalDateTime, Double> numberOfUniquesByDate = new HashMap<>();
-        users.values().forEach(user -> {
-            LocalDateTime dateTime = user.getImpressions().get(0).getKey();
-            if (numberOfUniquesByDate.containsKey(dateTime)) {
-                numberOfUniquesByDate.put(dateTime, numberOfUniquesByDate.get(dateTime) + 1.0);
-            } else {
-                numberOfUniquesByDate.put(dateTime, 1.0);
+        getUsers().forEach(user -> {
+            if (user.getClicks().size() > 0) {
+                LocalDateTime dateTime = user.getClicks().get(0).getKey();
+                if (numberOfUniquesByDate.containsKey(dateTime)) {
+                    numberOfUniquesByDate.put(dateTime, numberOfUniquesByDate.get(dateTime) + 1.0);
+                } else {
+                    numberOfUniquesByDate.put(dateTime, 1.0);
+                }
             }
         });
         return numberOfUniquesByDate;
