@@ -8,6 +8,7 @@ import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import model.GraphModel;
+import model.HistogramModel;
 import model.Model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -195,7 +196,8 @@ public class Controller {
         }
         GraphModel gm = new GraphModel(model, title, xAxisName, yAxisName, finalI,
             needDivisionForChangeTime);
-        setUpScene(new Graph(finalI, gm.getChart()), gm);
+        HistogramModel histogramModel = new HistogramModel(title,xAxisName,yAxisName,finalI);
+        setUpScene(new Graph(finalI, gm.getChart(), histogramModel.getChart()), gm, histogramModel);
       });
     }
   }
@@ -222,7 +224,7 @@ public class Controller {
    *
    * @param graphScene the graph scene
    */
-  public void setUpScene(Graph graphScene, GraphModel graphModel) {
+  public void setUpScene(Graph graphScene, GraphModel graphModel, HistogramModel histogramModel) {
     graphScene.createScene();
     this.setCurrentScene(graphScene);
 
@@ -254,7 +256,7 @@ public class Controller {
 
     graphScene.getTimeFilter().setOnAction(event -> {
       graphModel.updateGraphData(graphScene.getTimeFilter().getValue(), null);
-      graphScene.getChart().restoreAutoBounds();
+      graphScene.getLineChart().restoreAutoBounds();
     });
 
     //Checkbox listeners

@@ -6,7 +6,6 @@ import core.segments.Income;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
@@ -16,12 +15,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -29,10 +23,7 @@ import javafx.scene.layout.Region;
 import javax.swing.SwingUtilities;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
+
 
 public class Graph extends AbstractScene {
 
@@ -53,7 +44,8 @@ public class Graph extends AbstractScene {
   private ComboBox<String> compareControl1;
   private ComboBox<String> compareControl2;
   private ComboBox<String> compareControl3;
-  private final JFreeChart chart;
+  private final JFreeChart lineChart;
+  private final JFreeChart histogram;
 
   private final DatePicker startDatePicker;
   private final DatePicker endDatePicker;
@@ -63,18 +55,22 @@ public class Graph extends AbstractScene {
 
   private ChartPanel chartPanel;
 
+  private boolean showLineGraph = true;
+
 
   /**
    * Class Constructor
    *
-   * @param id the metric ID
-   * @param chart the chart
+   * @param id        the metric ID
+   * @param lineChart     the lineChart
+   * @param histogram
    */
-  public Graph(Integer id, JFreeChart chart) {
+  public Graph(Integer id, JFreeChart lineChart, JFreeChart histogram) {
     super();
     layout = new BorderPane();
     metricId = id;
-    this.chart = chart;
+    this.lineChart = lineChart;
+    this.histogram = histogram;
     this.startDatePicker = new DatePicker();
     this.endDatePicker = new DatePicker();
   }
@@ -120,38 +116,65 @@ public class Graph extends AbstractScene {
 
     BorderPane.setMargin(topBar, new Insets(10, 10, 10, 10));
 
+    var filterBar = new HBox();
+    filterBar.setAlignment(Pos.CENTER);
+    filterBar.setPadding(new Insets(10, 10, 10, 10));
+    filterBar.setSpacing(10);
 
-    chart.getTitle().setPadding(0, 120, 0, 0);
-    chart.getLegend().setPadding(0, 120, 0, 0);
+    if (metricId == 4) {
+      ToggleButton toggleGraph = new ToggleButton("Histogram");
+      toggleGraph.setOnAction(event -> {
+        if (toggleGraph.isSelected()) {
+          toggleGraph.setText("Line Graph");
+          showLineGraph = false;
+          chartPanel.setChart(histogram);
+        } else {
+          toggleGraph.setText("Histogram");
+          showLineGraph = true;
+          chartPanel.setChart(lineChart);
+        }
+      });
+      toggleGraph.getStyleClass().add("button");
+      filterBar.getChildren().add(toggleGraph);
+    }
+
+    if (showLineGraph) {
+      lineChart.getTitle().setPadding(0, 120, 0, 0);
+      lineChart.getLegend().setPadding(0, 120, 0, 0);
+      chartPanel = new ChartPanel(lineChart);
+    } else {
+      histogram.getTitle().setPadding(0, 120, 0, 0);
+      histogram.getLegend().setPadding(0, 120, 0, 0);
+      chartPanel = new ChartPanel(histogram);
+    }
 
 
     SwingNode swingNode = new SwingNode();
     SwingUtilities.invokeLater(() -> {
-      chartPanel = new ChartPanel(chart);
-      chartPanel.getChart().setBackgroundPaint(new Color(18, 18, 18));
-      chart.getTitle().setPaint(Color.WHITE);
-      chart.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
-      chartPanel.getChart().getPlot().setBackgroundPaint(Color.DARK_GRAY);
-      chartPanel.getChart().getPlot().setOutlinePaint(Color.DARK_GRAY);
-      chartPanel.getChart().getXYPlot().getRenderer().setSeriesPaint(0, Color.WHITE);
-      chartPanel.getChart().getXYPlot().getDomainAxis().setAxisLinePaint(Color.WHITE);
-      chartPanel.getChart().getXYPlot().getDomainAxis().setTickLabelPaint(Color.WHITE);
-      chartPanel.getChart().getXYPlot().getDomainAxis().setLabelPaint(Color.WHITE);
-      chartPanel.getChart().getXYPlot().getDomainAxis()
-          .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
-      chartPanel.getChart().getXYPlot().getDomainAxis()
-          .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
-      chartPanel.getChart().getXYPlot().getRangeAxis().setAxisLinePaint(Color.WHITE);
-      chartPanel.getChart().getXYPlot().getRangeAxis().setTickLabelPaint(Color.WHITE);
-      chartPanel.getChart().getXYPlot().getRangeAxis().setLabelPaint(Color.WHITE);
-      chartPanel.getChart().getXYPlot().getRangeAxis()
-          .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
-      chartPanel.getChart().getXYPlot().getRangeAxis()
-          .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+        chartPanel.getChart().setBackgroundPaint(new Color(18, 18, 18));
+        lineChart.getTitle().setPaint(Color.WHITE);
+        lineChart.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
+        chartPanel.getChart().getPlot().setBackgroundPaint(Color.DARK_GRAY);
+        chartPanel.getChart().getPlot().setOutlinePaint(Color.DARK_GRAY);
+        chartPanel.getChart().getXYPlot().getRenderer().setSeriesPaint(0, Color.WHITE);
+        chartPanel.getChart().getXYPlot().getDomainAxis().setAxisLinePaint(Color.WHITE);
+        chartPanel.getChart().getXYPlot().getDomainAxis().setTickLabelPaint(Color.WHITE);
+        chartPanel.getChart().getXYPlot().getDomainAxis().setLabelPaint(Color.WHITE);
+        chartPanel.getChart().getXYPlot().getDomainAxis()
+                .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+        chartPanel.getChart().getXYPlot().getDomainAxis()
+                .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+        chartPanel.getChart().getXYPlot().getRangeAxis().setAxisLinePaint(Color.WHITE);
+        chartPanel.getChart().getXYPlot().getRangeAxis().setTickLabelPaint(Color.WHITE);
+        chartPanel.getChart().getXYPlot().getRangeAxis().setLabelPaint(Color.WHITE);
+        chartPanel.getChart().getXYPlot().getRangeAxis()
+                .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+        chartPanel.getChart().getXYPlot().getRangeAxis()
+                .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
 
-      chartPanel.getChart().getXYPlot().getRenderer()
-          .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
-      chartPanel.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
+        chartPanel.getChart().getXYPlot().getRenderer()
+                .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
+        chartPanel.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
       swingNode.setContent(chartPanel);
 
       chartPanel.getChart().getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
@@ -169,19 +192,14 @@ public class Graph extends AbstractScene {
       chartPanel.setZoomInFactor(1.0);
       chartPanel.setZoomOutFactor(1.0);
     });
-    chart.getXYPlot().setDomainPannable(true);
-    chart.getXYPlot().setRangePannable(true);
+    lineChart.getXYPlot().setDomainPannable(true);
+    lineChart.getXYPlot().setRangePannable(true);
 
     var graphContainer = new HBox();
     graphContainer.setAlignment(Pos.CENTER);
     graphContainer.setPadding(new Insets(10, 10, 10, 10));
     graphContainer.getChildren().add(swingNode);
     layout.setCenter(graphContainer);
-
-    var filterBar = new HBox();
-    filterBar.setAlignment(Pos.CENTER);
-    filterBar.setPadding(new Insets(10, 10, 10, 10));
-    filterBar.setSpacing(10);
 
     startDatePicker.getStyleClass().add("start-date-picker");
     endDatePicker.getStyleClass().add("end-date-picker");
@@ -299,7 +317,7 @@ public class Graph extends AbstractScene {
 
   }
 
-  public ChartPanel getChart() {
+  public ChartPanel getLineChart() {
     return chartPanel;
   }
 
