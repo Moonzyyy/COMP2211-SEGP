@@ -6,11 +6,15 @@ public class FilterPredicate {
     private boolean enabled = false;
     private Predicate<User> predicate;
 
-    FilterPredicate(Predicate<User> predicate) {
+    private final String code;
+
+    public FilterPredicate(String code, Predicate<User> predicate) {
+        this.code = code;
         this.predicate = predicate;
     }
 
-    FilterPredicate(Predicate<User> predicate, boolean enabled) {
+    public FilterPredicate(String code, Predicate<User> predicate, boolean enabled) {
+        this.code = code;
         this.predicate = predicate;
         this.enabled = enabled;
     }

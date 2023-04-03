@@ -1,17 +1,22 @@
 package core;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
+import core.segments.Age;
+import core.segments.Context;
+import core.segments.Income;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
-import model.GraphModel;
-import model.HistogramModel;
-import model.Model;
+import model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import view.components.CompareItem;
 import view.components.DashboardComp;
 import view.scenes.AbstractScene;
 import view.scenes.Dashboard;
@@ -129,68 +134,57 @@ public class Controller {
       int finalI = i;
       dashboardComp.getNumberBoxes().get(i).setOnMouseClicked((event) -> {
         String title = "";
-        String xAxisName = "";
+        String xAxisName = "Date";
         String yAxisName = "";
         boolean needDivisionForChangeTime = false;
         switch (finalI) {
           case 0 -> {
             title = "Impressions Over Time";
-            xAxisName = "Date";
             yAxisName = "Impressions";
           }
           case 1 -> {
             title = "Clicks Over Time";
-            xAxisName = "Date";
             yAxisName = "Clicks";
           }
           case 2 -> {
             title = "Bounces Over Time";
-            xAxisName = "Date";
             yAxisName = "Bounces";
           }
           case 3 -> {
             title = "Conversions Over Time";
-            xAxisName = "Date";
             yAxisName = "Conversions";
           }
           case 4 -> {
             title = "Total Cost Over Time";
-            xAxisName = "Date";
             yAxisName = "Click Costs";
           }
           case 5 -> {
             title = "Click-Through-Rate Over Time";
-            xAxisName = "Date";
             yAxisName = "Click-through-rate";
             needDivisionForChangeTime = true;
           }
           case 6 -> {
             title = "Cost-per-acquisition Over Time";
-            xAxisName = "Date";
             yAxisName = "Cost-per-acquisition";
             needDivisionForChangeTime = true;
           }
           case 7 -> {
             title = "Cost-per-click Over Time";
-            xAxisName = "Date";
             yAxisName = "Cost-per-click";
             needDivisionForChangeTime = true;
           }
           case 8 -> {
             title = "Cost-per-thousand impressions Over Time";
-            xAxisName = "Date";
             yAxisName = "Cost-per-thousand impressions";
             needDivisionForChangeTime = true;
           }
           case 9 -> {
             title = "Bounce Rate Over Time";
-            xAxisName = "Date";
             yAxisName = "Bounce Rate";
             needDivisionForChangeTime = true;
           }
           case 10 -> {
             title = "Uniques Over Time";
-            xAxisName = "Date";
             yAxisName = "Uniques";
           }
         }
@@ -225,6 +219,7 @@ public class Controller {
    * @param graphScene the graph scene
    */
   public void setUpScene(Graph graphScene, GraphModel graphModel, HistogramModel histogramModel) {
+    HashMap<String, Boolean> preds = initPredicates();
     graphScene.createScene();
     this.setCurrentScene(graphScene);
 
@@ -245,8 +240,6 @@ public class Controller {
     // Checkbox Listener
     // When the filter button is pressed, get all the currently selected filters
     // and update the graph
-    graphScene.getCompareButton()
-        .setOnAction((event) -> graphModel.updateFilters(graphScene.getCheckboxes()));
 
     graphScene.getDateFilterButton().setOnAction(e -> {
       graphModel.updateDateFilters(graphScene.getStartDatePicker().getValue(),
@@ -255,21 +248,79 @@ public class Controller {
     });
 
     graphScene.getTimeFilter().setOnAction(event -> {
-      graphModel.updateGraphData(graphScene.getTimeFilter().getValue(), null);
+      graphModel.updateGraphData(graphScene.getTimeFilter().getValue());
       graphScene.getLineChart().restoreAutoBounds();
     });
 
+    graphScene.getCheckboxes().forEach(box -> {
+      box.setOnAction(event -> {
+        var male = graphScene.getMaleCheckBox();
+        var female = graphScene.getFemaleCheckBox();
+        if (box.equals(male)) {
+          if (female.isSelected()) togglePred(preds, female);
+        } else if (box.equals(female)) {
+          if (male.isSelected()) togglePred(preds, male);
+        }
+        preds.replace(box.getId(), box.isSelected());
+      });
+    });
+
+    graphScene.getSegmentFilterButton().setOnAction((event) -> {
+      graphModel.setPredicates(graphModel.updateSegmentFilters(graphModel.getPredicates(), preds));
+      graphModel.updateGraphData();
+    });
+
+    graphScene.getCompareControl2().setOnAction(event -> {
+      graphModel.removeLine(1);
+      ComboBox<CompareItem> box = graphScene.getCompareControl2();
+      CompareItem item = box.getSelectionModel().getSelectedItem();
+      if (item.value() != null) {
+        HashMap<String, Boolean> tmp_preds = new HashMap<>(1);
+        tmp_preds.put(item.value(), true);
+        graphModel.newLine(item.label(), tmp_preds);
+      }
+    });
+
     //Checkbox listeners
-    graphScene.getMaleCheckBox().setOnAction(event -> {
-      if (graphScene.getFemaleCheckBox().isSelected()) {
-        graphScene.getFemaleCheckBox().setSelected(false);
-      }
-    });
-    graphScene.getFemaleCheckBox().setOnAction(event -> {
-      if (graphScene.getMaleCheckBox().isSelected()) {
-        graphScene.getMaleCheckBox().setSelected(false);
-      }
-    });
+//    graphScene.getMaleCheckBox().setOnAction(event -> {
+//      if (graphScene.getFemaleCheckBox().isSelected()) {
+//        graphScene.getFemaleCheckBox().setSelected(false);
+//      }
+//    });
+//    graphScene.getFemaleCheckBox().setOnAction(event -> {
+//      if (graphScene.getMaleCheckBox().isSelected()) {
+//        graphScene.getMaleCheckBox().setSelected(false);
+//      }
+//    });
+  }
+
+  private void togglePred(HashMap<String, Boolean> predicates, CheckBox box) {
+    box.setSelected(!box.isSelected());
+    predicates.replace(box.getId(), predicates.get(box.getId()));
+  }
+
+  /**
+   * Initialise the predicates used for filtering by audience segment.
+   */
+//  public ArrayList<ArrayList<FilterPredicate>> initPredicates() {
+  public HashMap<String, Boolean> initPredicates() {
+    HashMap<String, Boolean> predicates = new HashMap<>();
+    for (Age a : Age.values()) {
+      predicates.put("age_" + a.idx, false);
+    }
+
+    for (Context c : Context.values()) {
+      predicates.put("context_" + c.idx, false);
+    }
+
+    for (Income i : Income.values()) {
+      predicates.put("income_" + i.idx, false);
+    }
+
+    predicates.put("male_1", false);
+    predicates.put("female_1", false);
+
+    return predicates;
   }
 
 

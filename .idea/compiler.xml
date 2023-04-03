@@ -23,7 +23,6 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="cw" target="17" />
-      <module name="Group30" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

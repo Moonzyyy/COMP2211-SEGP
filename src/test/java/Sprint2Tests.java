@@ -1,23 +1,14 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import core.segments.Age;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.CheckBox;
-import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import model.*;
-import view.scenes.Graph;
 
 import java.io.File;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.chrono.ChronoLocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Sprint2Tests {
 
@@ -43,9 +34,9 @@ public class Sprint2Tests {
         checkBox.setId("age_1");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(97050, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for ages <25");
-        graphModel.resetFilters();
+        graphModel.setPredicates(graphModel.resetFilters());
     }
 
     @Test
@@ -57,7 +48,7 @@ public class Sprint2Tests {
         checkBox.setId("age_2");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(121984, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for ages 25-34");
         graphModel.resetFilters();
     }
@@ -71,7 +62,7 @@ public class Sprint2Tests {
         checkBox.setId("age_3");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(121774, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for ages 34-44");
         graphModel.resetFilters();
     }
@@ -85,7 +76,7 @@ public class Sprint2Tests {
         checkBox.setId("age_4");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(84324, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for ages 44-54");
         graphModel.resetFilters();
     }
@@ -99,7 +90,7 @@ public class Sprint2Tests {
         checkBox.setId("age_5");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(60972, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for ages >54");
         graphModel.resetFilters();
     }
@@ -113,7 +104,7 @@ public class Sprint2Tests {
         checkBox.setId("male_1");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(161469, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for males");
         graphModel.resetFilters();
     }
@@ -127,7 +118,7 @@ public class Sprint2Tests {
         checkBox.setId("female_1");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(324635, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for females");
         graphModel.resetFilters();
     }
@@ -141,7 +132,7 @@ public class Sprint2Tests {
         checkBox.setId("income_3");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(145948, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for low income");
         graphModel.resetFilters();
     }
@@ -155,7 +146,7 @@ public class Sprint2Tests {
         checkBox.setId("income_2");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(243050, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for middle income");
         graphModel.resetFilters();
     }
@@ -169,7 +160,7 @@ public class Sprint2Tests {
         checkBox.setId("income_1");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(97106, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for high income");
         graphModel.resetFilters();
     }
@@ -183,7 +174,7 @@ public class Sprint2Tests {
         checkBox.setId("context_4");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(69583, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for blogs");
         graphModel.resetFilters();
     }
@@ -197,7 +188,7 @@ public class Sprint2Tests {
         checkBox.setId("context_1");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(139170, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for news");
         graphModel.resetFilters();
     }
@@ -211,7 +202,7 @@ public class Sprint2Tests {
         checkBox.setId("context_2");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(139256, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for shopping");
         graphModel.resetFilters();
     }
@@ -243,7 +234,7 @@ public class Sprint2Tests {
         checkBox.setId("context_5");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(0, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for hobbies");
         graphModel.resetFilters();
     }
@@ -257,7 +248,7 @@ public class Sprint2Tests {
         checkBox.setId("context_6");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(0, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for travel");
         graphModel.resetFilters();
     }
@@ -271,7 +262,7 @@ public class Sprint2Tests {
         checkBox.setId("context_3");
         checkBox.setSelected(true);
         ch.add(checkBox);
-        graphModel.updateFilters(ch);
+        graphModel.updateSegmentFilters(ch);
         assertEquals(138095, graphModel.getData().values().stream().mapToDouble(d -> d).sum(), "Impressions filtered for social media");
         graphModel.resetFilters();
     }

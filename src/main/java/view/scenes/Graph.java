@@ -23,6 +23,7 @@ import javafx.scene.layout.Region;
 import javax.swing.SwingUtilities;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import view.components.CompareItem;
 
 
 public class Graph extends AbstractScene {
@@ -36,14 +37,14 @@ public class Graph extends AbstractScene {
   Map<LocalDateTime, Double> data;
   private Button homeButton;
   private Button printButton;
-  private Button compareButton;
+  private Button segmentFilterButton;
   private Button dateFilterButton;
   private ListView<Node> compareList;
   private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
   private ComboBox<String> timeFilter;
-  private ComboBox<String> compareControl1;
-  private ComboBox<String> compareControl2;
-  private ComboBox<String> compareControl3;
+  private ComboBox<CompareItem> compareControl1;
+  private ComboBox<CompareItem> compareControl2;
+  private ComboBox<CompareItem> compareControl3;
   private final JFreeChart lineChart;
   private final JFreeChart histogram;
 
@@ -97,8 +98,8 @@ public class Graph extends AbstractScene {
     printButton.getStyleClass().add("button");
 
 
-    compareButton = new Button("Filter");
-    compareButton.getStyleClass().add("button");
+    segmentFilterButton = new Button("Filter");
+    segmentFilterButton.getStyleClass().add("button");
 
 
     topBar.getChildren().add(homeButton);
@@ -110,7 +111,7 @@ public class Graph extends AbstractScene {
     HBox.setHgrow(spacer2, Priority.ALWAYS);
     topBar.getChildren().add(spacer2);
     topBar.getChildren().add(printButton);
-    topBar.getChildren().add(compareButton);
+    topBar.getChildren().add(segmentFilterButton);
 
     layout.setTop(topBar);
 
@@ -216,7 +217,7 @@ public class Graph extends AbstractScene {
     compareControl1 = new ComboBox<>();
     compareControl1.setStyle("-fx-background-color: #FFFFFF");
     compareControl2 = new ComboBox<>();
-    compareControl2.setVisible(false);
+    compareControl2.setVisible(true);
     compareControl2.setStyle("-fx-background-color: #1C7C54");
     compareControl3 = new ComboBox<>();
     compareControl3.setVisible(false);
@@ -232,7 +233,7 @@ public class Graph extends AbstractScene {
     HBox.setHgrow(compareSpacer2, Priority.ALWAYS);
 
     filterBar.getChildren()
-        .addAll(timeFilter,startDatePicker, endDatePicker, dateFilterButton);
+        .addAll(compareControl1, compareSpacer, compareControl2, compareSpacer2, compareControl3, timeFilter,startDatePicker, endDatePicker, dateFilterButton);
 
     createCheckBoxes();
 
@@ -247,19 +248,20 @@ public class Graph extends AbstractScene {
   /**
    * @param compareControl
    */
-  private void compareControlFactory(ComboBox<String> compareControl) {
-    compareControl.getItems().addAll("No Filter", "Male", "Female");
+  private void compareControlFactory(ComboBox<CompareItem> compareControl) {
+    CompareItem defaultItem = new CompareItem("Default", null);
+    compareControl.getItems().addAll(defaultItem, new CompareItem("Male", "male_1"), new CompareItem("Female", "female_1"));
     for (Age age : Age.values()) {
-      compareControl.getItems().add(age.label);
+      compareControl.getItems().add(new CompareItem(age.label, "age_" + age.idx));
     }
     for (Income income : Income.values()) {
-      compareControl.getItems().add(income.label);
+      compareControl.getItems().add(new CompareItem(income.label, "income_" + income.idx));
     }
     for (Context context : Context.values()) {
-      compareControl.getItems().add(context.label);
+      compareControl.getItems().add(new CompareItem(context.label, "context_" + context.idx));
     }
     compareControl.getStyleClass().add("time-filter");
-    compareControl.setValue("No Filter");
+    compareControl.setValue(defaultItem);
   }
 
   /**
@@ -338,8 +340,8 @@ public class Graph extends AbstractScene {
   /**
    * @return get compare button
    */
-  public Button getCompareButton() {
-    return compareButton;
+  public Button getSegmentFilterButton() {
+    return segmentFilterButton;
   }
 
   /**
@@ -380,15 +382,15 @@ public class Graph extends AbstractScene {
   /**
    * @return
    */
-  public ComboBox<String> getCompareControl1() {
+  public ComboBox<CompareItem> getCompareControl1() {
     return compareControl1;
   }
 
-  public ComboBox<String> getCompareControl2() {
+  public ComboBox<CompareItem> getCompareControl2() {
     return compareControl2;
   }
 
-  public ComboBox<String> getCompareControl3() {
+  public ComboBox<CompareItem> getCompareControl3() {
     return compareControl3;
   }
 
