@@ -68,7 +68,6 @@ public class GraphModel {
     if (selected != null) currentlySelected = selected;
     XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) chart.getXYPlot().getRenderer();
     this.timeFilterVal = timeChosen;
-    dataSet.removeAllSeries();
 
     lines.forEach((idx, line) -> {
       Map<String, FilterPredicate> adjustedPredicates = this.updateSegmentFilters(predicates, currentlySelected);
@@ -79,7 +78,7 @@ public class GraphModel {
         adjustedPredicates.putIfAbsent(linePredicate, predicate);
       }
       Map<LocalDateTime, Double> lineData = model.loadData(id, this.combinePredicates(adjustedPredicates));
-      dataSet.addSeries(line.updateLine(timeChosen, lineData));
+      line.updateLine(timeChosen, lineData);
       renderer.setSeriesShapesVisible(line.getId(), !timeChosen.equals("Hour"));
     });
     updateDateFilters(currentStart, currentEnd);
@@ -163,6 +162,7 @@ public class GraphModel {
    */
   public void updateDateFilters(LocalDate startDate, LocalDate endDate) {
     if (startDate != null && endDate != null) {
+      dataSet.removeAllSeries();
       lines.forEach((idx, line) -> {
         TimeSeries dataSeries = line.getDataSeries();
         // Create start and end Date objects with selected times
@@ -188,15 +188,14 @@ public class GraphModel {
           }
         }
 
-        dataSet.removeSeries(dataSeries);
-        line.setDataSeries(filteredSeries);
-        dataSet.addSeries(line.getDataSeries());
-        XYPlot xyPlot = (XYPlot) chart.getPlot();
-        xyPlot.getDomainAxis().setAutoRange(true);
-        xyPlot.getRangeAxis().setAutoRange(true);
-        currentStart = startDate;
-        currentEnd = endDate;
+        line.setFilteredSeries(filteredSeries);
+        dataSet.addSeries(filteredSeries);
       });
+      XYPlot xyPlot = (XYPlot) chart.getPlot();
+      xyPlot.getDomainAxis().setAutoRange(true);
+      xyPlot.getRangeAxis().setAutoRange(true);
+      currentStart = startDate;
+      currentEnd = endDate;
     }
   }
 

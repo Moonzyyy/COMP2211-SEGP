@@ -14,6 +14,7 @@ public class GraphLine {
     private final String basePredicate;
     private final int id;
     private TimeSeries dataSeries;
+    private TimeSeries filteredSeries;
     private final boolean divide;
     private final String title;
 
@@ -22,6 +23,7 @@ public class GraphLine {
         this.id = id;
         this.title = title;
         this.dataSeries = new TimeSeries(title);
+        this.filteredSeries = new TimeSeries(title);
         this.basePredicate = initialP;
         this.divide = needDivisionForChangingTime;
     }
@@ -71,6 +73,14 @@ public class GraphLine {
 
     public void setDataSeries(TimeSeries dataSeries) {
         this.dataSeries = dataSeries;
+    }
+
+    public TimeSeries getFilteredSeries() {
+        return filteredSeries;
+    }
+
+    public void setFilteredSeries(TimeSeries filteredSeries) {
+        this.filteredSeries = filteredSeries;
     }
 
     public String getBasePredicate() {
