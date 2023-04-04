@@ -11,18 +11,18 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class GraphLine {
-    private final Map<String, Boolean> basePredicates;
+    private final String basePredicate;
     private final int id;
     private TimeSeries dataSeries;
     private final boolean divide;
     private final String title;
 
 
-    GraphLine(int id, String title, boolean needDivisionForChangingTime, Map<String, Boolean> initialPs) {
+    GraphLine(int id, String title, boolean needDivisionForChangingTime, String initialP) {
         this.id = id;
         this.title = title;
         this.dataSeries = new TimeSeries(title);
-        this.basePredicates = initialPs;
+        this.basePredicate = initialP;
         this.divide = needDivisionForChangingTime;
     }
 
@@ -73,8 +73,8 @@ public class GraphLine {
         this.dataSeries = dataSeries;
     }
 
-    public Map<String, Boolean> getBasePredicates() {
-        return basePredicates;
+    public String getBasePredicate() {
+        return basePredicate;
     }
 
     public int getId() {

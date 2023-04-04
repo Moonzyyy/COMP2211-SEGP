@@ -248,7 +248,7 @@ public class Controller {
     });
 
     graphScene.getTimeFilter().setOnAction(event -> {
-      graphModel.updateGraphData(graphScene.getTimeFilter().getValue());
+      graphModel.updateGraphData(graphScene.getTimeFilter().getValue(), preds);
       graphScene.getLineChart().restoreAutoBounds();
     });
 
@@ -266,8 +266,7 @@ public class Controller {
     });
 
     graphScene.getSegmentFilterButton().setOnAction((event) -> {
-      graphModel.setPredicates(graphModel.updateSegmentFilters(graphModel.getPredicates(), preds));
-      graphModel.updateGraphData();
+      graphModel.updateGraphData(preds);
     });
 
     graphScene.getCompareControl2().setOnAction(event -> {
@@ -275,9 +274,7 @@ public class Controller {
       ComboBox<CompareItem> box = graphScene.getCompareControl2();
       CompareItem item = box.getSelectionModel().getSelectedItem();
       if (item.value() != null) {
-        HashMap<String, Boolean> tmp_preds = new HashMap<>(1);
-        tmp_preds.put(item.value(), true);
-        graphModel.newLine(item.label(), tmp_preds);
+        graphModel.newLine(item.label(), item.value());
       }
     });
 
@@ -296,7 +293,7 @@ public class Controller {
 
   private void togglePred(HashMap<String, Boolean> predicates, CheckBox box) {
     box.setSelected(!box.isSelected());
-    predicates.replace(box.getId(), predicates.get(box.getId()));
+    predicates.replace(box.getId(), box.isSelected());
   }
 
   /**

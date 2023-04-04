@@ -16,8 +16,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -27,18 +26,13 @@ public class GraphModel {
 
   private final int id;
   private final boolean divide;
-  private TimeSeries dataSeries;
-  private HashMap<Integer, GraphLine> lines;
+  private final HashMap<Integer, GraphLine> lines;
   private final TimeSeriesCollection dataSet;
-
-  private Map<LocalDateTime, Double> data;
-
   public String timeFilterVal;
-
-  private JFreeChart chart;
-
+  private final JFreeChart chart;
   private final Model model;
-  private Map<String, ArrayList<FilterPredicate>> predicates;
+  private Map<String, FilterPredicate> predicates;
+  private Map<String, Boolean> currentlySelected;
   private LocalDate currentStart;
   private LocalDate currentEnd;
 
@@ -55,31 +49,35 @@ public class GraphModel {
     this.model = model;
     this.predicates = initPredicates();
     this.lines = new HashMap<>(1);
-    this.data = model.loadData(id, null);
-    this.dataSeries = new TimeSeries(title);
     this.dataSet = new TimeSeriesCollection();
     this.timeFilterVal = "Day";
     this.divide = needDivisionForChangingTime;
     this.chart = ChartFactory.createTimeSeriesChart(title, xAxisName, yAxisName, this.dataSet, true,true, false);
-    this.newLine(title, new HashMap<>(0));
+    this.newLine(title, null);
   }
 
-  public void updateGraphData() {
-    this.updateGraphData(this.timeFilterVal);
+  public void updateGraphData(HashMap<String, Boolean> selected) {
+    this.updateGraphData(this.timeFilterVal, selected);
   }
   /**
    * Sets the data of the graph via time period
    *
    * @param timeChosen The time period to filter by
    */
-  public void updateGraphData(String timeChosen) {
+  public void updateGraphData(String timeChosen, HashMap<String, Boolean> selected) {
+    if (selected != null) currentlySelected = selected;
     XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) chart.getXYPlot().getRenderer();
     this.timeFilterVal = timeChosen;
     dataSet.removeAllSeries();
 
     lines.forEach((idx, line) -> {
-      Map<String, Boolean> linePredicates = line.getBasePredicates();
-      Map<String, ArrayList<FilterPredicate>> adjustedPredicates = this.updateSegmentFilters(predicates, linePredicates, false);
+      Map<String, FilterPredicate> adjustedPredicates = this.updateSegmentFilters(predicates, currentlySelected);
+      String linePredicate = line.getBasePredicate();
+      if (linePredicate != null) {
+        FilterPredicate predicate = predicates.get(linePredicate);
+        adjustedPredicates.remove(predicate.getGroup() + "_all");
+        adjustedPredicates.putIfAbsent(linePredicate, predicate);
+      }
       Map<LocalDateTime, Double> lineData = model.loadData(id, this.combinePredicates(adjustedPredicates));
       dataSet.addSeries(line.updateLine(timeChosen, lineData));
       renderer.setSeriesShapesVisible(line.getId(), !timeChosen.equals("Hour"));
@@ -87,17 +85,15 @@ public class GraphModel {
     updateDateFilters(currentStart, currentEnd);
   }
 
-  public void newLine(String title, boolean divide, HashMap<String, Boolean> initialPredicates) {
-    GraphLine line = new GraphLine(this.lines.size(), title, divide, initialPredicates);
-    Map<String, ArrayList<FilterPredicate>> basePredicates = this.updateSegmentFilters(this.initPredicates(), initialPredicates);
+  public void newLine(String title, boolean divide, String predicateCode) {
+    GraphLine line = new GraphLine(this.lines.size(), title, divide, predicateCode);
     dataSet.addSeries(line.getDataSeries());
-//    line.updateLine(this.timeFilterVal, data);
     lines.put(this.lines.size(), line);
-    updateGraphData();
+    updateGraphData(null);
   }
 
-  public void newLine(String title, HashMap<String, Boolean> initialPredicates) {
-    this.newLine(title, this.divide, initialPredicates);
+  public void newLine(String title, String predicateCode) {
+    this.newLine(title, this.divide, predicateCode);
   }
 
   /**
@@ -149,13 +145,6 @@ public class GraphModel {
         setDisable(start || item.isAfter(localEnd));
       }
     });
-  }
-
-  /**
-   * Convert LocalDate to Date
-   */
-  private LocalDate convertTimePeriod(RegularTimePeriod rtp) {
-    return rtp.getStart().toInstant().atZone(ZoneOffset.UTC).toLocalDate();
   }
 
   /**
@@ -214,36 +203,29 @@ public class GraphModel {
   /**
    * Initialise the predicates used for filtering by audience segment.
    */
-  public Map<String, ArrayList<FilterPredicate>> initPredicates() {
-    Map<String, ArrayList<FilterPredicate>> allPredicates = new HashMap<>(4);
-    ArrayList<FilterPredicate> agePredicates = new ArrayList<>(6);
-    ArrayList<FilterPredicate> contextPredicates = new ArrayList<>(7);
-    ArrayList<FilterPredicate> incomePredicates = new ArrayList<>(4);
-    ArrayList<FilterPredicate> genderPredicates = new ArrayList<>(2);
-    agePredicates.add(new FilterPredicate("AGE_ALL", u -> true, true));
+  public Map<String, FilterPredicate> initPredicates() {
+    currentlySelected = new HashMap<>();
+    Map<String, FilterPredicate> allPredicates = new HashMap<>(19);
+    allPredicates.put("age_all", new FilterPredicate("age", u -> true));
     for (Age a : Age.values()) {
       Predicate<User> p = u -> u.getAge() == a;
-      agePredicates.add(a.idx, new FilterPredicate(a.name(), p));
+      allPredicates.put("age_" + a.idx, new FilterPredicate("age", p));
     }
-    allPredicates.put("ages", agePredicates);
 
-    contextPredicates.add(new FilterPredicate("CONTEXT_ALL", u -> true, true));
+    allPredicates.put("context_all", new FilterPredicate( "context", u -> true));
     for (Context c : Context.values()) {
       Predicate<User> p = u -> u.getContext() == c;
-      contextPredicates.add(c.idx, new FilterPredicate(c.name(), p));
+      allPredicates.put("context_" + c.idx, new FilterPredicate("context", p));
     }
-    allPredicates.put("contexts", contextPredicates);
 
-    incomePredicates.add(new FilterPredicate("INCOME_ALL", u -> true, true));
+    allPredicates.put("income_all", new FilterPredicate( "income", u -> true));
     for (Income i : Income.values()) {
       Predicate<User> p = u -> u.getIncome() == i;
-      incomePredicates.add(i.idx, new FilterPredicate(i.name(), p));
+      allPredicates.put("income_" + i.idx, new FilterPredicate("income", p));
     }
-    allPredicates.put("incomes", incomePredicates);
 
-    genderPredicates.add(new FilterPredicate("MALE", User::getGender));
-    genderPredicates.add(new FilterPredicate("FEMALE", u -> !u.getGender()));
-    allPredicates.put("genders", genderPredicates);
+    allPredicates.put("male_1", new FilterPredicate("gender", User::getGender));
+    allPredicates.put("female_1", new FilterPredicate("gender", u -> !u.getGender()));
     return allPredicates;
   }
 
@@ -252,95 +234,69 @@ public class GraphModel {
    *
    * @param selected A Map of predicates are either to be applied or not
    */
-  public Map<String, ArrayList<FilterPredicate>> updateSegmentFilters(Map<String, ArrayList<FilterPredicate>> predicates, Map<String, Boolean> selected) {
+  public Map<String, FilterPredicate> updateSegmentFilters(Map<String, FilterPredicate> predicates, Map<String, Boolean> selected) {
     return this.updateSegmentFilters(predicates, selected, true);
   }
-  public Map<String, ArrayList<FilterPredicate>> updateSegmentFilters(Map<String, ArrayList<FilterPredicate>> predicates, Map<String, Boolean> selected, Boolean resetBaseFilters) {
-    Pattern p = Pattern.compile("(.*)_(.*)");
-    ArrayList<FilterPredicate> agePredicates = predicates.get("ages");
-    ArrayList<FilterPredicate> contextPredicates = predicates.get("contexts");
-    ArrayList<FilterPredicate> incomePredicates = predicates.get("incomes");
-    FilterPredicate malePredicate = predicates.get("genders").get(0);
-    FilterPredicate femalePredicate = predicates.get("genders").get(1);
+  public Map<String, FilterPredicate> updateSegmentFilters(Map<String, FilterPredicate> predicates, Map<String, Boolean> selected, Boolean resetBaseFilters) {
+    HashMap<String, FilterPredicate> predicateMap = new HashMap<>();
     if (resetBaseFilters != null && resetBaseFilters) {
-      agePredicates.get(0).setEnabled(true);
-      contextPredicates.get(0).setEnabled(true);
-      incomePredicates.get(0).setEnabled(true);
+      predicateMap.put("age_all", predicates.get("age_all"));
+      predicateMap.put("context_all", predicates.get("context_all"));
+      predicateMap.put("income_all", predicates.get("income_all"));
+      predicateMap.remove("male_1");
+      predicateMap.remove("female_1");
     }
     selected.forEach((key, value) -> {
-      Matcher m = p.matcher(key);
-      if (m.find()) {
-        switch (m.group(1)) {
-          case "age" -> {
-            if (value) {
-              agePredicates.get(0).setEnabled(false);
-            }
-            agePredicates.get(Integer.parseInt(m.group(2))).setEnabled(value);
-          }
-          case "context" -> {
-            if (value) {
-              contextPredicates.get(0).setEnabled(false);
-            }
-            contextPredicates.get(Integer.parseInt(m.group(2))).setEnabled(value);
-          }
-          case "income" -> {
-            if (value) {
-              incomePredicates.get(0).setEnabled(false);
-            }
-            incomePredicates.get(Integer.parseInt(m.group(2))).setEnabled(value);
-          }
-          case "male" -> malePredicate.setEnabled(value);
-          default -> femalePredicate.setEnabled(value);
-        }
+      FilterPredicate fp = predicates.get(key);
+      if (value) {
+        predicateMap.put(key, fp);
+        if (fp.getGroup().equals("age")) predicateMap.remove("age_all");
+        if (fp.getGroup().equals("context")) predicateMap.remove("context_all");
+        if (fp.getGroup().equals("income")) predicateMap.remove("income_all");
       }
     });
-    return predicates;
+    return predicateMap;
   }
 
-  public Map<String, ArrayList<FilterPredicate>> resetFilters() {
-    return this.resetFilters(this.predicates);
+  public void resetFilters(Map<String, FilterPredicate> predicates) {
+    currentlySelected = new HashMap<>();
+    currentlySelected.put("age_all", true);
+    currentlySelected.put("context_all", true);
+    currentlySelected.put("income_all", true);
   }
-  public Map<String, ArrayList<FilterPredicate>> resetFilters(Map<String, ArrayList<FilterPredicate>> predicates) {
-    predicates.values().forEach(list -> list.forEach(fp -> fp.setEnabled(false)));
-    predicates.get("ages").get(0).setEnabled(true);
-    predicates.get("contexts").get(0).setEnabled(true);
-    predicates.get("incomes").get(0).setEnabled(true);
-    return predicates;
-  }
-
 
   /**
    * Combine the lists of predicates for filtering by audience segments
    * @return The combined list of predicates - "and"-ed together
    */
-  public Predicate<User> combinePredicates(Map<String, ArrayList<FilterPredicate>> predicates) {
-    var ages = predicates.get("ages").stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
-    var contexts = predicates.get("contexts").stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
-    var incomes = predicates.get("incomes").stream().filter(FilterPredicate::isEnabled).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
+  public Predicate<User> combinePredicates(Map<String, FilterPredicate> predicates) {
+    var ages = getPredicateGroup("age", predicates).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
+    var contexts = getPredicateGroup("context", predicates).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
+    var incomes = getPredicateGroup("income", predicates).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
     Predicate<User> gender = u -> true;
-    FilterPredicate male = predicates.get("genders").get(0);
-    FilterPredicate female = predicates.get("genders").get(1);
-    if (male.isEnabled()) {
+    FilterPredicate male = predicates.get("male_1");
+    FilterPredicate female = predicates.get("female_1");
+    if (male != null) {
       gender = male.getPredicate();
-    } else if (female.isEnabled()) {
+    } else if (female != null) {
       gender = female.getPredicate();
     }
     return ages.and(contexts).and(incomes).and(gender);
   }
 
-  public Map<LocalDateTime, Double> getData() {
-    return data;
+  private Stream<FilterPredicate> getPredicateGroup(String group, Map<String, FilterPredicate> predicates) {
+    return predicates.values().stream().filter(fp -> fp.getGroup().equals(group));
   }
 
   public int getId() {
     return id;
   }
 
-  public Map<String, ArrayList<FilterPredicate>> getPredicates() {
+  public Map<String, FilterPredicate> getPredicates() {
     return this.predicates;
   }
 
-  public void setPredicates(Map<String, ArrayList<FilterPredicate>> predicates) {
+  public void setPredicates(Map<String, FilterPredicate> predicates) {
     this.predicates = predicates;
   }
 
