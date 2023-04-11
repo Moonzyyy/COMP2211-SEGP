@@ -82,7 +82,7 @@ public class GraphModel {
     });
 
     updateDateFilters(currentStart, currentEnd, true);
-    updateDateFilters(currentStart, currentEnd, false);
+    //updateDateFilters(currentStart, currentEnd, false);
   }
 
   public void newLine(String title, boolean divide, String predicateCode) {
@@ -207,55 +207,77 @@ public class GraphModel {
      */
     public void updateDateFilters(LocalDate startDate, LocalDate endDate, boolean mainGraphLine) {
         if (startDate != null && endDate != null) {
-            dataSet.removeAllSeries();
             if(mainGraphLine)
             {
+
                 TimeSeries dataSeries = lines.get(0).getDataSeries();
                 TimeSeries filteredSeries = new TimeSeries(dataSeries.getKey());
                 if (!this.timeFilterVal.equals("Week")) {
                     Date startTimeDate = convertDate(startDate);
                     Date endTimeDate = convertDate(endDate);
 
-                    var time = dataSeries.getTimePeriod(0);
-                    Date date = time.getStart();
-                    if (date.compareTo(startTimeDate) >= 0 && date.compareTo(endTimeDate) <= 0) {
-                        filteredSeries.add(dataSeries.getDataItem(0));
+                    for (int i = 0; i < dataSeries.getItemCount(); i++) {
+                        var time = dataSeries.getTimePeriod(i);
+                        Date date = time.getStart();
+                        if (date.compareTo(startTimeDate) >= 0 && date.compareTo(endTimeDate) <= 0) {
+                            filteredSeries.add(dataSeries.getDataItem(i));
+                        }
                     }
 
                 } else {
                     Week startWeek = new Week(java.sql.Date.valueOf(startDate));
                     Week endWeek = new Week(java.sql.Date.valueOf(endDate));
 
-                    RegularTimePeriod compWeek = dataSeries.getDataItem(0).getPeriod();
-                    if (compWeek.compareTo(startWeek) >= 0 && compWeek.compareTo(endWeek) <= 0) {
-                        filteredSeries.add(dataSeries.getDataItem(0));
+                    for (int i = 0; i < dataSeries.getItemCount(); i++) {
+                        RegularTimePeriod compWeek = dataSeries.getDataItem(i).getPeriod();
+                        if (compWeek.compareTo(startWeek) >= 0 && compWeek.compareTo(endWeek) <= 0) {
+                            filteredSeries.add(dataSeries.getDataItem(i));
+                        }
                     }
 
                 }
                 lines.get(0).setFilteredSeries(filteredSeries);
-                dataSet.addSeries(filteredSeries);
+                if(lines.size() > 1)
+                {
+                    var data = dataSet.getSeries(1);
+                    dataSet.removeAllSeries();
+                    dataSet.addSeries(filteredSeries);
+                    dataSet.addSeries(data);
+                }else
+                {
+                    dataSet.removeAllSeries();
+                    dataSet.addSeries(filteredSeries);
+                }
 
-            } else if(!mainGraphLine)
+
+
+
+            } else if(lines.size() > 1)
             {
+                dataSet.removeSeries(1);
                 TimeSeries dataSeries = lines.get(1).getDataSeries();
                 TimeSeries filteredSeries = new TimeSeries(dataSeries.getKey());
                 if (!this.timeFilterVal.equals("Week")) {
                     Date startTimeDate = convertDate(startDate);
                     Date endTimeDate = convertDate(endDate);
 
-                    var time = dataSeries.getTimePeriod(1);
-                    Date date = time.getStart();
-                    if (date.compareTo(startTimeDate) >= 0 && date.compareTo(endTimeDate) <= 0) {
-                        filteredSeries.add(dataSeries.getDataItem(1));
+                    for (int i = 0; i < dataSeries.getItemCount(); i++) {
+                        var time = dataSeries.getTimePeriod(i);
+                        Date date = time.getStart();
+                        if (date.compareTo(startTimeDate) >= 0 && date.compareTo(endTimeDate) <= 0) {
+                            filteredSeries.add(dataSeries.getDataItem(i));
+                        }
                     }
 
                 } else {
                     Week startWeek = new Week(java.sql.Date.valueOf(startDate));
                     Week endWeek = new Week(java.sql.Date.valueOf(endDate));
 
-                    RegularTimePeriod compWeek = dataSeries.getDataItem(1).getPeriod();
-                    if (compWeek.compareTo(startWeek) >= 0 && compWeek.compareTo(endWeek) <= 0) {
-                        filteredSeries.add(dataSeries.getDataItem(1));
+                    for (int i = 0; i < dataSeries.getItemCount(); i++) {
+                        RegularTimePeriod compWeek = dataSeries.getDataItem(i).getPeriod();
+                        if (compWeek.compareTo(startWeek) >= 0 && compWeek.compareTo(endWeek) <= 0) {
+                            filteredSeries.add(dataSeries.getDataItem(i));
+                        }
                     }
 
                 }
