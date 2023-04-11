@@ -38,7 +38,7 @@ public class Graph extends AbstractScene {
   private Button homeButton;
   private Button printButton;
   private Button segmentFilterButton;
-  private Button dateFilterButton;
+
   private ListView<Node> compareList;
   private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
   private ComboBox<String> timeFilter;
@@ -50,9 +50,11 @@ public class Graph extends AbstractScene {
 
   private final DatePicker compareControlStartDatePicker;
   private final DatePicker compareControlEndDatePicker;
+    private Button compareControlDateFilterButton;
 
   private final DatePicker startDatePicker;
   private final DatePicker endDatePicker;
+    private Button dateFilterButton;
 
   private CheckBox maleCheckBox;
   private CheckBox femaleCheckBox;
@@ -210,6 +212,9 @@ public class Graph extends AbstractScene {
     startDatePicker.getStyleClass().add("start-date-picker");
     endDatePicker.getStyleClass().add("end-date-picker");
 
+    startDatePicker.setMaxWidth(110);
+    endDatePicker.setMaxWidth(110);
+
 
     timeFilter = new ComboBox<>();
     timeFilter.getItems().addAll("Hour", "Day", "Week", "Month");
@@ -237,14 +242,19 @@ public class Graph extends AbstractScene {
     var compareSpacer2 = new Region();
     HBox.setHgrow(compareSpacer2, Priority.ALWAYS);
 
+      compareControlDateFilterButton = new Button("Apply");
+    compareControlDateFilterButton.setDisable(true);
+
 
     compareControlStartDatePicker.getStyleClass().add("start-date-picker");
     compareControlEndDatePicker.getStyleClass().add("end-date-picker");
 
+    compareControlStartDatePicker.setMaxWidth(110);
+    compareControlEndDatePicker.setMaxWidth(110);
 
 
     filterBar.getChildren()
-        .addAll(compareControl1, compareSpacer, compareControl2, compareSpacer2, compareControlStartDatePicker, compareControlEndDatePicker, compareControl3,  timeFilter, startDatePicker, endDatePicker, dateFilterButton);
+        .addAll(compareControl1, compareSpacer, compareControl2, compareSpacer2, compareControl3 ,compareControlStartDatePicker, compareControlEndDatePicker, compareControlDateFilterButton, timeFilter, startDatePicker, endDatePicker, dateFilterButton);
 
     createCheckBoxes();
 
@@ -368,6 +378,8 @@ public class Graph extends AbstractScene {
   public Button getDateFilterButton() {
     return dateFilterButton;
   }
+
+  public Button getCompareControlDateFilterButton(){return compareControlDateFilterButton;}
 
   /**
    * @return get the box of time filters

@@ -253,6 +253,8 @@ public class Controller {
     graphModel.configureDatePickers(graphScene.getStartDatePicker(), graphScene.getEndDatePicker(),
         graphScene.getDateFilterButton());
 
+    graphModel.configureDatePickers(graphScene.getCompareControlStartDatePicker(), graphScene.getCompareControlEndDatePicker(), graphScene.getCompareControlDateFilterButton());
+
     // Checkbox Listener
     // When the filter button is pressed, get all the currently selected filters
     // and update the graph
