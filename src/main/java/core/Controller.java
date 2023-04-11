@@ -261,9 +261,15 @@ public class Controller {
 
     graphScene.getDateFilterButton().setOnAction(e -> {
       graphModel.updateDateFilters(graphScene.getStartDatePicker().getValue(),
-          graphScene.getEndDatePicker().getValue());
+          graphScene.getEndDatePicker().getValue(), true);
       graphScene.getDateFilterButton().setDisable(true);
     });
+
+      graphScene.getCompareControlDateFilterButton().setOnAction(e -> {
+          graphModel.updateDateFilters(graphScene.getCompareControlStartDatePicker().getValue(),
+                  graphScene.getCompareControlEndDatePicker().getValue(), false);
+          graphScene.getCompareControlDateFilterButton().setDisable(true);
+      });
 
     graphScene.getTimeFilter().setOnAction(event -> {
       graphModel.updateGraphData(graphScene.getTimeFilter().getValue(), preds);
