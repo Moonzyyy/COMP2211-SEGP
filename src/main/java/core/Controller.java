@@ -193,15 +193,6 @@ public class Controller {
     }
   }
 
-  private void setUpScene(BounceDef bounceDef) {
-    bounceDef.createScene();
-    this.setCurrentScene(bounceDef);
-
-    bounceDef.getBackButton().setOnAction((event) -> {
-      setUpScene(new Dashboard());
-    });
-  }
-
   /**
    * Sets up the settings scene.
    *
@@ -217,6 +208,25 @@ public class Controller {
       setUpScene(new StartMenu());
     });
 
+  }
+
+  private void setUpScene(BounceDef bounceDef) {
+    bounceDef.createScene();
+    this.setCurrentScene(bounceDef);
+
+    bounceDef.getBackButton().setOnAction((event) -> {
+      setUpScene(new Dashboard());
+    });
+
+    bounceDef.getApplyButton().setOnAction((event) -> {
+      if (bounceDef.getPageRadio().isSelected()) {
+        model.setBounceDef("page");
+        model.setBounceValue(Integer.parseInt(bounceDef.getPageRadio().getText()));
+      } else {
+        model.setBounceDef("time");
+        model.setBounceValue(Integer.parseInt(bounceDef.getTimeRadio().getText()));
+      }
+    });
   }
 
   /**

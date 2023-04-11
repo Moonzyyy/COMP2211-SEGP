@@ -21,6 +21,8 @@ public class Model {
 
     private final ArrayList<Double> metrics = new ArrayList<>(11);
 
+    private String bounceDef = "default";
+    private int bounceValue;
     private int bounces;
     private final DecimalFormat df3 = new DecimalFormat("#.###");
   private final DecimalFormat df2 = new DecimalFormat("#.##");
@@ -176,15 +178,20 @@ public class Model {
         return conversionsByDate;
     }
 
-
     /**
+     * Depending on the bounce definition, calculates the bounces.
      * Gets the number of bounces from the server stream.
-     * Currently, bounce is defined as pages viewed <= 1,
-     * but this will be user defined later.
      * @return total number of bounces
      */
     public int numberOfBounces() {
-        this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
+        switch (bounceDef) {
+            case ("default"):
+                this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
+            case ("page"):
+                this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
+            case ("time"):
+                this.bounces = (int) getServers().filter(server -> server.getTimeSpent() <= bounceValue).count();
+        }
         return this.bounces;
     }
 
@@ -443,4 +450,7 @@ public class Model {
     public void setPredicate(Predicate<User> predicate) {
         this.predicate = predicate;
     }
+
+    public void setBounceDef(String bounceDef) { this.bounceDef = bounceDef; }
+    public void setBounceValue(int bounceValue) { this.bounceValue = bounceValue; }
 }

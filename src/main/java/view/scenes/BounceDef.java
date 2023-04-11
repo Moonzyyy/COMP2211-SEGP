@@ -9,11 +9,17 @@ package view.scenes;
         import javafx.scene.layout.HBox;
         import javafx.scene.layout.Priority;
         import javafx.scene.layout.VBox;
+        import org.w3c.dom.Text;
 
 public class BounceDef extends AbstractScene {
 
+    private RadioButton timeRadio;
+    private RadioButton pageRadio;
+    private TextField inputPageText;
+    private TextField inputTimeText;
     private Button backButton;
     private Button applyButton;
+    private ToggleGroup toggleGroup;
 
     public BounceDef() {
         super();
@@ -37,26 +43,25 @@ public class BounceDef extends AbstractScene {
         bounceDefPane.setTop(titleBox);
 
         //Pages viewed and time spent radio buttons
-        ToggleGroup toggleGroup = new ToggleGroup();
+        toggleGroup = new ToggleGroup();
 
-        RadioButton pageRadio = new RadioButton("Pages Viewed:");
+        pageRadio = new RadioButton("Pages Viewed:");
         pageRadio.setToggleGroup(toggleGroup);
         pageRadio.getStyleClass().add("label");
-        TextField inputPageText = new TextField();
+        inputPageText = new TextField();
         VBox pageBox = new VBox(pageRadio, inputPageText);
         pageBox.setAlignment(Pos.CENTER);
         pageBox.setSpacing(10);
 
-        RadioButton timeRadio = new RadioButton("Time Spent:");
+        timeRadio = new RadioButton("Time Spent:");
         timeRadio.setToggleGroup(toggleGroup);
         timeRadio.getStyleClass().add("label");
-        TextField inputTimeText = new TextField();
+        inputTimeText = new TextField();
         VBox timeBox = new VBox(timeRadio, inputTimeText);
         timeBox.setAlignment(Pos.CENTER);
         timeBox.setSpacing(10);
 
         applyButton = new Button("Apply");
-
 
         VBox controls = new VBox(pageBox, timeBox, applyButton);
         controls.setAlignment(Pos.CENTER);
@@ -77,4 +82,22 @@ public class BounceDef extends AbstractScene {
     public Button getBackButton() {
         return backButton;
     }
+
+    public Button getApplyButton() {
+        return applyButton;
+    }
+
+    public ToggleGroup getToggleGroup() { return toggleGroup; }
+
+    public RadioButton getTimeRadio() {
+        return timeRadio;
+    }
+
+    public RadioButton getPageRadio() {
+        return pageRadio;
+    }
+
+    public TextField getInputPageText() { return inputPageText; }
+
+    public TextField getInputTimeText() { return inputTimeText; }
 }
