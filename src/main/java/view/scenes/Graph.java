@@ -48,6 +48,9 @@ public class Graph extends AbstractScene {
   private final JFreeChart lineChart;
   private final JFreeChart histogram;
 
+  private final DatePicker compareControlStartDatePicker;
+  private final DatePicker compareControlEndDatePicker;
+
   private final DatePicker startDatePicker;
   private final DatePicker endDatePicker;
 
@@ -74,6 +77,8 @@ public class Graph extends AbstractScene {
     this.histogram = histogram;
     this.startDatePicker = new DatePicker();
     this.endDatePicker = new DatePicker();
+    this.compareControlStartDatePicker = new DatePicker();
+    this.compareControlEndDatePicker = new DatePicker();
   }
 
   /**
@@ -232,8 +237,14 @@ public class Graph extends AbstractScene {
     var compareSpacer2 = new Region();
     HBox.setHgrow(compareSpacer2, Priority.ALWAYS);
 
+
+    compareControlStartDatePicker.getStyleClass().add("start-date-picker");
+    compareControlEndDatePicker.getStyleClass().add("end-date-picker");
+
+
+
     filterBar.getChildren()
-        .addAll(compareControl1, compareSpacer, compareControl2, compareSpacer2, compareControl3, timeFilter,startDatePicker, endDatePicker, dateFilterButton);
+        .addAll(compareControl1, compareSpacer, compareControl2, compareSpacer2, compareControlStartDatePicker, compareControlEndDatePicker, compareControl3,  timeFilter, startDatePicker, endDatePicker, dateFilterButton);
 
     createCheckBoxes();
 
@@ -364,6 +375,10 @@ public class Graph extends AbstractScene {
   public ComboBox<String> getTimeFilter() {
     return timeFilter;
   }
+
+  public DatePicker getCompareControlStartDatePicker(){return compareControlStartDatePicker;}
+
+    public DatePicker getCompareControlEndDatePicker() {return compareControlEndDatePicker;}
 
   /**
    * @return get the start date picker
