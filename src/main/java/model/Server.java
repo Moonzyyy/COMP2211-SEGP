@@ -4,14 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
-public class Server {
-    private LocalDateTime entryDate;
-
-    private int timeSpent;
-
-    private int pagesViewed;
-
-    private boolean conversion;
+public record Server(LocalDateTime entryDate, int timeSpent, int pagesViewed, boolean conversion) {
 
     /**
      *
@@ -20,13 +13,12 @@ public class Server {
      *                   It's a parameter to avoid re-initializing for every object.
      */
     public Server(String[] input, DateTimeFormatter formatter) {
-       String dateWithoutMS = input[0].substring(0, 13);
-        LocalDateTime entry = LocalDateTime.parse(dateWithoutMS, formatter);
-        setEntryDate(entry);
-
-        setTimeSpent(input[0], input[2]);
-        setPagesViewed(input[3]);
-        setConversion(input[4]);
+        this(
+                Server.setEntryDate(input[0], formatter),
+                Server.setTimeSpent(input[0], input[2]),
+                Integer.parseInt(input[3]),
+                input[4].equals("Yes")
+        );
     }
 
   /**
@@ -37,10 +29,13 @@ public class Server {
     }
 
   /**
-   * @param date set the entry date
+   * Set the entry date
+   * @param string converted to LocalDateTime
+   * @param formatter used to convert the string to LocalDateTime
    */
-    public void setEntryDate(LocalDateTime date) {
-        this.entryDate = date;
+    public static LocalDateTime setEntryDate(String string, DateTimeFormatter formatter) {
+        String dateWithoutMS = string.substring(0, 13);
+        return LocalDateTime.parse(dateWithoutMS, formatter);
     }
 
   /**
@@ -53,13 +48,13 @@ public class Server {
     /**
      * Gets the time spent on the website, or returns -1 if the user has not left (i.e. exitDate is n/a)
      */
-    public void setTimeSpent(String entryDateString, String exitDate) {
+    public static int setTimeSpent(String entryDateString, String exitDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime entryDate = LocalDateTime.parse(entryDateString, formatter);
         if (exitDate.equals("n/a")) {
-            this.timeSpent = -1;
+            return -1;
         } else {
-            this.timeSpent = (int) entryDate.until(LocalDateTime.parse(exitDate, formatter), ChronoUnit.SECONDS);
+            return (int) entryDate.until(LocalDateTime.parse(exitDate, formatter), ChronoUnit.SECONDS);
         }
     }
 
@@ -71,23 +66,9 @@ public class Server {
     }
 
   /**
-   * @param pagesViewed set the amount of pages viewed
-   */
-    public void setPagesViewed(String pagesViewed) {
-        this.pagesViewed = Integer.parseInt(pagesViewed);
-    }
-
-  /**
    * @return get the conversion
    */
     public boolean getConversion() {
         return conversion;
-    }
-
-    /**
-     * Converts "Yes" or "No" conversions to true and false
-     */
-    public void setConversion(String conversion) {
-        this.conversion = conversion.equals("Yes");
     }
 }

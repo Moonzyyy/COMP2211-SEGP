@@ -6,43 +6,23 @@ import core.segments.Income;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javafx.util.Pair;
-public class User {
-
-  /**
-   * A list of pairs of date and impression cost associated with this user.
-   */
-  private final ArrayList<Pair<LocalDateTime, Double>> impressions;
-  /**
-   * A list of pairs of a click date and click cost associated with this user.
-   */
-  private final ArrayList<Pair<LocalDateTime, Double>> clicks;
-  private final ArrayList<Server> servers;
-  private Long id;
-
-
-  /**
-   * Male = True
-   * Female = False
-   */
-  private Boolean gender;
-  private Age age;
-  private Context context;
-  private Income income;
+public record User(Long id, Boolean gender, Age age, Income income, Context context, ArrayList<Pair<LocalDateTime, Double>> impressions, ArrayList<Pair<LocalDateTime, Double>> clicks, ArrayList<Server> servers) {
 
   /**
    * Every unique user, gathered by ID, with their attributes,
    * including clicks, impressions and servers
    */
   public User(String[] input) {
-    impressions = new ArrayList<>();
-    clicks = new ArrayList<>();
-    servers = new ArrayList<>();
-
-    setId(input[1]);
-    setGender(input[2].equals("Male"));
-    setAge(input[3]);
-    setIncome(input[4]);
-    setContext(input[5]);
+    this(
+      Long.parseLong(input[1]),
+      input[2].equals("Male"),
+      Age.valueOfLabel(input[3]),
+      Income.valueOfLabel(input[4]),
+      Context.valueOfLabel(input[5]),
+      new ArrayList<>(),
+      new ArrayList<>(),
+      new ArrayList<>()
+    );
   }
 
   /**
@@ -55,9 +35,9 @@ public class User {
   /**
    * @param id set the ID
    */
-  public void setId(String id) {
-    this.id = Long.parseLong(id);
-  }
+//  public void setId(String id) {
+//    this.id = Long.parseLong(id);
+//  }
 
   /**
    * @return get the gender
@@ -69,9 +49,9 @@ public class User {
   /**
    * @param gender set the gender
    */
-  public void setGender(Boolean gender) {
-    this.gender = gender;
-  }
+//  public void setGender(Boolean gender) {
+//    this.gender = gender;
+//  }
 
   /**
    * @return get the age
@@ -83,16 +63,16 @@ public class User {
   /**
    * @param age set the age
    */
-  public void setAge(String age) {
-    this.age = Age.valueOfLabel(age);
-  }
+//  public void setAge(String age) {
+//    this.age = Age.valueOfLabel(age);
+//  }
 
   /**
    * @param income set the income
    */
-  public void setIncome(String income) {
-    this.income = Income.valueOf(income.toUpperCase());
-  }
+//  public void setIncome(String income) {
+//    this.income = Income.valueOf(income.toUpperCase());
+//  }
 
   /**
    * @return get the income
@@ -111,9 +91,9 @@ public class User {
   /**
    * @param context set the context
    */
-  public void setContext(String context) {
-    this.context = Context.valueOfLabel(context);
-  }
+//  public void setContext(String context) {
+//    this.context = Context.valueOfLabel(context);
+//  }
 
   /**
    * @param impression add the impression into the list of impressions
