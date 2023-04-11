@@ -29,6 +29,7 @@ public class Dashboard extends AbstractScene {
   private boolean menuOpen = false;
   private DashboardComp dashboardComp;
   private Button backButton;
+  private Button bounceDefButton;
 
   /**
    * The Dashboard constructor
@@ -62,7 +63,8 @@ public class Dashboard extends AbstractScene {
     backButton = new Button("<");
     backButton.getStyleClass().add("backButton");
 
-
+    bounceDefButton = new Button("Change Bounce Definition");
+    bounceDefButton.getStyleClass().add("bounceButton");
 
     // Sliding Menu Pane
     menuBar = new VBox();
@@ -123,11 +125,22 @@ public class Dashboard extends AbstractScene {
     titleBox.getChildren().add(new Label(""));
     titleBox.getStyleClass().add("titleBox");
 
+    //Back and bounce def buttons
+    BorderPane bottomButtons = new BorderPane();
+
     BorderPane.setMargin(backButton, new Insets(20, 0, 10, 10));
     BorderPane.setMargin(titleBox, new Insets(10, 0, 0, 10));
     BorderPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
     BorderPane.setAlignment(dashboardComp, Pos.CENTER);
-    inner.setBottom(backButton);
+
+    BorderPane.setMargin(bounceDefButton, new Insets(20, 10, 10, 10));
+    BorderPane.setMargin(titleBox, new Insets(10, 0, 0, 10));
+    BorderPane.setAlignment(bounceDefButton, Pos.BOTTOM_RIGHT);
+    //BorderPane.setAlignment(dashboardComp, Pos.CENTER);
+
+    bottomButtons.setLeft(backButton);
+    bottomButtons.setRight(bounceDefButton);
+    inner.setBottom(bottomButtons);
 
     scene = new Scene(layout, 1280, 720);
     scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
@@ -153,4 +166,7 @@ public class Dashboard extends AbstractScene {
     return this.backButton;
   }
 
+  public Button getBounceDefButton(){
+    return this.bounceDefButton;
+  }
 }

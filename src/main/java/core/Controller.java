@@ -18,13 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import view.components.CompareItem;
 import view.components.DashboardComp;
-import view.scenes.AbstractScene;
-import view.scenes.Dashboard;
-import view.scenes.Graph;
-import view.scenes.Import;
-import view.scenes.Loading;
-import view.scenes.Settings;
-import view.scenes.StartMenu;
+import view.scenes.*;
 
 public class Controller {
 
@@ -129,6 +123,9 @@ public class Controller {
     dashboard.getBackButton().setOnAction((event) -> {
       setUpScene(new StartMenu());
     });
+    dashboard.getBounceDefButton().setOnAction((event) -> {
+      setUpScene(new BounceDef());
+    });
     // All number box listeners
     for (int i = 0; i < dashboardComp.getNumberBoxes().size(); i++) {
       int finalI = i;
@@ -194,6 +191,15 @@ public class Controller {
         setUpScene(new Graph(finalI, gm.getChart(), histogramModel.getChart()), gm, histogramModel);
       });
     }
+  }
+
+  private void setUpScene(BounceDef bounceDef) {
+    bounceDef.createScene();
+    this.setCurrentScene(bounceDef);
+
+    bounceDef.getBackButton().setOnAction((event) -> {
+      setUpScene(new Dashboard());
+    });
   }
 
   /**
