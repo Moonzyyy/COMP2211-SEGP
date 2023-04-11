@@ -1,8 +1,10 @@
 package core;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import core.segments.Age;
 import core.segments.Context;
@@ -287,6 +289,16 @@ public class Controller {
       graphModel.updateGraphData(preds);
     });
 
+    graphScene.getCompareControl1().setOnAction(event -> {
+      var line = graphModel.getLines().get(0);
+//      toggleBoxDisable(graphScene.getCheckboxes(), line.getBasePredicate());
+      graphModel.removeLine(0);
+      ComboBox<CompareItem> box = graphScene.getCompareControl1();
+      CompareItem item = box.getSelectionModel().getSelectedItem();
+      graphModel.newLine(item.label(), item.value());
+//      toggleBoxDisable(graphScene.getCheckboxes(), item.value());
+    });
+
     graphScene.getCompareControl2().setOnAction(event -> {
       graphModel.removeLine(1);
       ComboBox<CompareItem> box = graphScene.getCompareControl2();
@@ -312,6 +324,11 @@ public class Controller {
   private void togglePred(HashMap<String, Boolean> predicates, CheckBox box) {
     box.setSelected(!box.isSelected());
     predicates.replace(box.getId(), box.isSelected());
+  }
+
+  private void toggleBoxDisable(ArrayList<CheckBox> checkBoxes, String id) {
+    var box =  checkBoxes.stream().filter(c -> Objects.equals(c.getId(), id)).findFirst();
+    box.ifPresent(b -> b.setDisable(!b.isDisabled()));
   }
 
   /**

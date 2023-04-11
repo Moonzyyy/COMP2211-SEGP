@@ -5,10 +5,8 @@ import org.jfree.data.time.*;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class GraphLine {
     private final String basePredicate;
@@ -33,7 +31,7 @@ public class GraphLine {
      *
      * @param timeChosen The time period to filter by
      */
-    public TimeSeries updateLine(String timeChosen, Map<LocalDateTime, Double> data) {
+    public void updateLine(String timeChosen, Map<LocalDateTime, Double> data) {
         dataSeries.clear();
         Function<LocalDateTime, RegularTimePeriod> fun;
         switch (timeChosen) {
@@ -64,7 +62,6 @@ public class GraphLine {
 //        updateDateFilters(currentStart, currentEnd);
 
 //        this.data = data;
-        return dataSeries;
     }
 
     public TimeSeries getDataSeries() {
