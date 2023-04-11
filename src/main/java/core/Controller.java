@@ -260,14 +260,14 @@ public class Controller {
     // and update the graph
 
     graphScene.getDateFilterButton().setOnAction(e -> {
-      graphModel.updateDateFilters(graphScene.getStartDatePicker().getValue(),
-          graphScene.getEndDatePicker().getValue(), true);
+      graphModel.updateMainDateFilters(graphScene.getStartDatePicker().getValue(),
+          graphScene.getEndDatePicker().getValue());
       graphScene.getDateFilterButton().setDisable(true);
     });
 
       graphScene.getCompareControlDateFilterButton().setOnAction(e -> {
-          graphModel.updateDateFilters(graphScene.getCompareControlStartDatePicker().getValue(),
-                  graphScene.getCompareControlEndDatePicker().getValue(), false);
+          graphModel.updateCompareDateFilters(graphScene.getCompareControlStartDatePicker().getValue(),
+                  graphScene.getCompareControlEndDatePicker().getValue());
           graphScene.getCompareControlDateFilterButton().setDisable(true);
       });
 
