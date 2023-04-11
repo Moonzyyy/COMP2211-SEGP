@@ -13,7 +13,6 @@ import org.jfree.chart.JFreeChart;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -74,7 +73,7 @@ public class GraphModel {
       String linePredicate = line.getBasePredicate();
       if (linePredicate != null) {
         FilterPredicate predicate = predicates.get(linePredicate);
-        adjustedPredicates.remove(predicate.getGroup() + "_all");
+        adjustedPredicates.remove(predicate.group() + "_all");
         adjustedPredicates.putIfAbsent(linePredicate, predicate);
       }
       Map<LocalDateTime, Double> lineData = model.loadData(id, this.combinePredicates(adjustedPredicates));
@@ -249,9 +248,9 @@ public class GraphModel {
       FilterPredicate fp = predicates.get(key);
       if (value) {
         predicateMap.put(key, fp);
-        if (fp.getGroup().equals("age")) predicateMap.remove("age_all");
-        if (fp.getGroup().equals("context")) predicateMap.remove("context_all");
-        if (fp.getGroup().equals("income")) predicateMap.remove("income_all");
+        if (fp.group().equals("age")) predicateMap.remove("age_all");
+        if (fp.group().equals("context")) predicateMap.remove("context_all");
+        if (fp.group().equals("income")) predicateMap.remove("income_all");
       }
     });
     return predicateMap;
@@ -269,22 +268,22 @@ public class GraphModel {
    * @return The combined list of predicates - "and"-ed together
    */
   public Predicate<User> combinePredicates(Map<String, FilterPredicate> predicates) {
-    var ages = getPredicateGroup("age", predicates).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
-    var contexts = getPredicateGroup("context", predicates).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
-    var incomes = getPredicateGroup("income", predicates).map(FilterPredicate::getPredicate).reduce(u -> false, Predicate::or);
+    var ages = getPredicateGroup("age", predicates).map(FilterPredicate::predicate).reduce(u -> false, Predicate::or);
+    var contexts = getPredicateGroup("context", predicates).map(FilterPredicate::predicate).reduce(u -> false, Predicate::or);
+    var incomes = getPredicateGroup("income", predicates).map(FilterPredicate::predicate).reduce(u -> false, Predicate::or);
     Predicate<User> gender = u -> true;
     FilterPredicate male = predicates.get("male_1");
     FilterPredicate female = predicates.get("female_1");
     if (male != null) {
-      gender = male.getPredicate();
+      gender = male.predicate();
     } else if (female != null) {
-      gender = female.getPredicate();
+      gender = female.predicate();
     }
     return ages.and(contexts).and(incomes).and(gender);
   }
 
   private Stream<FilterPredicate> getPredicateGroup(String group, Map<String, FilterPredicate> predicates) {
-    return predicates.values().stream().filter(fp -> fp.getGroup().equals(group));
+    return predicates.values().stream().filter(fp -> fp.group().equals(group));
   }
 
   public int getId() {
