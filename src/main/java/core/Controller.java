@@ -231,7 +231,7 @@ public class Controller {
 
     bounceDef.getResetButton().setOnAction((event) -> {
       model.setBounceDef("default");
-      model.setBounceValue(1);
+//      model.setBounceValue(1);
     });
   }
 
