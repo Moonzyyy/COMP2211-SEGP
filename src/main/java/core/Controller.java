@@ -221,11 +221,17 @@ public class Controller {
     bounceDef.getApplyButton().setOnAction((event) -> {
       if (bounceDef.getPageRadio().isSelected()) {
         model.setBounceDef("page");
-        model.setBounceValue(Integer.parseInt(bounceDef.getPageRadio().getText()));
+        model.setBounceValue(Integer.parseInt(bounceDef.getInputPageText().getText()));
       } else {
         model.setBounceDef("time");
-        model.setBounceValue(Integer.parseInt(bounceDef.getTimeRadio().getText()));
+        model.setBounceValue(Integer.parseInt(bounceDef.getInputTimeText().getText()));
       }
+      setUpScene(new Dashboard());
+    });
+
+    bounceDef.getResetButton().setOnAction((event) -> {
+      model.setBounceDef("default");
+      model.setBounceValue(1);
     });
   }
 
