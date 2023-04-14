@@ -201,11 +201,34 @@ public class Model {
         Map<LocalDateTime, Double> bouncesByDate = new HashMap<>();
         getServers().sequential().forEach(server -> {
             LocalDateTime dateTime = server.getEntryDate();
-            if (!server.getConversion() && bouncesByDate.containsKey(dateTime)) {
-                bouncesByDate.put(dateTime, bouncesByDate.get(dateTime) + 1);
-            } else if (!server.getConversion()) {
-                bouncesByDate.put(dateTime, 1.0);
+            switch (bounceDef) {
+                case "default" -> {
+                    if (server.getPagesViewed() <= 1 && bouncesByDate.containsKey(dateTime)) {
+                        bouncesByDate.put(dateTime, bouncesByDate.get(dateTime) + 1);
+                    } else if (server.getPagesViewed() <= 1) {
+                        bouncesByDate.put(dateTime, 1.0);
+                    }
+                }
+                case "page" -> {
+                    if (server.getTimeSpent() <= bounceValue && bouncesByDate.containsKey(dateTime)) {
+                        bouncesByDate.put(dateTime, bouncesByDate.get(dateTime) + 1);
+                    } else if (server.getTimeSpent() <= bounceValue) {
+                        bouncesByDate.put(dateTime, 1.0);
+                    }
+                }
+                case "time" -> {
+                    if (server.getPagesViewed() <= bounceValue && bouncesByDate.containsKey(dateTime)) {
+                        bouncesByDate.put(dateTime, bouncesByDate.get(dateTime) + 1);
+                    } else if (server.getPagesViewed() <= bounceValue) {
+                        bouncesByDate.put(dateTime, 1.0);
+                    }
+                }
             }
+//            if (!server.getConversion() && bouncesByDate.containsKey(dateTime)) {
+//                bouncesByDate.put(dateTime, bouncesByDate.get(dateTime) + 1);
+//            } else if (!server.getConversion()) {
+//                bouncesByDate.put(dateTime, 1.0);
+//            }
         });
         return bouncesByDate;
     }
