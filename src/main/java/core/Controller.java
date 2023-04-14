@@ -49,9 +49,7 @@ public class Controller {
       Alert alert = new Alert(Alert.AlertType.ERROR, message);
       alert.showAndWait();
     });
-
   }
-
 
   /**
    * @param stage Sets the stage within the class
@@ -102,8 +100,6 @@ public class Controller {
     // Predicates
     menu.getResumeButton()
         .setVisible(model.getImpressions() != null && model.getMetrics().size() > 0);
-
-
   }
 
   /**
@@ -231,7 +227,7 @@ public class Controller {
 
     bounceDef.getResetButton().setOnAction((event) -> {
       model.setBounceDef("default");
-//      model.setBounceValue(1);
+      setUpScene(new Dashboard());
     });
   }
 
@@ -271,11 +267,11 @@ public class Controller {
       graphScene.getDateFilterButton().setDisable(true);
     });
 
-      graphScene.getCompareControlDateFilterButton().setOnAction(e -> {
-          graphModel.updateCompareDateFilters(graphScene.getCompareControlStartDatePicker().getValue(),
-                  graphScene.getCompareControlEndDatePicker().getValue());
-          graphScene.getCompareControlDateFilterButton().setDisable(true);
-      });
+    graphScene.getCompareControlDateFilterButton().setOnAction(e -> {
+      graphModel.updateCompareDateFilters(graphScene.getCompareControlStartDatePicker().getValue(),
+          graphScene.getCompareControlEndDatePicker().getValue());
+      graphScene.getCompareControlDateFilterButton().setDisable(true);
+    });
 
     graphScene.getTimeFilter().setOnAction(event -> {
       graphModel.updateGraphData(graphScene.getTimeFilter().getValue(), preds);

@@ -242,7 +242,7 @@ public class Graph extends AbstractScene {
     var compareSpacer2 = new Region();
     HBox.setHgrow(compareSpacer2, Priority.ALWAYS);
 
-      compareControlDateFilterButton = new Button("Apply");
+    compareControlDateFilterButton = new Button("Apply");
     compareControlDateFilterButton.setDisable(true);
 
 
@@ -264,7 +264,6 @@ public class Graph extends AbstractScene {
         .add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
 
   }
-
 
   /**
    * @param compareControl

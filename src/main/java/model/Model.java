@@ -184,14 +184,6 @@ public class Model {
      * @return total number of bounces
      */
     public int numberOfBounces() {
-//        if (bounceDef.equals("default")) {
-//            return (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
-//        } else if (bounceDef.equals("page")) {
-//            return (int) getServers().filter(server -> server.getPagesViewed() <= bounceValue).count();
-//        } else {
-//            return (int) getServers().filter(server -> server.getTimeSpent() <= bounceValue).count();
-//        }
-
         switch (bounceDef) {
             case "default" -> this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
             case "page" ->

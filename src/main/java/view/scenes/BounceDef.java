@@ -12,7 +12,6 @@ package view.scenes;
         import org.w3c.dom.Text;
 
 public class BounceDef extends AbstractScene {
-
     private RadioButton timeRadio;
     private RadioButton pageRadio;
     private TextField inputPageText;

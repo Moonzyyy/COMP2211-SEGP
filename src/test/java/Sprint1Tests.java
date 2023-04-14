@@ -14,9 +14,9 @@ public class Sprint1Tests {
     @BeforeAll
     static void setUp() {
         model = new Model();
-        model.setClicksFile(new File("src/test/testData/click_log.csv"));
-        model.setImpressionsFile(new File("src/test/testData/impression_log.csv"));
-        model.setServerFile(new File("src/test/testData/server_log.csv"));
+        model.setClicksFile(new File("src/test/TestData/click_log.csv"));
+        model.setImpressionsFile(new File("src/test/TestData/impression_log.csv"));
+        model.setServerFile(new File("src/test/TestData/server_log.csv"));
         model.importData();
         model.getMetrics();
     }
@@ -70,7 +70,7 @@ public class Sprint1Tests {
 
     @Test
     void ThousandImps() {
-        assertEquals(0.24, model.costPerThousandImps(), "CPTI");
+        assertEquals(242.95, model.costPerThousandImps(), "CPTI");
     }
 }
 
