@@ -1,6 +1,5 @@
 package view.scenes;
 
-import java.util.Objects;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,96 +8,97 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-
 
 
 public class Settings extends AbstractScene {
 
-  private Button backButton;
+    private Button backButton;
 
-  public Settings() {
-    super();
-    createScene();
-  }
+    public Settings() {
+        super();
+    }
 
-  /**
-   * Creates all the components of the scene, and adds them to the layout
-   * Scene which contains settings to change the software visually
-   */
-  @Override
-  public void createScene() {
-    BorderPane settingsPane = new BorderPane();
+    /**
+     * Creates all the components of the scene, and adds them to the layout
+     * Scene which contains settings to change the software visually
+     */
+    public void createScene() {
+        BorderPane settingsPane = new BorderPane();
 
-    var titleBox = new HBox();
-    titleBox.setAlignment(Pos.CENTER);
-    var titleLabel = new Label("Settings");
-    HBox.setHgrow(titleLabel, Priority.ALWAYS);
-    titleLabel.getStyleClass().add("title");
-    titleBox.getChildren().add(titleLabel);
-    settingsPane.setTop(titleBox);
+        var title = new Label("Settings");
+        title.getStyleClass().add("title");
 
-    Label fontLabel = new Label("Text Font:");
-    fontLabel.getStyleClass().add("label");
-    ComboBox<String> fontDropdown = new ComboBox<>();
-    fontDropdown.getItems().addAll("Arial", "Times New Roman", "Verdana");
-    fontDropdown.getStyleClass().add("combo-box");
-    HBox fontBox = new HBox(fontLabel, fontDropdown);
-    fontBox.setAlignment(Pos.CENTER);
-    fontBox.setSpacing(10);
+        var settingsTitle = new VBox();
+        settingsTitle.setAlignment(Pos.CENTER);
+        settingsTitle.getChildren().add(title);
+        settingsPane.setTop(settingsTitle);
 
-    Label sizeLabel = new Label("Text Size:");
-    sizeLabel.getStyleClass().add("label");
-    HBox sizeLabelBox = new HBox(sizeLabel);
-    sizeLabelBox.setAlignment(Pos.CENTER);
-    sizeLabelBox.setSpacing(10);
+        Label fontLabel = new Label("Text Font:");
+        fontLabel.getStyleClass().add("custom-label");
+        ComboBox<String> fontDropdown = new ComboBox<>();
+        fontDropdown.getItems().addAll("Arial", "Times New Roman", "Verdana");
+        fontDropdown.getStyleClass().add("combo-box");
+        HBox fontBox = new HBox(fontLabel, fontDropdown);
+        fontBox.setAlignment(Pos.CENTER);
+        fontBox.setSpacing(10);
 
-    Button decreaseButton = new Button("-");
-    decreaseButton.setOnAction(e -> {
-      // handle decreasing font size
-    });
-    decreaseButton.getStyleClass().add("button");
+        Label sizeLabel = new Label("Text Size:");
+        sizeLabel.getStyleClass().add("custom-label");
+        HBox sizeLabelBox = new HBox(sizeLabel);
+        sizeLabelBox.setAlignment(Pos.CENTER);
+        sizeLabelBox.setSpacing(10);
 
-    Button increaseButton = new Button("+");
-    increaseButton.setOnAction(e -> {
-      // handle increasing font size
-    });
-    increaseButton.getStyleClass().add("button");
+        Button decreaseButton = new Button("-");
+        decreaseButton.setOnAction(e -> {
+            // handle decreasing font size
+        });
+        decreaseButton.getStyleClass().add("button");
 
-    Label filler = new Label(". . . . . . .");
-    filler.getStyleClass().add("label");
+        Button increaseButton = new Button("+");
+        increaseButton.setOnAction(e -> {
+            // handle increasing font size
+        });
+        increaseButton.getStyleClass().add("button");
 
-    HBox sizeBox = new HBox(sizeLabelBox, decreaseButton, filler, increaseButton);
-    sizeBox.setAlignment(Pos.CENTER);
-    sizeBox.setSpacing(10);
+        Label filler = new Label(". . . . . . .");
+        filler.getStyleClass().add("custom-label");
 
-    Label themeLabel = new Label("Colour Scheme:");
-    themeLabel.getStyleClass().add("label");
-    ComboBox<String> themeDropdown = new ComboBox<>();
-    themeDropdown.getItems().addAll("Light Mode", "Dark Mode");
-    themeDropdown.getStyleClass().add("combo-box");
-    HBox themeBox = new HBox(themeLabel, themeDropdown);
-    themeBox.setAlignment(Pos.CENTER);
-    themeBox.setSpacing(10);
+        HBox sizeBox = new HBox(sizeLabelBox, decreaseButton, filler, increaseButton);
+        sizeBox.setAlignment(Pos.CENTER);
+        sizeBox.setSpacing(10);
 
-    VBox controls = new VBox(fontBox, sizeBox, themeBox);
-    controls.setAlignment(Pos.CENTER);
-    controls.setSpacing(20);
-    settingsPane.setCenter(controls);
+        Label themeLabel = new Label("Colour Scheme:");
+        themeLabel.getStyleClass().add("custom-label");
+        ComboBox<String> themeDropdown = new ComboBox<>();
+        themeDropdown.getItems().addAll("Light Mode", "Dark Mode");
+        themeDropdown.getStyleClass().add("combo-box");
+        HBox themeBox = new HBox(themeLabel, themeDropdown);
+        themeBox.setAlignment(Pos.CENTER);
+        themeBox.setSpacing(10);
 
-    backButton = new Button("Back");
-    backButton.getStyleClass().add("backButton");
-    settingsPane.setBottom(backButton);
-    BorderPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
-    BorderPane.setMargin(backButton, new Insets(20, 0, 10, 10));
+        VBox controls = new VBox(fontBox, sizeBox, themeBox);
+        controls.setAlignment(Pos.CENTER);
+        controls.setPrefSize(200, 200);
+        controls.setSpacing(20);
+        settingsPane.setCenter(controls);
 
-    Scene settingsScene = new Scene(settingsPane, 1280, 720);
-    settingsScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/view/settings.css")).toExternalForm());
-    setScene(settingsScene);
-  }
+        backButton = new Button("Back");
+        backButton.getStyleClass().add("backButton");
+        var bottomBar = new HBox();
+        bottomBar.getChildren().add(backButton);
+        bottomBar.setAlignment(Pos.BOTTOM_LEFT);
+        bottomBar.setPadding(new Insets(20));
+        settingsPane.setBottom(bottomBar);
+        BorderPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
+        BorderPane.setMargin(backButton, new Insets(20, 0, 10, 10));
 
-  public Button getBackButton() {
-    return backButton;
-  }
+        scene = new Scene(settingsPane, 1280, 720);
+        scene.getStylesheets().add(getClass().getResource("/view/settings.css").toExternalForm());
+//    setScene(settingsScene);
+    }
+
+    public Button getBackButton() {
+        return backButton;
+    }
 }
