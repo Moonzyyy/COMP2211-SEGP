@@ -12,12 +12,12 @@ package view.scenes;
         import org.w3c.dom.Text;
 
 public class BounceDef extends AbstractScene {
-
     private RadioButton timeRadio;
     private RadioButton pageRadio;
     private TextField inputPageText;
     private TextField inputTimeText;
     private Button backButton;
+    private Button resetButton;
     private Button applyButton;
     private ToggleGroup toggleGroup;
 
@@ -61,9 +61,12 @@ public class BounceDef extends AbstractScene {
         timeBox.setAlignment(Pos.CENTER);
         timeBox.setSpacing(10);
 
+        resetButton = new Button("Reset");
+        resetButton.getStyleClass().add("backButton");
         applyButton = new Button("Apply");
+        applyButton.getStyleClass().add("backButton");
 
-        VBox controls = new VBox(pageBox, timeBox, applyButton);
+        VBox controls = new VBox(resetButton, pageBox, timeBox, applyButton);
         controls.setAlignment(Pos.CENTER);
         controls.setSpacing(20);
         bounceDefPane.setCenter(controls);
@@ -81,6 +84,10 @@ public class BounceDef extends AbstractScene {
 
     public Button getBackButton() {
         return backButton;
+    }
+
+    public Button getResetButton() {
+        return resetButton;
     }
 
     public Button getApplyButton() {

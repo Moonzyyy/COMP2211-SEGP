@@ -185,12 +185,11 @@ public class Model {
      */
     public int numberOfBounces() {
         switch (bounceDef) {
-            case ("default"):
-                this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
-            case ("page"):
-                this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
-            case ("time"):
-                this.bounces = (int) getServers().filter(server -> server.getTimeSpent() <= bounceValue).count();
+            case "default" -> this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
+            case "page" ->
+                    this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= bounceValue).count();
+            case "time" ->
+                    this.bounces = (int) getServers().filter(server -> server.getTimeSpent() <= bounceValue).count();
         }
         return this.bounces;
     }
@@ -218,6 +217,7 @@ public class Model {
      */
     public double bounceRate() {
         return Double.parseDouble(df3.format((double) this.bounces / metrics.get(1)));
+//        return Double.parseDouble(df3.format((double) metrics.get(3) / metrics.get(1)));
     }
 
   /**
