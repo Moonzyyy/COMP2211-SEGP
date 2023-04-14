@@ -264,16 +264,16 @@ public class Controller {
     // and update the graph
 
     graphScene.getDateFilterButton().setOnAction(e -> {
-      graphModel.updateMainDateFilters(graphScene.getStartDatePicker().getValue(),
-          graphScene.getEndDatePicker().getValue());
+      graphModel.updateDateFilters(graphScene.getStartDatePicker().getValue(),
+              graphScene.getEndDatePicker().getValue());
       graphScene.getDateFilterButton().setDisable(true);
     });
 
-    graphScene.getCompareControlDateFilterButton().setOnAction(e -> {
-      graphModel.updateCompareDateFilters(graphScene.getCompareControlStartDatePicker().getValue(),
-          graphScene.getCompareControlEndDatePicker().getValue());
-      graphScene.getCompareControlDateFilterButton().setDisable(true);
-    });
+//    graphScene.getCompareControlDateFilterButton().setOnAction(e -> {
+//      graphModel.updateCompareDateFilters(graphScene.getCompareControlStartDatePicker().getValue(),
+//          graphScene.getCompareControlEndDatePicker().getValue());
+//      graphScene.getCompareControlDateFilterButton().setDisable(true);
+//    });
 
     graphScene.getTimeFilter().setOnAction(event -> {
       graphModel.updateGraphData(graphScene.getTimeFilter().getValue(), preds);
@@ -298,22 +298,23 @@ public class Controller {
     });
 
     graphScene.getCompareControl1().setOnAction(event -> {
-      var line = graphModel.getLines().get(0);
-//      toggleBoxDisable(graphScene.getCheckboxes(), line.getBasePredicate());
-      graphModel.removeLine(0);
-      ComboBox<CompareItem> box = graphScene.getCompareControl1();
-      CompareItem item = box.getSelectionModel().getSelectedItem();
-      graphModel.newLine(item.label(), item.value());
-//      toggleBoxDisable(graphScene.getCheckboxes(), item.value());
+      this.updateLine(graphModel, graphScene, 0);
+      graphModel.updateGraphData(preds);
     });
 
     graphScene.getCompareControl2().setOnAction(event -> {
-      graphModel.removeLine(1);
       ComboBox<CompareItem> box = graphScene.getCompareControl2();
       CompareItem item = box.getSelectionModel().getSelectedItem();
       if (item.value() != null) {
-        graphModel.newLine(item.label(), item.value());
+        this.updateLine(graphModel, graphScene, 1);
+        graphModel.getLines().get(1).setEnabled(true);
+      } else {
+        GraphLine line = graphModel.getLines().get(1);
+        toggleBoxDisable(graphScene.getCheckboxes(), line.getBasePredicate());
+        line.setBasePredicate(null);
+        line.setEnabled(false);
       }
+      graphModel.updateGraphData(preds);
     });
 
     //Checkbox listeners
@@ -327,6 +328,16 @@ public class Controller {
 //        graphScene.getMaleCheckBox().setSelected(false);
 //      }
 //    });
+  }
+
+  private void updateLine(GraphModel graphModel, Graph graphScene, int index) {
+    var line = graphModel.getLines().get(index);
+    ComboBox<CompareItem> box = index == 0 ? graphScene.getCompareControl1() : graphScene.getCompareControl2();
+    CompareItem item = box.getSelectionModel().getSelectedItem();
+    toggleBoxDisable(graphScene.getCheckboxes(), line.getBasePredicate());
+    line.setBasePredicate(item.value());
+    line.setTitle(index == 0 ? graphModel.getTitle() : item.label());
+    toggleBoxDisable(graphScene.getCheckboxes(), item.value());
   }
 
   private void togglePred(HashMap<String, Boolean> predicates, CheckBox box) {

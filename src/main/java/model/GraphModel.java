@@ -35,6 +35,8 @@ public class GraphModel {
   private LocalDate currentStart;
   private LocalDate currentEnd;
 
+  private final String title;
+
   /**
    * @param model take in the model class
    * @param title title of the graph
@@ -53,6 +55,8 @@ public class GraphModel {
     this.divide = needDivisionForChangingTime;
     this.chart = ChartFactory.createTimeSeriesChart(title, xAxisName, yAxisName, this.dataSet, true,true, false);
     this.newLine(title, null);
+    this.newLine(title, null, false);
+    this.title = title;
   }
 
   public void updateGraphData(HashMap<String, Boolean> selected) {
@@ -69,31 +73,40 @@ public class GraphModel {
     this.timeFilterVal = timeChosen;
 
     lines.forEach((idx, line) -> {
-      Map<String, FilterPredicate> adjustedPredicates = this.updateSegmentFilters(predicates, currentlySelected);
-      String linePredicate = line.getBasePredicate();
-      if (linePredicate != null) {
-        FilterPredicate predicate = predicates.get(linePredicate);
-        adjustedPredicates.remove(predicate.group() + "_all");
-        adjustedPredicates.putIfAbsent(linePredicate, predicate);
+      if (line.isEnabled()) {
+        Map<String, FilterPredicate> adjustedPredicates = this.updateSegmentFilters(predicates, currentlySelected);
+        String linePredicate = line.getBasePredicate();
+        if (linePredicate != null) {
+          FilterPredicate predicate = predicates.get(linePredicate);
+          adjustedPredicates.remove(predicate.group() + "_all");
+          adjustedPredicates.putIfAbsent(linePredicate, predicate);
+        }
+        Map<LocalDateTime, Double> lineData = model.loadData(id, this.combinePredicates(adjustedPredicates));
+        line.updateLine(timeChosen, lineData);
+        renderer.setSeriesShapesVisible(line.getId(), !timeChosen.equals("Hour"));
       }
-      Map<LocalDateTime, Double> lineData = model.loadData(id, this.combinePredicates(adjustedPredicates));
-      line.updateLine(timeChosen, lineData);
-      renderer.setSeriesShapesVisible(line.getId(), !timeChosen.equals("Hour"));
     });
 
-    updateMainDateFilters(currentStart, currentEnd);
-    updateCompareDateFilters(currentStart, currentEnd);
+//    updateMainDateFilters(currentStart, currentEnd);
+//    updateCompareDateFilters(currentStart, currentEnd);
+      updateDateFilters(currentStart, currentEnd);
   }
 
-  public void newLine(String title, boolean divide, String predicateCode) {
-    GraphLine line = new GraphLine(this.lines.size(), title, divide, predicateCode);
-    dataSet.addSeries(line.getDataSeries());
+  public void newLine(String title, boolean divide, String predicateCode, boolean enabled) {
+    GraphLine line = new GraphLine(this.lines.size(), title, divide, predicateCode, enabled);
+    if (enabled) {
+      dataSet.addSeries(line.getDataSeries());
+    }
     lines.put(this.lines.size(), line);
     updateGraphData(null);
   }
 
+  public void newLine(String title, String predicateCode, boolean enabled) {
+    this.newLine(title, this.divide, predicateCode, enabled);
+  }
+
   public void newLine(String title, String predicateCode) {
-    this.newLine(title, this.divide, predicateCode);
+    this.newLine(title, this.divide, predicateCode, true);
   }
 
   /**
@@ -161,36 +174,39 @@ public class GraphModel {
    * @param startDate: lower bound of the dates to filter by
    * @param endDate: upper bound of the dates to filter by
    */
-  public void updateDateFilterss(LocalDate startDate, LocalDate endDate) {
+  public void updateDateFilters(LocalDate startDate, LocalDate endDate) {
     if (startDate != null && endDate != null) {
       dataSet.removeAllSeries();
       lines.forEach((idx, line) -> {
-        TimeSeries dataSeries = line.getDataSeries();
-        // Create start and end Date objects with selected times
-        TimeSeries filteredSeries = new TimeSeries(dataSeries.getKey());
-        if (!this.timeFilterVal.equals("Week")) {
-          Date startTimeDate = convertDate(startDate);
-          Date endTimeDate = convertDate(endDate);
-          for (int i = 0; i < dataSeries.getItemCount(); i++) {
-            var time = dataSeries.getTimePeriod(i);
-            Date date = time.getStart();
-            if (date.compareTo(startTimeDate) >= 0 && date.compareTo(endTimeDate) <= 0) {
-              filteredSeries.add(dataSeries.getDataItem(i));
-            }
-          }
-        } else {
-          Week startWeek = new Week(java.sql.Date.valueOf(startDate));
-          Week endWeek = new Week(java.sql.Date.valueOf(endDate));
-          for (int i = 0; i < dataSeries.getItemCount(); i++) {
-            RegularTimePeriod compWeek = dataSeries.getDataItem(i).getPeriod();
-            if (compWeek.compareTo(startWeek) >= 0 && compWeek.compareTo(endWeek) <= 0) {
-              filteredSeries.add(dataSeries.getDataItem(i));
-            }
-          }
-        }
+        if (line.isEnabled()) {
 
-        line.setFilteredSeries(filteredSeries);
-        dataSet.addSeries(filteredSeries);
+            TimeSeries dataSeries = line.getDataSeries();
+            // Create start and end Date objects with selected times
+            TimeSeries filteredSeries = new TimeSeries(dataSeries.getKey());
+            if (!this.timeFilterVal.equals("Week")) {
+              Date startTimeDate = convertDate(startDate);
+              Date endTimeDate = convertDate(endDate);
+              for (int i = 0; i < dataSeries.getItemCount(); i++) {
+                var time = dataSeries.getTimePeriod(i);
+                Date date = time.getStart();
+                if (date.compareTo(startTimeDate) >= 0 && date.compareTo(endTimeDate) <= 0) {
+                  filteredSeries.add(dataSeries.getDataItem(i));
+                }
+              }
+            } else {
+              Week startWeek = new Week(java.sql.Date.valueOf(startDate));
+              Week endWeek = new Week(java.sql.Date.valueOf(endDate));
+              for (int i = 0; i < dataSeries.getItemCount(); i++) {
+                RegularTimePeriod compWeek = dataSeries.getDataItem(i).getPeriod();
+                if (compWeek.compareTo(startWeek) >= 0 && compWeek.compareTo(endWeek) <= 0) {
+                  filteredSeries.add(dataSeries.getDataItem(i));
+                }
+              }
+            }
+
+            line.setFilteredSeries(filteredSeries);
+            dataSet.addSeries(filteredSeries);
+        }
       });
       XYPlot xyPlot = (XYPlot) chart.getPlot();
       xyPlot.getDomainAxis().setAutoRange(true);
@@ -205,55 +221,55 @@ public class GraphModel {
      * @param startDate: lower bound of the dates to filter by
      * @param endDate: upper bound of the dates to filter by
      */
-    public void updateMainDateFilters(LocalDate startDate, LocalDate endDate) {
-        if (startDate != null && endDate != null) {
-
-
-            TimeSeries dataSeries = lines.get(0).getDataSeries();
-            TimeSeries filteredSeries = new TimeSeries(dataSeries.getKey());
-            if (!this.timeFilterVal.equals("Week")) {
-                Date startTimeDate = convertDate(startDate);
-                Date endTimeDate = convertDate(endDate);
-
-                for (int i = 0; i < dataSeries.getItemCount(); i++) {
-                    var time = dataSeries.getTimePeriod(i);
-                    Date date = time.getStart();
-                    if (date.compareTo(startTimeDate) >= 0 && date.compareTo(endTimeDate) <= 0) {
-                        filteredSeries.add(dataSeries.getDataItem(i));
-                    }
-                }
-
-            } else {
-                Week startWeek = new Week(java.sql.Date.valueOf(startDate));
-                Week endWeek = new Week(java.sql.Date.valueOf(endDate));
-
-                for (int i = 0; i < dataSeries.getItemCount(); i++) {
-                    RegularTimePeriod compWeek = dataSeries.getDataItem(i).getPeriod();
-                    if (compWeek.compareTo(startWeek) >= 0 && compWeek.compareTo(endWeek) <= 0) {
-                        filteredSeries.add(dataSeries.getDataItem(i));
-                    }
-                }
-
-            }
-            lines.get(0).setFilteredSeries(filteredSeries);
-            if (lines.size() > 1) {
-                var data = dataSet.getSeries(1);
-                dataSet.removeAllSeries();
-                dataSet.addSeries(filteredSeries);
-                dataSet.addSeries(data);
-            } else {
-                dataSet.removeAllSeries();
-                dataSet.addSeries(filteredSeries);
-            }
-
-
-            XYPlot xyPlot = (XYPlot) chart.getPlot();
-            xyPlot.getDomainAxis().setAutoRange(true);
-            xyPlot.getRangeAxis().setAutoRange(true);
-            currentStart = startDate;
-            currentEnd = endDate;
-        }
-    }
+//    public void updateMainDateFilters(LocalDate startDate, LocalDate endDate) {
+//        if (startDate != null && endDate != null) {
+//
+//
+//            TimeSeries dataSeries = lines.get(0).getDataSeries();
+//            TimeSeries filteredSeries = new TimeSeries(dataSeries.getKey());
+//            if (!this.timeFilterVal.equals("Week")) {
+//                Date startTimeDate = convertDate(startDate);
+//                Date endTimeDate = convertDate(endDate);
+//
+//                for (int i = 0; i < dataSeries.getItemCount(); i++) {
+//                    var time = dataSeries.getTimePeriod(i);
+//                    Date date = time.getStart();
+//                    if (date.compareTo(startTimeDate) >= 0 && date.compareTo(endTimeDate) <= 0) {
+//                        filteredSeries.add(dataSeries.getDataItem(i));
+//                    }
+//                }
+//
+//            } else {
+//                Week startWeek = new Week(java.sql.Date.valueOf(startDate));
+//                Week endWeek = new Week(java.sql.Date.valueOf(endDate));
+//
+//                for (int i = 0; i < dataSeries.getItemCount(); i++) {
+//                    RegularTimePeriod compWeek = dataSeries.getDataItem(i).getPeriod();
+//                    if (compWeek.compareTo(startWeek) >= 0 && compWeek.compareTo(endWeek) <= 0) {
+//                        filteredSeries.add(dataSeries.getDataItem(i));
+//                    }
+//                }
+//
+//            }
+//            lines.get(0).setFilteredSeries(filteredSeries);
+//            if (lines.size() > 1) {
+//                var data = dataSet.getSeries(1);
+//                dataSet.removeAllSeries();
+//                dataSet.addSeries(filteredSeries);
+//                dataSet.addSeries(data);
+//            } else {
+//                dataSet.removeAllSeries();
+//                dataSet.addSeries(filteredSeries);
+//            }
+//
+//
+//            XYPlot xyPlot = (XYPlot) chart.getPlot();
+//            xyPlot.getDomainAxis().setAutoRange(true);
+//            xyPlot.getRangeAxis().setAutoRange(true);
+//            currentStart = startDate;
+//            currentEnd = endDate;
+//        }
+//    }
 
     /**
      * Filter the current TimeSeries between two dates
@@ -414,5 +430,9 @@ public class GraphModel {
 
   public HashMap<Integer, GraphLine> getLines() {
     return lines;
+  }
+
+  public String getTitle() {
+    return title;
   }
 }
