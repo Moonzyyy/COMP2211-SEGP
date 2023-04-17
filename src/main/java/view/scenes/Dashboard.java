@@ -1,5 +1,6 @@
 package view.scenes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,6 +36,7 @@ public class Dashboard extends AbstractScene {
     private ListView<Object> compareList;
     private CheckBox maleCheckBox;
     private CheckBox femaleCheckBox;
+    private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
 
     /**
    * The Dashboard constructor
