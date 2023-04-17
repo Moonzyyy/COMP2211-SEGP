@@ -2,13 +2,15 @@ package view.scenes;
 
 import java.util.List;
 import java.util.Objects;
+
+import core.segments.Age;
+import core.segments.Context;
+import core.segments.Income;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.Shadow;
 import javafx.scene.image.Image;
@@ -30,8 +32,11 @@ public class Dashboard extends AbstractScene {
   private DashboardComp dashboardComp;
   private Button backButton;
   private Button bounceDefButton;
+    private ListView<Object> compareList;
+    private CheckBox maleCheckBox;
+    private CheckBox femaleCheckBox;
 
-  /**
+    /**
    * The Dashboard constructor
    */
   public Dashboard() {
@@ -147,6 +152,58 @@ public class Dashboard extends AbstractScene {
     scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
     layout.setPrefHeight(scene.getHeight());
   }
+
+    void createCheckBoxes() {
+
+        compareList = new ListView<>();
+
+        var genderText = new Label("Gender of Audience:");
+        genderText.getStyleClass().add("list-cell-text");
+        maleCheckBox = new CheckBox("Male");
+        maleCheckBox.getStyleClass().add("checkbox");
+        maleCheckBox.setId("male_1");
+        femaleCheckBox = new CheckBox("Female");
+        femaleCheckBox.getStyleClass().add("checkbox");
+        femaleCheckBox.setId("female_1");
+        this.checkboxes.add(maleCheckBox);
+        this.checkboxes.add(femaleCheckBox);
+
+        compareList.getStyleClass().add("list-cell");
+        compareList.getItems().addAll(genderText, maleCheckBox, femaleCheckBox);
+
+        var ageText = new Label("Age of Audience:");
+        ageText.getStyleClass().add("list-cell-text");
+        compareList.getItems().add(ageText);
+        for (Age a : Age.values()) {
+            CheckBox box = new CheckBox(a.label);
+            box.setId("age_" + a.idx);
+            compareList.getItems().add(box);
+            this.checkboxes.add(box);
+        }
+
+        var incomeText = new Label("Income of Audience:");
+        incomeText.getStyleClass().add("list-cell-text");
+        compareList.getItems().add(incomeText);
+        for (Income i : Income.values()) {
+            CheckBox box = new CheckBox(i.label);
+            box.setId("income_" + i.idx);
+            compareList.getItems().add(box);
+            this.checkboxes.add(box);
+        }
+
+        var contextText = new Label("Location of Ad Interaction:");
+        contextText.getStyleClass().add("list-cell-text");
+        compareList.getItems().add(contextText);
+        for (Context c : Context.values()) {
+            CheckBox box = new CheckBox(c.label);
+            box.setId("context_" + c.idx);
+            compareList.getItems().add(box);
+            this.checkboxes.add(box);
+        }
+        this.checkboxes.forEach(c -> c.getStyleClass().add("checkbox"));
+        layout.setRight(compareList);
+
+    }
 
   public void postShowEdits() {
     menuBar.setTranslateX(-menuBar.getWidth());
