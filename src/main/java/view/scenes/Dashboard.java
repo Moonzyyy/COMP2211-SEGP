@@ -75,6 +75,12 @@ public class Dashboard extends AbstractScene {
     bounceDefButton = new Button("Change Bounce Definition");
     bounceDefButton.getStyleClass().add("bounceButton");
 
+      // Placeholder for menu items
+      var menuPlaceholder = new Label();
+      menuPlaceholder.getStyleClass().add("text");
+      menuBar.getChildren().addAll(menuPlaceholder);
+      menuBar.setAlignment(Pos.BOTTOM_LEFT);
+
     // Sliding Menu Pane
     menuBar = new VBox();
     menuBar.getStyleClass().add("menu");
@@ -85,11 +91,7 @@ public class Dashboard extends AbstractScene {
 
     menuBar.getChildren().add(createCheckBoxes());
 
-    // Placeholder for menu items
-    var menuPlaceholder = new Label("Dev Text");
-    menuPlaceholder.getStyleClass().add("text");
-    menuBar.getChildren().addAll(menuPlaceholder);
-    menuBar.setAlignment(Pos.BOTTOM_LEFT);
+
 
     // Menu Button
     var menuButton = new Button();
