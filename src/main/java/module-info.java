@@ -1,5 +1,5 @@
 module com.adviz {
-  requires com.opencsv;
+//  requires com.opencsv;
   requires java.sql;
   requires java.desktop;
   requires org.jfree.jfreechart;
