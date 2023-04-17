@@ -116,7 +116,12 @@ public class DashboardComp extends VBox {
   public void updateNumberBoxes(List<String> numbers) {
     for (int i = 0; i < numbers.size(); i++) {
       final Label numberLabel = (Label) numberBoxes.get(i).getChildren().get(0);
-      numberLabel.setText(numbers.get(i));
+      //Neaten up number boxes
+      switch (i+1) {
+        case 1, 2, 3, 4, 11 -> numberLabel.setText(numbers.get(i).substring(0, numbers.get(i).length()-2));
+        case 5, 7, 8, 9 -> numberLabel.setText("$" + numbers.get(i));
+        case 6, 10 -> numberLabel.setText(numbers.get(i));
+      }
     }
   }
 }

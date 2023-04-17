@@ -251,7 +251,7 @@ public class Controller {
     });
     // Creates a print job, works for physical printers, not PDFs
     graphScene.getPrintButton().setOnAction((event) -> {
-//      graphScene.getChart().createChartPrintJob();
+//        graphScene.getChart().createChartPrintJob();
 
     });
 
