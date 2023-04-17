@@ -67,6 +67,8 @@ public class Dashboard extends AbstractScene {
     layout.setCenter(wrapper);
     wrapper.setAlignment(Pos.BOTTOM_LEFT);
 
+
+
     backButton = new Button("<");
     backButton.getStyleClass().add("backButton");
 
@@ -80,6 +82,8 @@ public class Dashboard extends AbstractScene {
     VBox.setMargin(menuBar, new Insets(20, 0, 30, 0));
     menuBar.setMaxWidth(350);
     wrapper.getChildren().add(menuBar);
+
+    menuBar.getChildren().add(createCheckBoxes());
 
     // Placeholder for menu items
     var menuPlaceholder = new Label("Dev Text");
@@ -149,13 +153,14 @@ public class Dashboard extends AbstractScene {
     bottomButtons.setRight(bounceDefButton);
     inner.setBottom(bottomButtons);
 
+
     scene = new Scene(layout, 1280, 720);
     scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
     scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
     layout.setPrefHeight(scene.getHeight());
   }
 
-    void createCheckBoxes() {
+    ListView<Object> createCheckBoxes() {
 
         compareList = new ListView<>();
 
@@ -203,7 +208,7 @@ public class Dashboard extends AbstractScene {
             this.checkboxes.add(box);
         }
         this.checkboxes.forEach(c -> c.getStyleClass().add("checkbox"));
-        layout.setRight(compareList);
+        return compareList;
 
     }
 
