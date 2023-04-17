@@ -118,6 +118,8 @@ public class Controller {
     DashboardComp dashboardComp = dashboard.getDashboardComp();
     dashboardComp.updateNumberBoxes(metrics);
 
+    dashboard.bounceDefinition.setText(model.getBounceDef());
+
     //Button action listeners
     dashboard.getBackButton().setOnAction((event) -> {
       setUpScene(new StartMenu());

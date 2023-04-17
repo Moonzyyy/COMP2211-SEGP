@@ -470,6 +470,8 @@ public class Model {
         return serverFile;
     }
 
+    public String getBounceDef() {return bounceDef;}
+
     public void setPredicate(Predicate<User> predicate) {
         this.predicate = predicate;
     }

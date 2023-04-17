@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import view.components.DashboardComp;
 
@@ -37,6 +38,7 @@ public class Dashboard extends AbstractScene {
     private CheckBox maleCheckBox;
     private CheckBox femaleCheckBox;
     private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
+    public Text bounceDefinition;
 
     /**
    * The Dashboard constructor
@@ -75,19 +77,20 @@ public class Dashboard extends AbstractScene {
     bounceDefButton = new Button("Change Bounce Definition");
     bounceDefButton.getStyleClass().add("bounceButton");
 
-      // Placeholder for menu items
-      var menuPlaceholder = new Label();
-      menuPlaceholder.getStyleClass().add("text");
-      menuBar.getChildren().addAll(menuPlaceholder);
-      menuBar.setAlignment(Pos.BOTTOM_LEFT);
+      // Sliding Menu Pane
+      menuBar = new VBox();
+      menuBar.getStyleClass().add("menu");
+      VBox.setVgrow(menuBar, Priority.ALWAYS);
+      VBox.setMargin(menuBar, new Insets(20, 0, 30, 0));
+      menuBar.setMaxWidth(350);
+      wrapper.getChildren().add(menuBar);
 
-    // Sliding Menu Pane
-    menuBar = new VBox();
-    menuBar.getStyleClass().add("menu");
-    VBox.setVgrow(menuBar, Priority.ALWAYS);
-    VBox.setMargin(menuBar, new Insets(20, 0, 30, 0));
-    menuBar.setMaxWidth(350);
-    wrapper.getChildren().add(menuBar);
+
+      // Shows Current bounce Definition
+      bounceDefinition = new Text("");
+      bounceDefinition.getStyleClass().add("text");
+      menuBar.getChildren().add(bounceDefinition);
+      menuBar.setAlignment(Pos.BOTTOM_LEFT);
 
     menuBar.getChildren().add(createCheckBoxes());
 
