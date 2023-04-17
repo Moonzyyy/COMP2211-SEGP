@@ -21,7 +21,7 @@ public class Model {
 
     private final ArrayList<Double> metrics = new ArrayList<>(11);
 
-    private String bounceDef = "default";
+    private String bounceDef = "Page";
     private int bounceValue;
     private int bounces;
     private final DecimalFormat df3 = new DecimalFormat("#.###");
@@ -32,7 +32,8 @@ public class Model {
     private File serverFile;
     private Predicate<User> predicate;
 
-    public Model() {}
+    public Model() {
+    }
 
     public boolean importData() {
         //Get CSV data from all 3 log files
@@ -471,6 +472,7 @@ public class Model {
     }
 
     public String getBounceDef() {return bounceDef;}
+    public int getBounceValue() { return bounceValue; }
 
     public void setPredicate(Predicate<User> predicate) {
         this.predicate = predicate;
@@ -478,4 +480,5 @@ public class Model {
 
     public void setBounceDef(String bounceDef) { this.bounceDef = bounceDef; }
     public void setBounceValue(int bounceValue) { this.bounceValue = bounceValue; }
+
 }

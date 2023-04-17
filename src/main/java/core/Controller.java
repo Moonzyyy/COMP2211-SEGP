@@ -118,7 +118,7 @@ public class Controller {
     DashboardComp dashboardComp = dashboard.getDashboardComp();
     dashboardComp.updateNumberBoxes(metrics);
 
-    dashboard.bounceDefinition.setText(model.getBounceDef());
+    dashboard.bounceDefinition.setText(model.getBounceDef() + " " +model.getBounceValue());
 
     //Button action listeners
     dashboard.getBackButton().setOnAction((event) -> {
@@ -221,17 +221,17 @@ public class Controller {
 
     bounceDef.getApplyButton().setOnAction((event) -> {
       if (bounceDef.getPageRadio().isSelected()) {
-        model.setBounceDef("page");
+        model.setBounceDef("Page");
         model.setBounceValue(Integer.parseInt(bounceDef.getInputPageText().getText()));
       } else {
-        model.setBounceDef("time");
+        model.setBounceDef("Time");
         model.setBounceValue(Integer.parseInt(bounceDef.getInputTimeText().getText()));
       }
       setUpScene(new Dashboard());
     });
 
     bounceDef.getResetButton().setOnAction((event) -> {
-      model.setBounceDef("default");
+      model.setBounceDef("Page");
       setUpScene(new Dashboard());
     });
   }
