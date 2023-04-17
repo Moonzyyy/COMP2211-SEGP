@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jfree.data.time.TimeSeries;
 import view.components.CompareItem;
 import view.components.DashboardComp;
 import view.scenes.*;
@@ -258,6 +259,7 @@ public class Controller {
         graphScene.getDateFilterButton());
 
     graphModel.configureDatePickers(graphScene.getCompareControlStartDatePicker(), graphScene.getCompareControlEndDatePicker(), graphScene.getCompareControlDateFilterButton());
+    graphModel.updateGraphData(preds);
 
     // Checkbox Listener
     // When the filter button is pressed, get all the currently selected filters
@@ -269,11 +271,14 @@ public class Controller {
       graphScene.getDateFilterButton().setDisable(true);
     });
 
-//    graphScene.getCompareControlDateFilterButton().setOnAction(e -> {
-//      graphModel.updateCompareDateFilters(graphScene.getCompareControlStartDatePicker().getValue(),
-//          graphScene.getCompareControlEndDatePicker().getValue());
-//      graphScene.getCompareControlDateFilterButton().setDisable(true);
-//    });
+    graphScene.getCompareControlDateFilterButton().setOnAction(e -> {
+      boolean setVisible = graphModel.updateCompareDateFilters(graphScene.getCompareControlStartDatePicker().getValue(),
+          graphScene.getCompareControlEndDatePicker().getValue());
+      graphScene.getCompareControlDateFilterButton().setDisable(true);
+//      System.out.println(setVisible);
+      graphScene.setLineVisibility(2, setVisible);
+      graphScene.setLineVisibility(3, setVisible && graphModel.getLines().get(1).isEnabled());
+    });
 
     graphScene.getTimeFilter().setOnAction(event -> {
       graphModel.updateGraphData(graphScene.getTimeFilter().getValue(), preds);
@@ -305,11 +310,17 @@ public class Controller {
     graphScene.getCompareControl2().setOnAction(event -> {
       ComboBox<CompareItem> box = graphScene.getCompareControl2();
       CompareItem item = box.getSelectionModel().getSelectedItem();
+      GraphLine line = graphModel.getLines().get(1);
       if (item.value() != null) {
         this.updateLine(graphModel, graphScene, 1);
-        graphModel.getLines().get(1).setEnabled(true);
+        line.setEnabled(true);
+        graphScene.setLineVisibility(1, true);
+        graphScene.setLineVisibility(3, true);
+        graphModel.removeLine(line.getDatedSeries1());
+        line.setDatedSeries1(new TimeSeries(item.label()));
       } else {
-        GraphLine line = graphModel.getLines().get(1);
+        graphScene.setLineVisibility(1, false);
+        graphScene.setLineVisibility(3, false);
         toggleBoxDisable(graphScene.getCheckboxes(), line.getBasePredicate());
         line.setBasePredicate(null);
         line.setEnabled(false);
@@ -335,6 +346,7 @@ public class Controller {
     ComboBox<CompareItem> box = index == 0 ? graphScene.getCompareControl1() : graphScene.getCompareControl2();
     CompareItem item = box.getSelectionModel().getSelectedItem();
     toggleBoxDisable(graphScene.getCheckboxes(), line.getBasePredicate());
+//    line.setTitle(item.label());
     line.setBasePredicate(item.value());
     line.setTitle(index == 0 ? graphModel.getTitle() : item.label());
     toggleBoxDisable(graphScene.getCheckboxes(), item.value());

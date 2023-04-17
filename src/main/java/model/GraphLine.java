@@ -12,19 +12,20 @@ public class GraphLine {
     private String basePredicate;
     private final int id;
     private TimeSeries dataSeries;
-    private TimeSeries filteredSeries;
+    private TimeSeries datedSeries1;
+    private TimeSeries datedSeries2;
     private final boolean divide;
     private String title;
 
     private boolean enabled;
-
 
     GraphLine(int id, String title, boolean needDivisionForChangingTime, String initialP, boolean enabled) {
         this.enabled = enabled;
         this.id = id;
         this.title = title;
         this.dataSeries = new TimeSeries(title);
-        this.filteredSeries = new TimeSeries(title);
+        this.datedSeries1 = new TimeSeries(title);
+        this.datedSeries2 = new TimeSeries(title);
         this.basePredicate = initialP;
         this.divide = needDivisionForChangingTime;
     }
@@ -62,6 +63,7 @@ public class GraphLine {
 
             }
         }
+//        this.setDatedSeries1(dataSeries);
 //        updateDateFilters(currentStart, currentEnd);
 
 //        this.data = data;
@@ -75,12 +77,20 @@ public class GraphLine {
         this.dataSeries = dataSeries;
     }
 
-    public TimeSeries getFilteredSeries() {
-        return filteredSeries;
+    public TimeSeries getDatedSeries1() {
+        return datedSeries1;
     }
 
-    public void setFilteredSeries(TimeSeries filteredSeries) {
-        this.filteredSeries = filteredSeries;
+    public void setDatedSeries1(TimeSeries datedSeries1) {
+        this.datedSeries1 = datedSeries1;
+    }
+
+    public TimeSeries getDatedSeries2() {
+        return datedSeries2;
+    }
+
+    public void setDatedSeries2(TimeSeries datedSeries2) {
+        this.datedSeries2 = datedSeries2;
     }
 
     public String getBasePredicate() {

@@ -183,6 +183,8 @@ public class Graph extends AbstractScene {
         chartPanel.getChart().getXYPlot().getRenderer()
                 .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
         chartPanel.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
+        chartPanel.getChart().getXYPlot().getRenderer().setDefaultSeriesVisible(false);
+        chartPanel.getChart().getXYPlot().getRenderer().setSeriesVisible(0, true);
       swingNode.setContent(chartPanel);
 
       chartPanel.getChart().getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
@@ -432,5 +434,9 @@ public class Graph extends AbstractScene {
    */
   public CheckBox getFemaleCheckBox() {
     return femaleCheckBox;
+  }
+
+  public void setLineVisibility(int i, boolean isVisible) {
+    chartPanel.getChart().getXYPlot().getRenderer().setSeriesVisible(i, isVisible);
   }
 }
