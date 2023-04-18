@@ -118,6 +118,8 @@ public class Controller {
      * @param dashboard the dashboard scene
      */
     public void setUpScene(Dashboard dashboard) {
+        var preds = initPredicates();
+
         dashboard.createScene();
         dashboard.setTheme(theme);
         this.setCurrentScene(dashboard);
@@ -135,6 +137,26 @@ public class Controller {
         dashboard.getBounceDefButton().setOnAction((event) -> {
             setUpScene(new BounceDef());
         });
+
+        dashboard.getFilterButton().setOnAction((event ->
+        {
+            ArrayList<String> newDashboardValues = model.updateDashboardData("", preds);
+            dashboard.getDashboardComp().updateNumberBoxes(newDashboardValues);
+        }));
+
+        dashboard.getCheckboxes().forEach(box -> {
+            box.setOnAction(event -> {
+                var male = dashboard.getMaleCheckBox();
+                var female = dashboard.getFemaleCheckBox();
+                if (box.equals(male)) {
+                    if (female.isSelected()) togglePred(preds, female);
+                } else if (box.equals(female)) {
+                    if (male.isSelected()) togglePred(preds, male);
+                }
+                preds.replace(box.getId(), box.isSelected());
+            });
+        });
+
         // All number box listeners
         for (int i = 0; i < dashboardComp.getNumberBoxes().size(); i++) {
             int finalI = i;
@@ -200,6 +222,9 @@ public class Controller {
                 setUpScene(new Graph(finalI, gm.getChart(), histogramModel.getChart()), gm, histogramModel);
             });
         }
+
+
+
     }
 
     /**
@@ -316,6 +341,7 @@ public class Controller {
                 preds.replace(box.getId(), box.isSelected());
             });
         });
+
 
         graphScene.getSegmentFilterButton().setOnAction((event) -> {
             graphModel.updateGraphData(preds);
