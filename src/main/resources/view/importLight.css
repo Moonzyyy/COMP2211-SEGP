@@ -1,60 +1,76 @@
-.button{
-  -fx-background-radius: 30;
-  -fx-background-color: #1da463;
-  -fx-text-fill: white;
-  -fx-font-size: 25px;
-  -fx-font-family: "Roboto";
-  -fx-padding: 10;
-  -fx-cursor: hand;
-  -fx-pref-width: 200;
+.root {
+    -primary-color: #006d3e;
+    -secondary-color: #a03670;
+    -tertiary-color: #7c3cbe;
+    -neutral-color: #f8fdff;
+    -label-text-color: black;
+    -button-text-color: white;
+
+    -fx-font-weight: 500;
+
+    -fx-background-color: -neutral-color;
+    -fx-background-text-color: -label-text-color;
 }
 
-.button:hover{
-  -fx-background-color: #016136;
-  -fx-text-fill: white;
+.button {
+    -fx-background-radius: 30;
+    -fx-background-color: -primary-color;
+    -fx-text-fill: -button-text-color;
+    -fx-font-size: 25px;
+    -fx-font-family: "Roboto";
+    -fx-padding: 10;
+    -fx-cursor: hand;
+    -fx-pref-width: 200;
 }
 
-.button:pressed{
-  -fx-background-color: #bfbfbf;
-  -fx-text-fill: #121212;
-  /*-fx-font-size: 23px;*/
+.button:hover {
+    -fx-background-color: derive(-primary-color, -20%);
+    -fx-text-fill: -button-text-color;
+}
+
+.button:pressed {
+    -fx-background-color: derive(-primary-color, -30%);
+    -fx-text-fill: derive(-button-text-color, -30%);
 }
 
 
 .title {
-  -fx-font-size: 40;
-  -fx-font-family: "Roboto";
-  -fx-text-fill: #a41d5e;
-  -fx-padding: 20 0 0 0;
+    -fx-font-size: 80;
+    -fx-font-family: "Roboto";
+    -fx-font-weight: 500;
+    -fx-text-fill: -label-text-color;
+    -fx-padding: 50 0 0 0;
 
 }
 
-.importBox{
-  -fx-background-radius: 30;
-  -fx-padding: 20;
-  -fx-spacing: 20;
-  -fx-alignment: center;
+.tooltip{
+    -fx-background-color: -neutral-color;
+    -fx-text-fill: -label-text-color;
 }
 
-.importBox .label{
-  -fx-text-fill: #FFFFFF;
-  -fx-font-size: 30;
-  -fx-font-family: "Roboto";
+.importBox {
+    -fx-background-color: -neutral-color;
+    -fx-background-radius: 30;
+    -fx-padding: 20;
+    -fx-spacing: 20;
+    -fx-alignment: center;
 }
 
-.root {
-  -fx-background-color: #ffffff;
+.importBox .label {
+    -fx-text-fill: -label-text-color;
+    -fx-font-size: 30;
+    -fx-font-family: "Roboto";
 }
 
 
 .button:disabled {
-  -fx-background-color: #c2e8d2;
-  -fx-text-fill: #71ca99;
+    -fx-background-color: derive(-primary-color, +50%);
+    -fx-text-fill: derive(-button-text-color, +50%);
 }
 
 .fileNameText {
-  -fx-font-size: 12px;
-  -fx-fill: White;
-  -fx-font-weight: 700;
+    -fx-font-size: 12px;
+    -fx-fill: -label-text-color;
+    -fx-font-weight: 700;
 
 }
