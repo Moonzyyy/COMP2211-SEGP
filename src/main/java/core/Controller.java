@@ -119,6 +119,7 @@ public class Controller {
      */
     public void setUpScene(Dashboard dashboard) {
         dashboard.createScene();
+        dashboard.setTheme(theme);
         this.setCurrentScene(dashboard);
 
         List<String> metrics = model.getMetrics();
