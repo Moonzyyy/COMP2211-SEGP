@@ -9,9 +9,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import core.segments.Age;
+import core.segments.Context;
+import core.segments.Income;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 
 public class Model {
 
@@ -30,9 +33,13 @@ public class Model {
     private File clicksFile;
     private File impressionsFile;
     private File serverFile;
+    private Map<String, FilterPredicate> predicates;
     private Predicate<User> predicate;
+    private Map<String, Boolean> currentlySelected;
 
     public Model() {
+        this.predicates = initPredicates();
+        bounceValue = 1;
     }
 
     public boolean importData() {
@@ -186,10 +193,10 @@ public class Model {
      */
     public int numberOfBounces() {
         switch (bounceDef) {
-            case "default" -> this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
-            case "page" ->
+            case "Default" -> this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
+            case "Page" ->
                     this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= bounceValue).count();
-            case "time" ->
+            case "Time" ->
                     this.bounces = (int) getServers().filter(server -> server.getTimeSpent() <= bounceValue).count();
         }
         return this.bounces;
@@ -203,21 +210,21 @@ public class Model {
         getServers().sequential().forEach(server -> {
             LocalDateTime dateTime = server.getEntryDate();
             switch (bounceDef) {
-                case "default" -> {
+                case "Default" -> {
                     if (server.getPagesViewed() <= 1 && bouncesByDate.containsKey(dateTime)) {
                         bouncesByDate.put(dateTime, bouncesByDate.get(dateTime) + 1);
                     } else if (server.getPagesViewed() <= 1) {
                         bouncesByDate.put(dateTime, 1.0);
                     }
                 }
-                case "page" -> {
+                case "Page" -> {
                     if (server.getTimeSpent() <= bounceValue && bouncesByDate.containsKey(dateTime)) {
                         bouncesByDate.put(dateTime, bouncesByDate.get(dateTime) + 1);
                     } else if (server.getTimeSpent() <= bounceValue) {
                         bouncesByDate.put(dateTime, 1.0);
                     }
                 }
-                case "time" -> {
+                case "Time" -> {
                     if (server.getPagesViewed() <= bounceValue && bouncesByDate.containsKey(dateTime)) {
                         bouncesByDate.put(dateTime, bouncesByDate.get(dateTime) + 1);
                     } else if (server.getPagesViewed() <= bounceValue) {
@@ -429,7 +436,103 @@ public class Model {
         return data;
     }
 
+    public void updateDashData(String timeChosen, HashMap<String, Boolean> selected) {
+        if (selected != null) currentlySelected = selected;
 
+
+        Map<String, FilterPredicate> adjustedPredicates = this.updateSegmentFilters(predicates, currentlySelected);
+
+        for(int i = 0; i < 11; i++)
+        {
+            Map<LocalDateTime, Double> GraphData = loadData(i, this.combinePredicates(adjustedPredicates));
+        }
+
+
+
+
+
+
+    }
+
+    /**
+     * Initialise the predicates used for filtering by audience segment.
+     */
+    public Map<String, FilterPredicate> initPredicates() {
+        currentlySelected = new HashMap<>();
+        Map<String, FilterPredicate> allPredicates = new HashMap<>(19);
+        allPredicates.put("age_all", new FilterPredicate("age", u -> true));
+        for (Age a : Age.values()) {
+            Predicate<User> p = u -> u.getAge() == a;
+            allPredicates.put("age_" + a.idx, new FilterPredicate("age", p));
+        }
+
+        allPredicates.put("context_all", new FilterPredicate( "context", u -> true));
+        for (Context c : Context.values()) {
+            Predicate<User> p = u -> u.getContext() == c;
+            allPredicates.put("context_" + c.idx, new FilterPredicate("context", p));
+        }
+
+        allPredicates.put("income_all", new FilterPredicate( "income", u -> true));
+        for (Income i : Income.values()) {
+            Predicate<User> p = u -> u.getIncome() == i;
+            allPredicates.put("income_" + i.idx, new FilterPredicate("income", p));
+        }
+
+        allPredicates.put("male_1", new FilterPredicate("gender", User::getGender));
+        allPredicates.put("female_1", new FilterPredicate("gender", u -> !u.getGender()));
+        return allPredicates;
+    }
+    /**
+     * Update the enabled predicates for filtering by audience segment
+     *
+     * @param selected A Map of predicates are either to be applied or not
+     */
+    public Map<String, FilterPredicate> updateSegmentFilters(Map<String, FilterPredicate> predicates, Map<String, Boolean> selected) {
+        return this.updateSegmentFilters(predicates, selected, true);
+    }
+    public Map<String, FilterPredicate> updateSegmentFilters(Map<String, FilterPredicate> predicates, Map<String, Boolean> selected, Boolean resetBaseFilters) {
+        HashMap<String, FilterPredicate> predicateMap = new HashMap<>();
+        if (resetBaseFilters != null && resetBaseFilters) {
+            predicateMap.put("age_all", predicates.get("age_all"));
+            predicateMap.put("context_all", predicates.get("context_all"));
+            predicateMap.put("income_all", predicates.get("income_all"));
+            predicateMap.remove("male_1");
+            predicateMap.remove("female_1");
+        }
+        selected.forEach((key, value) -> {
+            FilterPredicate fp = predicates.get(key);
+            if (value) {
+                predicateMap.put(key, fp);
+                if (fp.group().equals("age")) predicateMap.remove("age_all");
+                if (fp.group().equals("context")) predicateMap.remove("context_all");
+                if (fp.group().equals("income")) predicateMap.remove("income_all");
+            }
+        });
+        return predicateMap;
+    }
+
+    /**
+     * Combine the lists of predicates for filtering by audience segments
+     * @return The combined list of predicates - "and"-ed together
+     */
+    public Predicate<User> combinePredicates(Map<String, FilterPredicate> predicates) {
+        var ages = getPredicateGroup("age", predicates).map(FilterPredicate::predicate).reduce(u -> false, Predicate::or);
+        var contexts = getPredicateGroup("context", predicates).map(FilterPredicate::predicate).reduce(u -> false, Predicate::or);
+        var incomes = getPredicateGroup("income", predicates).map(FilterPredicate::predicate).reduce(u -> false, Predicate::or);
+        Predicate<User> gender = u -> true;
+        FilterPredicate male = predicates.get("male_1");
+        FilterPredicate female = predicates.get("female_1");
+        if (male != null) {
+            gender = male.predicate();
+        } else if (female != null) {
+            gender = female.predicate();
+        }
+        return ages.and(contexts).and(incomes).and(gender);
+    }
+
+    public Stream<FilterPredicate> getPredicateGroup(String group, Map<String, FilterPredicate> predicates) {
+        return predicates.values().stream().filter(fp -> fp.group().equals(group));
+    }
 
     /**
      * Create arraylist of metrics from functions to persist after import

@@ -38,7 +38,9 @@ public class Dashboard extends AbstractScene {
     private CheckBox maleCheckBox;
     private CheckBox femaleCheckBox;
     private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
+
     public Text bounceDefinition;
+    private Button filterButton;
 
     /**
    * The Dashboard constructor
@@ -92,7 +94,14 @@ public class Dashboard extends AbstractScene {
       menuBar.getChildren().add(bounceDefinition);
       menuBar.setAlignment(Pos.BOTTOM_LEFT);
 
+
+
+
+
     menuBar.getChildren().add(createCheckBoxes());
+
+    filterButton = new Button("Filter");
+    menuBar.getChildren().add(filterButton);
 
 
 
@@ -221,6 +230,8 @@ public class Dashboard extends AbstractScene {
     menuBar.setTranslateX(-menuBar.getWidth());
   }
 
+  public ArrayList<CheckBox> getCheckBoxes(){return checkboxes;}
+
   /**
    * @return get the dashboard components
    */
@@ -238,4 +249,24 @@ public class Dashboard extends AbstractScene {
   public Button getBounceDefButton(){
     return this.bounceDefButton;
   }
+
+  public Button getFilterButton() {return this.filterButton;}
+
+    public ArrayList<CheckBox> getCheckboxes() {
+        return checkboxes;
+    }
+
+    /**
+     * @return get the male check box
+     */
+    public CheckBox getMaleCheckBox() {
+        return maleCheckBox;
+    }
+
+    /**
+     * @return get the female check box
+     */
+    public CheckBox getFemaleCheckBox() {
+        return femaleCheckBox;
+    }
 }
