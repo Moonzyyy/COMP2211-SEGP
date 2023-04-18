@@ -39,6 +39,7 @@ public class Dashboard extends AbstractScene {
     private ListView<Object> compareList;
     private CheckBox maleCheckBox;
     private CheckBox femaleCheckBox;
+    private ImageView menuImg;
 
     /**
      * The Dashboard constructor
@@ -72,7 +73,7 @@ public class Dashboard extends AbstractScene {
 
         backButton = new Button("Back");
 
-        bounceDefButton = new Button("Change Bounce Definition");
+        bounceDefButton = new Button("Bounce Def");
 
 
         // Sliding Menu Pane
@@ -100,7 +101,7 @@ public class Dashboard extends AbstractScene {
         menuButton.getStyleClass().add("menuButton");
         Image menu = new Image(
                 Objects.requireNonNull(getClass().getResourceAsStream("/images/menu.png")));
-        var menuImg = new ImageView(menu);
+        menuImg = new ImageView(menu);
         menuImg.setFitHeight(20);
         menuImg.setFitWidth(20);
         menuButton.setGraphic(menuImg);
@@ -240,10 +241,12 @@ public class Dashboard extends AbstractScene {
         if (theme) {
             scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
             scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
+//            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu.png"))));
 
         } else {
             scene.getStylesheets().add(getClass().getResource("/view/dashboardLight.css").toExternalForm());
             scene.getStylesheets().add(getClass().getResource("/view/dashboardCompLight.css").toExternalForm());
+//            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menuLight.png"))));
 
         }
     }

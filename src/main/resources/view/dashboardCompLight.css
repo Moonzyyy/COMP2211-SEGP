@@ -1,73 +1,76 @@
 .root {
-  -primary-color: #006d3e;
-  -secondary-color: #a03670;
-  -tertiary-color: #7c3cbe;
-  -neutral-color: #f8fdff;
-  -surface-color: #dce5db;
-  -label-text-color: #000000;
-  -button-text-color: #ffffff;
+    -primary-color: #dce5db;
+    -secondary-color: #a03670;
+    -tertiary-color: #7c3cbe;
+    -neutral-color: #f8fdff;
+    -surface-color: #006d3e;
+    -button-text-color: #000000;
+    -label-text-color: #ffffff;
 
-  -fx-font-weight: 500;
-  -fx-font-family: Roboto;
+    -surface-color-halfTransparent: rgba(0, 109, 62, 0.5);
+    -surface-color-point3Transparent: rgba(0, 109, 62, 0.3);
 
-  -fx-background-color: -neutral-color;
-  -fx-background-text-color: -label-text-color;
+    -fx-font-weight: 500;
+    -fx-font-family: Roboto;
+
+    -fx-background-color: -neutral-color;
+    -fx-background-text-color: -label-text-color;
 }
 
 .DashboardComp {
-  -fx-spacing: 40;
-  -fx-alignment: center;
+    -fx-spacing: 40;
+    -fx-alignment: center;
 }
 
 .number {
-  -fx-text-fill: -label-text-color;
-  -fx-font-size: 30px;
+    -fx-text-fill: -label-text-color;
+    -fx-font-size: 30px;
 }
 
 .text {
-  -fx-text-fill: -label-text-color;
-  -fx-font-size: 20px;
+    -fx-text-fill: -label-text-color;
+    -fx-font-size: 20px;
 }
 
 .row {
-  -fx-spacing: 20;
-  -fx-alignment: center;
+    -fx-spacing: 20;
+    -fx-alignment: center;
 }
 
 .numberBox {
-  -fx-background-radius: 10;
-  -fx-background-color: -surface-color;
-  -fx-opacity: 0.8;
-  -fx-padding: 10;
-  -fx-spacing: 15;
-  -fx-cursor: hand;
-  -fx-pref-width: 150;
-  -fx-pref-height: 150;
-  /*Add a slightly lighter shadow to the left of each box*/
-  -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.5), 0, 0, 5, 5);
+    -fx-background-radius: 10;
+    -fx-background-color: -surface-color;
+    -fx-opacity: 0.8;
+    -fx-padding: 10;
+    -fx-spacing: 15;
+    -fx-cursor: hand;
+    -fx-pref-width: 150;
+    -fx-pref-height: 150;
+    /*Add a slightly lighter shadow to the left of each box*/
+    -fx-effect: dropshadow(three-pass-box, -surface-color-halfTransparent, 0, 0, 5, 5);
 }
 
 .numberBox:hover {
-  /*Material design hover effect*/
-  /*-fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.3), 0, 0, 2, 2);*/
-  -fx-effect: dropshadow(three-pass-box, -surface-color, 0, 0, 2, 2);
+    /*Material design hover effect*/
+    -fx-effect: dropshadow(three-pass-box, -surface-color-point3Transparent, 0, 0, 2, 2);
+
 }
 
 .numberBox:pressed {
-  /*Material design pressed effect*/
-  -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0), 0, 0, 0, 0);
+    /*Material design pressed effect*/
+    -fx-effect: dropshadow(three-pass-box, -surface-color, 0, 0, 0, 0);
 }
 
 .numberBox:hover .text {
-  -fx-font-size: 20px;
-  -fx-font-weight: 700;
-  -fx-translate-x: -2;
-  -fx-translate-y: -2;
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-translate-x: -2;
+    -fx-translate-y: -2;
 }
 
 .numberBox:hover .number {
-  -fx-font-size: 30px;
-  -fx-font-weight: 700;
-  -fx-translate-x: -2;
-  -fx-translate-y: -2;
+    -fx-font-size: 30px;
+    -fx-font-weight: 700;
+    -fx-translate-x: -2;
+    -fx-translate-y: -2;
 }
