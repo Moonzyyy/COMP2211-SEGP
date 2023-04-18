@@ -74,10 +74,10 @@ public class Dashboard extends AbstractScene {
 
 
 
-    backButton = new Button("<");
+    backButton = new Button("Back");
     backButton.getStyleClass().add("backButton");
 
-    bounceDefButton = new Button("Change Bounce Definition");
+    bounceDefButton = new Button("Bounce Def");
     bounceDefButton.getStyleClass().add("bounceButton");
 
       // Sliding Menu Pane
@@ -256,9 +256,6 @@ public class Dashboard extends AbstractScene {
 
         }
     }
-  public Button getBounceDefButton(){
-    return this.bounceDefButton;
-  }
 
   public Button getFilterButton() {return this.filterButton;}
 
