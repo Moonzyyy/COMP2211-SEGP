@@ -30,6 +30,6 @@ public class Loading extends AbstractScene {
     StackPane.setAlignment(loadingPane, Pos.CENTER);
     scene = new Scene(loadingPane, 1280, 720);
     scene.getStylesheets().add(
-        Objects.requireNonNull(getClass().getResource("/view/start.css")).toExternalForm());
+        Objects.requireNonNull(getClass().getResource("/view/startLight.css")).toExternalForm());
   }
 }
