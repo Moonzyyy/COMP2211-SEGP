@@ -1,0 +1,39 @@
+.title {
+    -fx-padding: 100 0 0 0;
+    -fx-font-size: 100px;
+    -fx-font-family: "Roboto";
+    -fx-text-fill: #7e1954;
+}
+
+
+.button{
+    -fx-background-radius: 30;
+    -fx-background-color: #1da463;
+    -fx-text-fill: white;
+    -fx-font-size: 25px;
+    -fx-font-family: "Roboto";
+    -fx-padding: 10;
+    -fx-cursor: hand;
+    -fx-pref-width: 200;
+}
+
+.button:hover{
+    -fx-background-color: #0c804a;
+    -fx-text-fill: white;
+}
+
+.button:pressed{
+    -fx-background-color: #016136;
+    -fx-text-fill: darkgray;
+    -fx-font-size: 23px;
+}
+
+.loading {
+    -fx-font-size: 100px;
+    -fx-font-family: "Roboto";
+    -fx-text-fill: #7e1954;
+}
+
+.root {
+    -fx-background-color: #ffffff;
+}
