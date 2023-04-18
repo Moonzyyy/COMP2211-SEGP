@@ -45,54 +45,21 @@ public class Settings extends AbstractScene {
         settingsPane.setTop(settingsTitle);
 
         Label fontLabel = new Label("Text Font:");
-        fontLabel.getStyleClass().add("custom-label");
         ComboBox<String> fontDropdown = new ComboBox<>();
         fontDropdown.getItems().addAll("Arial", "Times New Roman", "Verdana");
-        fontDropdown.getStyleClass().add("combo-box");
         HBox fontBox = new HBox(fontLabel, fontDropdown);
         fontBox.setAlignment(Pos.CENTER);
         fontBox.setSpacing(10);
 
-//        Label sizeLabel = new Label("Text Size:");
-//        sizeLabel.getStyleClass().add("custom-label");
-//        HBox sizeLabelBox = new HBox(sizeLabel);
-//        sizeLabelBox.setAlignment(Pos.CENTER);
-//        sizeLabelBox.setSpacing(10);
-//
-//        Button decreaseButton = new Button("-");
-//        decreaseButton.setOnAction(e -> {
-//            // handle decreasing font size
+//        bgColorPicker = new ColorPicker();
+//        bgColor = new SimpleObjectProperty<>();
+//        Bindings.bindBidirectional(bgColor, bgColorPicker.valueProperty());
+//        bgColor.addListener((observable, oldValue, newValue) -> {
+//            settingsPane.setStyle("-fx-background-color: " + toRGBString(newValue));
 //        });
-//        decreaseButton.getStyleClass().add("button");
-//
-//        Button increaseButton = new Button("+");
-//        increaseButton.setOnAction(e -> {
-//            // handle increasing font size
-//        });
-//        increaseButton.getStyleClass().add("button");
-//
-//        Label filler = new Label(". . . . . . .");
-//        filler.getStyleClass().add("custom-label");
-//
-//        HBox sizeBox = new HBox(sizeLabelBox, decreaseButton, filler, increaseButton);
-//        sizeBox.setAlignment(Pos.CENTER);
-//        sizeBox.setSpacing(10);
-
-        bgColorPicker = new ColorPicker();
-        bgColor = new SimpleObjectProperty<>();
-        Bindings.bindBidirectional(bgColor, bgColorPicker.valueProperty());
-        bgColor.addListener((observable, oldValue, newValue) -> {
-            settingsPane.setStyle("-fx-background-color: " + toRGBString(newValue));
-//            if (newValue.getBrightness() > 0.5) {
-//                title.setStyle("-fx-text-fill: black;");
-//            } else {
-//                title.setStyle("-fx-text-fill: white;");
-//            }
-        });
 
 
         Label themeLabel = new Label("Colour Scheme:");
-        themeLabel.getStyleClass().add("custom-label");
         themeDropdown = new ComboBox<>();
         themeDropdown.getItems().addAll("Light Mode", "Dark Mode");
         themeDropdown.getStyleClass().add("combo-box");
@@ -100,14 +67,13 @@ public class Settings extends AbstractScene {
         themeBox.setAlignment(Pos.CENTER);
         themeBox.setSpacing(10);
 
-        VBox controls = new VBox(fontBox, bgColorPicker, themeBox);
+        VBox controls = new VBox(fontBox, themeBox);
         controls.setAlignment(Pos.CENTER);
         controls.setPrefSize(200, 200);
         controls.setSpacing(20);
         settingsPane.setCenter(controls);
 
         backButton = new Button("Back");
-        backButton.getStyleClass().add("backButton");
         var bottomBar = new HBox();
         bottomBar.getChildren().add(backButton);
         bottomBar.setAlignment(Pos.BOTTOM_LEFT);
