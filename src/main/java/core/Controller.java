@@ -139,7 +139,8 @@ public class Controller {
 
         dashboard.getFilterButton().setOnAction((event ->
         {
-            model.updateDashData("", null);
+            ArrayList<String> newDashboardValues = model.updateDashboardData("", preds);
+            dashboard.getDashboardComp().updateNumberBoxes(newDashboardValues);
         }));
 
         dashboard.getCheckboxes().forEach(box -> {

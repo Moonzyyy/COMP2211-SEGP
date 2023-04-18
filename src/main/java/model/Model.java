@@ -1,6 +1,7 @@
 package model;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -436,21 +437,23 @@ public class Model {
         return data;
     }
 
-    public void updateDashData(String timeChosen, HashMap<String, Boolean> selected) {
+    public ArrayList<String> updateDashboardData(String timeChosen, HashMap<String, Boolean> selected) {
         if (selected != null) currentlySelected = selected;
 
 
         Map<String, FilterPredicate> adjustedPredicates = this.updateSegmentFilters(predicates, currentlySelected);
-
+        ArrayList<String> listOfMetricValue = new ArrayList<>();
         for(int i = 0; i < 11; i++)
         {
-            Map<LocalDateTime, Double> GraphData = loadData(i, this.combinePredicates(adjustedPredicates));
+            Map<LocalDateTime,Double> metricData = loadData(i, this.combinePredicates(adjustedPredicates));
+            double totalMetricValue = 0;
+            for (Double metricValue : metricData.values()) {
+                totalMetricValue += metricValue;
+            }
+            listOfMetricValue.add(Double.toString(totalMetricValue));
         }
 
-
-
-
-
+        return listOfMetricValue;
 
     }
 

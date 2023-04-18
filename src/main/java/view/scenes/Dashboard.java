@@ -226,11 +226,11 @@ public class Dashboard extends AbstractScene {
 
     }
 
+
   public void postShowEdits() {
     menuBar.setTranslateX(-menuBar.getWidth());
   }
 
-  public ArrayList<CheckBox> getCheckBoxes(){return checkboxes;}
 
   /**
    * @return get the dashboard components
