@@ -1,49 +1,50 @@
+
+.root {
+    -primary-color: #f2e9e4;
+    -secondary-color: #ffffff;
+    -tertiary-color: #ffffff;
+    -neutral-color: #121212;
+    -surface-color: #424242;
+    -label-text-color: #ffffff;
+    -button-text-color: #000000;
+
+    -fx-font-weight: 500;
+    -fx-font-family: Roboto;
+
+    -fx-background-color: -neutral-color;
+    -fx-background-text-color: -label-text-color;
+}
+
 .title {
     -fx-padding: 100 0 0 0;
     -fx-font-size: 100px;
-    -fx-font-family: "Roboto";
-    -fx-text-fill: #f2e9e4;
+    -fx-text-fill: -label-text-color;
 }
+
 
 .button {
-    -fx-background-color: #4c4c4c;
-    -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
     -fx-background-radius: 30;
-}
-
-.botton:hover {
-    -fx-background-color: #282828;
-}
-
-.startButton{
-    -fx-background-radius: 30;
-    -fx-background-color: #f2e9e4;
-    -fx-text-fill: black;
+    -fx-background-color: -primary-color;
+    -fx-text-fill: -button-text-color;
     -fx-font-size: 25px;
-    -fx-font-family: "Roboto";
     -fx-padding: 10;
     -fx-cursor: hand;
     -fx-pref-width: 200;
 }
 
-.startButton:hover{
-    -fx-background-color: #dedede;
-    -fx-text-fill: #121212;
+.button:hover {
+    -fx-background-color: derive(-primary-color, -15%);
+    -fx-text-fill: -button-text-color;
 }
 
-.startButton:pressed{
-    -fx-background-color: #bfbfbf;
-    -fx-text-fill: #121212;
+.button:pressed {
+    -fx-text-fill: darkgray;
     -fx-font-size: 23px;
 }
 
 .loading {
     -fx-font-size: 100px;
-    -fx-font-family: "Roboto";
-    -fx-text-fill: #f2e9e4;
+    -fx-font-weight: 600;
+    -fx-text-fill: -primary-color;
 }
 
-.root {
-    -fx-background-color: #121212;
-}

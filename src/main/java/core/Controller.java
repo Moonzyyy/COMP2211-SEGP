@@ -121,6 +121,7 @@ public class Controller {
         var preds = initPredicates();
 
         dashboard.createScene();
+        dashboard.setTheme(theme);
         this.setCurrentScene(dashboard);
 
         List<String> metrics = model.getMetrics();

@@ -7,6 +7,7 @@
     -button-text-color: white;
 
     -fx-font-weight: 500;
+    -fx-font-family: Roboto;
 
     -fx-background-color: -neutral-color;
     -fx-text-background-color: -label-text-color;
@@ -15,17 +16,15 @@
 .title {
     -fx-padding: 100 0 0 0;
     -fx-font-size: 100px;
-    -fx-font-family: "Roboto";
-    -fx-text-fill: black;
+    -fx-text-fill: -label-text-color;
 }
 
 
 .button {
     -fx-background-radius: 30;
     -fx-background-color: -primary-color;
-    -fx-text-fill: white;
+    -fx-text-fill: -button-text-color;
     -fx-font-size: 25px;
-    -fx-font-family: "Roboto";
     -fx-padding: 10;
     -fx-cursor: hand;
     -fx-pref-width: 200;
@@ -33,7 +32,7 @@
 
 .button:hover {
     -fx-background-color: derive(-primary-color, -20%);
-    -fx-text-fill: white;
+    -fx-text-fill: -button-text-color;
 }
 
 .button:pressed {
@@ -44,7 +43,6 @@
 
 .loading {
     -fx-font-size: 100px;
-    -fx-font-family: "Roboto";
     -fx-font-weight: 600;
     -fx-text-fill: -primary-color;
 }

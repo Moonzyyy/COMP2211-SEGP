@@ -18,10 +18,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import org.jfree.chart.renderer.xy.StackedXYBarRenderer;
 import view.components.DashboardComp;
 
 /**
@@ -39,6 +37,7 @@ public class Dashboard extends AbstractScene {
     private ListView<Object> compareList;
     private CheckBox maleCheckBox;
     private CheckBox femaleCheckBox;
+    private ImageView menuImg;
     private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
 
     public Text bounceDefinition;
@@ -81,10 +80,10 @@ public class Dashboard extends AbstractScene {
 
 
 
-    backButton = new Button("<");
+    backButton = new Button("Back");
     backButton.getStyleClass().add("backButton");
 
-    bounceDefButton = new Button("Change Bounce Definition");
+    bounceDefButton = new Button("Bounce Def");
     bounceDefButton.getStyleClass().add("bounceButton");
 
       // Sliding Menu Pane
@@ -108,6 +107,9 @@ public class Dashboard extends AbstractScene {
       endDatePicker.setMaxWidth(110);
 
       menuBar.getChildren().add(createCheckBoxes());
+      menuBar.setAlignment(Pos.BOTTOM_LEFT);
+
+    menuBar.getChildren().add(createCheckBoxes());
 
       HBox hBox = new HBox(100);
       hBox.getChildren().addAll(startDatePicker, endDatePicker);
@@ -266,7 +268,6 @@ public class Dashboard extends AbstractScene {
     menuBar.setTranslateX(-menuBar.getWidth());
   }
 
-
   /**
    * @return get the dashboard components
    */
@@ -281,9 +282,24 @@ public class Dashboard extends AbstractScene {
     return this.backButton;
   }
 
-  public Button getBounceDefButton(){
-    return this.bounceDefButton;
-  }
+    public Button getBounceDefButton() {
+        return this.bounceDefButton;
+    }
+
+    public void setTheme(boolean theme) {
+        scene.getStylesheets().clear();
+        if (theme) {
+            scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
+//            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu.png"))));
+
+        } else {
+            scene.getStylesheets().add(getClass().getResource("/view/dashboardLight.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/view/dashboardCompLight.css").toExternalForm());
+//            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menuLight.png"))));
+
+        }
+    }
 
   public Button getFilterButton() {return this.filterButton;}
 
