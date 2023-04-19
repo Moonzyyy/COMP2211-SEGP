@@ -3,7 +3,9 @@ package model;
 import java.io.File;
 import java.lang.reflect.Array;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -12,10 +14,14 @@ import java.util.stream.Stream;
 import core.segments.Age;
 import core.segments.Context;
 import core.segments.Income;
+import javafx.scene.control.Button;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.time.TimeSeries;
 
 public class Model {
 
@@ -412,6 +418,27 @@ public class Model {
         return cptiByDate;
     }
 
+
+    /**
+     * Create arraylist of metrics from functions to persist after import
+     * @return arraylist of metrics
+     */
+    public ArrayList<String> getMetrics() {
+        metrics.clear();
+        metrics.add((double) totalImpressions());
+        metrics.add((double) totalClicks());
+        metrics.add((double) numberOfBounces());
+        metrics.add((double) numberOfConversions());
+        metrics.add(totalCost());
+        metrics.add(clickThroughRate());
+        metrics.add(costPerAcquisition());
+        metrics.add(costPerClick());
+        metrics.add(costPerThousandImps());
+        metrics.add(bounceRate());
+        metrics.add((double) numberOfUniques());
+        return metrics.stream().map(m -> Double.toString(m)).collect(Collectors.toCollection(ArrayList::new));
+    }
+
   /**
    * @param id The ID of the data that will get returned
    * @param predicate what we use for filtering
@@ -455,6 +482,30 @@ public class Model {
 
         return listOfMetricValue;
 
+    }
+
+    public void configureDatePickers(DatePicker startDatePicker, DatePicker endDatePicker, Button dateFilterButton)
+    {
+        // set the maximum date of the first date picker to the selected date on the second date picker
+        startDatePicker.setDayCellFactory(param -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                dateFilterButton.setDisable(false);
+
+            }
+        });
+
+
+        // set the minimum date of the second date picker to the selected date on the first date picker
+        endDatePicker.setDayCellFactory(param -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                dateFilterButton.setDisable(false);
+
+            }
+        });
     }
 
     /**
@@ -537,25 +588,7 @@ public class Model {
         return predicates.values().stream().filter(fp -> fp.group().equals(group));
     }
 
-    /**
-     * Create arraylist of metrics from functions to persist after import
-     * @return arraylist of metrics
-     */
-    public ArrayList<String> getMetrics() {
-        metrics.clear();
-        metrics.add((double) totalImpressions());
-        metrics.add((double) totalClicks());
-        metrics.add((double) numberOfBounces());
-        metrics.add((double) numberOfConversions());
-        metrics.add(totalCost());
-        metrics.add(clickThroughRate());
-        metrics.add(costPerAcquisition());
-        metrics.add(costPerClick());
-        metrics.add(costPerThousandImps());
-        metrics.add(bounceRate());
-        metrics.add((double) numberOfUniques());
-        return metrics.stream().map(m -> Double.toString(m)).collect(Collectors.toCollection(ArrayList::new));
-    }
+
 
     public void setClicksFile(File clicksFile) {
         this.clicksFile = clicksFile;

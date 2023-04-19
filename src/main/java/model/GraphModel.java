@@ -64,6 +64,51 @@ public class GraphModel {
     updateGraphData(null);
   }
 
+    /**
+     * The initial configuration for the datePickers.
+     * Includes setting their initial values, the update handlers for each cell and the min/max values for each picker.
+     * @param startDatePicker Date picker for the start date
+     * @param endDatePicker Date picker for the end date
+     * @param dateFilterButton Button responsible for starting date filtering
+     */
+    public void configureDatePickers(DatePicker startDatePicker, DatePicker endDatePicker, Button dateFilterButton) {
+        TimeSeries dataSeries = lines.get(0).getDataSeries();
+        Date startDate = dataSeries.getTimePeriod(0).getStart();
+        LocalDate localStart = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        start1 = localStart;
+        start2 = localStart;
+        startDatePicker.setValue(localStart);
+
+        Date endDate = dataSeries.getTimePeriod(dataSeries.getItemCount() - 1).getEnd();
+        LocalDate localEnd = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        end1 = localEnd;
+        end2 = localEnd;
+        endDatePicker.setValue(localEnd);
+
+        // set the maximum date of the first date picker to the selected date on the second date picker
+        startDatePicker.setDayCellFactory(param -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                dateFilterButton.setDisable(false);
+                boolean end = endDatePicker.getValue() != null ? item.isAfter(endDatePicker.getValue().minusDays(1)) : item.isAfter(localEnd.minusDays(1));
+                setDisable(end || item.isBefore(localStart));
+            }
+        });
+
+
+        // set the minimum date of the second date picker to the selected date on the first date picker
+        endDatePicker.setDayCellFactory(param -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                dateFilterButton.setDisable(false);
+                boolean start = startDatePicker.getValue() != null ? item.isBefore(startDatePicker.getValue().plusDays(1)) : item.isBefore(localStart.plusDays(1));
+                setDisable(start || item.isAfter(localEnd));
+            }
+        });
+    }
+
   public void updateGraphData(HashMap<String, Boolean> selected) {
     this.updateGraphData(this.timeFilterVal, selected);
   }
@@ -125,50 +170,7 @@ public class GraphModel {
     return chart;
   }
 
-  /**
-   * The initial configuration for the datePickers.
-   * Includes setting their initial values, the update handlers for each cell and the min/max values for each picker.
-   * @param startDatePicker Date picker for the start date
-   * @param endDatePicker Date picker for the end date
-   * @param dateFilterButton Button responsible for starting date filtering
-   */
-  public void configureDatePickers(DatePicker startDatePicker, DatePicker endDatePicker, Button dateFilterButton) {
-    TimeSeries dataSeries = lines.get(0).getDataSeries();
-    Date startDate = dataSeries.getTimePeriod(0).getStart();
-    LocalDate localStart = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    start1 = localStart;
-    start2 = localStart;
-    startDatePicker.setValue(localStart);
 
-    Date endDate = dataSeries.getTimePeriod(dataSeries.getItemCount() - 1).getEnd();
-    LocalDate localEnd = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    end1 = localEnd;
-    end2 = localEnd;
-    endDatePicker.setValue(localEnd);
-
-    // set the maximum date of the first date picker to the selected date on the second date picker
-    startDatePicker.setDayCellFactory(param -> new DateCell() {
-      @Override
-      public void updateItem(LocalDate item, boolean empty) {
-        super.updateItem(item, empty);
-        dateFilterButton.setDisable(false);
-        boolean end = endDatePicker.getValue() != null ? item.isAfter(endDatePicker.getValue().minusDays(1)) : item.isAfter(localEnd.minusDays(1));
-        setDisable(end || item.isBefore(localStart));
-      }
-    });
-
-
-    // set the minimum date of the second date picker to the selected date on the first date picker
-    endDatePicker.setDayCellFactory(param -> new DateCell() {
-      @Override
-      public void updateItem(LocalDate item, boolean empty) {
-        super.updateItem(item, empty);
-        dateFilterButton.setDisable(false);
-        boolean start = startDatePicker.getValue() != null ? item.isBefore(startDatePicker.getValue().plusDays(1)) : item.isBefore(localStart.plusDays(1));
-        setDisable(start || item.isAfter(localEnd));
-      }
-    });
-  }
 
   /**
    * Convert LocalDate to Date

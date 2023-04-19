@@ -18,8 +18,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.jfree.chart.renderer.xy.StackedXYBarRenderer;
 import view.components.DashboardComp;
 
 /**
@@ -42,6 +44,10 @@ public class Dashboard extends AbstractScene {
     public Text bounceDefinition;
     private Button filterButton;
 
+    private final DatePicker startDatePicker;
+    private final DatePicker endDatePicker;
+
+
     /**
    * The Dashboard constructor
    */
@@ -51,6 +57,8 @@ public class Dashboard extends AbstractScene {
     root.setAlignment(Pos.BOTTOM_LEFT);
     layout = new BorderPane();
 //    root.getChildren().add(layout);
+      this.startDatePicker = new DatePicker();
+      this.endDatePicker = new DatePicker();
   }
 
   /**
@@ -92,13 +100,25 @@ public class Dashboard extends AbstractScene {
       bounceDefinition = new Text("");
       bounceDefinition.getStyleClass().add("text");
       menuBar.getChildren().add(bounceDefinition);
+
+      startDatePicker.getStyleClass().add("start-date-picker");
+      endDatePicker.getStyleClass().add("end-date-picker");
+
+      startDatePicker.setMaxWidth(110);
+      endDatePicker.setMaxWidth(110);
+
+      menuBar.getChildren().add(createCheckBoxes());
+
+      HBox hBox = new HBox(100);
+      hBox.getChildren().addAll(startDatePicker, endDatePicker);
+
+      menuBar.getChildren().add(hBox);
       menuBar.setAlignment(Pos.BOTTOM_LEFT);
 
 
 
 
 
-    menuBar.getChildren().add(createCheckBoxes());
 
     filterButton = new Button("Filter");
     menuBar.getChildren().add(filterButton);
@@ -227,6 +247,21 @@ public class Dashboard extends AbstractScene {
     }
 
 
+    public void setLoading()
+    {
+        StackPane stackPane = new StackPane();
+        Text loadingText = new Text("Loading...");
+        loadingText.getStyleClass().add("loading");
+        stackPane.getChildren().add(loadingText);
+        root.getChildren().add(stackPane);
+    }
+
+    public void removeLoading()
+    {
+        root.getChildren().remove(root.getChildren().size() - 1);
+    }
+
+
   public void postShowEdits() {
     menuBar.setTranslateX(-menuBar.getWidth());
   }
@@ -268,5 +303,17 @@ public class Dashboard extends AbstractScene {
      */
     public CheckBox getFemaleCheckBox() {
         return femaleCheckBox;
+    }
+
+
+    public DatePicker getStartDatePicker() {
+        return startDatePicker;
+    }
+
+    /**
+     * @return get the end date picker
+     */
+    public DatePicker getEndDatePicker() {
+        return endDatePicker;
     }
 }

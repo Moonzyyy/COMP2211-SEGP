@@ -137,10 +137,13 @@ public class Controller {
             setUpScene(new BounceDef());
         });
 
+
         dashboard.getFilterButton().setOnAction((event ->
         {
+            dashboard.setLoading();
             ArrayList<String> newDashboardValues = model.updateDashboardData("", preds);
             dashboard.getDashboardComp().updateNumberBoxes(newDashboardValues);
+            dashboard.removeLoading();
         }));
 
         dashboard.getCheckboxes().forEach(box -> {
@@ -155,6 +158,7 @@ public class Controller {
                 preds.replace(box.getId(), box.isSelected());
             });
         });
+
 
         // All number box listeners
         for (int i = 0; i < dashboardComp.getNumberBoxes().size(); i++) {
