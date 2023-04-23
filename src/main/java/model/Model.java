@@ -1,12 +1,12 @@
 package model;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,8 +20,6 @@ import javafx.scene.control.DatePicker;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.time.TimeSeries;
 
 public class Model {
 
@@ -43,6 +41,10 @@ public class Model {
     private Map<String, FilterPredicate> predicates;
     private Predicate<User> predicate;
     private Map<String, Boolean> currentlySelected;
+
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+
 
     public Model() {
         this.predicates = initPredicates();
@@ -486,13 +488,42 @@ public class Model {
 
     public void configureDatePickers(DatePicker startDatePicker, DatePicker endDatePicker, Button dateFilterButton)
     {
+
+        Map<LocalDateTime, Double> testing = loadData(1, null);
+        testing.keySet().forEach(dates  ->
+            {
+                if(startDate == null)
+                {
+                    startDate = dates;
+                } else if(endDate == null)
+                {
+                    endDate = dates;
+                } else
+                {
+                    if(startDate.compareTo(dates) > 0)
+                    {
+                        startDate = dates;
+                    } else if(endDate.compareTo(dates) < 0)
+                    {
+                        endDate = dates;
+                    }
+                }
+            });
+
+        LocalDate localStart = startDate.toLocalDate();
+        LocalDate localEnd = endDate.toLocalDate();
+
+        startDatePicker.setValue(localStart);
+        endDatePicker.setValue(localEnd);
+
         // set the maximum date of the first date picker to the selected date on the second date picker
         startDatePicker.setDayCellFactory(param -> new DateCell() {
             @Override
             public void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
                 dateFilterButton.setDisable(false);
-
+                boolean end = endDatePicker.getValue() != null ? item.isAfter(endDatePicker.getValue().minusDays(1)) : item.isAfter(localEnd.minusDays(1));
+                setDisable(end || item.isBefore(localStart));
             }
         });
 
@@ -503,6 +534,8 @@ public class Model {
             public void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
                 dateFilterButton.setDisable(false);
+                boolean start = startDatePicker.getValue() != null ? item.isBefore(startDatePicker.getValue().plusDays(1)) : item.isBefore(localStart.plusDays(1));
+                setDisable(start || item.isAfter(localEnd));
 
             }
         });

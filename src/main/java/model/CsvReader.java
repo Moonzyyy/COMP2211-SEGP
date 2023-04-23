@@ -80,6 +80,7 @@ public class CsvReader {
             users.put(user.getId(), user);
           }
           String dateWithoutMS = arr[0].substring(0, 13);
+
           user.addImpression(new Pair<>(LocalDateTime.parse(dateWithoutMS, formatter),
               Double.parseDouble(arr[6])));
         });

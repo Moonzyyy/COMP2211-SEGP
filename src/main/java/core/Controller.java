@@ -139,14 +139,6 @@ public class Controller {
         });
 
 
-        dashboard.getFilterButton().setOnAction((event ->
-        {
-            dashboard.setLoading();
-            ArrayList<String> newDashboardValues = model.updateDashboardData("", preds);
-            dashboard.getDashboardComp().updateNumberBoxes(newDashboardValues);
-            dashboard.removeLoading();
-        }));
-
         dashboard.getCheckboxes().forEach(box -> {
             box.setOnAction(event -> {
                 var male = dashboard.getMaleCheckBox();
@@ -159,6 +151,16 @@ public class Controller {
                 preds.replace(box.getId(), box.isSelected());
             });
         });
+
+        model.configureDatePickers(dashboard.getStartDatePicker(), dashboard.getEndDatePicker(), dashboard.getFilterButton());
+
+        dashboard.getFilterButton().setOnAction((event ->
+        {
+            dashboard.setLoading();
+            ArrayList<String> newDashboardValues = model.updateDashboardData(null, preds);
+            dashboard.getDashboardComp().updateNumberBoxes(newDashboardValues);
+            dashboard.removeLoading();
+        }));
 
 
         // All number box listeners

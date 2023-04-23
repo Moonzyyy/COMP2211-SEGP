@@ -109,16 +109,12 @@ public class Dashboard extends AbstractScene {
       menuBar.getChildren().add(createCheckBoxes());
       menuBar.setAlignment(Pos.BOTTOM_LEFT);
 
-    menuBar.getChildren().add(createCheckBoxes());
 
       HBox hBox = new HBox(100);
       hBox.getChildren().addAll(startDatePicker, endDatePicker);
 
       menuBar.getChildren().add(hBox);
       menuBar.setAlignment(Pos.BOTTOM_LEFT);
-
-
-
 
 
 
