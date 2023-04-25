@@ -11,9 +11,7 @@ import org.junit.jupiter.api.Test;
 import model.*;
 
 import java.io.File;
-import java.sql.SQLOutput;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Sprint2Tests {

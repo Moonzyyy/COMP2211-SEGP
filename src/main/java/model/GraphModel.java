@@ -219,7 +219,7 @@ public class GraphModel {
 //      dataSet.removeAllSeries();
       lines.forEach((idx, line) -> {
         dataSet.removeSeries(line.getDatedSeries2());
-        line.setDatedSeries2(new TimeSeries(line.getTitle() + ": " + startDate + "-" + endDate));
+        line.setDatedSeries2(new TimeSeries(line.getTitle() + ": " + startDate + " " + endDate));
         TimeSeries filteredSeries = line.getDatedSeries2();
         if (line.isEnabled() && !(startDate.equals(start1) && endDate.equals(end1))) {
           this.applyDateFilter(line.getDataSeries(), line.getDatedSeries2(), startDate, endDate);
