@@ -282,6 +282,23 @@ public class Controller {
             model.setBounceDef("Page");
             setUpScene(new Dashboard());
         });
+
+        bounceDef.getInputPageText().textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!bounceDef.getInputPageText().getText().matches("[0-9]+"))
+            {
+                bounceDef.getInputPageText().setText(bounceDef.getInputPageText().getText(0, bounceDef.getInputPageText().getText().length()-1));
+                logger.info("Only numbers are allowed!!");
+            }
+        });
+
+        bounceDef.getInputTimeText().textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!bounceDef.getInputTimeText().getText().matches("[0-9]+"))
+            {
+                bounceDef.getInputTimeText().setText(bounceDef.getInputTimeText().getText(0, bounceDef.getInputTimeText().getText().length()-1));
+                logger.info("Only numbers are allowed!!");
+            }
+        });
+
     }
 
     /**
