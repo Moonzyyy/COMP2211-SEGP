@@ -64,6 +64,51 @@ public class GraphModel {
     updateGraphData(null);
   }
 
+    /**
+     * The initial configuration for the datePickers.
+     * Includes setting their initial values, the update handlers for each cell and the min/max values for each picker.
+     * @param startDatePicker Date picker for the start date
+     * @param endDatePicker Date picker for the end date
+     * @param dateFilterButton Button responsible for starting date filtering
+     */
+    public void configureDatePickers(DatePicker startDatePicker, DatePicker endDatePicker, Button dateFilterButton) {
+        TimeSeries dataSeries = lines.get(0).getDataSeries();
+        Date startDate = dataSeries.getTimePeriod(0).getStart();
+        LocalDate localStart = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        start1 = localStart;
+        start2 = localStart;
+        startDatePicker.setValue(localStart);
+
+        Date endDate = dataSeries.getTimePeriod(dataSeries.getItemCount() - 1).getEnd();
+        LocalDate localEnd = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        end1 = localEnd;
+        end2 = localEnd;
+        endDatePicker.setValue(localEnd);
+
+        // set the maximum date of the first date picker to the selected date on the second date picker
+        startDatePicker.setDayCellFactory(param -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                dateFilterButton.setDisable(false);
+                boolean end = endDatePicker.getValue() != null ? item.isAfter(endDatePicker.getValue().minusDays(1)) : item.isAfter(localEnd.minusDays(1));
+                setDisable(end || item.isBefore(localStart));
+            }
+        });
+
+
+        // set the minimum date of the second date picker to the selected date on the first date picker
+        endDatePicker.setDayCellFactory(param -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                dateFilterButton.setDisable(false);
+                boolean start = startDatePicker.getValue() != null ? item.isBefore(startDatePicker.getValue().plusDays(1)) : item.isBefore(localStart.plusDays(1));
+                setDisable(start || item.isAfter(localEnd));
+            }
+        });
+    }
+
   public void updateGraphData(HashMap<String, Boolean> selected) {
     this.updateGraphData(this.timeFilterVal, selected);
   }
@@ -79,14 +124,14 @@ public class GraphModel {
 
     lines.forEach((idx, line) -> {
       if (line.isEnabled()) {
-        Map<String, FilterPredicate> adjustedPredicates = this.updateSegmentFilters(predicates, currentlySelected);
+        Map<String, FilterPredicate> adjustedPredicates = model.updateSegmentFilters(predicates, currentlySelected);
         String linePredicate = line.getBasePredicate();
         if (linePredicate != null) {
           FilterPredicate predicate = predicates.get(linePredicate);
           adjustedPredicates.remove(predicate.group() + "_all");
           adjustedPredicates.putIfAbsent(linePredicate, predicate);
         }
-        Map<LocalDateTime, Double> lineData = model.loadData(id, this.combinePredicates(adjustedPredicates));
+        Map<LocalDateTime, Double> lineData = model.loadData(id, model.combinePredicates(adjustedPredicates));
         line.updateLine(timeChosen, lineData);
         renderer.setSeriesShapesVisible(line.getId(), !timeChosen.equals("Hour"));
       }
@@ -125,50 +170,7 @@ public class GraphModel {
     return chart;
   }
 
-  /**
-   * The initial configuration for the datePickers.
-   * Includes setting their initial values, the update handlers for each cell and the min/max values for each picker.
-   * @param startDatePicker Date picker for the start date
-   * @param endDatePicker Date picker for the end date
-   * @param dateFilterButton Button responsible for starting date filtering
-   */
-  public void configureDatePickers(DatePicker startDatePicker, DatePicker endDatePicker, Button dateFilterButton) {
-    TimeSeries dataSeries = lines.get(0).getDataSeries();
-    Date startDate = dataSeries.getTimePeriod(0).getStart();
-    LocalDate localStart = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    start1 = localStart;
-    start2 = localStart;
-    startDatePicker.setValue(localStart);
 
-    Date endDate = dataSeries.getTimePeriod(dataSeries.getItemCount() - 1).getEnd();
-    LocalDate localEnd = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    end1 = localEnd;
-    end2 = localEnd;
-    endDatePicker.setValue(localEnd);
-
-    // set the maximum date of the first date picker to the selected date on the second date picker
-    startDatePicker.setDayCellFactory(param -> new DateCell() {
-      @Override
-      public void updateItem(LocalDate item, boolean empty) {
-        super.updateItem(item, empty);
-        dateFilterButton.setDisable(false);
-        boolean end = endDatePicker.getValue() != null ? item.isAfter(endDatePicker.getValue().minusDays(1)) : item.isAfter(localEnd.minusDays(1));
-        setDisable(end || item.isBefore(localStart));
-      }
-    });
-
-
-    // set the minimum date of the second date picker to the selected date on the first date picker
-    endDatePicker.setDayCellFactory(param -> new DateCell() {
-      @Override
-      public void updateItem(LocalDate item, boolean empty) {
-        super.updateItem(item, empty);
-        dateFilterButton.setDisable(false);
-        boolean start = startDatePicker.getValue() != null ? item.isBefore(startDatePicker.getValue().plusDays(1)) : item.isBefore(localStart.plusDays(1));
-        setDisable(start || item.isAfter(localEnd));
-      }
-    });
-  }
 
   /**
    * Convert LocalDate to Date
@@ -392,34 +394,7 @@ public class GraphModel {
     return allPredicates;
   }
 
-  /**
-   * Update the enabled predicates for filtering by audience segment
-   *
-   * @param selected A Map of predicates are either to be applied or not
-   */
-  public Map<String, FilterPredicate> updateSegmentFilters(Map<String, FilterPredicate> predicates, Map<String, Boolean> selected) {
-    return this.updateSegmentFilters(predicates, selected, true);
-  }
-  public Map<String, FilterPredicate> updateSegmentFilters(Map<String, FilterPredicate> predicates, Map<String, Boolean> selected, Boolean resetBaseFilters) {
-    HashMap<String, FilterPredicate> predicateMap = new HashMap<>();
-    if (resetBaseFilters != null && resetBaseFilters) {
-      predicateMap.put("age_all", predicates.get("age_all"));
-      predicateMap.put("context_all", predicates.get("context_all"));
-      predicateMap.put("income_all", predicates.get("income_all"));
-      predicateMap.remove("male_1");
-      predicateMap.remove("female_1");
-    }
-    selected.forEach((key, value) -> {
-      FilterPredicate fp = predicates.get(key);
-      if (value) {
-        predicateMap.put(key, fp);
-        if (fp.group().equals("age")) predicateMap.remove("age_all");
-        if (fp.group().equals("context")) predicateMap.remove("context_all");
-        if (fp.group().equals("income")) predicateMap.remove("income_all");
-      }
-    });
-    return predicateMap;
-  }
+
 
   public void resetFilters(Map<String, FilterPredicate> predicates) {
     currentlySelected = new HashMap<>();
@@ -428,28 +403,8 @@ public class GraphModel {
     currentlySelected.put("income_all", true);
   }
 
-  /**
-   * Combine the lists of predicates for filtering by audience segments
-   * @return The combined list of predicates - "and"-ed together
-   */
-  public Predicate<User> combinePredicates(Map<String, FilterPredicate> predicates) {
-    var ages = getPredicateGroup("age", predicates).map(FilterPredicate::predicate).reduce(u -> false, Predicate::or);
-    var contexts = getPredicateGroup("context", predicates).map(FilterPredicate::predicate).reduce(u -> false, Predicate::or);
-    var incomes = getPredicateGroup("income", predicates).map(FilterPredicate::predicate).reduce(u -> false, Predicate::or);
-    Predicate<User> gender = u -> true;
-    FilterPredicate male = predicates.get("male_1");
-    FilterPredicate female = predicates.get("female_1");
-    if (male != null) {
-      gender = male.predicate();
-    } else if (female != null) {
-      gender = female.predicate();
-    }
-    return ages.and(contexts).and(incomes).and(gender);
-  }
 
-  private Stream<FilterPredicate> getPredicateGroup(String group, Map<String, FilterPredicate> predicates) {
-    return predicates.values().stream().filter(fp -> fp.group().equals(group));
-  }
+
 
   public int getId() {
     return id;

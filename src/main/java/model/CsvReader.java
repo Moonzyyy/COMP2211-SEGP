@@ -1,6 +1,6 @@
 package model;
 
-import com.opencsv.CSVReader;
+//import com.opencsv.CSVReader;
 import core.AdViz;
 import core.Controller;
 import javafx.util.Pair;
@@ -19,7 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class CsvReader {
-    private static final Logger logger = LogManager.getLogger(CSVReader.class);
+    private static final Logger logger = LogManager.getLogger(CsvReader.class);
     private final HashMap<Long,User> users = new HashMap<Long, User>();
 
     /**
@@ -80,6 +80,7 @@ public class CsvReader {
             users.put(user.getId(), user);
           }
           String dateWithoutMS = arr[0].substring(0, 13);
+
           user.addImpression(new Pair<>(LocalDateTime.parse(dateWithoutMS, formatter),
               Double.parseDouble(arr[6])));
         });

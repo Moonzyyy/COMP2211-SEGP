@@ -9,68 +9,78 @@ import javafx.scene.layout.VBox;
 
 public class StartMenu extends AbstractScene {
 
-  private Button importButton;
-  private Button settingsButton;
+    private Button importButton;
+    private Button settingsButton;
 
-  private Button resumeButton;
+    private Button resumeButton;
 
-  public StartMenu() {
-    super();
+    public StartMenu() {
+        super();
 
-  }
+    }
 
-  /**
-   * Creates the scene for the start menu.
-   */
-  public void createScene() {
-    importButton = new Button("Import");
-    importButton.getStyleClass().add("startButton");
+    /**
+     * Creates the scene for the start menu.
+     */
+    public void createScene() {
+        importButton = new Button("Import");
+        importButton.getStyleClass().add("startButton");
 
-    settingsButton = new Button("Settings");
-    settingsButton.getStyleClass().add("startButton");
+        settingsButton = new Button("Settings");
+        settingsButton.getStyleClass().add("startButton");
 
-    resumeButton = new Button("Resume");
-    resumeButton.getStyleClass().add("startButton");
+        resumeButton = new Button("Resume");
+        resumeButton.getStyleClass().add("startButton");
 
-    var title = new Label("AdViz");
-    title.getStyleClass().add("title");
+        var title = new Label("AdViz");
+        title.getStyleClass().add("title");
 
-    var startTitle = new VBox();
-    startTitle.setAlignment(Pos.CENTER);
-    startTitle.getChildren().add(title);
+        var startTitle = new VBox();
+        startTitle.setAlignment(Pos.CENTER);
+        startTitle.getChildren().add(title);
 
-    var startButtonsVBox = new VBox();
-    startButtonsVBox.getChildren().addAll(importButton, settingsButton, resumeButton);
-    startButtonsVBox.setPrefSize(200, 200);
-    startButtonsVBox.setSpacing(20);
-    startButtonsVBox.setAlignment(Pos.CENTER);
+        var startButtonsVBox = new VBox();
+        startButtonsVBox.getChildren().addAll(importButton, settingsButton, resumeButton);
+        startButtonsVBox.setPrefSize(200, 200);
+        startButtonsVBox.setSpacing(20);
+        startButtonsVBox.setAlignment(Pos.CENTER);
 
-    var startBorderPane = new BorderPane();
-    startBorderPane.setTop(startTitle);
-    startBorderPane.setCenter(startButtonsVBox);
+        var startBorderPane = new BorderPane();
+        startBorderPane.setTop(startTitle);
+        startBorderPane.setCenter(startButtonsVBox);
 
-    scene = new Scene(startBorderPane, 1280, 720);
-    scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
-  }
+        scene = new Scene(startBorderPane, 1280, 720);
 
-  /**
-   * @return get the Import button
-   */
-  public Button getImportButton() {
-    return this.importButton;
-  }
+        scene.getStylesheets().add(getClass().getResource("/view/startLight.css").toExternalForm());
+    }
 
-  /**
-   * @return get the Settings button
-   */
-  public Button getSettingsButton() {
-    return this.settingsButton;
-  }
+    /**
+     * @return get the Import button
+     */
+    public Button getImportButton() {
+        return this.importButton;
+    }
 
-  /**
-   * @return get the Resume Button
-   */
-  public Button getResumeButton() {
-    return this.resumeButton;
-  }
+    /**
+     * @return get the Settings button
+     */
+    public Button getSettingsButton() {
+        return this.settingsButton;
+    }
+
+    /**
+     * @return get the Resume Button
+     */
+    public Button getResumeButton() {
+        return this.resumeButton;
+    }
+
+    public void setTheme(boolean theme) {
+        scene.getStylesheets().clear();
+        if (theme) {
+            scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
+        } else {
+            scene.getStylesheets().add(getClass().getResource("/view/startLight.css").toExternalForm());
+        }
+    }
 }

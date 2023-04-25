@@ -37,8 +37,15 @@ public class Dashboard extends AbstractScene {
     private ListView<Object> compareList;
     private CheckBox maleCheckBox;
     private CheckBox femaleCheckBox;
+    private ImageView menuImg;
     private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
+
     public Text bounceDefinition;
+    private Button filterButton;
+
+    private final DatePicker startDatePicker;
+    private final DatePicker endDatePicker;
+
 
     /**
    * The Dashboard constructor
@@ -49,6 +56,8 @@ public class Dashboard extends AbstractScene {
     root.setAlignment(Pos.BOTTOM_LEFT);
     layout = new BorderPane();
 //    root.getChildren().add(layout);
+      this.startDatePicker = new DatePicker();
+      this.endDatePicker = new DatePicker();
   }
 
   /**
@@ -71,10 +80,10 @@ public class Dashboard extends AbstractScene {
 
 
 
-    backButton = new Button("<");
+    backButton = new Button("Back");
     backButton.getStyleClass().add("backButton");
 
-    bounceDefButton = new Button("Change Bounce Definition");
+    bounceDefButton = new Button("Bounce Def");
     bounceDefButton.getStyleClass().add("bounceButton");
 
       // Sliding Menu Pane
@@ -90,9 +99,27 @@ public class Dashboard extends AbstractScene {
       bounceDefinition = new Text("");
       bounceDefinition.getStyleClass().add("text");
       menuBar.getChildren().add(bounceDefinition);
+
+      startDatePicker.getStyleClass().add("start-date-picker");
+      endDatePicker.getStyleClass().add("end-date-picker");
+
+      startDatePicker.setMaxWidth(110);
+      endDatePicker.setMaxWidth(110);
+
+      menuBar.getChildren().add(createCheckBoxes());
       menuBar.setAlignment(Pos.BOTTOM_LEFT);
 
-    menuBar.getChildren().add(createCheckBoxes());
+
+      HBox hBox = new HBox(100);
+      hBox.getChildren().addAll(startDatePicker, endDatePicker);
+
+      menuBar.getChildren().add(hBox);
+      menuBar.setAlignment(Pos.BOTTOM_LEFT);
+
+
+
+    filterButton = new Button("Filter");
+    menuBar.getChildren().add(filterButton);
 
 
 
@@ -217,6 +244,22 @@ public class Dashboard extends AbstractScene {
 
     }
 
+
+    public void setLoading()
+    {
+        StackPane stackPane = new StackPane();
+        Text loadingText = new Text("Loading...");
+        loadingText.getStyleClass().add("loading");
+        stackPane.getChildren().add(loadingText);
+        root.getChildren().add(stackPane);
+    }
+
+    public void removeLoading()
+    {
+        root.getChildren().remove(root.getChildren().size() - 1);
+    }
+
+
   public void postShowEdits() {
     menuBar.setTranslateX(-menuBar.getWidth());
   }
@@ -235,7 +278,54 @@ public class Dashboard extends AbstractScene {
     return this.backButton;
   }
 
-  public Button getBounceDefButton(){
-    return this.bounceDefButton;
-  }
+    public Button getBounceDefButton() {
+        return this.bounceDefButton;
+    }
+
+    public void setTheme(boolean theme) {
+        scene.getStylesheets().clear();
+        if (theme) {
+            scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
+//            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu.png"))));
+
+        } else {
+            scene.getStylesheets().add(getClass().getResource("/view/dashboardLight.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/view/dashboardCompLight.css").toExternalForm());
+//            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menuLight.png"))));
+
+        }
+    }
+
+  public Button getFilterButton() {return this.filterButton;}
+
+    public ArrayList<CheckBox> getCheckboxes() {
+        return checkboxes;
+    }
+
+    /**
+     * @return get the male check box
+     */
+    public CheckBox getMaleCheckBox() {
+        return maleCheckBox;
+    }
+
+    /**
+     * @return get the female check box
+     */
+    public CheckBox getFemaleCheckBox() {
+        return femaleCheckBox;
+    }
+
+
+    public DatePicker getStartDatePicker() {
+        return startDatePicker;
+    }
+
+    /**
+     * @return get the end date picker
+     */
+    public DatePicker getEndDatePicker() {
+        return endDatePicker;
+    }
 }

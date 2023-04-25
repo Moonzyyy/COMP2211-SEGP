@@ -2,13 +2,21 @@ package model;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import core.segments.Age;
+import core.segments.Context;
+import core.segments.Income;
+import javafx.scene.control.Button;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,9 +38,17 @@ public class Model {
     private File clicksFile;
     private File impressionsFile;
     private File serverFile;
+    private Map<String, FilterPredicate> predicates;
     private Predicate<User> predicate;
+    private Map<String, Boolean> currentlySelected;
+
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+
 
     public Model() {
+        this.predicates = initPredicates();
+        bounceValue = 1;
     }
 
     public boolean importData() {
@@ -186,10 +202,10 @@ public class Model {
      */
     public int numberOfBounces() {
         switch (bounceDef) {
-            case "default" -> this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
-            case "page" ->
+            case "Default" -> this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
+            case "Page" ->
                     this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= bounceValue).count();
-            case "time" ->
+            case "Time" ->
                     this.bounces = (int) getServers().filter(server -> server.getTimeSpent() <= bounceValue).count();
         }
         return this.bounces;
@@ -203,21 +219,21 @@ public class Model {
         getServers().sequential().forEach(server -> {
             LocalDateTime dateTime = server.getEntryDate();
             switch (bounceDef) {
-                case "default" -> {
+                case "Default" -> {
                     if (server.getPagesViewed() <= 1 && bouncesByDate.containsKey(dateTime)) {
                         bouncesByDate.put(dateTime, bouncesByDate.get(dateTime) + 1);
                     } else if (server.getPagesViewed() <= 1) {
                         bouncesByDate.put(dateTime, 1.0);
                     }
                 }
-                case "page" -> {
+                case "Page" -> {
                     if (server.getTimeSpent() <= bounceValue && bouncesByDate.containsKey(dateTime)) {
                         bouncesByDate.put(dateTime, bouncesByDate.get(dateTime) + 1);
                     } else if (server.getTimeSpent() <= bounceValue) {
                         bouncesByDate.put(dateTime, 1.0);
                     }
                 }
-                case "time" -> {
+                case "Time" -> {
                     if (server.getPagesViewed() <= bounceValue && bouncesByDate.containsKey(dateTime)) {
                         bouncesByDate.put(dateTime, bouncesByDate.get(dateTime) + 1);
                     } else if (server.getPagesViewed() <= bounceValue) {
@@ -404,6 +420,27 @@ public class Model {
         return cptiByDate;
     }
 
+
+    /**
+     * Create arraylist of metrics from functions to persist after import
+     * @return arraylist of metrics
+     */
+    public ArrayList<String> getMetrics() {
+        metrics.clear();
+        metrics.add((double) totalImpressions());
+        metrics.add((double) totalClicks());
+        metrics.add((double) numberOfBounces());
+        metrics.add((double) numberOfConversions());
+        metrics.add(totalCost());
+        metrics.add(clickThroughRate());
+        metrics.add(costPerAcquisition());
+        metrics.add(costPerClick());
+        metrics.add(costPerThousandImps());
+        metrics.add(bounceRate());
+        metrics.add((double) numberOfUniques());
+        return metrics.stream().map(m -> Double.toString(m)).collect(Collectors.toCollection(ArrayList::new));
+    }
+
   /**
    * @param id The ID of the data that will get returned
    * @param predicate what we use for filtering
@@ -429,27 +466,162 @@ public class Model {
         return data;
     }
 
+    public ArrayList<String> updateDashboardData(String timeChosen, HashMap<String, Boolean> selected) {
+        if (selected != null) currentlySelected = selected;
 
+
+        Map<String, FilterPredicate> adjustedPredicates = this.updateSegmentFilters(predicates, currentlySelected);
+        ArrayList<String> listOfMetricValue = new ArrayList<>();
+        for(int i = 0; i < 11; i++)
+        {
+            Map<LocalDateTime,Double> metricData = loadData(i, this.combinePredicates(adjustedPredicates));
+            double totalMetricValue = 0;
+            for (Double metricValue : metricData.values()) {
+                totalMetricValue += metricValue;
+            }
+            listOfMetricValue.add(Double.toString(totalMetricValue));
+        }
+
+        return listOfMetricValue;
+
+    }
+
+    public void configureDatePickers(DatePicker startDatePicker, DatePicker endDatePicker, Button dateFilterButton)
+    {
+
+        Map<LocalDateTime, Double> testing = loadData(1, null);
+        testing.keySet().forEach(dates  ->
+            {
+                if(startDate == null)
+                {
+                    startDate = dates;
+                } else if(endDate == null)
+                {
+                    endDate = dates;
+                } else
+                {
+                    if(startDate.compareTo(dates) > 0)
+                    {
+                        startDate = dates;
+                    } else if(endDate.compareTo(dates) < 0)
+                    {
+                        endDate = dates;
+                    }
+                }
+            });
+
+        LocalDate localStart = startDate.toLocalDate();
+        LocalDate localEnd = endDate.toLocalDate();
+
+        startDatePicker.setValue(localStart);
+        endDatePicker.setValue(localEnd);
+
+        // set the maximum date of the first date picker to the selected date on the second date picker
+        startDatePicker.setDayCellFactory(param -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                dateFilterButton.setDisable(false);
+                boolean end = endDatePicker.getValue() != null ? item.isAfter(endDatePicker.getValue().minusDays(1)) : item.isAfter(localEnd.minusDays(1));
+                setDisable(end || item.isBefore(localStart));
+            }
+        });
+
+
+        // set the minimum date of the second date picker to the selected date on the first date picker
+        endDatePicker.setDayCellFactory(param -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                dateFilterButton.setDisable(false);
+                boolean start = startDatePicker.getValue() != null ? item.isBefore(startDatePicker.getValue().plusDays(1)) : item.isBefore(localStart.plusDays(1));
+                setDisable(start || item.isAfter(localEnd));
+
+            }
+        });
+    }
 
     /**
-     * Create arraylist of metrics from functions to persist after import
-     * @return arraylist of metrics
+     * Initialise the predicates used for filtering by audience segment.
      */
-    public ArrayList<String> getMetrics() {
-        metrics.clear();
-        metrics.add((double) totalImpressions());
-        metrics.add((double) totalClicks());
-        metrics.add((double) numberOfBounces());
-        metrics.add((double) numberOfConversions());
-        metrics.add(totalCost());
-        metrics.add(clickThroughRate());
-        metrics.add(costPerAcquisition());
-        metrics.add(costPerClick());
-        metrics.add(costPerThousandImps());
-        metrics.add(bounceRate());
-        metrics.add((double) numberOfUniques());
-        return metrics.stream().map(m -> Double.toString(m)).collect(Collectors.toCollection(ArrayList::new));
+    public Map<String, FilterPredicate> initPredicates() {
+        currentlySelected = new HashMap<>();
+        Map<String, FilterPredicate> allPredicates = new HashMap<>(19);
+        allPredicates.put("age_all", new FilterPredicate("age", u -> true));
+        for (Age a : Age.values()) {
+            Predicate<User> p = u -> u.getAge() == a;
+            allPredicates.put("age_" + a.idx, new FilterPredicate("age", p));
+        }
+
+        allPredicates.put("context_all", new FilterPredicate( "context", u -> true));
+        for (Context c : Context.values()) {
+            Predicate<User> p = u -> u.getContext() == c;
+            allPredicates.put("context_" + c.idx, new FilterPredicate("context", p));
+        }
+
+        allPredicates.put("income_all", new FilterPredicate( "income", u -> true));
+        for (Income i : Income.values()) {
+            Predicate<User> p = u -> u.getIncome() == i;
+            allPredicates.put("income_" + i.idx, new FilterPredicate("income", p));
+        }
+
+        allPredicates.put("male_1", new FilterPredicate("gender", User::getGender));
+        allPredicates.put("female_1", new FilterPredicate("gender", u -> !u.getGender()));
+        return allPredicates;
     }
+    /**
+     * Update the enabled predicates for filtering by audience segment
+     *
+     * @param selected A Map of predicates are either to be applied or not
+     */
+    public Map<String, FilterPredicate> updateSegmentFilters(Map<String, FilterPredicate> predicates, Map<String, Boolean> selected) {
+        return this.updateSegmentFilters(predicates, selected, true);
+    }
+    public Map<String, FilterPredicate> updateSegmentFilters(Map<String, FilterPredicate> predicates, Map<String, Boolean> selected, Boolean resetBaseFilters) {
+        HashMap<String, FilterPredicate> predicateMap = new HashMap<>();
+        if (resetBaseFilters != null && resetBaseFilters) {
+            predicateMap.put("age_all", predicates.get("age_all"));
+            predicateMap.put("context_all", predicates.get("context_all"));
+            predicateMap.put("income_all", predicates.get("income_all"));
+            predicateMap.remove("male_1");
+            predicateMap.remove("female_1");
+        }
+        selected.forEach((key, value) -> {
+            FilterPredicate fp = predicates.get(key);
+            if (value) {
+                predicateMap.put(key, fp);
+                if (fp.group().equals("age")) predicateMap.remove("age_all");
+                if (fp.group().equals("context")) predicateMap.remove("context_all");
+                if (fp.group().equals("income")) predicateMap.remove("income_all");
+            }
+        });
+        return predicateMap;
+    }
+
+    /**
+     * Combine the lists of predicates for filtering by audience segments
+     * @return The combined list of predicates - "and"-ed together
+     */
+    public Predicate<User> combinePredicates(Map<String, FilterPredicate> predicates) {
+        var ages = getPredicateGroup("age", predicates).map(FilterPredicate::predicate).reduce(u -> false, Predicate::or);
+        var contexts = getPredicateGroup("context", predicates).map(FilterPredicate::predicate).reduce(u -> false, Predicate::or);
+        var incomes = getPredicateGroup("income", predicates).map(FilterPredicate::predicate).reduce(u -> false, Predicate::or);
+        Predicate<User> gender = u -> true;
+        FilterPredicate male = predicates.get("male_1");
+        FilterPredicate female = predicates.get("female_1");
+        if (male != null) {
+            gender = male.predicate();
+        } else if (female != null) {
+            gender = female.predicate();
+        }
+        return ages.and(contexts).and(incomes).and(gender);
+    }
+
+    public Stream<FilterPredicate> getPredicateGroup(String group, Map<String, FilterPredicate> predicates) {
+        return predicates.values().stream().filter(fp -> fp.group().equals(group));
+    }
+
+
 
     public void setClicksFile(File clicksFile) {
         this.clicksFile = clicksFile;

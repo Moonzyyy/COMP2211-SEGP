@@ -7,30 +7,38 @@ import javafx.scene.Scene;
  */
 abstract public class AbstractScene {
 
-  protected Scene scene;
+    protected Scene scene;
 
-  AbstractScene() {
-  }
+    AbstractScene() {
+    }
 
-  /**
-   * @return get the scene
-   */
-  public Scene getScene() {
-    return scene;
-  }
+    /**
+     * @return get the scene
+     */
+    public Scene getScene() {
+        return scene;
+    }
 
-  /**
-   * @param scene set the scene
-   */
-  public void setScene(Scene scene) {
-    this.scene = scene;
-  }
+    /**
+     * @param scene set the scene
+     */
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
 
-  /**
-   * create the scene
-   */
-  abstract void createScene();
+    /**
+     * create the scene
+     */
+    abstract void createScene();
 
-  public void postShowEdits() {
-  }
+    public void postShowEdits() {
+    }
+
+    /**
+     * Set the theme of the scene.
+     *
+     * @param theme true for dark theme, false for light theme
+     */
+    public void setTheme(boolean theme) {
+    }
 }
