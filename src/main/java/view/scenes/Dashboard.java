@@ -30,8 +30,6 @@ public class Dashboard extends AbstractScene {
     private final StackPane root;
     private final BorderPane layout;
     private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
-    private final DatePicker startDatePicker;
-    private final DatePicker endDatePicker;
     public Text bounceDefinition;
     private VBox menuBar;
     private boolean menuOpen = false;

@@ -155,7 +155,7 @@ public class Controller {
         dashboard.getFilterButton().setOnAction((event ->
         {
             dashboard.setLoading();
-            ArrayList<String> newDashboardValues = model.updateDashboardData(null, preds);
+            ArrayList<String> newDashboardValues = model.updateDashboardData(preds);
             dashboard.getDashboardComp().updateNumberBoxes(newDashboardValues);
             dashboard.removeLoading();
         }));

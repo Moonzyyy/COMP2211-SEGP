@@ -463,7 +463,7 @@ public class Model {
         return data;
     }
 
-    public ArrayList<String> updateDashboardData(String timeChosen, HashMap<String, Boolean> selected) {
+    public ArrayList<String> updateDashboardData(HashMap<String, Boolean> selected) {
         if (selected != null) currentlySelected = selected;
 
 
