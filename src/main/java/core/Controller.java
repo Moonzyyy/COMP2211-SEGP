@@ -152,8 +152,6 @@ public class Controller {
             });
         });
 
-        model.configureDatePickers(dashboard.getStartDatePicker(), dashboard.getEndDatePicker(), dashboard.getFilterButton());
-
         dashboard.getFilterButton().setOnAction((event ->
         {
             dashboard.setLoading();

@@ -43,9 +43,6 @@ public class Dashboard extends AbstractScene {
     public Text bounceDefinition;
     private Button filterButton;
 
-    private final DatePicker startDatePicker;
-    private final DatePicker endDatePicker;
-
 
     /**
    * The Dashboard constructor
@@ -56,8 +53,6 @@ public class Dashboard extends AbstractScene {
     root.setAlignment(Pos.BOTTOM_LEFT);
     layout = new BorderPane();
 //    root.getChildren().add(layout);
-      this.startDatePicker = new DatePicker();
-      this.endDatePicker = new DatePicker();
   }
 
   /**
@@ -100,20 +95,10 @@ public class Dashboard extends AbstractScene {
       bounceDefinition.getStyleClass().add("text");
       menuBar.getChildren().add(bounceDefinition);
 
-      startDatePicker.getStyleClass().add("start-date-picker");
-      endDatePicker.getStyleClass().add("end-date-picker");
-
-      startDatePicker.setMaxWidth(110);
-      endDatePicker.setMaxWidth(110);
-
       menuBar.getChildren().add(createCheckBoxes());
       menuBar.setAlignment(Pos.BOTTOM_LEFT);
 
 
-      HBox hBox = new HBox(100);
-      hBox.getChildren().addAll(startDatePicker, endDatePicker);
-
-      menuBar.getChildren().add(hBox);
       menuBar.setAlignment(Pos.BOTTOM_LEFT);
 
 
@@ -318,14 +303,4 @@ public class Dashboard extends AbstractScene {
     }
 
 
-    public DatePicker getStartDatePicker() {
-        return startDatePicker;
-    }
-
-    /**
-     * @return get the end date picker
-     */
-    public DatePicker getEndDatePicker() {
-        return endDatePicker;
-    }
 }
