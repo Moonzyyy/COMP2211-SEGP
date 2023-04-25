@@ -27,170 +27,165 @@ import view.components.DashboardComp;
  */
 public class Dashboard extends AbstractScene {
 
-  private final StackPane root;
-  private final BorderPane layout;
-  private VBox menuBar;
-  private boolean menuOpen = false;
-  private DashboardComp dashboardComp;
-  private Button backButton;
-  private Button bounceDefButton;
+    private final StackPane root;
+    private final BorderPane layout;
+    private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
+    private final DatePicker startDatePicker;
+    private final DatePicker endDatePicker;
+    public Text bounceDefinition;
+    private VBox menuBar;
+    private boolean menuOpen = false;
+    private DashboardComp dashboardComp;
+    private Button backButton;
+    private Button bounceDefButton;
     private ListView<Object> compareList;
     private CheckBox maleCheckBox;
     private CheckBox femaleCheckBox;
     private ImageView menuImg;
-    private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
-
-    public Text bounceDefinition;
     private Button filterButton;
-
-    private final DatePicker startDatePicker;
-    private final DatePicker endDatePicker;
 
 
     /**
-   * The Dashboard constructor
-   */
-  public Dashboard() {
-    super();
-    root = new StackPane();
-    root.setAlignment(Pos.BOTTOM_LEFT);
-    layout = new BorderPane();
+     * The Dashboard constructor
+     */
+    public Dashboard() {
+        super();
+        root = new StackPane();
+        root.setAlignment(Pos.BOTTOM_LEFT);
+        layout = new BorderPane();
 //    root.getChildren().add(layout);
-      this.startDatePicker = new DatePicker();
-      this.endDatePicker = new DatePicker();
-  }
+        this.startDatePicker = new DatePicker();
+        this.endDatePicker = new DatePicker();
+    }
 
-  /**
-   * Creates all the components of the scene, and adds them to the layout.
-   */
-  public void createScene() {
-    var titleBox = new HBox();
-    titleBox.setAlignment(Pos.CENTER);
-    var titleLabel = new Label("Dashboard");
-    titleLabel.getStyleClass().add("title");
-    layout.setTop(titleBox);
+    /**
+     * Creates all the components of the scene, and adds them to the layout.
+     */
+    public void createScene() {
+        var titleBox = new HBox();
+        titleBox.setAlignment(Pos.CENTER);
+        var titleLabel = new Label("Dashboard");
+        titleLabel.getStyleClass().add("title");
+        layout.setTop(titleBox);
 
-    dashboardComp = new DashboardComp(this);
-    dashboardComp.getStyleClass().add("dashboardComp");
-    var inner = new BorderPane();
-    inner.setCenter(dashboardComp);
-    var wrapper = new StackPane(inner);
-    layout.setCenter(wrapper);
-    wrapper.setAlignment(Pos.BOTTOM_LEFT);
-
-
-
-    backButton = new Button("Back");
-    backButton.getStyleClass().add("backButton");
-
-    bounceDefButton = new Button("Bounce Def");
-    bounceDefButton.getStyleClass().add("bounceButton");
-
-      // Sliding Menu Pane
-      menuBar = new VBox();
-      menuBar.getStyleClass().add("menu");
-      VBox.setVgrow(menuBar, Priority.ALWAYS);
-      VBox.setMargin(menuBar, new Insets(20, 0, 30, 0));
-      menuBar.setMaxWidth(350);
-      wrapper.getChildren().add(menuBar);
+        dashboardComp = new DashboardComp(this);
+        dashboardComp.getStyleClass().add("dashboardComp");
+        var inner = new BorderPane();
+        inner.setCenter(dashboardComp);
+        var wrapper = new StackPane(inner);
+        layout.setCenter(wrapper);
+        wrapper.setAlignment(Pos.BOTTOM_LEFT);
 
 
-      // Shows Current bounce Definition
-      bounceDefinition = new Text("");
-      bounceDefinition.getStyleClass().add("text");
-      menuBar.getChildren().add(bounceDefinition);
+        backButton = new Button("Back");
+        backButton.getStyleClass().add("backButton");
 
-      startDatePicker.getStyleClass().add("start-date-picker");
-      endDatePicker.getStyleClass().add("end-date-picker");
+        bounceDefButton = new Button("Bounce Def");
+        bounceDefButton.getStyleClass().add("bounceButton");
 
-      startDatePicker.setMaxWidth(110);
-      endDatePicker.setMaxWidth(110);
-
-      menuBar.getChildren().add(createCheckBoxes());
-      menuBar.setAlignment(Pos.BOTTOM_LEFT);
-
-
-      HBox hBox = new HBox(100);
-      hBox.getChildren().addAll(startDatePicker, endDatePicker);
-
-      menuBar.getChildren().add(hBox);
-      menuBar.setAlignment(Pos.BOTTOM_LEFT);
+        // Sliding Menu Pane
+        menuBar = new VBox();
+        menuBar.getStyleClass().add("menu");
+        VBox.setVgrow(menuBar, Priority.ALWAYS);
+        VBox.setMargin(menuBar, new Insets(20, 0, 30, 0));
+        menuBar.setMaxWidth(350);
+        wrapper.getChildren().add(menuBar);
 
 
+        // Shows Current bounce Definition
+        bounceDefinition = new Text("");
+        bounceDefinition.getStyleClass().add("text");
+        menuBar.getChildren().add(bounceDefinition);
 
-    filterButton = new Button("Filter");
-    menuBar.getChildren().add(filterButton);
+        startDatePicker.getStyleClass().add("start-date-picker");
+        endDatePicker.getStyleClass().add("end-date-picker");
+
+        startDatePicker.setMaxWidth(110);
+        endDatePicker.setMaxWidth(110);
+
+        menuBar.getChildren().add(createCheckBoxes());
+        menuBar.setAlignment(Pos.BOTTOM_LEFT);
 
 
+        HBox hBox = new HBox(100);
+        hBox.getChildren().addAll(startDatePicker, endDatePicker);
 
-    // Menu Button
-    var menuButton = new Button();
-    menuButton.setContentDisplay(ContentDisplay.CENTER);
-    menuButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-    menuButton.setAlignment(Pos.CENTER);
-    menuButton.getStyleClass().add("menuButton");
-    Image menu = new Image(
-        Objects.requireNonNull(getClass().getResourceAsStream("/images/menu.png")));
-    var menuImg = new ImageView(menu);
-    menuImg.setFitHeight(20);
-    menuImg.setFitWidth(20);
-    menuButton.setGraphic(menuImg);
+        menuBar.getChildren().add(hBox);
+        menuBar.setAlignment(Pos.BOTTOM_LEFT);
 
-    // Menu Animation
-    var menuTransition = new TranslateTransition(Duration.millis(200), menuBar);
-    menuButton.setOnAction(e -> {
-      if (menuOpen) {
-        menuTransition.setToX(-menuBar.getWidth());
-        menuTransition.setFromX(0);
-        menuTransition.setOnFinished(evt -> layout.setLeft(null));
-        menuTransition.play();
-      } else {
-        menuTransition.setToX(0);
-        menuTransition.setFromX(-200);
-        menuTransition.setOnFinished(evt -> {
-          menuBar.translateXProperty().set(0);
-        });
-        menuTransition.play();
+
+        filterButton = new Button("Filter");
+        menuBar.getChildren().add(filterButton);
+
+
+        // Menu Button
+        var menuButton = new Button();
+        menuButton.setContentDisplay(ContentDisplay.CENTER);
+        menuButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        menuButton.setAlignment(Pos.CENTER);
+        menuButton.getStyleClass().add("menuButton");
+        Image menu = new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/images/menu.png")));
+        var menuImg = new ImageView(menu);
+        menuImg.setFitHeight(20);
+        menuImg.setFitWidth(20);
+        menuButton.setGraphic(menuImg);
+
+        // Menu Animation
+        var menuTransition = new TranslateTransition(Duration.millis(200), menuBar);
+        menuButton.setOnAction(e -> {
+            if (menuOpen) {
+                menuTransition.setToX(-menuBar.getWidth());
+                menuTransition.setFromX(0);
+                menuTransition.setOnFinished(evt -> layout.setLeft(null));
+                menuTransition.play();
+            } else {
+                menuTransition.setToX(0);
+                menuTransition.setFromX(-200);
+                menuTransition.setOnFinished(evt -> {
+                    menuBar.translateXProperty().set(0);
+                });
+                menuTransition.play();
 //        layout.setLeft(menuBar);
-      }
-      menuOpen = !menuOpen;
-    });
+            }
+            menuOpen = !menuOpen;
+        });
 
-    // Title box positioning
-    titleBox.getChildren().add(menuButton);
-    Region spacer = new Region();
-    HBox.setHgrow(spacer, Priority.ALWAYS);
-    titleBox.getChildren().add(spacer);
-    titleBox.getChildren().add(titleLabel);
-    Region spacer2 = new Region();
-    HBox.setHgrow(spacer2, Priority.ALWAYS);
-    titleBox.getChildren().add(spacer2);
-    titleBox.getChildren().add(new Label(""));
-    titleBox.getStyleClass().add("titleBox");
+        // Title box positioning
+        titleBox.getChildren().add(menuButton);
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        titleBox.getChildren().add(spacer);
+        titleBox.getChildren().add(titleLabel);
+        Region spacer2 = new Region();
+        HBox.setHgrow(spacer2, Priority.ALWAYS);
+        titleBox.getChildren().add(spacer2);
+        titleBox.getChildren().add(new Label(""));
+        titleBox.getStyleClass().add("titleBox");
 
-    //Back and bounce def buttons
-    BorderPane bottomButtons = new BorderPane();
+        //Back and bounce def buttons
+        BorderPane bottomButtons = new BorderPane();
 
-    BorderPane.setMargin(backButton, new Insets(20, 0, 10, 10));
-    BorderPane.setMargin(titleBox, new Insets(10, 0, 0, 10));
-    BorderPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
-    BorderPane.setAlignment(dashboardComp, Pos.CENTER);
+        BorderPane.setMargin(backButton, new Insets(20, 0, 10, 10));
+        BorderPane.setMargin(titleBox, new Insets(10, 0, 0, 10));
+        BorderPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
+        BorderPane.setAlignment(dashboardComp, Pos.CENTER);
 
-    BorderPane.setMargin(bounceDefButton, new Insets(20, 10, 10, 10));
-    BorderPane.setMargin(titleBox, new Insets(10, 0, 0, 10));
-    BorderPane.setAlignment(bounceDefButton, Pos.BOTTOM_RIGHT);
-    //BorderPane.setAlignment(dashboardComp, Pos.CENTER);
+        BorderPane.setMargin(bounceDefButton, new Insets(20, 10, 10, 10));
+        BorderPane.setMargin(titleBox, new Insets(10, 0, 0, 10));
+        BorderPane.setAlignment(bounceDefButton, Pos.BOTTOM_RIGHT);
+        //BorderPane.setAlignment(dashboardComp, Pos.CENTER);
 
-    bottomButtons.setLeft(backButton);
-    bottomButtons.setRight(bounceDefButton);
-    inner.setBottom(bottomButtons);
+        bottomButtons.setLeft(backButton);
+        bottomButtons.setRight(bounceDefButton);
+        inner.setBottom(bottomButtons);
 
 
-    scene = new Scene(layout, 1280, 720);
-    scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
-    scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
-    layout.setPrefHeight(scene.getHeight());
-  }
+        scene = new Scene(layout, 1280, 720);
+        scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
+        layout.setPrefHeight(scene.getHeight());
+    }
 
     ListView<Object> createCheckBoxes() {
 
@@ -245,8 +240,7 @@ public class Dashboard extends AbstractScene {
     }
 
 
-    public void setLoading()
-    {
+    public void setLoading() {
         StackPane stackPane = new StackPane();
         Text loadingText = new Text("Loading...");
         loadingText.getStyleClass().add("loading");
@@ -254,29 +248,28 @@ public class Dashboard extends AbstractScene {
         root.getChildren().add(stackPane);
     }
 
-    public void removeLoading()
-    {
+    public void removeLoading() {
         root.getChildren().remove(root.getChildren().size() - 1);
     }
 
 
-  public void postShowEdits() {
-    menuBar.setTranslateX(-menuBar.getWidth());
-  }
+    public void postShowEdits() {
+        menuBar.setTranslateX(-menuBar.getWidth());
+    }
 
-  /**
-   * @return get the dashboard components
-   */
-  public DashboardComp getDashboardComp() {
-    return this.dashboardComp;
-  }
+    /**
+     * @return get the dashboard components
+     */
+    public DashboardComp getDashboardComp() {
+        return this.dashboardComp;
+    }
 
-  /**
-   * @return get the back button
-   */
-  public Button getBackButton(){
-    return this.backButton;
-  }
+    /**
+     * @return get the back button
+     */
+    public Button getBackButton() {
+        return this.backButton;
+    }
 
     public Button getBounceDefButton() {
         return this.bounceDefButton;
@@ -297,7 +290,9 @@ public class Dashboard extends AbstractScene {
         }
     }
 
-  public Button getFilterButton() {return this.filterButton;}
+    public Button getFilterButton() {
+        return this.filterButton;
+    }
 
     public ArrayList<CheckBox> getCheckboxes() {
         return checkboxes;
