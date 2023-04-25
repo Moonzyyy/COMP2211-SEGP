@@ -456,6 +456,7 @@ public class Controller {
      */
     public void setUpScene(Loading loading) {
         loading.createScene();
+        loading.setTheme(theme);
         this.setCurrentScene(loading);
     }
 

@@ -2,6 +2,7 @@ package view.scenes;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
 import javafx.concurrent.Task;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,23 +14,32 @@ import javafx.scene.layout.VBox;
 public class Loading extends AbstractScene {
 
 
-  public Loading() {
-    super();
-  }
+    public Loading() {
+        super();
+    }
 
-  /**
-   * Creates all the components of the scene, and adds them to the layout
-   * Loading scene while waiting for log files to be parsed
-   */
-  public void createScene() {
-    Label loadingLabel = new Label("Loading...");
-    loadingLabel.getStyleClass().add("loading");
+    /**
+     * Creates all the components of the scene, and adds them to the layout
+     * Loading scene while waiting for log files to be parsed
+     */
+    public void createScene() {
+        Label loadingLabel = new Label("Loading...");
+        loadingLabel.getStyleClass().add("loading");
 
-    var loadingPane = new StackPane();
-    loadingPane.getChildren().add(loadingLabel);
-    StackPane.setAlignment(loadingPane, Pos.CENTER);
-    scene = new Scene(loadingPane, 1280, 720);
-    scene.getStylesheets().add(
-        Objects.requireNonNull(getClass().getResource("/view/startLight.css")).toExternalForm());
-  }
+        var loadingPane = new StackPane();
+        loadingPane.getChildren().add(loadingLabel);
+        StackPane.setAlignment(loadingPane, Pos.CENTER);
+        scene = new Scene(loadingPane, 1280, 720);
+        scene.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/view/start.css")).toExternalForm());
+    }
+
+    public void setTheme(boolean theme) {
+        scene.getStylesheets().clear();
+        if (theme) {
+            scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
+        } else {
+            scene.getStylesheets().add(getClass().getResource("/view/startLight.css").toExternalForm());
+        }
+    }
 }
