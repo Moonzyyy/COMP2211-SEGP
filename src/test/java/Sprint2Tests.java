@@ -20,7 +20,7 @@ public class Sprint2Tests {
 
     @BeforeAll
     static void prep() {
-        JFXPanel dummy = new JFXPanel();
+//        JFXPanel dummy = new JFXPanel();
         model = new Model();
         model.setClicksFile(new File("src/test/TestData/click_log.csv"));
         model.setImpressionsFile(new File("src/test/TestData/impression_log.csv"));
