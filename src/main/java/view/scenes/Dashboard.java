@@ -41,7 +41,8 @@ public class Dashboard extends AbstractScene {
     private ListView<Object> compareList;
     private CheckBox maleCheckBox;
     private CheckBox femaleCheckBox;
-    private ImageView menuImg;
+    private Button menuButton;
+    private Label titleLabel;
     private Button filterButton;
 
 
@@ -64,7 +65,7 @@ public class Dashboard extends AbstractScene {
     public void createScene() {
         var titleBox = new HBox();
         titleBox.setAlignment(Pos.CENTER);
-        var titleLabel = new Label("Dashboard");
+        titleLabel = new Label("Dashboard");
         titleLabel.getStyleClass().add("title");
         layout.setTop(titleBox);
 
@@ -119,7 +120,7 @@ public class Dashboard extends AbstractScene {
 
 
         // Menu Button
-        var menuButton = new Button();
+        menuButton = new Button();
         menuButton.setContentDisplay(ContentDisplay.CENTER);
         menuButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         menuButton.setAlignment(Pos.CENTER);
@@ -255,6 +256,7 @@ public class Dashboard extends AbstractScene {
 
     public void postShowEdits() {
         menuBar.setTranslateX(-menuBar.getWidth());
+        titleLabel.setTranslateX(-menuButton.getWidth() / 2);
     }
 
     /**
