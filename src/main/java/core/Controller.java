@@ -282,6 +282,23 @@ public class Controller {
             model.setBounceDef("Page");
             setUpScene(new Dashboard());
         });
+
+        bounceDef.getInputPageText().textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!bounceDef.getInputPageText().getText().matches("[0-9]+"))
+            {
+                bounceDef.getInputPageText().setText(bounceDef.getInputPageText().getText(0, bounceDef.getInputPageText().getText().length()-1));
+                logger.info("Only numbers are allowed!!");
+            }
+        });
+
+        bounceDef.getInputTimeText().textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!bounceDef.getInputTimeText().getText().matches("[0-9]+"))
+            {
+                bounceDef.getInputTimeText().setText(bounceDef.getInputTimeText().getText(0, bounceDef.getInputTimeText().getText().length()-1));
+                logger.info("Only numbers are allowed!!");
+            }
+        });
+
     }
 
     /**
@@ -366,12 +383,12 @@ public class Controller {
                 this.updateLine(graphModel, graphScene, 1);
                 line.setEnabled(true);
                 graphScene.setLineVisibility(1, true);
-                graphScene.setLineVisibility(3, true);
+//                graphScene.setLineVisibility(3, true);
                 graphModel.removeLine(line.getDatedSeries1());
                 line.setDatedSeries1(new TimeSeries(item.label()));
             } else {
                 graphScene.setLineVisibility(1, false);
-                graphScene.setLineVisibility(3, false);
+//                graphScene.setLineVisibility(3, false);
                 toggleBoxDisable(graphScene.getCheckboxes(), line.getBasePredicate());
                 line.setBasePredicate(null);
                 line.setEnabled(false);
@@ -416,7 +433,6 @@ public class Controller {
     /**
      * Initialise the predicates used for filtering by audience segment.
      */
-//  public ArrayList<ArrayList<FilterPredicate>> initPredicates() {
     public HashMap<String, Boolean> initPredicates() {
         HashMap<String, Boolean> predicates = new HashMap<>();
         for (Age a : Age.values()) {
@@ -436,7 +452,6 @@ public class Controller {
 
         return predicates;
     }
-
 
     /**
      * @param loading Loading Scene
