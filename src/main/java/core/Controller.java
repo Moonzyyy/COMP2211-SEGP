@@ -222,7 +222,7 @@ public class Controller {
                 }
                 GraphModel gm = new GraphModel(model, title, xAxisName, yAxisName, finalI,
                         needDivisionForChangeTime);
-                HistogramModel histogramModel = new HistogramModel(title, xAxisName, yAxisName, finalI);
+                HistogramModel histogramModel = new HistogramModel(model, finalI);
                 setUpScene(new Graph(finalI, gm.getChart(), histogramModel.getChart()), gm, histogramModel);
             });
         }
