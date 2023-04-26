@@ -222,7 +222,7 @@ public class Controller {
                 }
                 GraphModel gm = new GraphModel(model, title, xAxisName, yAxisName, finalI,
                         needDivisionForChangeTime);
-                HistogramModel histogramModel = new HistogramModel(title, xAxisName, yAxisName, finalI);
+                HistogramModel histogramModel = new HistogramModel(model, finalI);
                 setUpScene(new Graph(finalI, gm.getChart(), histogramModel.getChart()), gm, histogramModel);
             });
         }
@@ -307,6 +307,7 @@ public class Controller {
     public void setUpScene(Graph graphScene, GraphModel graphModel, HistogramModel histogramModel) {
         HashMap<String, Boolean> preds = initPredicates();
         graphScene.createScene();
+        graphScene.getTheme(theme);
         this.setCurrentScene(graphScene);
 
         //Button action listeners

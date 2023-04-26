@@ -23,6 +23,9 @@ import javafx.scene.layout.Region;
 import javax.swing.SwingUtilities;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.DatasetRenderingOrder;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYBarRenderer;
 import view.components.CompareItem;
 
 
@@ -62,6 +65,8 @@ public class Graph extends AbstractScene {
   private ChartPanel chartPanel;
 
   private boolean showLineGraph = true;
+
+  private boolean graphTheme = true;
 
 
   /**
@@ -156,25 +161,103 @@ public class Graph extends AbstractScene {
       chartPanel = new ChartPanel(histogram);
     }
 
-
     SwingNode swingNode = new SwingNode();
-    SwingUtilities.invokeLater(() -> {
-        chartPanel.getChart().setBackgroundPaint(new Color(18, 18, 18));
-        lineChart.getTitle().setPaint(Color.WHITE);
+    if (graphTheme) {
+      SwingUtilities.invokeLater(() -> {
+          chartPanel.getChart().setBackgroundPaint(new Color(18, 18, 18));
+          lineChart.getTitle().setPaint(Color.WHITE);
+          lineChart.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
+          histogram.getTitle().setPaint(Color.WHITE);
+          histogram.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
+          chartPanel.getChart().getPlot().setBackgroundPaint(Color.DARK_GRAY);
+          chartPanel.getChart().getPlot().setOutlinePaint(Color.DARK_GRAY);
+          chartPanel.getChart().getXYPlot().getRenderer().setSeriesPaint(0, Color.WHITE);
+          chartPanel.getChart().getXYPlot().getDomainAxis().setAxisLinePaint(Color.WHITE);
+          chartPanel.getChart().getXYPlot().getDomainAxis().setTickLabelPaint(Color.WHITE);
+          chartPanel.getChart().getXYPlot().getDomainAxis().setLabelPaint(Color.WHITE);
+          chartPanel.getChart().getXYPlot().getDomainAxis()
+                  .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+          chartPanel.getChart().getXYPlot().getDomainAxis()
+                  .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+          chartPanel.getChart().getXYPlot().getRangeAxis().setAxisLinePaint(Color.WHITE);
+          chartPanel.getChart().getXYPlot().getRangeAxis().setTickLabelPaint(Color.WHITE);
+          chartPanel.getChart().getXYPlot().getRangeAxis().setLabelPaint(Color.WHITE);
+          chartPanel.getChart().getXYPlot().getRangeAxis()
+                  .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+          chartPanel.getChart().getXYPlot().getRangeAxis()
+                  .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+
+          chartPanel.getChart().getXYPlot().getRenderer()
+                  .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
+          chartPanel.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
+          chartPanel.getChart().getXYPlot().getRenderer().setDefaultSeriesVisible(false);
+          chartPanel.getChart().getXYPlot().getRenderer().setSeriesVisible(0, true);
+          histogram.setBackgroundPaint(new Color(18, 18, 18));
+          histogram.getPlot().setBackgroundPaint(Color.DARK_GRAY);
+          histogram.getPlot().setOutlinePaint(Color.DARK_GRAY);
+          histogram.getXYPlot().getRenderer().setSeriesPaint(0, Color.WHITE);
+          histogram.getXYPlot().getDomainAxis().setAxisLinePaint(Color.WHITE);
+          histogram.getXYPlot().getDomainAxis().setTickLabelPaint(Color.WHITE);
+          histogram.getXYPlot().getDomainAxis().setLabelPaint(Color.WHITE);
+          histogram.getXYPlot().getDomainAxis()
+                  .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+          histogram.getXYPlot().getDomainAxis()
+                  .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+          histogram.getXYPlot().getRangeAxis().setAxisLinePaint(Color.WHITE);
+          histogram.getXYPlot().getRangeAxis().setTickLabelPaint(Color.WHITE);
+          histogram.getXYPlot().getRangeAxis().setLabelPaint(Color.WHITE);
+          histogram.getXYPlot().getRangeAxis()
+                  .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+          histogram.getXYPlot().getRangeAxis()
+                  .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+          histogram.getXYPlot().getRenderer()
+                  .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
+          histogram.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
+          histogram.getXYPlot().getRenderer().setDefaultSeriesVisible(false);
+          histogram.getXYPlot().getRenderer().setSeriesVisible(0, true);
+          histogram.getXYPlot().setDatasetRenderingOrder(DatasetRenderingOrder.REVERSE);
+          XYPlot histogramPlot = (XYPlot) histogram.getPlot();
+          XYBarRenderer barRenderer = (XYBarRenderer) histogramPlot.getRenderer();
+          barRenderer.setSeriesOutlinePaint(0, Color.WHITE);
+          barRenderer.setDrawBarOutline(true);
+          Color translucentWhite = new Color(255, 255, 255, 77);
+          barRenderer.setSeriesPaint(0, translucentWhite);
+        swingNode.setContent(chartPanel);
+
+        chartPanel.getChart().getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
+        chartPanel.getChart().getLegend().setItemPaint(Color.WHITE);
+        chartPanel.getChart().getLegend().setBackgroundPaint(Color.decode("#121212"));
+
+        chartPanel.setMouseWheelEnabled(true);
+        chartPanel.setDomainZoomable(true);
+        chartPanel.setRangeZoomable(true);
+        chartPanel.setZoomTriggerDistance(Integer.MAX_VALUE);
+        chartPanel.zoomOutBoth(0, 0);
+        chartPanel.restoreAutoBounds();
+        chartPanel.setFillZoomRectangle(false);
+        chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
+        chartPanel.setZoomInFactor(1.0);
+        chartPanel.setZoomOutFactor(1.0);
+      }); } else {
+      SwingUtilities.invokeLater(() -> {
+        chartPanel.getChart().setBackgroundPaint(new Color(237, 243, 245));
+        lineChart.getTitle().setPaint(Color.BLACK);
         lineChart.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
-        chartPanel.getChart().getPlot().setBackgroundPaint(Color.DARK_GRAY);
-        chartPanel.getChart().getPlot().setOutlinePaint(Color.DARK_GRAY);
-        chartPanel.getChart().getXYPlot().getRenderer().setSeriesPaint(0, Color.WHITE);
-        chartPanel.getChart().getXYPlot().getDomainAxis().setAxisLinePaint(Color.WHITE);
-        chartPanel.getChart().getXYPlot().getDomainAxis().setTickLabelPaint(Color.WHITE);
-        chartPanel.getChart().getXYPlot().getDomainAxis().setLabelPaint(Color.WHITE);
+        histogram.getTitle().setPaint(Color.BLACK);
+        histogram.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
+        chartPanel.getChart().getPlot().setBackgroundPaint(Color.LIGHT_GRAY);
+        chartPanel.getChart().getPlot().setOutlinePaint(Color.LIGHT_GRAY);
+        chartPanel.getChart().getXYPlot().getRenderer().setSeriesPaint(0, Color.BLACK);
+        chartPanel.getChart().getXYPlot().getDomainAxis().setAxisLinePaint(Color.BLACK);
+        chartPanel.getChart().getXYPlot().getDomainAxis().setTickLabelPaint(Color.BLACK);
+        chartPanel.getChart().getXYPlot().getDomainAxis().setLabelPaint(Color.BLACK);
         chartPanel.getChart().getXYPlot().getDomainAxis()
                 .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
         chartPanel.getChart().getXYPlot().getDomainAxis()
                 .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
-        chartPanel.getChart().getXYPlot().getRangeAxis().setAxisLinePaint(Color.WHITE);
-        chartPanel.getChart().getXYPlot().getRangeAxis().setTickLabelPaint(Color.WHITE);
-        chartPanel.getChart().getXYPlot().getRangeAxis().setLabelPaint(Color.WHITE);
+        chartPanel.getChart().getXYPlot().getRangeAxis().setAxisLinePaint(Color.BLACK);
+        chartPanel.getChart().getXYPlot().getRangeAxis().setTickLabelPaint(Color.BLACK);
+        chartPanel.getChart().getXYPlot().getRangeAxis().setLabelPaint(Color.BLACK);
         chartPanel.getChart().getXYPlot().getRangeAxis()
                 .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
         chartPanel.getChart().getXYPlot().getRangeAxis()
@@ -185,23 +268,55 @@ public class Graph extends AbstractScene {
         chartPanel.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
         chartPanel.getChart().getXYPlot().getRenderer().setDefaultSeriesVisible(false);
         chartPanel.getChart().getXYPlot().getRenderer().setSeriesVisible(0, true);
-      swingNode.setContent(chartPanel);
+        histogram.setBackgroundPaint(new Color(237, 243, 245));
+        histogram.getPlot().setBackgroundPaint(Color.LIGHT_GRAY);
+        histogram.getPlot().setOutlinePaint(Color.LIGHT_GRAY);
+        histogram.getXYPlot().getRenderer().setSeriesPaint(0, Color.BLACK);
+        histogram.getXYPlot().getDomainAxis().setAxisLinePaint(Color.BLACK);
+        histogram.getXYPlot().getDomainAxis().setTickLabelPaint(Color.BLACK);
+        histogram.getXYPlot().getDomainAxis().setLabelPaint(Color.BLACK);
+        histogram.getXYPlot().getDomainAxis()
+                .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+        histogram.getXYPlot().getDomainAxis()
+                .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+        histogram.getXYPlot().getRangeAxis().setAxisLinePaint(Color.BLACK);
+        histogram.getXYPlot().getRangeAxis().setTickLabelPaint(Color.BLACK);
+        histogram.getXYPlot().getRangeAxis().setLabelPaint(Color.BLACK);
+        histogram.getXYPlot().getRangeAxis()
+                .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+        histogram.getXYPlot().getRangeAxis()
+                .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+        histogram.getXYPlot().getRenderer()
+                .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
+        histogram.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
+        histogram.getXYPlot().getRenderer().setDefaultSeriesVisible(false);
+        histogram.getXYPlot().getRenderer().setSeriesVisible(0, true);
+        histogram.getXYPlot().setDatasetRenderingOrder(DatasetRenderingOrder.REVERSE);
+        XYPlot histogramPlot = (XYPlot) histogram.getPlot();
+        XYBarRenderer barRenderer = (XYBarRenderer) histogramPlot.getRenderer();
+        barRenderer.setSeriesOutlinePaint(0, new Color(0, 125, 82));
+        barRenderer.setDrawBarOutline(true);
+        Color translucentWhite = new Color(0, 125, 82, 77);
+        barRenderer.setSeriesPaint(0, translucentWhite);
+        swingNode.setContent(chartPanel);
 
-      chartPanel.getChart().getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
-      chartPanel.getChart().getLegend().setItemPaint(Color.WHITE);
-      chartPanel.getChart().getLegend().setBackgroundPaint(Color.decode("#121212"));
+        chartPanel.getChart().getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
+        chartPanel.getChart().getLegend().setItemPaint(Color.BLACK);
+        chartPanel.getChart().getLegend().setBackgroundPaint(Color.decode("#D3D3D3"));
 
-      chartPanel.setMouseWheelEnabled(true);
-      chartPanel.setDomainZoomable(true);
-      chartPanel.setRangeZoomable(true);
-      chartPanel.setZoomTriggerDistance(Integer.MAX_VALUE);
-      chartPanel.zoomOutBoth(0, 0);
-      chartPanel.restoreAutoBounds();
-      chartPanel.setFillZoomRectangle(false);
-      chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
-      chartPanel.setZoomInFactor(1.0);
-      chartPanel.setZoomOutFactor(1.0);
-    });
+        chartPanel.setMouseWheelEnabled(true);
+        chartPanel.setDomainZoomable(true);
+        chartPanel.setRangeZoomable(true);
+        chartPanel.setZoomTriggerDistance(Integer.MAX_VALUE);
+        chartPanel.zoomOutBoth(0, 0);
+        chartPanel.restoreAutoBounds();
+        chartPanel.setFillZoomRectangle(false);
+        chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
+        chartPanel.setZoomInFactor(1.0);
+        chartPanel.setZoomOutFactor(1.0);
+      });
+
+    }
     lineChart.getXYPlot().setDomainPannable(true);
     lineChart.getXYPlot().setRangePannable(true);
 
@@ -438,5 +553,10 @@ public class Graph extends AbstractScene {
 
   public void setLineVisibility(int i, boolean isVisible) {
     chartPanel.getChart().getXYPlot().getRenderer().setSeriesVisible(i, isVisible);
+  }
+
+  public boolean getTheme (boolean theme) {
+    graphTheme = theme;
+    return graphTheme;
   }
 }
