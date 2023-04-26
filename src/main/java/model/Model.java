@@ -106,7 +106,6 @@ public class Model {
         Map<LocalDateTime, Double> impressionsByDate = new HashMap<>();
         getImpressions().sequential().forEach(impression -> {
             LocalDateTime dateTime = impression.getKey();
-            Double impressions = impression.getValue();
             if (impressionsByDate.containsKey(dateTime)) {
                 impressionsByDate.put(dateTime, impressionsByDate.get(dateTime) + 1.0);
             } else {
@@ -147,7 +146,7 @@ public class Model {
      */
     public int numberOfUniques()
     {
-        return (int) users.values().stream().parallel().filter(u -> u.getClicks().size() > 0).count();
+        return (int) getUsers().filter(u -> u.getClicks().size() > 0).count();
     }
 
   /**
@@ -155,7 +154,7 @@ public class Model {
    */
     public Map<LocalDateTime, Double> loadNumberOfUniquesData() {
         Map<LocalDateTime, Double> numberOfUniquesByDate = new HashMap<>();
-        getUsers().forEach(user -> {
+        getUsers().sequential().forEach(user -> {
             if (user.getClicks().size() > 0) {
                 LocalDateTime dateTime = user.getClicks().get(0).getKey();
                 if (numberOfUniquesByDate.containsKey(dateTime)) {
@@ -468,19 +467,9 @@ public class Model {
 
 
         Map<String, FilterPredicate> adjustedPredicates = this.updateSegmentFilters(predicates, currentlySelected);
-        ArrayList<String> listOfMetricValue = new ArrayList<>();
-        for(int i = 0; i < 11; i++)
-        {
-            Map<LocalDateTime,Double> metricData = loadData(i, this.combinePredicates(adjustedPredicates));
-            double totalMetricValue = 0;
-            for (Double metricValue : metricData.values()) {
-                totalMetricValue += metricValue;
-            }
-            listOfMetricValue.add(Double.toString(totalMetricValue));
-        }
+        this.predicate = this.combinePredicates(adjustedPredicates);
 
-        return listOfMetricValue;
-
+        return getMetrics();
     }
 
     /**
@@ -511,6 +500,14 @@ public class Model {
         allPredicates.put("female_1", new FilterPredicate("gender", u -> !u.getGender()));
         return allPredicates;
     }
+
+    public void resetFilters(Map<String, FilterPredicate> predicates) {
+        currentlySelected = new HashMap<>();
+        currentlySelected.put("age_all", true);
+        currentlySelected.put("context_all", true);
+        currentlySelected.put("income_all", true);
+    }
+
     /**
      * Update the enabled predicates for filtering by audience segment
      *
@@ -519,6 +516,7 @@ public class Model {
     public Map<String, FilterPredicate> updateSegmentFilters(Map<String, FilterPredicate> predicates, Map<String, Boolean> selected) {
         return this.updateSegmentFilters(predicates, selected, true);
     }
+
     public Map<String, FilterPredicate> updateSegmentFilters(Map<String, FilterPredicate> predicates, Map<String, Boolean> selected, Boolean resetBaseFilters) {
         HashMap<String, FilterPredicate> predicateMap = new HashMap<>();
         if (resetBaseFilters != null && resetBaseFilters) {

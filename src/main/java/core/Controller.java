@@ -324,6 +324,7 @@ public class Controller {
                 graphScene.getDateFilterButton());
 
         graphModel.configureDatePickers(graphScene.getCompareControlStartDatePicker(), graphScene.getCompareControlEndDatePicker(), graphScene.getCompareControlDateFilterButton());
+        System.out.println(preds);
         graphModel.updateGraphData(preds);
 
         // Checkbox Listener

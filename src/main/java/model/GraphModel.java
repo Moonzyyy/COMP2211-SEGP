@@ -1,10 +1,5 @@
 package model;
 
-import core.segments.Age;
-import core.segments.Context;
-import core.segments.Income;
-
-import java.sql.Time;
 import java.time.ZoneId;
 import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
@@ -15,8 +10,6 @@ import org.jfree.chart.JFreeChart;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -52,7 +45,7 @@ public class GraphModel {
   public GraphModel(Model model, String title, String xAxisName, String yAxisName, int id, boolean needDivisionForChangingTime) {
     this.id = id;
     this.model = model;
-    this.predicates = initPredicates();
+    this.predicates = model.initPredicates();
     this.lines = new HashMap<>(1);
     this.dataSet = new TimeSeriesCollection();
     this.timeFilterVal = "Day";
@@ -61,7 +54,7 @@ public class GraphModel {
     this.newLine(title, null);
     this.newLine("Comparison", null, false);
     this.title = title;
-    updateGraphData(null);
+    updateGraphData(new HashMap<>());
   }
 
     /**
@@ -145,13 +138,7 @@ public class GraphModel {
 
   public void newLine(String title, boolean divide, String predicateCode, boolean enabled) {
     GraphLine line = new GraphLine(this.lines.size(), title, divide, predicateCode, enabled);
-//    if (enabled) {
-//      dataSet.addSeries(line.getDataSeries());
-//      dataSet.addSeries(line.getDatedSeries1());
-//      dataSet.addSeries(line.getDatedSeries2());
-//    }
     lines.put(this.lines.size(), line);
-//    updateGraphData(null);
   }
 
   public void newLine(String title, String predicateCode, boolean enabled) {
@@ -232,7 +219,6 @@ public class GraphModel {
       xyPlot.getRangeAxis().setAutoRange(true);
       start2 = startDate;
       end2 = endDate;
-      System.out.println(dataSet.getSeriesCount());
       return true;
     }
     return false;
@@ -364,44 +350,6 @@ public class GraphModel {
 //        start1 = startDate;
 //        end1 = endDate;
 //    }
-
-  /**
-   * Initialise the predicates used for filtering by audience segment.
-   */
-  public Map<String, FilterPredicate> initPredicates() {
-    currentlySelected = new HashMap<>();
-    Map<String, FilterPredicate> allPredicates = new HashMap<>(19);
-    allPredicates.put("age_all", new FilterPredicate("age", u -> true));
-    for (Age a : Age.values()) {
-      Predicate<User> p = u -> u.getAge() == a;
-      allPredicates.put("age_" + a.idx, new FilterPredicate("age", p));
-    }
-
-    allPredicates.put("context_all", new FilterPredicate( "context", u -> true));
-    for (Context c : Context.values()) {
-      Predicate<User> p = u -> u.getContext() == c;
-      allPredicates.put("context_" + c.idx, new FilterPredicate("context", p));
-    }
-
-    allPredicates.put("income_all", new FilterPredicate( "income", u -> true));
-    for (Income i : Income.values()) {
-      Predicate<User> p = u -> u.getIncome() == i;
-      allPredicates.put("income_" + i.idx, new FilterPredicate("income", p));
-    }
-
-    allPredicates.put("male_1", new FilterPredicate("gender", User::getGender));
-    allPredicates.put("female_1", new FilterPredicate("gender", u -> !u.getGender()));
-    return allPredicates;
-  }
-
-
-
-  public void resetFilters(Map<String, FilterPredicate> predicates) {
-    currentlySelected = new HashMap<>();
-    currentlySelected.put("age_all", true);
-    currentlySelected.put("context_all", true);
-    currentlySelected.put("income_all", true);
-  }
 
 
 
