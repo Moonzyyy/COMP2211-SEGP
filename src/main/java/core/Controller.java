@@ -307,6 +307,7 @@ public class Controller {
     public void setUpScene(Graph graphScene, GraphModel graphModel, HistogramModel histogramModel) {
         HashMap<String, Boolean> preds = initPredicates();
         graphScene.createScene();
+        graphScene.getTheme(theme);
         this.setCurrentScene(graphScene);
 
         //Button action listeners
