@@ -1,15 +1,16 @@
 package view.scenes;
 
-        import java.util.Objects;
-        import javafx.geometry.Insets;
-        import javafx.geometry.Pos;
-        import javafx.scene.Scene;
-        import javafx.scene.control.*;
-        import javafx.scene.layout.BorderPane;
-        import javafx.scene.layout.HBox;
-        import javafx.scene.layout.Priority;
-        import javafx.scene.layout.VBox;
-        import org.w3c.dom.Text;
+import java.util.Objects;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import org.w3c.dom.Text;
 
 public class BounceDef extends AbstractScene {
     private RadioButton timeRadio;
@@ -50,6 +51,7 @@ public class BounceDef extends AbstractScene {
         pageRadio.getStyleClass().add("label");
         inputPageText = new TextField();
         VBox pageBox = new VBox(pageRadio, inputPageText);
+        pageBox.setPrefWidth(200);
         pageBox.setAlignment(Pos.CENTER);
         pageBox.setSpacing(10);
 
@@ -60,11 +62,10 @@ public class BounceDef extends AbstractScene {
         VBox timeBox = new VBox(timeRadio, inputTimeText);
         timeBox.setAlignment(Pos.CENTER);
         timeBox.setSpacing(10);
+        timeBox.setPrefWidth(200);
 
         resetButton = new Button("Reset");
-        resetButton.getStyleClass().add("backButton");
         applyButton = new Button("Apply");
-        applyButton.getStyleClass().add("backButton");
 
         VBox controls = new VBox(resetButton, pageBox, timeBox, applyButton);
         controls.setAlignment(Pos.CENTER);
@@ -72,7 +73,6 @@ public class BounceDef extends AbstractScene {
         bounceDefPane.setCenter(controls);
 
         backButton = new Button("Back");
-        backButton.getStyleClass().add("backButton");
         bounceDefPane.setBottom(backButton);
         BorderPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
         BorderPane.setMargin(backButton, new Insets(20, 0, 10, 10));
@@ -94,7 +94,9 @@ public class BounceDef extends AbstractScene {
         return applyButton;
     }
 
-    public ToggleGroup getToggleGroup() { return toggleGroup; }
+    public ToggleGroup getToggleGroup() {
+        return toggleGroup;
+    }
 
     public RadioButton getTimeRadio() {
         return timeRadio;
@@ -104,7 +106,11 @@ public class BounceDef extends AbstractScene {
         return pageRadio;
     }
 
-    public TextField getInputPageText() { return inputPageText; }
+    public TextField getInputPageText() {
+        return inputPageText;
+    }
 
-    public TextField getInputTimeText() { return inputTimeText; }
+    public TextField getInputTimeText() {
+        return inputTimeText;
+    }
 }

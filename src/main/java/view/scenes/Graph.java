@@ -3,24 +3,18 @@ package view.scenes;
 import core.segments.Age;
 import core.segments.Context;
 import core.segments.Income;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javax.swing.SwingUtilities;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.DatasetRenderingOrder;
@@ -28,535 +22,564 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import view.components.CompareItem;
 
+import javax.swing.*;
+import java.awt.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
+
 
 public class Graph extends AbstractScene {
 
-  private final BorderPane layout;
+    private final BorderPane layout;
 
-  /**
-   * The id of the metric that is being graphed.
-   */
-  private final Integer metricId;
-  Map<LocalDateTime, Double> data;
-  private Button homeButton;
-  private Button printButton;
-  private Button segmentFilterButton;
-
-  private ListView<Node> compareList;
-  private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
-  private ComboBox<String> timeFilter;
-  private ComboBox<CompareItem> compareControl1;
-  private ComboBox<CompareItem> compareControl2;
-  private ComboBox<CompareItem> compareControl3;
-  private final JFreeChart lineChart;
-  private final JFreeChart histogram;
-
-  private final DatePicker compareControlStartDatePicker;
-  private final DatePicker compareControlEndDatePicker;
+    /**
+     * The id of the metric that is being graphed.
+     */
+    private final Integer metricId;
+    private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
+    private final JFreeChart lineChart;
+    private final JFreeChart histogram;
+    private final DatePicker compareControlStartDatePicker;
+    private final DatePicker compareControlEndDatePicker;
+    private final DatePicker startDatePicker;
+    private final DatePicker endDatePicker;
+    Map<LocalDateTime, Double> data;
+    private Button homeButton;
+    private Button printButton;
+    private Button segmentFilterButton;
+    private ListView<Node> compareList;
+    private ComboBox<String> timeFilter;
+    private ComboBox<CompareItem> compareControl1;
+    private ComboBox<CompareItem> compareControl2;
+    private ComboBox<CompareItem> compareControl3;
     private Button compareControlDateFilterButton;
-
-  private final DatePicker startDatePicker;
-  private final DatePicker endDatePicker;
     private Button dateFilterButton;
 
-  private CheckBox maleCheckBox;
-  private CheckBox femaleCheckBox;
+    private CheckBox maleCheckBox;
+    private CheckBox femaleCheckBox;
 
-  private ChartPanel chartPanel;
+    private ChartPanel chartPanel;
 
-  private boolean showLineGraph = true;
+    private boolean showLineGraph = true;
 
-  private boolean graphTheme = true;
-
-
-  /**
-   * Class Constructor
-   *
-   * @param id        the metric ID
-   * @param lineChart     the lineChart
-   * @param histogram
-   */
-  public Graph(Integer id, JFreeChart lineChart, JFreeChart histogram) {
-    super();
-    layout = new BorderPane();
-    metricId = id;
-    this.lineChart = lineChart;
-    this.histogram = histogram;
-    this.startDatePicker = new DatePicker();
-    this.endDatePicker = new DatePicker();
-    this.compareControlStartDatePicker = new DatePicker();
-    this.compareControlEndDatePicker = new DatePicker();
-  }
-
-  /**
-   * Creates all the components of the scene, and adds them to the layout
-   */
-  public void createScene() {
-
-    var topBar = new HBox();
-    topBar.setAlignment(Pos.BOTTOM_CENTER);
-
-    topBar.getStyleClass().add("topBar");
-
-    homeButton = new Button("Home");
-    homeButton.getStyleClass().add("button");
-    HBox.setHgrow(homeButton, Priority.ALWAYS);
-
-    var graphTitle = new Label("AdViz - Graph");
-    graphTitle.getStyleClass().add("graphTitle");
+    private boolean graphTheme;
 
 
-    printButton = new Button("Print");
-    printButton.getStyleClass().add("button");
+    /**
+     * Class Constructor
+     *
+     * @param id        the metric ID
+     * @param lineChart the lineChart
+     * @param histogram
+     */
+    public Graph(Integer id, JFreeChart lineChart, JFreeChart histogram) {
+        super();
+        layout = new BorderPane();
+        metricId = id;
+        this.lineChart = lineChart;
+        this.histogram = histogram;
+        this.startDatePicker = new DatePicker();
+        this.endDatePicker = new DatePicker();
+        this.compareControlStartDatePicker = new DatePicker();
+        this.compareControlEndDatePicker = new DatePicker();
+        this.graphTheme = true;
+    }
+
+    /**
+     * Creates all the components of the scene, and adds them to the layout
+     */
+    public void createScene() {
+
+        var topBar = new HBox();
+        topBar.setAlignment(Pos.BOTTOM_CENTER);
+
+        topBar.getStyleClass().add("topBar");
+
+        homeButton = new Button("Home");
+        homeButton.getStyleClass().add("button");
+        HBox.setHgrow(homeButton, Priority.ALWAYS);
+
+        var graphTitle = new Label("AdViz - Graph");
+        graphTitle.getStyleClass().add("graphTitle");
 
 
-    segmentFilterButton = new Button("Filter");
-    segmentFilterButton.getStyleClass().add("button");
+        printButton = new Button("Print");
+        printButton.getStyleClass().add("button");
 
 
-    topBar.getChildren().add(homeButton);
-    Region spacer = new Region();
-    HBox.setHgrow(spacer, Priority.ALWAYS);
-    topBar.getChildren().add(spacer);
-    topBar.getChildren().add(graphTitle);
-    Region spacer2 = new Region();
-    HBox.setHgrow(spacer2, Priority.ALWAYS);
-    topBar.getChildren().add(spacer2);
-    topBar.getChildren().add(printButton);
-    topBar.getChildren().add(segmentFilterButton);
+        segmentFilterButton = new Button("Filter");
+        segmentFilterButton.getStyleClass().add("button");
 
-    layout.setTop(topBar);
 
-    BorderPane.setMargin(topBar, new Insets(10, 10, 10, 10));
+        topBar.getChildren().add(homeButton);
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        topBar.getChildren().add(spacer);
+        topBar.getChildren().add(graphTitle);
+        Region spacer2 = new Region();
+        HBox.setHgrow(spacer2, Priority.ALWAYS);
+        topBar.getChildren().add(spacer2);
+        topBar.getChildren().add(printButton);
+        topBar.getChildren().add(segmentFilterButton);
 
-    var filterBar = new HBox();
-    filterBar.setAlignment(Pos.CENTER);
-    filterBar.setPadding(new Insets(10, 10, 10, 10));
-    filterBar.setSpacing(10);
+        layout.setTop(topBar);
 
-    if (metricId == 4) {
-      ToggleButton toggleGraph = new ToggleButton("Histogram");
-      toggleGraph.setOnAction(event -> {
-        if (toggleGraph.isSelected()) {
-          toggleGraph.setText("Line Graph");
-          showLineGraph = false;
-          chartPanel.setChart(histogram);
-        } else {
-          toggleGraph.setText("Histogram");
-          showLineGraph = true;
-          chartPanel.setChart(lineChart);
+        BorderPane.setMargin(topBar, new Insets(10, 10, 10, 10));
+
+        var filterBar = new HBox();
+        filterBar.setAlignment(Pos.CENTER);
+        filterBar.setPadding(new Insets(10, 10, 10, 10));
+        filterBar.setSpacing(10);
+
+        if (metricId == 4) {
+            ToggleButton toggleGraph = new ToggleButton("Histogram");
+            toggleGraph.setOnAction(event -> {
+                if (toggleGraph.isSelected()) {
+                    toggleGraph.setText("Line Graph");
+                    showLineGraph = false;
+                    chartPanel.setChart(histogram);
+                } else {
+                    toggleGraph.setText("Histogram");
+                    showLineGraph = true;
+                    chartPanel.setChart(lineChart);
+                }
+            });
+            toggleGraph.getStyleClass().add("button");
+            filterBar.getChildren().add(toggleGraph);
         }
-      });
-      toggleGraph.getStyleClass().add("button");
-      filterBar.getChildren().add(toggleGraph);
+
+        if (showLineGraph) {
+            lineChart.getTitle().setPadding(0, 120, 0, 0);
+            lineChart.getLegend().setPadding(0, 120, 0, 0);
+            chartPanel = new ChartPanel(lineChart);
+        } else {
+            histogram.getTitle().setPadding(0, 120, 0, 0);
+            histogram.getLegend().setPadding(0, 120, 0, 0);
+            chartPanel = new ChartPanel(histogram);
+        }
+
+        SwingNode swingNode = new SwingNode();
+        if (getGraphTheme()) {
+            // DARK MODE
+            SwingUtilities.invokeLater(() -> {
+                chartPanel.getChart().setBackgroundPaint(new Color(18, 18, 18));
+                lineChart.getTitle().setPaint(Color.WHITE);
+                lineChart.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
+                histogram.getTitle().setPaint(Color.WHITE);
+                histogram.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
+                chartPanel.getChart().getPlot().setBackgroundPaint(Color.DARK_GRAY);
+                chartPanel.getChart().getPlot().setOutlinePaint(Color.DARK_GRAY);
+                chartPanel.getChart().getXYPlot().getRenderer().setSeriesPaint(0, Color.WHITE);
+                chartPanel.getChart().getXYPlot().getDomainAxis().setAxisLinePaint(Color.WHITE);
+                chartPanel.getChart().getXYPlot().getDomainAxis().setTickLabelPaint(Color.WHITE);
+                chartPanel.getChart().getXYPlot().getDomainAxis().setLabelPaint(Color.WHITE);
+                chartPanel.getChart().getXYPlot().getDomainAxis()
+                        .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                chartPanel.getChart().getXYPlot().getDomainAxis()
+                        .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                chartPanel.getChart().getXYPlot().getRangeAxis().setAxisLinePaint(Color.WHITE);
+                chartPanel.getChart().getXYPlot().getRangeAxis().setTickLabelPaint(Color.WHITE);
+                chartPanel.getChart().getXYPlot().getRangeAxis().setLabelPaint(Color.WHITE);
+                chartPanel.getChart().getXYPlot().getRangeAxis()
+                        .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                chartPanel.getChart().getXYPlot().getRangeAxis()
+                        .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+
+                chartPanel.getChart().getXYPlot().getRenderer()
+                        .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                chartPanel.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
+                chartPanel.getChart().getXYPlot().getRenderer().setDefaultSeriesVisible(false);
+                chartPanel.getChart().getXYPlot().getRenderer().setSeriesVisible(0, true);
+                histogram.setBackgroundPaint(new Color(18, 18, 18));
+                histogram.getPlot().setBackgroundPaint(Color.DARK_GRAY);
+                histogram.getPlot().setOutlinePaint(Color.DARK_GRAY);
+                histogram.getXYPlot().getRenderer().setSeriesPaint(0, Color.WHITE);
+                histogram.getXYPlot().getDomainAxis().setAxisLinePaint(Color.WHITE);
+                histogram.getXYPlot().getDomainAxis().setTickLabelPaint(Color.WHITE);
+                histogram.getXYPlot().getDomainAxis().setLabelPaint(Color.WHITE);
+                histogram.getXYPlot().getDomainAxis()
+                        .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                histogram.getXYPlot().getDomainAxis()
+                        .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                histogram.getXYPlot().getRangeAxis().setAxisLinePaint(Color.WHITE);
+                histogram.getXYPlot().getRangeAxis().setTickLabelPaint(Color.WHITE);
+                histogram.getXYPlot().getRangeAxis().setLabelPaint(Color.WHITE);
+                histogram.getXYPlot().getRangeAxis()
+                        .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                histogram.getXYPlot().getRangeAxis()
+                        .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                histogram.getXYPlot().getRenderer()
+                        .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                histogram.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
+                histogram.getXYPlot().getRenderer().setDefaultSeriesVisible(false);
+                histogram.getXYPlot().getRenderer().setSeriesVisible(0, true);
+                histogram.getXYPlot().setDatasetRenderingOrder(DatasetRenderingOrder.REVERSE);
+                XYPlot histogramPlot = (XYPlot) histogram.getPlot();
+                XYBarRenderer barRenderer = (XYBarRenderer) histogramPlot.getRenderer();
+                barRenderer.setSeriesOutlinePaint(0, Color.WHITE);
+                barRenderer.setDrawBarOutline(true);
+                Color translucentWhite = new Color(255, 255, 255, 77);
+                barRenderer.setSeriesPaint(0, translucentWhite);
+                swingNode.setContent(chartPanel);
+
+                chartPanel.getChart().getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
+                chartPanel.getChart().getLegend().setItemPaint(Color.WHITE);
+                chartPanel.getChart().getLegend().setBackgroundPaint(Color.decode("#121212"));
+
+                chartPanel.setMouseWheelEnabled(true);
+                chartPanel.setDomainZoomable(true);
+                chartPanel.setRangeZoomable(true);
+                chartPanel.setZoomTriggerDistance(Integer.MAX_VALUE);
+                chartPanel.zoomOutBoth(0, 0);
+                chartPanel.restoreAutoBounds();
+                chartPanel.setFillZoomRectangle(false);
+                chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
+                chartPanel.setZoomInFactor(1.0);
+                chartPanel.setZoomOutFactor(1.0);
+            });
+        } else {
+            //LIGHT MODE
+            SwingUtilities.invokeLater(() -> {
+                chartPanel.getChart().setBackgroundPaint(new Color(237, 243, 245));
+                lineChart.getTitle().setPaint(Color.BLACK);
+                lineChart.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
+                histogram.getTitle().setPaint(Color.BLACK);
+                histogram.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
+                chartPanel.getChart().getPlot().setBackgroundPaint(Color.LIGHT_GRAY);
+                chartPanel.getChart().getPlot().setOutlinePaint(Color.LIGHT_GRAY);
+                chartPanel.getChart().getXYPlot().getRenderer().setSeriesPaint(0, Color.BLACK);
+                chartPanel.getChart().getXYPlot().getDomainAxis().setAxisLinePaint(Color.BLACK);
+                chartPanel.getChart().getXYPlot().getDomainAxis().setTickLabelPaint(Color.BLACK);
+                chartPanel.getChart().getXYPlot().getDomainAxis().setLabelPaint(Color.BLACK);
+                chartPanel.getChart().getXYPlot().getDomainAxis()
+                        .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                chartPanel.getChart().getXYPlot().getDomainAxis()
+                        .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                chartPanel.getChart().getXYPlot().getRangeAxis().setAxisLinePaint(Color.BLACK);
+                chartPanel.getChart().getXYPlot().getRangeAxis().setTickLabelPaint(Color.BLACK);
+                chartPanel.getChart().getXYPlot().getRangeAxis().setLabelPaint(Color.BLACK);
+                chartPanel.getChart().getXYPlot().getRangeAxis()
+                        .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                chartPanel.getChart().getXYPlot().getRangeAxis()
+                        .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+
+                chartPanel.getChart().getXYPlot().getRenderer()
+                        .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                chartPanel.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
+                chartPanel.getChart().getXYPlot().getRenderer().setDefaultSeriesVisible(false);
+                chartPanel.getChart().getXYPlot().getRenderer().setSeriesVisible(0, true);
+                histogram.setBackgroundPaint(new Color(237, 243, 245));
+                histogram.getPlot().setBackgroundPaint(Color.LIGHT_GRAY);
+                histogram.getPlot().setOutlinePaint(Color.LIGHT_GRAY);
+                histogram.getXYPlot().getRenderer().setSeriesPaint(0, Color.BLACK);
+                histogram.getXYPlot().getDomainAxis().setAxisLinePaint(Color.BLACK);
+                histogram.getXYPlot().getDomainAxis().setTickLabelPaint(Color.BLACK);
+                histogram.getXYPlot().getDomainAxis().setLabelPaint(Color.BLACK);
+                histogram.getXYPlot().getDomainAxis()
+                        .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                histogram.getXYPlot().getDomainAxis()
+                        .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                histogram.getXYPlot().getRangeAxis().setAxisLinePaint(Color.BLACK);
+                histogram.getXYPlot().getRangeAxis().setTickLabelPaint(Color.BLACK);
+                histogram.getXYPlot().getRangeAxis().setLabelPaint(Color.BLACK);
+                histogram.getXYPlot().getRangeAxis()
+                        .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                histogram.getXYPlot().getRangeAxis()
+                        .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                histogram.getXYPlot().getRenderer()
+                        .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                histogram.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
+                histogram.getXYPlot().getRenderer().setDefaultSeriesVisible(false);
+                histogram.getXYPlot().getRenderer().setSeriesVisible(0, true);
+                histogram.getXYPlot().setDatasetRenderingOrder(DatasetRenderingOrder.REVERSE);
+                XYPlot histogramPlot = (XYPlot) histogram.getPlot();
+                XYBarRenderer barRenderer = (XYBarRenderer) histogramPlot.getRenderer();
+                barRenderer.setSeriesOutlinePaint(0, new Color(0, 125, 82));
+                barRenderer.setDrawBarOutline(true);
+                Color translucentWhite = new Color(0, 125, 82, 77);
+                barRenderer.setSeriesPaint(0, translucentWhite);
+                swingNode.setContent(chartPanel);
+
+                chartPanel.getChart().getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
+                chartPanel.getChart().getLegend().setItemPaint(Color.BLACK);
+                chartPanel.getChart().getLegend().setBackgroundPaint(Color.decode("#D3D3D3"));
+
+                chartPanel.setMouseWheelEnabled(true);
+                chartPanel.setDomainZoomable(true);
+                chartPanel.setRangeZoomable(true);
+                chartPanel.setZoomTriggerDistance(Integer.MAX_VALUE);
+                chartPanel.zoomOutBoth(0, 0);
+                chartPanel.restoreAutoBounds();
+                chartPanel.setFillZoomRectangle(false);
+                chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
+                chartPanel.setZoomInFactor(1.0);
+                chartPanel.setZoomOutFactor(1.0);
+            });
+
+        }
+        lineChart.getXYPlot().setDomainPannable(true);
+        lineChart.getXYPlot().setRangePannable(true);
+
+        var graphContainer = new HBox();
+        graphContainer.setAlignment(Pos.CENTER);
+        graphContainer.setPadding(new Insets(10, 10, 10, 10));
+        graphContainer.getChildren().add(swingNode);
+        layout.setCenter(graphContainer);
+
+        startDatePicker.getStyleClass().add("start-date-picker");
+        endDatePicker.getStyleClass().add("end-date-picker");
+
+        startDatePicker.setMaxWidth(110);
+        endDatePicker.setMaxWidth(110);
+
+
+        timeFilter = new ComboBox<>();
+        timeFilter.getItems().addAll("Hour", "Day", "Week", "Month");
+        timeFilter.setValue("Day");
+        timeFilter.getStyleClass().add("time-filter");
+
+        dateFilterButton = new Button("Apply");
+        dateFilterButton.setDisable(true);
+
+        compareControl1 = new ComboBox<>();
+        compareControl1.setStyle("-fx-background-color: #FFFFFF");
+        compareControl2 = new ComboBox<>();
+        compareControl2.setVisible(true);
+        compareControl2.setStyle("-fx-background-color: #1C7C54");
+        compareControl3 = new ComboBox<>();
+        compareControl3.setVisible(false);
+        compareControl3.setStyle("-fx-background-color: #CC2936");
+
+        compareControlFactory(compareControl1);
+        compareControlFactory(compareControl2);
+        compareControlFactory(compareControl3);
+
+        var compareSpacer = new Region();
+        compareSpacer.setPadding(new Insets(0, 0, 0, 20));
+        var compareSpacer2 = new Region();
+        HBox.setHgrow(compareSpacer2, Priority.ALWAYS);
+
+        compareControlDateFilterButton = new Button("Apply");
+        compareControlDateFilterButton.setDisable(true);
+
+
+        compareControlStartDatePicker.getStyleClass().add("start-date-picker");
+        compareControlEndDatePicker.getStyleClass().add("end-date-picker");
+
+        compareControlStartDatePicker.setMaxWidth(110);
+        compareControlEndDatePicker.setMaxWidth(110);
+
+
+        filterBar.getChildren()
+                .addAll(compareControl1, compareSpacer, compareControl2, compareSpacer2, compareControl3, compareControlStartDatePicker, compareControlEndDatePicker, compareControlDateFilterButton, timeFilter, startDatePicker, endDatePicker, dateFilterButton);
+
+        createCheckBoxes();
+
+        layout.setBottom(filterBar);
+        scene = new Scene(layout, 1280, 720);
+        scene.getStylesheets()
+                .add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
+
     }
 
-    if (showLineGraph) {
-      lineChart.getTitle().setPadding(0, 120, 0, 0);
-      lineChart.getLegend().setPadding(0, 120, 0, 0);
-      chartPanel = new ChartPanel(lineChart);
-    } else {
-      histogram.getTitle().setPadding(0, 120, 0, 0);
-      histogram.getLegend().setPadding(0, 120, 0, 0);
-      chartPanel = new ChartPanel(histogram);
+    /**
+     * @param compareControl
+     */
+    private void compareControlFactory(ComboBox<CompareItem> compareControl) {
+        CompareItem defaultItem = new CompareItem("Default", null);
+        compareControl.getItems().addAll(defaultItem, new CompareItem("Male", "male_1"), new CompareItem("Female", "female_1"));
+        for (Age age : Age.values()) {
+            compareControl.getItems().add(new CompareItem(age.label, "age_" + age.idx));
+        }
+        for (Income income : Income.values()) {
+            compareControl.getItems().add(new CompareItem(income.label, "income_" + income.idx));
+        }
+        for (Context context : Context.values()) {
+            compareControl.getItems().add(new CompareItem(context.label, "context_" + context.idx));
+        }
+        compareControl.getStyleClass().add("time-filter");
+        compareControl.setValue(defaultItem);
     }
 
-    SwingNode swingNode = new SwingNode();
-    if (graphTheme) {
-      SwingUtilities.invokeLater(() -> {
-          chartPanel.getChart().setBackgroundPaint(new Color(18, 18, 18));
-          lineChart.getTitle().setPaint(Color.WHITE);
-          lineChart.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
-          histogram.getTitle().setPaint(Color.WHITE);
-          histogram.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
-          chartPanel.getChart().getPlot().setBackgroundPaint(Color.DARK_GRAY);
-          chartPanel.getChart().getPlot().setOutlinePaint(Color.DARK_GRAY);
-          chartPanel.getChart().getXYPlot().getRenderer().setSeriesPaint(0, Color.WHITE);
-          chartPanel.getChart().getXYPlot().getDomainAxis().setAxisLinePaint(Color.WHITE);
-          chartPanel.getChart().getXYPlot().getDomainAxis().setTickLabelPaint(Color.WHITE);
-          chartPanel.getChart().getXYPlot().getDomainAxis().setLabelPaint(Color.WHITE);
-          chartPanel.getChart().getXYPlot().getDomainAxis()
-                  .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
-          chartPanel.getChart().getXYPlot().getDomainAxis()
-                  .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
-          chartPanel.getChart().getXYPlot().getRangeAxis().setAxisLinePaint(Color.WHITE);
-          chartPanel.getChart().getXYPlot().getRangeAxis().setTickLabelPaint(Color.WHITE);
-          chartPanel.getChart().getXYPlot().getRangeAxis().setLabelPaint(Color.WHITE);
-          chartPanel.getChart().getXYPlot().getRangeAxis()
-                  .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
-          chartPanel.getChart().getXYPlot().getRangeAxis()
-                  .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+    /**
+     * Creates the checkboxes for the filter bar
+     */
+    void createCheckBoxes() {
 
-          chartPanel.getChart().getXYPlot().getRenderer()
-                  .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
-          chartPanel.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
-          chartPanel.getChart().getXYPlot().getRenderer().setDefaultSeriesVisible(false);
-          chartPanel.getChart().getXYPlot().getRenderer().setSeriesVisible(0, true);
-          histogram.setBackgroundPaint(new Color(18, 18, 18));
-          histogram.getPlot().setBackgroundPaint(Color.DARK_GRAY);
-          histogram.getPlot().setOutlinePaint(Color.DARK_GRAY);
-          histogram.getXYPlot().getRenderer().setSeriesPaint(0, Color.WHITE);
-          histogram.getXYPlot().getDomainAxis().setAxisLinePaint(Color.WHITE);
-          histogram.getXYPlot().getDomainAxis().setTickLabelPaint(Color.WHITE);
-          histogram.getXYPlot().getDomainAxis().setLabelPaint(Color.WHITE);
-          histogram.getXYPlot().getDomainAxis()
-                  .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
-          histogram.getXYPlot().getDomainAxis()
-                  .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
-          histogram.getXYPlot().getRangeAxis().setAxisLinePaint(Color.WHITE);
-          histogram.getXYPlot().getRangeAxis().setTickLabelPaint(Color.WHITE);
-          histogram.getXYPlot().getRangeAxis().setLabelPaint(Color.WHITE);
-          histogram.getXYPlot().getRangeAxis()
-                  .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
-          histogram.getXYPlot().getRangeAxis()
-                  .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
-          histogram.getXYPlot().getRenderer()
-                  .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
-          histogram.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
-          histogram.getXYPlot().getRenderer().setDefaultSeriesVisible(false);
-          histogram.getXYPlot().getRenderer().setSeriesVisible(0, true);
-          histogram.getXYPlot().setDatasetRenderingOrder(DatasetRenderingOrder.REVERSE);
-          XYPlot histogramPlot = (XYPlot) histogram.getPlot();
-          XYBarRenderer barRenderer = (XYBarRenderer) histogramPlot.getRenderer();
-          barRenderer.setSeriesOutlinePaint(0, Color.WHITE);
-          barRenderer.setDrawBarOutline(true);
-          Color translucentWhite = new Color(255, 255, 255, 77);
-          barRenderer.setSeriesPaint(0, translucentWhite);
-        swingNode.setContent(chartPanel);
+        compareList = new ListView<>();
 
-        chartPanel.getChart().getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
-        chartPanel.getChart().getLegend().setItemPaint(Color.WHITE);
-        chartPanel.getChart().getLegend().setBackgroundPaint(Color.decode("#121212"));
+        var genderText = new Label("Gender of Audience:");
+        genderText.getStyleClass().add("list-cell-text");
+        maleCheckBox = new CheckBox("Male");
+        maleCheckBox.getStyleClass().add("checkbox");
+        maleCheckBox.setId("male_1");
+        femaleCheckBox = new CheckBox("Female");
+        femaleCheckBox.getStyleClass().add("checkbox");
+        femaleCheckBox.setId("female_1");
+        this.checkboxes.add(maleCheckBox);
+        this.checkboxes.add(femaleCheckBox);
 
-        chartPanel.setMouseWheelEnabled(true);
-        chartPanel.setDomainZoomable(true);
-        chartPanel.setRangeZoomable(true);
-        chartPanel.setZoomTriggerDistance(Integer.MAX_VALUE);
-        chartPanel.zoomOutBoth(0, 0);
-        chartPanel.restoreAutoBounds();
-        chartPanel.setFillZoomRectangle(false);
-        chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
-        chartPanel.setZoomInFactor(1.0);
-        chartPanel.setZoomOutFactor(1.0);
-      }); } else {
-      SwingUtilities.invokeLater(() -> {
-        chartPanel.getChart().setBackgroundPaint(new Color(237, 243, 245));
-        lineChart.getTitle().setPaint(Color.BLACK);
-        lineChart.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
-        histogram.getTitle().setPaint(Color.BLACK);
-        histogram.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
-        chartPanel.getChart().getPlot().setBackgroundPaint(Color.LIGHT_GRAY);
-        chartPanel.getChart().getPlot().setOutlinePaint(Color.LIGHT_GRAY);
-        chartPanel.getChart().getXYPlot().getRenderer().setSeriesPaint(0, Color.BLACK);
-        chartPanel.getChart().getXYPlot().getDomainAxis().setAxisLinePaint(Color.BLACK);
-        chartPanel.getChart().getXYPlot().getDomainAxis().setTickLabelPaint(Color.BLACK);
-        chartPanel.getChart().getXYPlot().getDomainAxis().setLabelPaint(Color.BLACK);
-        chartPanel.getChart().getXYPlot().getDomainAxis()
-                .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
-        chartPanel.getChart().getXYPlot().getDomainAxis()
-                .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
-        chartPanel.getChart().getXYPlot().getRangeAxis().setAxisLinePaint(Color.BLACK);
-        chartPanel.getChart().getXYPlot().getRangeAxis().setTickLabelPaint(Color.BLACK);
-        chartPanel.getChart().getXYPlot().getRangeAxis().setLabelPaint(Color.BLACK);
-        chartPanel.getChart().getXYPlot().getRangeAxis()
-                .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
-        chartPanel.getChart().getXYPlot().getRangeAxis()
-                .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+        compareList.getStyleClass().add("list-cell");
+        compareList.getItems().addAll(genderText, maleCheckBox, femaleCheckBox);
 
-        chartPanel.getChart().getXYPlot().getRenderer()
-                .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
-        chartPanel.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
-        chartPanel.getChart().getXYPlot().getRenderer().setDefaultSeriesVisible(false);
-        chartPanel.getChart().getXYPlot().getRenderer().setSeriesVisible(0, true);
-        histogram.setBackgroundPaint(new Color(237, 243, 245));
-        histogram.getPlot().setBackgroundPaint(Color.LIGHT_GRAY);
-        histogram.getPlot().setOutlinePaint(Color.LIGHT_GRAY);
-        histogram.getXYPlot().getRenderer().setSeriesPaint(0, Color.BLACK);
-        histogram.getXYPlot().getDomainAxis().setAxisLinePaint(Color.BLACK);
-        histogram.getXYPlot().getDomainAxis().setTickLabelPaint(Color.BLACK);
-        histogram.getXYPlot().getDomainAxis().setLabelPaint(Color.BLACK);
-        histogram.getXYPlot().getDomainAxis()
-                .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
-        histogram.getXYPlot().getDomainAxis()
-                .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
-        histogram.getXYPlot().getRangeAxis().setAxisLinePaint(Color.BLACK);
-        histogram.getXYPlot().getRangeAxis().setTickLabelPaint(Color.BLACK);
-        histogram.getXYPlot().getRangeAxis().setLabelPaint(Color.BLACK);
-        histogram.getXYPlot().getRangeAxis()
-                .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
-        histogram.getXYPlot().getRangeAxis()
-                .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
-        histogram.getXYPlot().getRenderer()
-                .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
-        histogram.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
-        histogram.getXYPlot().getRenderer().setDefaultSeriesVisible(false);
-        histogram.getXYPlot().getRenderer().setSeriesVisible(0, true);
-        histogram.getXYPlot().setDatasetRenderingOrder(DatasetRenderingOrder.REVERSE);
-        XYPlot histogramPlot = (XYPlot) histogram.getPlot();
-        XYBarRenderer barRenderer = (XYBarRenderer) histogramPlot.getRenderer();
-        barRenderer.setSeriesOutlinePaint(0, new Color(0, 125, 82));
-        barRenderer.setDrawBarOutline(true);
-        Color translucentWhite = new Color(0, 125, 82, 77);
-        barRenderer.setSeriesPaint(0, translucentWhite);
-        swingNode.setContent(chartPanel);
+        var ageText = new Label("Age of Audience:");
+        ageText.getStyleClass().add("list-cell-text");
+        compareList.getItems().add(ageText);
+        for (Age a : Age.values()) {
+            CheckBox box = new CheckBox(a.label);
+            box.setId("age_" + a.idx);
+            compareList.getItems().add(box);
+            this.checkboxes.add(box);
+        }
 
-        chartPanel.getChart().getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
-        chartPanel.getChart().getLegend().setItemPaint(Color.BLACK);
-        chartPanel.getChart().getLegend().setBackgroundPaint(Color.decode("#D3D3D3"));
+        var incomeText = new Label("Income of Audience:");
+        incomeText.getStyleClass().add("list-cell-text");
+        compareList.getItems().add(incomeText);
+        for (Income i : Income.values()) {
+            CheckBox box = new CheckBox(i.label);
+            box.setId("income_" + i.idx);
+            compareList.getItems().add(box);
+            this.checkboxes.add(box);
+        }
 
-        chartPanel.setMouseWheelEnabled(true);
-        chartPanel.setDomainZoomable(true);
-        chartPanel.setRangeZoomable(true);
-        chartPanel.setZoomTriggerDistance(Integer.MAX_VALUE);
-        chartPanel.zoomOutBoth(0, 0);
-        chartPanel.restoreAutoBounds();
-        chartPanel.setFillZoomRectangle(false);
-        chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
-        chartPanel.setZoomInFactor(1.0);
-        chartPanel.setZoomOutFactor(1.0);
-      });
+        var contextText = new Label("Location of Ad Interaction:");
+        contextText.getStyleClass().add("list-cell-text");
+        compareList.getItems().add(contextText);
+        for (Context c : Context.values()) {
+            CheckBox box = new CheckBox(c.label);
+            box.setId("context_" + c.idx);
+            compareList.getItems().add(box);
+            this.checkboxes.add(box);
+        }
+        this.checkboxes.forEach(c -> c.getStyleClass().add("checkbox"));
+        layout.setRight(compareList);
 
     }
-    lineChart.getXYPlot().setDomainPannable(true);
-    lineChart.getXYPlot().setRangePannable(true);
 
-    var graphContainer = new HBox();
-    graphContainer.setAlignment(Pos.CENTER);
-    graphContainer.setPadding(new Insets(10, 10, 10, 10));
-    graphContainer.getChildren().add(swingNode);
-    layout.setCenter(graphContainer);
-
-    startDatePicker.getStyleClass().add("start-date-picker");
-    endDatePicker.getStyleClass().add("end-date-picker");
-
-    startDatePicker.setMaxWidth(110);
-    endDatePicker.setMaxWidth(110);
-
-
-    timeFilter = new ComboBox<>();
-    timeFilter.getItems().addAll("Hour", "Day", "Week", "Month");
-    timeFilter.setValue("Day");
-    timeFilter.getStyleClass().add("time-filter");
-
-    dateFilterButton = new Button("Apply");
-    dateFilterButton.setDisable(true);
-
-    compareControl1 = new ComboBox<>();
-    compareControl1.setStyle("-fx-background-color: #FFFFFF");
-    compareControl2 = new ComboBox<>();
-    compareControl2.setVisible(true);
-    compareControl2.setStyle("-fx-background-color: #1C7C54");
-    compareControl3 = new ComboBox<>();
-    compareControl3.setVisible(false);
-    compareControl3.setStyle("-fx-background-color: #CC2936");
-
-    compareControlFactory(compareControl1);
-    compareControlFactory(compareControl2);
-    compareControlFactory(compareControl3);
-
-    var compareSpacer = new Region();
-    compareSpacer.setPadding(new Insets(0, 0, 0, 20));
-    var compareSpacer2 = new Region();
-    HBox.setHgrow(compareSpacer2, Priority.ALWAYS);
-
-    compareControlDateFilterButton = new Button("Apply");
-    compareControlDateFilterButton.setDisable(true);
-
-
-    compareControlStartDatePicker.getStyleClass().add("start-date-picker");
-    compareControlEndDatePicker.getStyleClass().add("end-date-picker");
-
-    compareControlStartDatePicker.setMaxWidth(110);
-    compareControlEndDatePicker.setMaxWidth(110);
-
-
-    filterBar.getChildren()
-        .addAll(compareControl1, compareSpacer, compareControl2, compareSpacer2, compareControl3 ,compareControlStartDatePicker, compareControlEndDatePicker, compareControlDateFilterButton, timeFilter, startDatePicker, endDatePicker, dateFilterButton);
-
-    createCheckBoxes();
-
-    layout.setBottom(filterBar);
-    scene = new Scene(layout, 1280, 720);
-    scene.getStylesheets()
-        .add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
-
-  }
-
-  /**
-   * @param compareControl
-   */
-  private void compareControlFactory(ComboBox<CompareItem> compareControl) {
-    CompareItem defaultItem = new CompareItem("Default", null);
-    compareControl.getItems().addAll(defaultItem, new CompareItem("Male", "male_1"), new CompareItem("Female", "female_1"));
-    for (Age age : Age.values()) {
-      compareControl.getItems().add(new CompareItem(age.label, "age_" + age.idx));
-    }
-    for (Income income : Income.values()) {
-      compareControl.getItems().add(new CompareItem(income.label, "income_" + income.idx));
-    }
-    for (Context context : Context.values()) {
-      compareControl.getItems().add(new CompareItem(context.label, "context_" + context.idx));
-    }
-    compareControl.getStyleClass().add("time-filter");
-    compareControl.setValue(defaultItem);
-  }
-
-  /**
-   * Creates the checkboxes for the filter bar
-   */
-  void createCheckBoxes() {
-
-    compareList = new ListView<>();
-
-    var genderText = new Label("Gender of Audience:");
-    genderText.getStyleClass().add("list-cell-text");
-    maleCheckBox = new CheckBox("Male");
-    maleCheckBox.getStyleClass().add("checkbox");
-    maleCheckBox.setId("male_1");
-    femaleCheckBox = new CheckBox("Female");
-    femaleCheckBox.getStyleClass().add("checkbox");
-    femaleCheckBox.setId("female_1");
-    this.checkboxes.add(maleCheckBox);
-    this.checkboxes.add(femaleCheckBox);
-
-    compareList.getStyleClass().add("list-cell");
-    compareList.getItems().addAll(genderText, maleCheckBox, femaleCheckBox);
-
-    var ageText = new Label("Age of Audience:");
-    ageText.getStyleClass().add("list-cell-text");
-    compareList.getItems().add(ageText);
-    for (Age a : Age.values()) {
-      CheckBox box = new CheckBox(a.label);
-      box.setId("age_" + a.idx);
-      compareList.getItems().add(box);
-      this.checkboxes.add(box);
+    public ChartPanel getLineChart() {
+        return chartPanel;
     }
 
-    var incomeText = new Label("Income of Audience:");
-    incomeText.getStyleClass().add("list-cell-text");
-    compareList.getItems().add(incomeText);
-    for (Income i : Income.values()) {
-      CheckBox box = new CheckBox(i.label);
-      box.setId("income_" + i.idx);
-      compareList.getItems().add(box);
-      this.checkboxes.add(box);
+    /**
+     * @return get home button
+     */
+    public Button getHomeButton() {
+        return homeButton;
     }
 
-    var contextText = new Label("Location of Ad Interaction:");
-    contextText.getStyleClass().add("list-cell-text");
-    compareList.getItems().add(contextText);
-    for (Context c : Context.values()) {
-      CheckBox box = new CheckBox(c.label);
-      box.setId("context_" + c.idx);
-      compareList.getItems().add(box);
-      this.checkboxes.add(box);
+    /**
+     * @return get print button
+     */
+    public Button getPrintButton() {
+        return printButton;
     }
-    this.checkboxes.forEach(c -> c.getStyleClass().add("checkbox"));
-    layout.setRight(compareList);
 
-  }
+    /**
+     * @return get compare button
+     */
+    public Button getSegmentFilterButton() {
+        return segmentFilterButton;
+    }
 
-  public ChartPanel getLineChart() {
-    return chartPanel;
-  }
+    /**
+     * @return get the list of check boxes
+     */
+    public ArrayList<CheckBox> getCheckboxes() {
+        return checkboxes;
+    }
 
-  /**
-   * @return get home button
-   */
-  public Button getHomeButton() {
-    return homeButton;
-  }
+    /**
+     * @return get the date filter button
+     */
+    public Button getDateFilterButton() {
+        return dateFilterButton;
+    }
 
-  /**
-   * @return get print button
-   */
-  public Button getPrintButton() {
-    return printButton;
-  }
+    public Button getCompareControlDateFilterButton() {
+        return compareControlDateFilterButton;
+    }
 
-  /**
-   * @return get compare button
-   */
-  public Button getSegmentFilterButton() {
-    return segmentFilterButton;
-  }
+    /**
+     * @return get the box of time filters
+     */
+    public ComboBox<String> getTimeFilter() {
+        return timeFilter;
+    }
 
-  /**
-   * @return get the list of check boxes
-   */
-  public ArrayList<CheckBox> getCheckboxes() {
-    return checkboxes;
-  }
+    public DatePicker getCompareControlStartDatePicker() {
+        return compareControlStartDatePicker;
+    }
 
-  /**
-   * @return get the date filter button
-   */
-  public Button getDateFilterButton() {
-    return dateFilterButton;
-  }
+    public DatePicker getCompareControlEndDatePicker() {
+        return compareControlEndDatePicker;
+    }
 
-  public Button getCompareControlDateFilterButton(){return compareControlDateFilterButton;}
+    /**
+     * @return get the start date picker
+     */
+    public DatePicker getStartDatePicker() {
+        return startDatePicker;
+    }
 
-  /**
-   * @return get the box of time filters
-   */
-  public ComboBox<String> getTimeFilter() {
-    return timeFilter;
-  }
+    /**
+     * @return get the end date picker
+     */
+    public DatePicker getEndDatePicker() {
+        return endDatePicker;
+    }
 
-  public DatePicker getCompareControlStartDatePicker(){return compareControlStartDatePicker;}
+    /**
+     * @return
+     */
+    public ComboBox<CompareItem> getCompareControl1() {
+        return compareControl1;
+    }
 
-    public DatePicker getCompareControlEndDatePicker() {return compareControlEndDatePicker;}
+    public ComboBox<CompareItem> getCompareControl2() {
+        return compareControl2;
+    }
 
-  /**
-   * @return get the start date picker
-   */
-  public DatePicker getStartDatePicker() {
-    return startDatePicker;
-  }
+    public ComboBox<CompareItem> getCompareControl3() {
+        return compareControl3;
+    }
 
-  /**
-   * @return get the end date picker
-   */
-  public DatePicker getEndDatePicker() {
-    return endDatePicker;
-  }
+    /**
+     * @return get the male check box
+     */
+    public CheckBox getMaleCheckBox() {
+        return maleCheckBox;
+    }
 
-  /**
-   * @return
-   */
-  public ComboBox<CompareItem> getCompareControl1() {
-    return compareControl1;
-  }
+    /**
+     * @return get the female check box
+     */
+    public CheckBox getFemaleCheckBox() {
+        return femaleCheckBox;
+    }
 
-  public ComboBox<CompareItem> getCompareControl2() {
-    return compareControl2;
-  }
+    public void setLineVisibility(int i, boolean isVisible) {
+        chartPanel.getChart().getXYPlot().getRenderer().setSeriesVisible(i, isVisible);
+    }
 
-  public ComboBox<CompareItem> getCompareControl3() {
-    return compareControl3;
-  }
+    public boolean getGraphTheme() {
+        return graphTheme;
+    }
 
-  /**
-   * @return get the male check box
-   */
-  public CheckBox getMaleCheckBox() {
-    return maleCheckBox;
-  }
+    public void setGraphTheme(boolean theme) {
+        this.graphTheme = theme;
+    }
 
-  /**
-   * @return get the female check box
-   */
-  public CheckBox getFemaleCheckBox() {
-    return femaleCheckBox;
-  }
+    public void setTheme(boolean theme) {
+        scene.getStylesheets().clear();
+        if (theme) {
+            scene.getStylesheets().add(getClass().getResource("/view/graph.css").toExternalForm());
+//            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu.png"))));
+        } else {
+            scene.getStylesheets().add(getClass().getResource("/view/graph.css").toExternalForm());
+//            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menuLight.png"))));
 
-  public void setLineVisibility(int i, boolean isVisible) {
-    chartPanel.getChart().getXYPlot().getRenderer().setSeriesVisible(i, isVisible);
-  }
-
-  public boolean getTheme (boolean theme) {
-    graphTheme = theme;
-    return graphTheme;
-  }
+        }
+    }
 }

@@ -1,56 +1,123 @@
-.title {
-    -fx-font-size: 80px;
-    -fx-font-family: "Roboto";
-    -fx-text-fill: #FFFFFF;
-    -fx-padding: 20 0 0 0;
-}
 
-.backButton {
-    -fx-background-radius: 30;
-    -fx-background-color: #f2e9e4;
-    -fx-text-fill: black;
-    -fx-font-size: 100;
-    -fx-font-family: "Roboto";
-    -fx-cursor: hand;
-    -fx-pref-width: 50;
-    -fx-pref-height: 30;
-    -fx-padding: 5;
-}
+.root {
+    -primary-color: #f2e9e4;
+    -secondary-color: #ffffff;
+    -tertiary-color: #ffffff;
+    -neutral-color: #121212;
+    -surface-color: #424242;
+    -label-text-color: #ffffff;
+    -button-text-color: #000000;
 
-.backButton:hover {
-    -fx-background-color: #dedede;
-    -fx-text-fill: #121212;
-}
+    -fx-font-weight: 500;
+    -fx-font-family: Roboto;
 
-.backButton:pressed {
-    -fx-background-color: #bfbfbf;
-    -fx-text-fill: #121212;
-}
-
-.button {
-    -fx-background-color: #f2e9e4;
-    -fx-text-fill: black;
-    -fx-font-size: 11px;
-    -fx-font-family: "Roboto";
-    -fx-cursor: hand;
-    -fx-padding: 5;
-}
-
-.button:hover {
-    -fx-background-color: #dedede;
-    -fx-text-fill: #121212;
-}
-
-.button:pressed {
-    -fx-background-color: #bfbfbf;
-    -fx-text-fill: #121212;
+    -fx-background-color: -neutral-color;
+    -fx-background-text-color: -label-text-color;
 }
 
 .label {
     -fx-font-size: 30px;
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: -label-text-color;
 }
 
-.root {
-    -fx-background-color: #121212;
+
+.button {
+    -fx-background-radius: 30;
+    -fx-background-color: -primary-color;
+    -fx-text-fill: -button-text-color;
+    -fx-font-size: 25px;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+    -fx-pref-width: 200;
+}
+
+.button:hover {
+    -fx-background-color: derive(-primary-color, -20%);
+}
+
+.button:pressed {
+    -fx-background-color: derive(-primary-color, -30%);
+    -fx-text-fill: derive(-button-text-color, -30%);
+}
+
+.title {
+    -fx-padding: 50 0 0 0;
+    -fx-font-size: 80px;
+    -fx-text-fill: -label-text-color;
+}
+
+.radio-button {
+    -fx-font-size: 30px;
+    -fx-text-fill: -label-text-color;
+    -fx-padding: 5px 10px;
+    -fx-background-color: transparent;
+    -fx-border-color: -primary-color;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50%;
+    -fx-cursor: hand;
+}
+
+.radio-button:selected {
+    -fx-border-color: -primary-color;
+}
+
+.text-field {
+    -fx-font-size: 30px;
+    -fx-prompt-text-fill: derive(-label-text-color,-40%);
+    -fx-text-fill: -label-text-color;
+    -fx-padding: 5px 10px;
+    -fx-background-color: transparent;
+    -fx-border-color: -secondary-color;
+    -fx-border-width: 2px;
+    -fx-border-radius: 3px;
+    -fx-pref-width: 400;
+    -fx-cursor: text;
+}
+
+.text-field:focused {
+    -fx-border-color: -primary-color;
+}
+
+.text-field:disabled {
+    -fx-opacity: 0.6;
+}
+
+.text-field:hover {
+    -fx-background-color: derive(-surface-color,-10%);
+}
+
+
+.combo-box {
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -fx-text-background-color;
+    -fx-pref-width: 200;
+    -fx-font-size: 20px;
+    -fx-pref-height: -fx-font-size;
+    -fx-highlight-text-fill: -fx-text-background-color;
+    -fx-highlight-fill: derive(-surface-color, -10%);
+}
+
+.combo-box .list-view .list-cell {
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: derive(-surface-color, -10%);
+}
+
+.combo-box .list-view .list-cell:hover {
+    -fx-background-color: derive(-surface-color, -10%);
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: derive(-surface-color, -20%);
+}
+
+.combo-box .list-cell {
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: -surface-color;
+}
+
+.combo-box .arrow {
+    -fx-background-color: BLACK;
 }
