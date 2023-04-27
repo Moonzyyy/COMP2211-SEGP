@@ -17,9 +17,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.DatasetRenderingOrder;
+import org.jfree.chart.plot.ValueAxisPlot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import view.components.CompareItem;
 
 import javax.swing.*;
@@ -164,34 +167,37 @@ public class Graph extends AbstractScene {
         if (getGraphTheme()) {
             // DARK MODE
             SwingUtilities.invokeLater(() -> {
-                chartPanel.getChart().setBackgroundPaint(new Color(18, 18, 18));
+                JFreeChart chart = chartPanel.getChart();
+                XYPlot xyPlot = chart.getXYPlot();
+                chart.setBackgroundPaint(new Color(18, 18, 18));
                 lineChart.getTitle().setPaint(Color.WHITE);
                 lineChart.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
                 histogram.getTitle().setPaint(Color.WHITE);
                 histogram.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
-                chartPanel.getChart().getPlot().setBackgroundPaint(Color.DARK_GRAY);
-                chartPanel.getChart().getPlot().setOutlinePaint(Color.DARK_GRAY);
-                chartPanel.getChart().getXYPlot().getRenderer().setSeriesPaint(0, Color.WHITE);
-                chartPanel.getChart().getXYPlot().getDomainAxis().setAxisLinePaint(Color.WHITE);
-                chartPanel.getChart().getXYPlot().getDomainAxis().setTickLabelPaint(Color.WHITE);
-                chartPanel.getChart().getXYPlot().getDomainAxis().setLabelPaint(Color.WHITE);
-                chartPanel.getChart().getXYPlot().getDomainAxis()
-                        .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
-                chartPanel.getChart().getXYPlot().getDomainAxis()
-                        .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
-                chartPanel.getChart().getXYPlot().getRangeAxis().setAxisLinePaint(Color.WHITE);
-                chartPanel.getChart().getXYPlot().getRangeAxis().setTickLabelPaint(Color.WHITE);
-                chartPanel.getChart().getXYPlot().getRangeAxis().setLabelPaint(Color.WHITE);
-                chartPanel.getChart().getXYPlot().getRangeAxis()
-                        .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
-                chartPanel.getChart().getXYPlot().getRangeAxis()
-                        .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                chart.getPlot().setBackgroundPaint(Color.DARK_GRAY);
+                chart.getPlot().setOutlinePaint(Color.DARK_GRAY);
 
-                chartPanel.getChart().getXYPlot().getRenderer()
-                        .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
-                chartPanel.getChart().getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
-                chartPanel.getChart().getXYPlot().getRenderer().setDefaultSeriesVisible(false);
-                chartPanel.getChart().getXYPlot().getRenderer().setSeriesVisible(0, true);
+                ValueAxis domainAxis = xyPlot.getDomainAxis();
+                domainAxis.setAxisLinePaint(Color.WHITE);
+                domainAxis.setTickLabelPaint(Color.WHITE);
+                domainAxis.setLabelPaint(Color.WHITE);
+                domainAxis.setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                domainAxis.setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+
+                ValueAxis rangeAxis = xyPlot.getRangeAxis();
+                rangeAxis.setAxisLinePaint(Color.WHITE);
+                rangeAxis.setTickLabelPaint(Color.WHITE);
+                rangeAxis.setLabelPaint(Color.WHITE);
+                rangeAxis.setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                rangeAxis.setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+
+                XYItemRenderer renderer = xyPlot.getRenderer();
+                renderer.setSeriesPaint(0, Color.WHITE);
+                renderer.setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                renderer.setSeriesStroke(0, new BasicStroke(4.0f));
+                renderer.setDefaultSeriesVisible(false);
+                renderer.setSeriesVisible(0, true);
+
                 histogram.setBackgroundPaint(new Color(18, 18, 18));
                 histogram.getPlot().setBackgroundPaint(Color.DARK_GRAY);
                 histogram.getPlot().setOutlinePaint(Color.DARK_GRAY);
@@ -224,9 +230,9 @@ public class Graph extends AbstractScene {
                 barRenderer.setSeriesPaint(0, translucentWhite);
                 swingNode.setContent(chartPanel);
 
-                chartPanel.getChart().getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
-                chartPanel.getChart().getLegend().setItemPaint(Color.WHITE);
-                chartPanel.getChart().getLegend().setBackgroundPaint(Color.decode("#121212"));
+                chart.getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
+                chart.getLegend().setItemPaint(Color.WHITE);
+                chart.getLegend().setBackgroundPaint(Color.decode("#121212"));
 
                 chartPanel.setMouseWheelEnabled(true);
                 chartPanel.setDomainZoomable(true);
@@ -344,10 +350,10 @@ public class Graph extends AbstractScene {
         dateFilterButton.setDisable(true);
 
         compareControl1 = new ComboBox<>();
-        compareControl1.setStyle("-fx-background-color: #FFFFFF");
+        compareControl1.setStyle("-fx-background-color: #FFFFFF; -fx-background-insets: 0;");
         compareControl2 = new ComboBox<>();
         compareControl2.setVisible(true);
-        compareControl2.setStyle("-fx-background-color: #1C7C54");
+        compareControl2.setStyle("-fx-background-color: #1C7C54; -fx-background-insets: 0;");
         compareControl3 = new ComboBox<>();
         compareControl3.setVisible(false);
         compareControl3.setStyle("-fx-background-color: #CC2936");
