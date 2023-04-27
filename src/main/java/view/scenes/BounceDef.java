@@ -50,8 +50,10 @@ public class BounceDef extends AbstractScene {
         pageRadio.setToggleGroup(toggleGroup);
         pageRadio.getStyleClass().add("label");
         inputPageText = new TextField();
-        VBox pageBox = new VBox(pageRadio, inputPageText);
-        pageBox.setPrefWidth(200);
+        inputPageText.setAlignment(Pos.CENTER);
+        HBox pageBox = new HBox(pageRadio, inputPageText);
+        pageRadio.maxWidthProperty().bind(pageBox.widthProperty().multiply(0.8));
+        inputPageText.maxWidthProperty().bind(pageBox.widthProperty().multiply(0.15));
         pageBox.setAlignment(Pos.CENTER);
         pageBox.setSpacing(10);
 
@@ -59,17 +61,25 @@ public class BounceDef extends AbstractScene {
         timeRadio.setToggleGroup(toggleGroup);
         timeRadio.getStyleClass().add("label");
         inputTimeText = new TextField();
-        VBox timeBox = new VBox(timeRadio, inputTimeText);
+        inputTimeText.setAlignment(Pos.CENTER);
+        HBox timeBox = new HBox(timeRadio, inputTimeText);
+        timeRadio.maxWidthProperty().bind(timeBox.widthProperty().multiply(0.8));
+        inputTimeText.maxWidthProperty().bind(pageBox.widthProperty().multiply(0.15));
         timeBox.setAlignment(Pos.CENTER);
         timeBox.setSpacing(10);
-        timeBox.setPrefWidth(200);
 
         resetButton = new Button("Reset");
         applyButton = new Button("Apply");
+        HBox buttons = new HBox(applyButton, resetButton);
+        buttons.setSpacing(20);
+        buttons.setPadding(new Insets(10, 0, 0, 0));
+        buttons.setAlignment(Pos.CENTER);
 
-        VBox controls = new VBox(resetButton, pageBox, timeBox, applyButton);
+        VBox controls = new VBox(pageBox, timeBox, buttons);
         controls.setAlignment(Pos.CENTER);
         controls.setSpacing(20);
+        controls.setMinWidth(200);
+        controls.maxWidthProperty().bind(bounceDefPane.widthProperty().multiply(0.33));
         bounceDefPane.setCenter(controls);
 
         backButton = new Button("Back");

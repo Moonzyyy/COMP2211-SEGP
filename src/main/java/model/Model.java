@@ -2,11 +2,8 @@ package model;
 
 import java.io.File;
 import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -14,9 +11,6 @@ import java.util.stream.Stream;
 import core.segments.Age;
 import core.segments.Context;
 import core.segments.Income;
-import javafx.scene.control.Button;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,7 +24,8 @@ public class Model {
     private final ArrayList<Double> metrics = new ArrayList<>(11);
 
     private String bounceDef = "Page";
-    private int bounceValue;
+    private int bouncePageValue;
+    private int bounceTimeValue;
     private int bounces;
     private final DecimalFormat df3 = new DecimalFormat("#.###");
   private final DecimalFormat df2 = new DecimalFormat("#.##");
@@ -45,7 +40,8 @@ public class Model {
 
     public Model() {
         this.predicates = initPredicates();
-        bounceValue = 1;
+        bouncePageValue = 1;
+        bounceTimeValue = 1;
     }
 
     public boolean importData() {
@@ -200,9 +196,9 @@ public class Model {
         switch (bounceDef) {
             case "Default" -> this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= 1).count();
             case "Page" ->
-                    this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= bounceValue).count();
+                    this.bounces = (int) getServers().filter(server -> server.getPagesViewed() <= bouncePageValue).count();
             case "Time" ->
-                    this.bounces = (int) getServers().filter(server -> server.getTimeSpent() <= bounceValue).count();
+                    this.bounces = (int) getServers().filter(server -> server.getTimeSpent() <= bounceTimeValue).count();
         }
         return this.bounces;
     }
@@ -223,16 +219,16 @@ public class Model {
                     }
                 }
                 case "Page" -> {
-                    if (server.getTimeSpent() <= bounceValue && bouncesByDate.containsKey(dateTime)) {
+                    if (server.getTimeSpent() <= bouncePageValue && bouncesByDate.containsKey(dateTime)) {
                         bouncesByDate.put(dateTime, bouncesByDate.get(dateTime) + 1);
-                    } else if (server.getTimeSpent() <= bounceValue) {
+                    } else if (server.getTimeSpent() <= bouncePageValue) {
                         bouncesByDate.put(dateTime, 1.0);
                     }
                 }
                 case "Time" -> {
-                    if (server.getPagesViewed() <= bounceValue && bouncesByDate.containsKey(dateTime)) {
+                    if (server.getPagesViewed() <= bounceTimeValue && bouncesByDate.containsKey(dateTime)) {
                         bouncesByDate.put(dateTime, bouncesByDate.get(dateTime) + 1);
-                    } else if (server.getPagesViewed() <= bounceValue) {
+                    } else if (server.getPagesViewed() <= bounceTimeValue) {
                         bouncesByDate.put(dateTime, 1.0);
                     }
                 }
@@ -584,13 +580,15 @@ public class Model {
     }
 
     public String getBounceDef() {return bounceDef;}
-    public int getBounceValue() { return bounceValue; }
+    public int getBouncePageValue() { return bouncePageValue; }
+    public int getBounceTimeValue() { return bounceTimeValue; }
 
     public void setPredicate(Predicate<User> predicate) {
         this.predicate = predicate;
     }
 
     public void setBounceDef(String bounceDef) { this.bounceDef = bounceDef; }
-    public void setBounceValue(int bounceValue) { this.bounceValue = bounceValue; }
+    public void setBouncePageValue(int bouncePageValue) { this.bouncePageValue = bouncePageValue; }
+    public void setBounceTimeValue(int bouncePageValue) { this.bounceTimeValue = bouncePageValue; }
 
 }

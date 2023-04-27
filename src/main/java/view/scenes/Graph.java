@@ -174,7 +174,6 @@ public class Graph extends AbstractScene {
         XYPlot histogramPlot = histogram.getXYPlot();
         XYBarRenderer barRenderer = (XYBarRenderer) histogramPlot.getRenderer();
 
-
         SwingUtilities.invokeLater(() -> {
             lineChart.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
             histogram.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));

@@ -128,7 +128,7 @@ public class Controller {
         DashboardComp dashboardComp = dashboard.getDashboardComp();
         dashboardComp.updateNumberBoxes(metrics);
 
-        dashboard.bounceDefinition.setText(model.getBounceDef() + " " + model.getBounceValue());
+        dashboard.bounceDefinition.setText(model.getBounceDef() + " " + (model.getBounceDef().equals("page") ? model.getBouncePageValue() : model.getBounceTimeValue()));
 
         //Button action listeners
         dashboard.getBackButton().setOnAction((event) -> {
@@ -267,32 +267,49 @@ public class Controller {
 
         bounceDef.getApplyButton().setOnAction((event) -> {
             if (bounceDef.getPageRadio().isSelected()) {
+                String text = bounceDef.getInputPageText().getText();
+                model.setBouncePageValue(Integer.parseInt(text.length() > 0 ? text : "1"));
                 model.setBounceDef("Page");
-                model.setBounceValue(Integer.parseInt(bounceDef.getInputPageText().getText()));
             } else {
+                String text = bounceDef.getInputTimeText().getText();
                 model.setBounceDef("Time");
-                model.setBounceValue(Integer.parseInt(bounceDef.getInputTimeText().getText()));
+                model.setBounceTimeValue(Integer.parseInt(text.length() > 0 ? text : "1"));
             }
             setUpScene(new Dashboard());
         });
 
         bounceDef.getResetButton().setOnAction((event) -> {
             model.setBounceDef("Page");
-            setUpScene(new Dashboard());
+            model.setBouncePageValue(1);
+            model.setBounceTimeValue(1);
+            bounceDef.getInputPageText().setText("1");
+            bounceDef.getInputTimeText().setText("1");
+//            setUpScene(new Dashboard());
         });
 
+        bounceDef.getInputPageText().setText(String.valueOf(model.getBouncePageValue()));
+        bounceDef.getInputTimeText().setText(String.valueOf(model.getBounceTimeValue()));
+
+        if (Objects.equals(model.getBounceDef(), "Page")) {
+            bounceDef.getPageRadio().setSelected(true);
+        } else {
+            bounceDef.getTimeRadio().setSelected(true);
+        }
+
         bounceDef.getInputPageText().textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!bounceDef.getInputPageText().getText().matches("[0-9]+"))
+            String text = bounceDef.getInputPageText().getText();
+            if(!text.matches("[0-9]+") && text.length() > 0)
             {
-                bounceDef.getInputPageText().setText(bounceDef.getInputPageText().getText(0, bounceDef.getInputPageText().getText().length()-1));
+                bounceDef.getInputPageText().setText(bounceDef.getInputPageText().getText(0, text.length()-1));
                 logger.info("Only numbers are allowed!!");
             }
         });
 
         bounceDef.getInputTimeText().textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!bounceDef.getInputTimeText().getText().matches("[0-9]+"))
+            String text = bounceDef.getInputTimeText().getText();
+            if(!text.matches("[0-9]+") && text.length() > 0)
             {
-                bounceDef.getInputTimeText().setText(bounceDef.getInputTimeText().getText(0, bounceDef.getInputTimeText().getText().length()-1));
+                bounceDef.getInputTimeText().setText(bounceDef.getInputTimeText().getText(0, text.length()-1));
                 logger.info("Only numbers are allowed!!");
             }
         });
