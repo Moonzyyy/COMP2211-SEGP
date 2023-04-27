@@ -36,31 +36,62 @@ public class PartitionBoundaryTesting {
     }
 
     //Bounce def partitions
+    /**
+     * Helper function to increase modularity
+     *
+     * @param bounceDef the bounce definition, either page or time
+     * @param bounceVal the bounce value
+     */
     private void bounceTestHelper(String bounceDef, int bounceVal) {
         model.setBounceDef(bounceDef);
         model.setBounceValue(bounceVal);
     }
 
+    //Valid inputs
     @Test
-    void bounceNumPages2() {
+    void bounceNumPages5Valid() {
+        bounceTestHelper("Page", 5);
+        assertEquals(14852, model.numberOfBounces(), "Number of bounces when pages viewed is 5");
+    }
+
+    @Test
+    void bounceRatePages5Valid() {
+        bounceTestHelper("Page", 5);
+        assertEquals(0.621, model.bounceRate(), "Bounce rate when pages viewed is 5");
+    }
+
+    @Test
+    void bounceNumTime5Valid() {
+        bounceTestHelper("Time", 5);
+        assertEquals(5134, model.numberOfBounces(), "Number of bounces when time taken is 5");
+    }
+
+    @Test
+    void bounceRateTime5Valid() {
+        bounceTestHelper("Time", 5);
+        assertEquals(0.215, model.bounceRate(), "Bounce rate when time taken is 5");
+    }
+
+    @Test
+    void bounceNumPages2Valid() {
         bounceTestHelper("Page", 2);
         assertEquals(10089, model.numberOfBounces(), "Number of bounces when pages viewed is 2");
     }
 
     @Test
-    void bounceRatePages2() {
+    void bounceRatePages2Valid() {
         bounceTestHelper("Page", 2);
-        assertEquals(0.362, model.bounceRate(), "Bounce rate when pages viewed is 2");
+        assertEquals(0.422, model.bounceRate(), "Bounce rate when pages viewed is 2");
     }
 
     @Test
-    void bounceNumTime2() {
+    void bounceNumTime2Valid() {
         bounceTestHelper("Time", 2);
         assertEquals(3775, model.numberOfBounces(), "Number of bounces when time taken is 2");
     }
 
     @Test
-    void bounceRateTime2() {
+    void bounceRateTime2Valid() {
         bounceTestHelper("Time", 2);
         assertEquals(0.158, model.bounceRate(), "Bounce rate when time taken is 2");
     }

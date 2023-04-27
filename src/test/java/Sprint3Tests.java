@@ -35,12 +35,18 @@ public class Sprint3Tests {
         return sum;
     }
 
+    /**
+     * Helper function to increase modularity
+     *
+     * @param bounceDef the bounce definition, either page or time
+     * @param bounceVal the bounce value
+     */
     private void bounceTestHelper(String bounceDef, int bounceVal) {
         model.setBounceDef(bounceDef);
         model.setBounceValue(bounceVal);
     }
 
-        @Test
+    @Test
     void bounceNumPages2() {
         bounceTestHelper("Page", 2);
         assertEquals(10089, model.numberOfBounces(), "Number of bounces when pages viewed is 2");
@@ -49,7 +55,7 @@ public class Sprint3Tests {
     @Test
     void bounceRatePages2() {
         bounceTestHelper("Page", 2);
-        assertEquals(0.362, model.bounceRate(), "Bounce rate when pages viewed is 2");
+        assertEquals(0.422, model.bounceRate(), "Bounce rate when pages viewed is 2");
     }
 
     @Test
