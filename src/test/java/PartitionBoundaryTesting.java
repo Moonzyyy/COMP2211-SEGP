@@ -1,5 +1,3 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import model.GraphModel;
 import model.Model;
 import org.junit.jupiter.api.BeforeAll;
@@ -7,7 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-public class Sprint3Tests {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class PartitionBoundaryTesting {
     private static Model model;
 
     @BeforeAll
@@ -35,12 +35,13 @@ public class Sprint3Tests {
         return sum;
     }
 
+    //Bounce def partitions
     private void bounceTestHelper(String bounceDef, int bounceVal) {
         model.setBounceDef(bounceDef);
         model.setBounceValue(bounceVal);
     }
 
-        @Test
+    @Test
     void bounceNumPages2() {
         bounceTestHelper("Page", 2);
         assertEquals(10089, model.numberOfBounces(), "Number of bounces when pages viewed is 2");
