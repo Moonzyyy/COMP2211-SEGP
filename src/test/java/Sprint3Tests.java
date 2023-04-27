@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class Sprint3Tests {
     private static Model model;
@@ -34,6 +35,36 @@ public class Sprint3Tests {
             sum += (double) gm.getLines().get(0).getDataSeries().getDataItem(a).getValue();
         }
         return sum;
+    }
+
+    //Sprint 3 tests
+    private void bounceTestHelper(String bounceDef, int bounceVal) {
+        model.setBounceDef(bounceDef);
+        model.setBounceValue(bounceVal);
+
+    }
+        @Test
+    void bounceNumPages2() {
+        bounceTestHelper("Page", 2);
+        assertEquals(10089, model.numberOfBounces(), "Number of bounces when pages viewed is 2");
+    }
+
+    @Test
+    void bounceRatePages2() {
+        bounceTestHelper("Page", 2);
+        assertEquals(0.362, model.bounceRate(), "Bounce rate when pages viewed is 2");
+    }
+
+    @Test
+    void bounceNumTime2() {
+        bounceTestHelper("Time", 2);
+        assertEquals(3775, model.numberOfBounces(), "Number of bounces when time taken is 2");
+    }
+
+    @Test
+    void bounceRateTime2() {
+        bounceTestHelper("Time", 2);
+        assertEquals(0.158, model.bounceRate(), "Bounce rate when time taken is 2");
     }
 
     //Defect testing
