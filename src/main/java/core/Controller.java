@@ -364,12 +364,14 @@ public class Controller {
                     if (male.isSelected()) togglePred(preds, male);
                 }
                 preds.replace(box.getId(), box.isSelected());
+                graphScene.getSegmentFilterButton().setDisable(false);
             });
         });
 
 
         graphScene.getSegmentFilterButton().setOnAction((event) -> {
             graphModel.updateGraphData(preds);
+            graphScene.getSegmentFilterButton().setDisable(true);
         });
 
         graphScene.getCompareControl1().setOnAction(event -> {

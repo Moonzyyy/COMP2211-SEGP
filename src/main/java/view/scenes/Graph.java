@@ -113,6 +113,7 @@ public class Graph extends AbstractScene {
 
 
         segmentFilterButton = new Button("Filter");
+        segmentFilterButton.setDisable(true);
         segmentFilterButton.getStyleClass().add("button");
 
 
@@ -164,6 +165,18 @@ public class Graph extends AbstractScene {
         }
 
         SwingNode swingNode = new SwingNode();
+        SwingUtilities.invokeLater(() -> {
+            chartPanel.setMouseWheelEnabled(true);
+            chartPanel.setDomainZoomable(true);
+            chartPanel.setRangeZoomable(true);
+            chartPanel.setZoomTriggerDistance(Integer.MAX_VALUE);
+            chartPanel.zoomOutBoth(0, 0);
+            chartPanel.restoreAutoBounds();
+            chartPanel.setFillZoomRectangle(false);
+            chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
+            chartPanel.setZoomInFactor(1.0);
+            chartPanel.setZoomOutFactor(1.0);
+        });
         if (getGraphTheme()) {
             // DARK MODE
             SwingUtilities.invokeLater(() -> {
@@ -233,17 +246,6 @@ public class Graph extends AbstractScene {
                 chart.getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
                 chart.getLegend().setItemPaint(Color.WHITE);
                 chart.getLegend().setBackgroundPaint(Color.decode("#121212"));
-
-                chartPanel.setMouseWheelEnabled(true);
-                chartPanel.setDomainZoomable(true);
-                chartPanel.setRangeZoomable(true);
-                chartPanel.setZoomTriggerDistance(Integer.MAX_VALUE);
-                chartPanel.zoomOutBoth(0, 0);
-                chartPanel.restoreAutoBounds();
-                chartPanel.setFillZoomRectangle(false);
-                chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
-                chartPanel.setZoomInFactor(1.0);
-                chartPanel.setZoomOutFactor(1.0);
             });
         } else {
             //LIGHT MODE
@@ -311,17 +313,6 @@ public class Graph extends AbstractScene {
                 chartPanel.getChart().getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
                 chartPanel.getChart().getLegend().setItemPaint(Color.BLACK);
                 chartPanel.getChart().getLegend().setBackgroundPaint(Color.decode("#D3D3D3"));
-
-                chartPanel.setMouseWheelEnabled(true);
-                chartPanel.setDomainZoomable(true);
-                chartPanel.setRangeZoomable(true);
-                chartPanel.setZoomTriggerDistance(Integer.MAX_VALUE);
-                chartPanel.zoomOutBoth(0, 0);
-                chartPanel.restoreAutoBounds();
-                chartPanel.setFillZoomRectangle(false);
-                chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
-                chartPanel.setZoomInFactor(1.0);
-                chartPanel.setZoomOutFactor(1.0);
             });
 
         }
