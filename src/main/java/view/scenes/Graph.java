@@ -367,7 +367,7 @@ public class Graph extends AbstractScene {
 
     private void handleZoom(MouseWheelEvent e) {
         double ZOOM_INCREMENT = 0.1;
-        double zoomFactor = 1.0 + (ZOOM_INCREMENT * e.getWheelRotation() * -1);
+        double zoomFactor = 1.0 + (ZOOM_INCREMENT * e.getWheelRotation());
         double newZoomFactor = currentZoomFactor * zoomFactor;
 
         double MAX_ZOOM_FACTOR = 5.0;
