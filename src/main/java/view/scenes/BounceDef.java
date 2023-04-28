@@ -57,7 +57,11 @@ public class BounceDef extends AbstractScene {
         pageErrorMsg = new Label("Please enter number of pages from 1 to 10");
         pageErrorMsg.setVisible(false);
         pageErrorMsg.getStyleClass().add("errorLabel");
-        HBox pageBox = new HBox(pageRadio, inputPageText, pageErrorMsg);
+        HBox pageBox = new HBox(pageRadio, inputPageText);
+        pageBox.setMinWidth(200);
+        pageBox.maxWidthProperty().bind(bounceDefPane.widthProperty().multiply(0.33));
+        VBox pageWrapper = new VBox(pageBox, pageErrorMsg);
+        pageWrapper.setAlignment(Pos.CENTER);
         pageRadio.maxWidthProperty().bind(pageBox.widthProperty().multiply(0.8));
         inputPageText.maxWidthProperty().bind(pageBox.widthProperty().multiply(0.15));
         pageBox.setAlignment(Pos.CENTER);
@@ -73,6 +77,10 @@ public class BounceDef extends AbstractScene {
         timeErrorMsg.setVisible(false);
         timeErrorMsg.getStyleClass().add("errorLabel");
         HBox timeBox = new HBox(timeRadio, inputTimeText, timeErrorMsg);
+        timeBox.setMinWidth(200);
+        timeBox.maxWidthProperty().bind(bounceDefPane.widthProperty().multiply(0.33));
+        VBox timeWrapper = new VBox(timeBox, timeErrorMsg);
+        timeWrapper.setAlignment(Pos.CENTER);
         timeRadio.maxWidthProperty().bind(timeBox.widthProperty().multiply(0.8));
         inputTimeText.maxWidthProperty().bind(pageBox.widthProperty().multiply(0.15));
         timeBox.setAlignment(Pos.CENTER);
@@ -85,11 +93,11 @@ public class BounceDef extends AbstractScene {
         buttons.setPadding(new Insets(10, 0, 0, 0));
         buttons.setAlignment(Pos.CENTER);
 
-        VBox controls = new VBox(pageBox, timeBox, buttons);
+        VBox controls = new VBox(pageWrapper, timeWrapper, buttons);
         controls.setAlignment(Pos.CENTER);
         controls.setSpacing(20);
-        controls.setMinWidth(200);
-        controls.maxWidthProperty().bind(bounceDefPane.widthProperty().multiply(0.33));
+//        controls.setMinWidth(200);
+//        controls.maxWidthProperty().bind(bounceDefPane.widthProperty().multiply(0.33));
         bounceDefPane.setCenter(controls);
 
         backButton = new Button("Back");

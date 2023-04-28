@@ -268,14 +268,15 @@ public class Controller {
         bounceDef.getApplyButton().setOnAction((event) -> {
             if (bounceDef.getPageRadio().isSelected()) {
                 String text = bounceDef.getInputPageText().getText();
-                if (Integer.parseInt(text) < 1 || Integer.parseInt(text) > 10) {
-                    bounceDef.getPageErrorMsg().setVisible(true);
-                } else {
-                    bounceDef.getPageErrorMsg().setVisible(false);
+//                if (Integer.parseInt(text) < 1 || Integer.parseInt(text) > 10) {
+//                    bounceDef.getPageErrorMsg().setVisible(true);
+//                    System.out.println("Error");
+//                } else {
+//                    bounceDef.getPageErrorMsg().setVisible(false);
                     model.setBouncePageValue(Integer.parseInt(text.length() > 0 ? text : "1"));
                     model.setBounceDef("Page");
                     setUpScene(new Dashboard());
-                }
+//                }
             } else {
                 String text = bounceDef.getInputTimeText().getText();
                 if (Integer.parseInt(text) < 1 || Integer.parseInt(text) > 10) {
@@ -309,20 +310,48 @@ public class Controller {
 
         bounceDef.getInputPageText().textProperty().addListener((observable, oldValue, newValue) -> {
             String text = bounceDef.getInputPageText().getText();
-            if (!text.matches("[0-9]+") && text.length() > 0) {
-                bounceDef.getInputPageText().setText(bounceDef.getInputPageText().getText(0, text.length() - 1));
-                logger.info("Only numbers are allowed!!");
+            boolean valid = validBounceDef(text);
+//            if (!valid && text.length() > 0) {
+//                bounceDef.getInputPageText().setText(bounceDef.getInputPageText().getText(0, text.length() - 1));
+//                valid = validBounceDef(text);
+//            }
+            bounceDef.getPageErrorMsg().setVisible(!valid);
+            if (bounceDef.getPageRadio().isSelected()) {
+                bounceDef.getApplyButton().setDisable(!valid);
             }
+        });
+
+        bounceDef.getPageRadio().setOnAction(e -> {
+            String text = bounceDef.getInputPageText().getText();
+            bounceDef.getApplyButton().setDisable(!validBounceDef(text));
         });
 
         bounceDef.getInputTimeText().textProperty().addListener((observable, oldValue, newValue) -> {
             String text = bounceDef.getInputTimeText().getText();
-            if (!text.matches("[0-9]+") && text.length() > 0) {
-                bounceDef.getInputTimeText().setText(bounceDef.getInputTimeText().getText(0, text.length() - 1));
-                logger.info("Only numbers are allowed!!");
+            boolean valid = validBounceDef(text);
+//            if (!valid && text.length() > 0) {
+//                bounceDef.getInputTimeText().setText(bounceDef.getInputTimeText().getText(0, text.length() - 1));
+//                valid = validBounceDef(text);
+//            }
+            bounceDef.getTimeErrorMsg().setVisible(!valid);
+            if (bounceDef.getTimeRadio().isSelected()) {
+                bounceDef.getApplyButton().setDisable(!valid);
             }
         });
 
+        bounceDef.getTimeRadio().setOnAction(e -> {
+            String text = bounceDef.getInputTimeText().getText();
+            bounceDef.getApplyButton().setDisable(!validBounceDef(text));
+        });
+
+    }
+
+    private boolean validBounceDef(String input) {
+        if (input.length() > 0) {
+            return input.matches("[0-9]+") && Integer.parseInt(input) >= 1 && Integer.parseInt(input) <= 10;
+        } else {
+            return false;
+        }
     }
 
     /**
