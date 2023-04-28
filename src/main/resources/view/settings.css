@@ -1,49 +1,8 @@
-
-.root {
-    -primary-color: #f2e9e4;
-    -secondary-color: #ffffff;
-    -tertiary-color: #ffffff;
-    -neutral-color: #121212;
-    -surface-color: #424242;
-    -label-text-color: #ffffff;
-    -button-text-color: #000000;
-
-    -fx-font-weight: 500;
-    -fx-font-family: Roboto;
-
-    -fx-background-color: -neutral-color;
-    -fx-background-text-color: -label-text-color;
-}
-
-.label {
-    -fx-font-size: 30px;
-    -fx-text-fill: -label-text-color;
-}
-
-
-.button {
-    -fx-background-radius: 30;
-    -fx-background-color: -primary-color;
-    -fx-text-fill: -button-text-color;
-    -fx-font-size: 25px;
-    -fx-padding: 10;
-    -fx-cursor: hand;
-    -fx-pref-width: 200;
-}
-
-.button:hover {
-    -fx-background-color: derive(-primary-color, -20%);
-}
-
-.button:pressed {
-    -fx-background-color: derive(-primary-color, -30%);
-    -fx-text-fill: derive(-button-text-color, -30%);
-}
+@import "style.css";
 
 .title {
     -fx-padding: 50 0 0 0;
     -fx-font-size: 80px;
-    -fx-text-fill: -label-text-color;
 }
 
 .combo-box {

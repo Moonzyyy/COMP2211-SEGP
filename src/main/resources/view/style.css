@@ -14,6 +14,11 @@
     -fx-background-text-color: -label-text-color;
 }
 
+.label {
+    -fx-font-size: 30px;
+    -fx-text-fill: -label-text-color;
+}
+
 .title {
     -fx-font-size: 100px;
     -fx-text-fill: -label-text-color;

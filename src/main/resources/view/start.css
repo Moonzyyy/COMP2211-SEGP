@@ -4,3 +4,8 @@
     -fx-padding: 100 0 0 0;
 }
 
+.loading {
+    -fx-font-size: 100px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -primary-color;
+}
