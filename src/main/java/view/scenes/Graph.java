@@ -204,6 +204,9 @@ public class Graph extends AbstractScene {
 
             renderer.setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
             renderer.setSeriesStroke(0, new BasicStroke(4.0f));
+            renderer.setSeriesStroke(1, new BasicStroke(4.0f));
+            renderer.setSeriesStroke(2, new BasicStroke(4.0f));
+            renderer.setSeriesStroke(3, new BasicStroke(4.0f));
             renderer.setDefaultSeriesVisible(false);
             renderer.setSeriesVisible(0, true);
 
@@ -235,6 +238,9 @@ public class Graph extends AbstractScene {
                 rangeAxis.setLabelPaint(Color.WHITE);
 
                 renderer.setSeriesPaint(0, Color.WHITE);
+                renderer.setSeriesPaint(1, Color.decode("#1C7C54"));
+                renderer.setSeriesPaint(2, Color.RED);
+                renderer.setSeriesPaint(3, Color.YELLOW);
 
                 histogram.setBackgroundPaint(new Color(18, 18, 18));
                 histogram.getPlot().setBackgroundPaint(Color.DARK_GRAY);
@@ -249,6 +255,7 @@ public class Graph extends AbstractScene {
                 histogramPlot.getRangeAxis().setLabelPaint(Color.WHITE);
 
                 barRenderer.setSeriesOutlinePaint(0, Color.WHITE);
+                barRenderer.setSeriesOutlinePaint(1, Color.decode("#1C7C54"));
                 barRenderer.setDrawBarOutline(true);
                 Color translucentWhite = new Color(255, 255, 255, 77);
                 barRenderer.setSeriesPaint(0, translucentWhite);
