@@ -123,4 +123,13 @@ public class BounceDef extends AbstractScene {
     public TextField getInputTimeText() {
         return inputTimeText;
     }
+
+    public void setTheme(boolean theme) {
+        scene.getStylesheets().clear();
+        if (theme) {
+            scene.getStylesheets().add(getClass().getResource("/view/bounceDef.css").toExternalForm());
+        } else {
+            scene.getStylesheets().add(getClass().getResource("/view/bounceDefLight.css").toExternalForm());
+        }
+    }
 }

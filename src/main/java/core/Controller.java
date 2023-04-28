@@ -228,7 +228,6 @@ public class Controller {
         }
 
 
-
     }
 
     /**
@@ -260,6 +259,7 @@ public class Controller {
     private void setUpScene(BounceDef bounceDef) {
         bounceDef.createScene();
         this.setCurrentScene(bounceDef);
+        bounceDef.setTheme(theme);
 
         bounceDef.getBackButton().setOnAction((event) -> {
             setUpScene(new Dashboard());
@@ -298,18 +298,16 @@ public class Controller {
 
         bounceDef.getInputPageText().textProperty().addListener((observable, oldValue, newValue) -> {
             String text = bounceDef.getInputPageText().getText();
-            if(!text.matches("[0-9]+") && text.length() > 0)
-            {
-                bounceDef.getInputPageText().setText(bounceDef.getInputPageText().getText(0, text.length()-1));
+            if (!text.matches("[0-9]+") && text.length() > 0) {
+                bounceDef.getInputPageText().setText(bounceDef.getInputPageText().getText(0, text.length() - 1));
                 logger.info("Only numbers are allowed!!");
             }
         });
 
         bounceDef.getInputTimeText().textProperty().addListener((observable, oldValue, newValue) -> {
             String text = bounceDef.getInputTimeText().getText();
-            if(!text.matches("[0-9]+") && text.length() > 0)
-            {
-                bounceDef.getInputTimeText().setText(bounceDef.getInputTimeText().getText(0, text.length()-1));
+            if (!text.matches("[0-9]+") && text.length() > 0) {
+                bounceDef.getInputTimeText().setText(bounceDef.getInputTimeText().getText(0, text.length() - 1));
                 logger.info("Only numbers are allowed!!");
             }
         });

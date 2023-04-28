@@ -52,10 +52,11 @@
     -fx-padding: 5px 10px;
     -fx-background-color: transparent;
     -fx-border-color: -primary-color;
-    /*-fx-border-width: 2px;*/
     -fx-border-width: 0;
-    /*-fx-border-radius: 50%;*/
     -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+
 }
 
 .radio-button:selected {
