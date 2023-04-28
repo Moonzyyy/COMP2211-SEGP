@@ -17,6 +17,8 @@ public class BounceDef extends AbstractScene {
     private RadioButton pageRadio;
     private TextField inputPageText;
     private TextField inputTimeText;
+    private Label timeErrorMsg;
+    private Label pageErrorMsg;
     private Button backButton;
     private Button resetButton;
     private Button applyButton;
@@ -51,7 +53,11 @@ public class BounceDef extends AbstractScene {
         pageRadio.getStyleClass().add("label");
         inputPageText = new TextField();
         inputPageText.setAlignment(Pos.CENTER);
-        HBox pageBox = new HBox(pageRadio, inputPageText);
+        //Pop-up error msg
+        pageErrorMsg = new Label("Please enter number of pages from 1 to 10");
+        pageErrorMsg.setVisible(false);
+        pageErrorMsg.getStyleClass().add("errorLabel");
+        HBox pageBox = new HBox(pageRadio, inputPageText, pageErrorMsg);
         pageRadio.maxWidthProperty().bind(pageBox.widthProperty().multiply(0.8));
         inputPageText.maxWidthProperty().bind(pageBox.widthProperty().multiply(0.15));
         pageBox.setAlignment(Pos.CENTER);
@@ -62,7 +68,11 @@ public class BounceDef extends AbstractScene {
         timeRadio.getStyleClass().add("label");
         inputTimeText = new TextField();
         inputTimeText.setAlignment(Pos.CENTER);
-        HBox timeBox = new HBox(timeRadio, inputTimeText);
+        //Pop-up error msg
+        timeErrorMsg = new Label("Please enter a time from 1 to 10");
+        timeErrorMsg.setVisible(false);
+        timeErrorMsg.getStyleClass().add("errorLabel");
+        HBox timeBox = new HBox(timeRadio, inputTimeText, timeErrorMsg);
         timeRadio.maxWidthProperty().bind(timeBox.widthProperty().multiply(0.8));
         inputTimeText.maxWidthProperty().bind(pageBox.widthProperty().multiply(0.15));
         timeBox.setAlignment(Pos.CENTER);
@@ -122,6 +132,14 @@ public class BounceDef extends AbstractScene {
 
     public TextField getInputTimeText() {
         return inputTimeText;
+    }
+
+    public Label getTimeErrorMsg() {
+        return timeErrorMsg;
+    }
+
+    public Label getPageErrorMsg() {
+        return pageErrorMsg;
     }
 
     public void setTheme(boolean theme) {

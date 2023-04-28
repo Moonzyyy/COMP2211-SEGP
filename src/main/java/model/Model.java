@@ -589,6 +589,6 @@ public class Model {
 
     public void setBounceDef(String bounceDef) { this.bounceDef = bounceDef; }
     public void setBouncePageValue(int bouncePageValue) { this.bouncePageValue = bouncePageValue; }
-    public void setBounceTimeValue(int bouncePageValue) { this.bounceTimeValue = bouncePageValue; }
+    public void setBounceTimeValue(int bounceTimeValue) { this.bounceTimeValue = bounceTimeValue; }
 
 }

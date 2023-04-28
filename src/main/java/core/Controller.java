@@ -268,14 +268,25 @@ public class Controller {
         bounceDef.getApplyButton().setOnAction((event) -> {
             if (bounceDef.getPageRadio().isSelected()) {
                 String text = bounceDef.getInputPageText().getText();
-                model.setBouncePageValue(Integer.parseInt(text.length() > 0 ? text : "1"));
-                model.setBounceDef("Page");
+                if (Integer.parseInt(text) < 1 || Integer.parseInt(text) > 10) {
+                    bounceDef.getPageErrorMsg().setVisible(true);
+                } else {
+                    bounceDef.getPageErrorMsg().setVisible(false);
+                    model.setBouncePageValue(Integer.parseInt(text.length() > 0 ? text : "1"));
+                    model.setBounceDef("Page");
+                    setUpScene(new Dashboard());
+                }
             } else {
                 String text = bounceDef.getInputTimeText().getText();
-                model.setBounceDef("Time");
-                model.setBounceTimeValue(Integer.parseInt(text.length() > 0 ? text : "1"));
+                if (Integer.parseInt(text) < 1 || Integer.parseInt(text) > 10) {
+                    bounceDef.getTimeErrorMsg().setVisible(true);
+                } else {
+                    bounceDef.getTimeErrorMsg().setVisible(false);
+                    model.setBounceDef("Time");
+                    model.setBounceTimeValue(Integer.parseInt(text.length() > 0 ? text : "1"));
+                    setUpScene(new Dashboard());
+                }
             }
-            setUpScene(new Dashboard());
         });
 
         bounceDef.getResetButton().setOnAction((event) -> {
