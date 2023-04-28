@@ -1,0 +1,124 @@
+
+.root {
+    -primary-color: #dce5db;
+    -secondary-color: #a03670;
+    -tertiary-color: #7c3cbe;
+    -neutral-color: #f8fdff;
+    -surface-color: #006d3e;
+    -label-text-color: black;
+    -button-text-color: black;
+
+    -fx-font-weight: 500;
+    -fx-font-family: Roboto;
+
+    -fx-background-color: -neutral-color;
+    -fx-text-background-color: -label-text-color;
+}
+
+.label {
+    -fx-font-size: 30px;
+    -fx-text-fill: -label-text-color;
+}
+
+
+.button {
+    -fx-background-radius: 30;
+    -fx-background-color: -primary-color;
+    -fx-text-fill: -button-text-color;
+    -fx-font-size: 25px;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+    -fx-pref-width: 200;
+}
+
+.button:hover {
+    -fx-background-color: derive(-primary-color, -20%);
+}
+
+.button:pressed {
+    -fx-background-color: derive(-primary-color, -30%);
+    -fx-text-fill: derive(-button-text-color, -30%);
+}
+
+.title {
+    -fx-padding: 50 0 0 0;
+    -fx-font-size: 80px;
+    -fx-text-fill: -label-text-color;
+}
+
+.radio-button {
+    -fx-font-size: 30px;
+    -fx-text-fill: -label-text-color;
+    -fx-padding: 5px 10px;
+    -fx-background-color: transparent;
+    -fx-border-color: -surface-color;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.radio-button .radio {
+    -fx-mark-color: -surface-color;
+}
+
+.text-field {
+    -fx-font-size: 30px;
+    -fx-prompt-text-fill: derive(-label-text-color, -40%);
+    -fx-text-fill: -label-text-color;
+    -fx-padding: 5px 10px;
+    -fx-background-color: transparent;
+    -fx-border-color: -surface-color;
+    -fx-border-width: 2px;
+    -fx-border-radius: 3px;
+    -fx-pref-width: 400;
+    -fx-cursor: text;
+}
+
+.text-field:focused {
+    -fx-border-color: derive(-primary-color, -20%);
+}
+
+.text-field:disabled {
+    -fx-opacity: 0.6;
+}
+
+.text-field:hover {
+    -fx-background-color: derive(-neutral-color, -10%);
+}
+
+/*Not used, but could be if design changes*/
+.combo-box {
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -fx-text-background-color;
+    -fx-pref-width: 200;
+    -fx-font-size: 20px;
+    -fx-pref-height: -fx-font-size;
+    -fx-highlight-text-fill: -fx-text-background-color;
+    -fx-highlight-fill: derive(-surface-color, -10%);
+}
+
+.combo-box .list-view .list-cell {
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: derive(-surface-color, -10%);
+}
+
+.combo-box .list-view .list-cell:hover {
+    -fx-background-color: derive(-surface-color, -10%);
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: derive(-surface-color, -20%);
+}
+
+.combo-box .list-cell {
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: -surface-color;
+}
+
+.combo-box .arrow {
+    -fx-background-color: BLACK;
+}
