@@ -27,6 +27,7 @@ import view.components.CompareItem;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseWheelEvent;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
@@ -68,6 +69,11 @@ public class Graph extends AbstractScene {
     private boolean showLineGraph = true;
 
     private boolean graphTheme;
+
+    private double currentZoomFactor = 1.0;
+    private double MAX_ZOOM_FACTOR = 5.0;
+    private double MIN_ZOOM_FACTOR = 0.1;
+    private double ZOOM_INCREMENT = 0.1;
 
 
     /**
@@ -205,15 +211,9 @@ public class Graph extends AbstractScene {
             renderer.setSeriesVisible(0, true);
 
             chartPanel.setMouseWheelEnabled(true);
-            chartPanel.setDomainZoomable(true);
-            chartPanel.setRangeZoomable(true);
-            chartPanel.setZoomTriggerDistance(Integer.MAX_VALUE);
-            chartPanel.zoomOutBoth(0, 0);
-            chartPanel.restoreAutoBounds();
-            chartPanel.setFillZoomRectangle(false);
-            chartPanel.setZoomOutlinePaint(new Color(0f, 0f, 0f, 0f));
-            chartPanel.setZoomInFactor(1.0);
-            chartPanel.setZoomOutFactor(1.0);
+            chartPanel.setDomainZoomable(false);
+            chartPanel.setRangeZoomable(false);
+            chartPanel.addMouseWheelListener(e -> handleZoom(e));
 
             chart.getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
 
@@ -365,6 +365,32 @@ public class Graph extends AbstractScene {
         scene.getStylesheets()
                 .add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
 
+    }
+
+
+    private void handleZoom(MouseWheelEvent e) {
+        double zoomFactor = 1.0 + (ZOOM_INCREMENT * e.getWheelRotation() * -1);
+        double newZoomFactor = currentZoomFactor * zoomFactor;
+
+        if (newZoomFactor < MIN_ZOOM_FACTOR) {
+            zoomFactor = MIN_ZOOM_FACTOR / currentZoomFactor;
+        } else if (newZoomFactor > MAX_ZOOM_FACTOR) {
+            zoomFactor = MAX_ZOOM_FACTOR / currentZoomFactor;
+        }
+
+        XYPlot plot = chartPanel.getChart().getXYPlot();
+        ValueAxis domainAxis = plot.getDomainAxis();
+        ValueAxis rangeAxis = plot.getRangeAxis();
+
+        double domainAxisLength = domainAxis.getRange().getLength();
+        double rangeAxisLength = rangeAxis.getRange().getLength();
+
+        domainAxis.setRange(domainAxis.getLowerBound() - (domainAxisLength * (zoomFactor - 1) / 2),
+                domainAxis.getUpperBound() + (domainAxisLength * (zoomFactor - 1) / 2));
+        rangeAxis.setRange(rangeAxis.getLowerBound() - (rangeAxisLength * (zoomFactor - 1) / 2),
+                rangeAxis.getUpperBound() + (rangeAxisLength * (zoomFactor - 1) / 2));
+
+        currentZoomFactor *= zoomFactor;
     }
 
     /**
