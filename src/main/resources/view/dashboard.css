@@ -1,45 +1,9 @@
-.root {
-    -primary-color: #f2e9e4;
-    -secondary-color: #ffffff;
-    -tertiary-color: #ffffff;
-    -neutral-color: #121212;
-    -surface-color: #424242;
-    -label-text-color: #ffffff;
-    -button-text-color: #000000;
-
-    -fx-font-weight: 500;
-    -fx-font-family: Roboto;
-
-    -fx-background-color: -neutral-color;
-    -fx-background-text-color: -label-text-color;
-}
-
-
-.button {
-    -fx-background-radius: 30;
-    -fx-background-color: -primary-color;
-    -fx-text-fill: -button-text-color;
-    -fx-font-size: 25px;
-    -fx-padding: 10;
-    -fx-cursor: hand;
-    -fx-pref-width: 200;
-}
-
-.button:hover {
-    -fx-background-color: derive(-primary-color, -15%);
-    -fx-text-fill: -button-text-color;
-}
-
-.button:pressed {
-    -fx-text-fill: darkgray;
-    -fx-font-size: 23px;
-}
+@import "style.css";
 
 .title {
     -fx-font-size: 40;
     -fx-text-fill: #FFFFFF;
     -fx-padding: 20 0 0 0;
-
 }
 
 .titleBox .text {
