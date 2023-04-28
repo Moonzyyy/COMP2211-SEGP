@@ -33,6 +33,11 @@
   -fx-pref-width: 100;
 }
 
+.button:pressed {
+  -fx-text-fill: darkgray;
+  -fx-font-size: 15px;
+}
+
 /* Set background color and font color for ListView */
 .list-cell {
   -fx-background-color: #121212;
@@ -53,6 +58,7 @@
   -fx-background-color: #000000;
   -fx-background-radius: 10px;
   -fx-padding: 5;
+  visibility: hidden;
 }
 
 /* Set background color for CheckBox when hovered */
@@ -69,6 +75,9 @@
 .check-box:selected {
   -fx-background-color: #f5f5f5;
   -fx-opacity: 0.85;
+}
+.check-box:selected > .box > .mark {
+  visibility: visible;
 }
 
 .check-box:selected > .text {
