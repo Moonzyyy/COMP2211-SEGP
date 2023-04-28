@@ -290,8 +290,8 @@ public class Graph extends AbstractScene {
                 histogramPlot.getRangeAxis().setLabelPaint(Color.BLACK);
 
                 barRenderer.setSeriesOutlinePaint(0, new Color(0, 125, 82));
-                Color translucentWhite = new Color(0, 125, 82, 77);
-                barRenderer.setSeriesPaint(0, translucentWhite);
+                Color translucentGreen = new Color(0, 125, 82, 77);
+                barRenderer.setSeriesPaint(0, translucentGreen);
                 swingNode.setContent(chartPanel);
 
                 chart.getLegend().setItemPaint(Color.BLACK);
