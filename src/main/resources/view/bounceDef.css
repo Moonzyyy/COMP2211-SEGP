@@ -1,10 +1,5 @@
 @import "style.css";
 
-.label {
-    -fx-font-size: 30px;
-    -fx-text-fill: -label-text-color;
-}
-
 .errorLabel {
     -fx-font-size: 30px;
     -fx-text-fill: red;

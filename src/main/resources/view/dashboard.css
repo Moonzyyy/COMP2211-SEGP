@@ -28,7 +28,7 @@
 
 }
 
-.menuButton {
+.button.menuButton {
     -fx-background-radius: 50%;
     -fx-background-color: #f2e9e4;
     -fx-cursor: hand;
