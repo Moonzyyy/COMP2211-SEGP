@@ -71,9 +71,6 @@ public class Graph extends AbstractScene {
     private boolean graphTheme;
 
     private double currentZoomFactor = 1.0;
-    private double MAX_ZOOM_FACTOR = 5.0;
-    private double MIN_ZOOM_FACTOR = 0.1;
-    private double ZOOM_INCREMENT = 0.1;
 
 
     /**
@@ -213,7 +210,7 @@ public class Graph extends AbstractScene {
             chartPanel.setMouseWheelEnabled(true);
             chartPanel.setDomainZoomable(false);
             chartPanel.setRangeZoomable(false);
-            chartPanel.addMouseWheelListener(e -> handleZoom(e));
+            chartPanel.addMouseWheelListener(this::handleZoom);
 
             chart.getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
 
@@ -369,9 +366,12 @@ public class Graph extends AbstractScene {
 
 
     private void handleZoom(MouseWheelEvent e) {
+        double ZOOM_INCREMENT = 0.1;
         double zoomFactor = 1.0 + (ZOOM_INCREMENT * e.getWheelRotation() * -1);
         double newZoomFactor = currentZoomFactor * zoomFactor;
 
+        double MAX_ZOOM_FACTOR = 5.0;
+        double MIN_ZOOM_FACTOR = 0.1;
         if (newZoomFactor < MIN_ZOOM_FACTOR) {
             zoomFactor = MIN_ZOOM_FACTOR / currentZoomFactor;
         } else if (newZoomFactor > MAX_ZOOM_FACTOR) {
