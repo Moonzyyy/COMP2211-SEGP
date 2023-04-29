@@ -106,12 +106,14 @@ public class Settings extends AbstractScene {
         return themeDropdown;
     }
 
-    public void setTheme(boolean theme) {
-        scene.getStylesheets().clear();
-        if (theme) {
-            scene.getStylesheets().add(getClass().getResource("/view/settings.css").toExternalForm());
-        } else {
-            scene.getStylesheets().add(getClass().getResource("/view/settingsLight.css").toExternalForm());
-        }
+    public void setStyles(boolean theme) {
+//        scene.getStylesheets().clear();
+        scene.getStylesheets().add(getClass().getResource("/view/style.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/view/settings.css").toExternalForm());
+//        if (theme) {
+//            scene.getStylesheets().add(getClass().getResource("/view/settings.css").toExternalForm());
+//        } else {
+//            scene.getStylesheets().add(getClass().getResource("/view/settingsLight.css").toExternalForm());
+//        }
     }
 }

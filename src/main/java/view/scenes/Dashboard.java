@@ -263,19 +263,21 @@ public class Dashboard extends AbstractScene {
         return this.bounceDefButton;
     }
 
-    public void setTheme(boolean theme) {
+    public void setStyles(boolean theme) {
         scene.getStylesheets().clear();
-        if (theme) {
-            scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
-            scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
-//            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu.png"))));
-
-        } else {
-            scene.getStylesheets().add(getClass().getResource("/view/dashboardLight.css").toExternalForm());
-            scene.getStylesheets().add(getClass().getResource("/view/dashboardCompLight.css").toExternalForm());
-//            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menuLight.png"))));
-
-        }
+        scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
+//        if (theme) {
+//            scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
+//            scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
+////            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu.png"))));
+//
+//        } else {
+//            scene.getStylesheets().add(getClass().getResource("/view/dashboardLight.css").toExternalForm());
+//            scene.getStylesheets().add(getClass().getResource("/view/dashboardCompLight.css").toExternalForm());
+////            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menuLight.png"))));
+//
+//        }
     }
 
     public Button getFilterButton() {

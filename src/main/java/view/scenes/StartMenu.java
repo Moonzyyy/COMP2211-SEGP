@@ -49,6 +49,7 @@ public class StartMenu extends AbstractScene {
         startBorderPane.setTop(startTitle);
         startBorderPane.setCenter(startButtonsVBox);
 
+        startBorderPane.getStyleClass().add("light");
         scene = new Scene(startBorderPane, 1280, 720);
 
         scene.getStylesheets().add(getClass().getResource("/view/startLight.css").toExternalForm());
@@ -75,12 +76,13 @@ public class StartMenu extends AbstractScene {
         return this.resumeButton;
     }
 
-    public void setTheme(boolean theme) {
+    public void setStyles(boolean theme) {
         scene.getStylesheets().clear();
-        if (theme) {
-            scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
-        } else {
-            scene.getStylesheets().add(getClass().getResource("/view/startLight.css").toExternalForm());
-        }
+        scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
+//        if (theme) {
+//            scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
+//        } else {
+//            scene.getStylesheets().add(getClass().getResource("/view/startLight.css").toExternalForm());
+//        }
     }
 }

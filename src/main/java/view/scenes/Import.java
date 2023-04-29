@@ -184,13 +184,14 @@ public class Import extends AbstractScene {
         return serverFileName;
     }
 
-    public void setTheme(boolean theme) {
+    public void setStyles(boolean theme) {
         scene.getStylesheets().clear();
-        if (theme) {
-            scene.getStylesheets().add(getClass().getResource("/view/import.css").toExternalForm());
-        } else {
-            scene.getStylesheets().add(getClass().getResource("/view/importLight.css").toExternalForm());
-        }
+        scene.getStylesheets().add(getClass().getResource("/view/import.css").toExternalForm());
+//        if (theme) {
+//            scene.getStylesheets().add(getClass().getResource("/view/import.css").toExternalForm());
+//        } else {
+//            scene.getStylesheets().add(getClass().getResource("/view/importLight.css").toExternalForm());
+//        }
     }
 
 }

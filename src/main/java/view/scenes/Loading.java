@@ -34,12 +34,13 @@ public class Loading extends AbstractScene {
                 Objects.requireNonNull(getClass().getResource("/view/start.css")).toExternalForm());
     }
 
-    public void setTheme(boolean theme) {
+    public void setStyles(boolean theme) {
         scene.getStylesheets().clear();
-        if (theme) {
-            scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
-        } else {
-            scene.getStylesheets().add(getClass().getResource("/view/startLight.css").toExternalForm());
-        }
+        scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
+//        if (theme) {
+//            scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
+//        } else {
+//            scene.getStylesheets().add(getClass().getResource("/view/startLight.css").toExternalForm());
+//        }
     }
 }

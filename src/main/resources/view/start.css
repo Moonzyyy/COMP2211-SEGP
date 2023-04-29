@@ -2,6 +2,7 @@
 
 .title {
     -fx-padding: 100 0 0 0;
+    -fx-text-fill: -label-text-color;
 }
 
 .loading {

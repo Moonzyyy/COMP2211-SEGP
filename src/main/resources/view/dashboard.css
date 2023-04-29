@@ -43,3 +43,118 @@
     -fx-font-size: 30;
     -fx-font-family: "Roboto";
 }
+
+/* Set background color and font color for ListView */
+.list-cell {
+    -fx-background-color: #121212;
+    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff;
+}
+
+
+/* Set background color and border color for CheckBox */
+.check-box {
+    -fx-border-color: #f5f5f5;
+    -fx-padding: 0 10 0 10;
+    -fx-alignment: center;
+    -fx-pref-width: 150;
+}
+
+.check-box > .box> .mark {
+    -fx-background-color: #000000;
+    -fx-background-radius: 10px;
+    -fx-padding: 5;
+    visibility: hidden;
+}
+
+/* Set background color for CheckBox when hovered */
+.check-box:hover {
+    -fx-background-color: #212121;
+}
+
+/* Set checkbox text color */
+.check-box > .text {
+    -fx-fill: #ffffff;
+}
+
+/* Set background color for CheckBox when selected */
+.check-box:selected {
+    -fx-background-color: #f5f5f5;
+    -fx-opacity: 0.85;
+}
+.check-box:selected > .box > .mark {
+    visibility: visible;
+}
+
+.check-box:selected > .text {
+    -fx-fill: #000000;
+}
+
+/* Set font color for CheckBox */
+.check-box .box {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f5f5f5;
+}
+
+.list-view .text {
+    -fx-font-size: 16px;
+}
+
+
+/* Set font color for ListView header */
+.list-view .column-header .label {
+    -fx-text-fill: #f5f5f5;
+}
+
+
+/* Set divider color for ListView */
+.list-view .virtual-flow .clipped-container {
+    -fx-background-color: #212121;
+}
+
+.list-cell-text {
+    -fx-text-fill: #ffffff;
+    -fx-padding: 10 0 0 0;
+}
+
+.list-cell {
+    -fx-alignment: center;
+    -fx-spacing: 10;
+}
+
+/*Scroll bar styling*/
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #616161;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 10px;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #515151;
+}
+
+.scroll-bar:vertical .thumb:pressed {
+    -fx-background-color: #212121;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .track-background {
+    -fx-background-color: #424242;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+    -fx-background-color: #212121;
+}
+
+.scroll-bar:vertical .increment-arrow:hover,
+.scroll-bar:vertical .decrement-arrow:hover {
+    -fx-background-color: #424242;
+}

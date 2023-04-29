@@ -3,6 +3,7 @@
 .title {
     -fx-padding: 50 0 0 0;
     -fx-font-size: 80px;
+    -fx-text-fill: -label-text-color;
 }
 
 .combo-box {

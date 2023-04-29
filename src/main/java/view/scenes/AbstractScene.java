@@ -39,6 +39,17 @@ abstract public class AbstractScene {
      *
      * @param theme true for dark theme, false for light theme
      */
+    public void setStyles(boolean theme) {
+    }
+
     public void setTheme(boolean theme) {
+        var classes = this.scene.getRoot().getStyleClass();
+        if (!theme) {
+            classes.remove("theme-dark");
+            classes.add("theme--light");
+        } else {
+            classes.remove("theme--light");
+            classes.add("theme--dark");
+        }
     }
 }

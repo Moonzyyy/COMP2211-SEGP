@@ -587,15 +587,16 @@ public class Graph extends AbstractScene {
         this.graphTheme = theme;
     }
 
-    public void setTheme(boolean theme) {
+    public void setStyles(boolean theme) {
         scene.getStylesheets().clear();
-        if (theme) {
-            scene.getStylesheets().add(getClass().getResource("/view/graph.css").toExternalForm());
-//            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu.png"))));
-        } else {
-            scene.getStylesheets().add(getClass().getResource("/view/graph.css").toExternalForm());
-//            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menuLight.png"))));
-
-        }
+        scene.getStylesheets().add(getClass().getResource("/view/graph.css").toExternalForm());
+//        if (theme) {
+//            scene.getStylesheets().add(getClass().getResource("/view/graph.css").toExternalForm());
+////            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu.png"))));
+//        } else {
+//            scene.getStylesheets().add(getClass().getResource("/view/graph.css").toExternalForm());
+////            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menuLight.png"))));
+//
+//        }
     }
 }

@@ -150,12 +150,13 @@ public class BounceDef extends AbstractScene {
         return pageErrorMsg;
     }
 
-    public void setTheme(boolean theme) {
+    public void setStyles(boolean theme) {
         scene.getStylesheets().clear();
-        if (theme) {
-            scene.getStylesheets().add(getClass().getResource("/view/bounceDef.css").toExternalForm());
-        } else {
-            scene.getStylesheets().add(getClass().getResource("/view/bounceDefLight.css").toExternalForm());
-        }
+        scene.getStylesheets().add(getClass().getResource("/view/bounceDef.css").toExternalForm());
+//        if (theme) {
+//            scene.getStylesheets().add(getClass().getResource("/view/bounceDef.css").toExternalForm());
+//        } else {
+//            scene.getStylesheets().add(getClass().getResource("/view/bounceDefLight.css").toExternalForm());
+//        }
     }
 }

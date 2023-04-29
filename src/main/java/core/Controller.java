@@ -78,6 +78,7 @@ public class Controller {
         this.currentScene = newScene;
         stage.show();
         newScene.postShowEdits();
+        newScene.setTheme(theme);
     }
 
     /**
@@ -88,7 +89,7 @@ public class Controller {
      */
     public void setUpScene(StartMenu menu) {
         menu.createScene();
-        menu.setTheme(theme);
+        menu.setStyles(theme);
         this.setCurrentScene(menu);
 
         //Add the action listeners
@@ -121,7 +122,7 @@ public class Controller {
         var preds = initPredicates();
 
         dashboard.createScene();
-        dashboard.setTheme(theme);
+        dashboard.setStyles(theme);
         this.setCurrentScene(dashboard);
 
         List<String> metrics = model.getMetrics();
@@ -238,7 +239,7 @@ public class Controller {
     public void setUpScene(Settings settings) {
 
         settings.createScene();
-        settings.setTheme(theme);
+        settings.setStyles(theme);
         this.setCurrentScene(settings);
 
         settings.getThemeDropdown().setValue(theme ? "Dark Mode" : "Light Mode");
@@ -250,6 +251,7 @@ public class Controller {
 
         settings.getThemeDropdown().setOnAction((event) -> {
             theme = !settings.getThemeDropdown().getValue().equals("Light Mode");
+//            settings.setStyles(theme);
             settings.setTheme(theme);
         });
 
@@ -259,7 +261,7 @@ public class Controller {
     private void setUpScene(BounceDef bounceDef) {
         bounceDef.createScene();
         this.setCurrentScene(bounceDef);
-        bounceDef.setTheme(theme);
+        bounceDef.setStyles(theme);
 
         bounceDef.getBackButton().setOnAction((event) -> {
             setUpScene(new Dashboard());
@@ -363,7 +365,7 @@ public class Controller {
         HashMap<String, Boolean> preds = initPredicates();
         graphScene.setGraphTheme(theme);
         graphScene.createScene();
-        graphScene.setTheme(theme);
+        graphScene.setStyles(theme);
 
         this.setCurrentScene(graphScene);
 
@@ -517,7 +519,7 @@ public class Controller {
      */
     public void setUpScene(Loading loading) {
         loading.createScene();
-        loading.setTheme(theme);
+        loading.setStyles(theme);
         this.setCurrentScene(loading);
     }
 
@@ -529,7 +531,7 @@ public class Controller {
     public void setUpScene(Import importScene) {
 
         importScene.createScene();
-        importScene.setTheme(theme);
+        importScene.setStyles(theme);
         this.setCurrentScene(importScene);
 
         //Button action listeners

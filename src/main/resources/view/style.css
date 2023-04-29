@@ -14,6 +14,15 @@
     -fx-background-text-color: -label-text-color;
 }
 
+.root.theme--light {
+    -primary-color: #dce5db;
+    -secondary-color: #a03670;
+    -tertiary-color: #7c3cbe;
+    -neutral-color: #f8fdff;
+    -surface-color: #006d3e;
+    -label-text-color: #000000;
+}
+
 .label {
     -fx-font-size: 30px;
     -fx-text-fill: -label-text-color;
