@@ -107,8 +107,7 @@ public class Settings extends AbstractScene {
     }
 
     public void setStyles(boolean theme) {
-//        scene.getStylesheets().clear();
-        scene.getStylesheets().add(getClass().getResource("/view/style.css").toExternalForm());
+        scene.getStylesheets().clear();
         scene.getStylesheets().add(getClass().getResource("/view/settings.css").toExternalForm());
 //        if (theme) {
 //            scene.getStylesheets().add(getClass().getResource("/view/settings.css").toExternalForm());
