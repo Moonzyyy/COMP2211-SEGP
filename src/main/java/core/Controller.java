@@ -21,10 +21,7 @@ import view.components.DashboardComp;
 import view.scenes.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Controller {
 
@@ -33,7 +30,8 @@ public class Controller {
     private boolean theme;
     private AbstractScene currentScene;
     private Stage stage;
-    private PrintWriter file;
+    private Properties settingsFile;
+    private OutputStream writeToSettings;
 
     /**
      * The constructor of the controller.
@@ -44,13 +42,13 @@ public class Controller {
         this.model = model;
         try
         {
+            settingsFile = new Properties();
+            InputStream readSetting =  new FileInputStream("config.properties");
+            settingsFile.load(readSetting);
+            if(settingsFile.getProperty("sceneTheme").equals("DarkMode")) theme = true ; else theme = false;
+            readSetting.close();
+            writeToSettings = new FileOutputStream("config.properties");
 
-
-            InputStream settingsPath = getClass().getResourceAsStream( "/settings.txt");
-            BufferedReader iReader = new BufferedReader(new InputStreamReader(settingsPath));
-            String[] settings = iReader.readLine().split(" ");
-
-            if(settings[1].equals("DarkMode")) this.theme = true; else{this.theme = false;}
 
         }catch (Exception e){logger.error(e.getMessage());}
 
@@ -261,12 +259,16 @@ public class Controller {
         });
 
         settings.getThemeDropdown().setOnAction((event) -> {
-            theme = !settings.getThemeDropdown().getValue().equals("Light Mode");
-            if(theme)
-            {}else
-            {}
+            try
+            {
+                theme = !settings.getThemeDropdown().getValue().equals("Light Mode");
+                if(theme) settingsFile.setProperty("sceneTheme", "DarkMode"); else settingsFile.setProperty("sceneTheme", "LightMode");
+
+                settingsFile.store(writeToSettings, null);
 //            settings.setStyles(theme);
-            settings.setTheme(theme);
+                settings.setTheme(theme);
+            }catch (Exception e){logger.error(e.getMessage());}
+
         });
 
 
