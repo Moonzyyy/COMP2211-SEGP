@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import view.components.DashboardComp;
@@ -225,20 +226,6 @@ public class Dashboard extends AbstractScene {
         return compareList;
 
     }
-
-
-    public void setLoading() {
-        StackPane stackPane = new StackPane();
-        Text loadingText = new Text("Loading...");
-        loadingText.getStyleClass().add("loading");
-        stackPane.getChildren().add(loadingText);
-        root.getChildren().add(stackPane);
-    }
-
-    public void removeLoading() {
-        root.getChildren().remove(root.getChildren().size() - 1);
-    }
-
 
     public void postShowEdits() {
         menuBar.setTranslateX(-menuBar.getWidth());

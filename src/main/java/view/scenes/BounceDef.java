@@ -37,27 +37,33 @@ public class BounceDef extends AbstractScene {
     public void createScene() {
         BorderPane bounceDefPane = new BorderPane();
 
-        var titleBox = new HBox();
+        var titleBox = new VBox();
         titleBox.setAlignment(Pos.CENTER);
         var titleLabel = new Label("Bounce");
-        HBox.setHgrow(titleLabel, Priority.ALWAYS);
+        VBox.setVgrow(titleLabel, Priority.ALWAYS);
         titleLabel.getStyleClass().add("title");
-        titleBox.getChildren().add(titleLabel);
+
+        var definitionLabel = new Label("Definition");
+        definitionLabel.getStyleClass().add("label");
+
+        titleBox.getChildren().addAll(titleLabel, definitionLabel);
         bounceDefPane.setTop(titleBox);
 
         //Pages viewed and time spent radio buttons
         toggleGroup = new ToggleGroup();
 
-        pageRadio = new RadioButton("Pages Viewed:");
+        pageRadio = new RadioButton("");
         pageRadio.setToggleGroup(toggleGroup);
         pageRadio.getStyleClass().add("label");
         inputPageText = new TextField();
         inputPageText.setAlignment(Pos.CENTER);
+        Label pagesViewedText = new Label("Pages Viewed");
+        pagesViewedText.getStyleClass().add("label");
         //Pop-up error msg
         pageErrorMsg = new Label("Please enter number of pages from 1 to 10");
         pageErrorMsg.setVisible(false);
         pageErrorMsg.getStyleClass().add("errorLabel");
-        HBox pageBox = new HBox(pageRadio, inputPageText);
+        HBox pageBox = new HBox(pageRadio, inputPageText, pagesViewedText);
         pageBox.setMinWidth(200);
         pageBox.maxWidthProperty().bind(bounceDefPane.widthProperty().multiply(0.33));
         VBox pageWrapper = new VBox(pageBox, pageErrorMsg);
@@ -67,16 +73,20 @@ public class BounceDef extends AbstractScene {
         pageBox.setAlignment(Pos.CENTER);
         pageBox.setSpacing(10);
 
-        timeRadio = new RadioButton("Time Spent:");
+        timeRadio = new RadioButton("");
         timeRadio.setToggleGroup(toggleGroup);
         timeRadio.getStyleClass().add("label");
         inputTimeText = new TextField();
         inputTimeText.setAlignment(Pos.CENTER);
+        Label secondsSpentText = new Label("Seconds Spent");
+        secondsSpentText.getStyleClass().add("label");
         //Pop-up error msg
-        timeErrorMsg = new Label("Please enter a time from 1 to 10");
+        timeErrorMsg = new Label("Please enter a time from 1 to 300");
         timeErrorMsg.setVisible(false);
         timeErrorMsg.getStyleClass().add("errorLabel");
-        HBox timeBox = new HBox(timeRadio, inputTimeText, timeErrorMsg);
+        Label test = new Label("Seconds");
+        test.getStyleClass().add("label");
+        HBox timeBox = new HBox(timeRadio, inputTimeText, secondsSpentText);
         timeBox.setMinWidth(200);
         timeBox.maxWidthProperty().bind(bounceDefPane.widthProperty().multiply(0.33));
         VBox timeWrapper = new VBox(timeBox, timeErrorMsg);

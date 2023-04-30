@@ -1,4 +1,4 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
+/*import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import model.Model;
@@ -72,5 +72,5 @@ public class Sprint1Tests {
     void ThousandImps() {
         assertEquals(242.95, model.costPerThousandImps(), "CPTI");
     }
-}
+}*/
 

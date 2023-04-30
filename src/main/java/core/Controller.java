@@ -20,7 +20,7 @@ import view.components.CompareItem;
 import view.components.DashboardComp;
 import view.scenes.*;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +33,7 @@ public class Controller {
     private boolean theme;
     private AbstractScene currentScene;
     private Stage stage;
+    private PrintWriter file;
 
     /**
      * The constructor of the controller.
@@ -41,8 +42,19 @@ public class Controller {
      */
     public Controller(Model model) {
         this.model = model;
-        // Set the theme to true by default, meaning that the theme is dark
-        this.theme = true;
+        try
+        {
+
+
+            InputStream settingsPath = getClass().getResourceAsStream( "/settings.txt");
+            BufferedReader iReader = new BufferedReader(new InputStreamReader(settingsPath));
+            String[] settings = iReader.readLine().split(" ");
+
+            if(settings[1].equals("DarkMode")) this.theme = true; else{this.theme = false;}
+
+        }catch (Exception e){logger.error(e.getMessage());}
+
+
     }
 
 
@@ -129,7 +141,7 @@ public class Controller {
         DashboardComp dashboardComp = dashboard.getDashboardComp();
         dashboardComp.updateNumberBoxes(metrics);
 
-        dashboard.bounceDefinition.setText(model.getBounceDef() + " " + (model.getBounceDef().equals("page") ? model.getBouncePageValue() : model.getBounceTimeValue()));
+        dashboard.bounceDefinition.setText("Bounce Def: " + (model.getBounceDef().equals("Page") ? model.getBouncePageValue() : model.getBounceTimeValue()) + " " + (model.getBounceDef().equals("Page") ? "Pages" : "Sec"));
 
         //Button action listeners
         dashboard.getBackButton().setOnAction((event) -> {
@@ -155,10 +167,9 @@ public class Controller {
 
         dashboard.getFilterButton().setOnAction((event ->
         {
-            dashboard.setLoading();
             ArrayList<String> newDashboardValues = model.updateDashboardData(preds);
             dashboard.getDashboardComp().updateNumberBoxes(newDashboardValues);
-            dashboard.removeLoading();
+
         }));
 
 
@@ -251,6 +262,9 @@ public class Controller {
 
         settings.getThemeDropdown().setOnAction((event) -> {
             theme = !settings.getThemeDropdown().getValue().equals("Light Mode");
+            if(theme)
+            {}else
+            {}
 //            settings.setStyles(theme);
             settings.setTheme(theme);
         });
@@ -309,6 +323,18 @@ public class Controller {
         } else {
             bounceDef.getTimeRadio().setSelected(true);
         }
+
+        bounceDef.getInputPageText().setOnMouseClicked(mouseEvent ->
+        {
+            bounceDef.getPageRadio().setSelected(true);
+            bounceDef.getTimeRadio().setSelected(false);
+        });
+        bounceDef.getInputTimeText().setOnMouseClicked(mouseEvent ->
+        {
+            bounceDef.getPageRadio().setSelected(false);
+            bounceDef.getTimeRadio().setSelected(true);
+        });
+
 
         bounceDef.getInputPageText().textProperty().addListener((observable, oldValue, newValue) -> {
             String text = bounceDef.getInputPageText().getText();
