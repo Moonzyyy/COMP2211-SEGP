@@ -13,7 +13,6 @@ abstract public class AbstractScene {
     protected String font;
 
     AbstractScene() {
-        this.font = "Roboto";
     }
 
     /**
