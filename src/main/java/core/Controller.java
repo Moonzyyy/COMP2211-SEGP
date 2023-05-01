@@ -46,7 +46,7 @@ public class Controller {
             settingsFile = new Properties();
             InputStream readSetting =  new FileInputStream("config.properties");
             settingsFile.load(readSetting);
-            theme = settingsFile.getProperty("sceneTheme") != null && settingsFile.getProperty("sceneTheme").equals("DarkMode");
+            theme = settingsFile.getProperty("sceneTheme") == null || settingsFile.getProperty("sceneTheme").equals("DarkMode");
             fontFamily = settingsFile.getProperty("sceneFont") != null ? settingsFile.getProperty("sceneFont") : "Roboto";
             readSetting.close();
             writeToSettings = new FileOutputStream("config.properties");

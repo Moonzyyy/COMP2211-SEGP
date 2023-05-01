@@ -1,5 +1,11 @@
 @import "style.css";
 
+.root {
+    -menu-bg: derive(-surface-color, +50%);
+    -button-text-color: #000000;
+    -scrollbar-color: #8a8f99;
+}
+
 .root.theme--light {
     -primary-color: #dce5db;
     -secondary-color: #a03670;
@@ -8,16 +14,17 @@
     -surface-color: #006d3e;
     -button-text-color: #000000;
     -label-text-color: #000000;
+    -scrollbar-color: #97b09e;
 }
 
 .title {
     -fx-font-size: 40;
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: -label-text-color;
     -fx-padding: 20 0 0 0;
 }
 
 .titleBox .text {
-    -fx-fill: #FFFFFF;
+    -fx-fill: -label-text-color;
     -fx-font-size: 40;
 }
 
@@ -29,7 +36,7 @@
 
 /*CSS related to the sliding menu*/
 .menu {
-    -fx-background-color: #757e8e;
+    -fx-background-color: -menu-bg;
     -fx-padding: 20;
     -fx-spacing: 20;
     -fx-pref-height: 70%;
@@ -48,15 +55,19 @@
 }
 
 .menu .text {
-    -fx-fill: black;
-    -fx-font-size: 30;
+    -fx-fill: -label-text-color;
+    -fx-font-size: 16px;
+}
+
+.menu .button .text {
+    -fx-fill: -button-text-color;
 }
 
 /* Set background color and font color for ListView */
 .list-cell {
-    -fx-background-color: #121212;
+    -fx-background-color: -menu-bg;
     -fx-font-size: 14px;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -label-text-color;
 }
 
 
@@ -69,7 +80,7 @@
 }
 
 .check-box > .box > .mark {
-    -fx-background-color: #000000;
+    -fx-background-color: -label-text-color;
     -fx-background-radius: 10px;
     -fx-padding: 5;
     visibility: hidden;
@@ -77,7 +88,7 @@
 
 /* Set background color for CheckBox when hovered */
 .check-box:hover {
-    -fx-background-color: #212121;
+    -fx-background-color: derive(-surface-color, +75%);
 }
 
 /* Set checkbox text color */
@@ -96,7 +107,7 @@
 }
 
 .check-box:selected > .text {
-    -fx-fill: #000000;
+    -fx-fill: -label-text-color;
 }
 
 /* Set font color for CheckBox */
@@ -137,17 +148,17 @@
 }
 
 .scroll-bar:vertical .thumb {
-    -fx-background-color: #616161;
+    -fx-background-color: -scrollbar-color;
     -fx-background-insets: 0, 1, 2;
     -fx-background-radius: 10px;
 }
 
 .scroll-bar:vertical .thumb:hover {
-    -fx-background-color: #515151;
+    -fx-background-color: derive(-scrollbar-color, -10%);
 }
 
 .scroll-bar:vertical .thumb:pressed {
-    -fx-background-color: #212121;
+    -fx-background-color: derive(-scrollbar-color, -20%);
 }
 
 .scroll-bar:vertical .track {
@@ -155,15 +166,15 @@
 }
 
 .scroll-bar:vertical .track-background {
-    -fx-background-color: #424242;
+    -fx-background-color: derive(-scrollbar-color, +15%);
 }
 
 .scroll-bar:vertical .increment-arrow,
 .scroll-bar:vertical .decrement-arrow {
-    -fx-background-color: #212121;
+    -fx-background-color: derive(-scrollbar-color, +10%);
 }
 
 .scroll-bar:vertical .increment-arrow:hover,
 .scroll-bar:vertical .decrement-arrow:hover {
-    -fx-background-color: #424242;
+    -fx-background-color: derive(-scrollbar-color, +5%);
 }

@@ -31,7 +31,7 @@ public class Dashboard extends AbstractScene {
     private final StackPane root;
     private final BorderPane layout;
     private final ArrayList<CheckBox> checkboxes = new ArrayList<CheckBox>(14);
-    public Text bounceDefinition;
+    public Label bounceDefinition;
     private VBox menuBar;
     private boolean menuOpen = false;
     private DashboardComp dashboardComp;
@@ -88,12 +88,6 @@ public class Dashboard extends AbstractScene {
         VBox.setMargin(menuBar, new Insets(20, 0, 30, 0));
         menuBar.setMaxWidth(350);
         wrapper.getChildren().add(menuBar);
-
-
-        // Shows Current bounce Definition
-        bounceDefinition = new Text("");
-        bounceDefinition.getStyleClass().add("text");
-        menuBar.getChildren().add(bounceDefinition);
 
       menuBar.getChildren().add(createCheckBoxes());
       menuBar.setAlignment(Pos.BOTTOM_LEFT);
@@ -178,6 +172,10 @@ public class Dashboard extends AbstractScene {
     ListView<Object> createCheckBoxes() {
 
         compareList = new ListView<>();
+
+        bounceDefinition = new Label("");
+        bounceDefinition.getStyleClass().add("text");
+        compareList.getItems().add(bounceDefinition);
 
         var genderText = new Label("Gender of Audience:");
         genderText.getStyleClass().add("list-cell-text");
