@@ -21,7 +21,6 @@
 .importBox .label {
   -fx-text-fill: -label-text-color;
   -fx-font-size: 30;
-  -fx-font-family: "Roboto";
 }
 
 .button:disabled {
