@@ -10,7 +10,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.w3c.dom.Text;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 public class BounceDef extends AbstractScene {
     private RadioButton timeRadio;
@@ -39,14 +40,16 @@ public class BounceDef extends AbstractScene {
 
         var titleBox = new VBox();
         titleBox.setAlignment(Pos.CENTER);
-        var titleLabel = new Label("Bounce");
+        var titleLabel = new Label("Bounce\nDefinition");
+        titleLabel.setTextAlignment(TextAlignment.CENTER);
+//        System.out.println(titleLabel.getLineSpacing());
         VBox.setVgrow(titleLabel, Priority.ALWAYS);
         titleLabel.getStyleClass().add("title");
 
-        var definitionLabel = new Label("Definition");
-        definitionLabel.getStyleClass().add("label");
+//        var definitionLabel = new Label("Definition");
+//        definitionLabel.getStyleClass().add("label");
 
-        titleBox.getChildren().addAll(titleLabel, definitionLabel);
+        titleBox.getChildren().addAll(titleLabel);
         bounceDefPane.setTop(titleBox);
 
         //Pages viewed and time spent radio buttons

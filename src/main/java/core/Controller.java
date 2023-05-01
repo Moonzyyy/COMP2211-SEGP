@@ -28,6 +28,7 @@ public class Controller {
     private static final Logger logger = LogManager.getLogger(Controller.class);
     private final Model model;
     private boolean theme;
+    private String fontFamily;
     private AbstractScene currentScene;
     private Stage stage;
     private Properties settingsFile;
@@ -45,7 +46,8 @@ public class Controller {
             settingsFile = new Properties();
             InputStream readSetting =  new FileInputStream("config.properties");
             settingsFile.load(readSetting);
-            if(settingsFile.getProperty("sceneTheme").equals("DarkMode")) theme = true ; else theme = false;
+            theme = settingsFile.getProperty("sceneTheme") != null && settingsFile.getProperty("sceneTheme").equals("DarkMode");
+            fontFamily = settingsFile.getProperty("sceneFont") != null ? settingsFile.getProperty("sceneFont") : "Roboto";
             readSetting.close();
             writeToSettings = new FileOutputStream("config.properties");
 
@@ -88,6 +90,7 @@ public class Controller {
         this.currentScene = newScene;
         stage.show();
         newScene.postShowEdits();
+        newScene.setFont(fontFamily);
         newScene.setTheme(theme);
     }
 
@@ -252,22 +255,32 @@ public class Controller {
         this.setCurrentScene(settings);
 
         settings.getThemeDropdown().setValue(theme ? "Dark Mode" : "Light Mode");
+        settings.getFontDropdown().setValue(fontFamily);
 
         //Button action listeners
         settings.getBackButton().setOnAction((event) -> {
             setUpScene(new StartMenu());
         });
 
+        settings.getFontDropdown().setOnAction((event) -> {
+            try {
+                fontFamily = settings.getFontDropdown().getValue();
+                settingsFile.setProperty("sceneFont", fontFamily);
+                settingsFile.store(writeToSettings, null);
+                settings.setFont(fontFamily);
+                System.out.println("Setting font");
+            } catch (Exception e) {logger.error(e.getMessage());}
+        });
+
         settings.getThemeDropdown().setOnAction((event) -> {
-            try
-            {
+            try {
                 theme = !settings.getThemeDropdown().getValue().equals("Light Mode");
                 if(theme) settingsFile.setProperty("sceneTheme", "DarkMode"); else settingsFile.setProperty("sceneTheme", "LightMode");
 
                 settingsFile.store(writeToSettings, null);
 //            settings.setStyles(theme);
                 settings.setTheme(theme);
-            }catch (Exception e){logger.error(e.getMessage());}
+            } catch (Exception e){logger.error(e.getMessage());}
 
         });
 

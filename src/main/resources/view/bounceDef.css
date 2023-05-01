@@ -17,6 +17,7 @@
 
 .title {
     -fx-padding: 50 0 0 0;
+    -fx-font-size: 75px;
 }
 
 .radio-button {

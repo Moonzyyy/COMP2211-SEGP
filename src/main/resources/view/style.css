@@ -8,10 +8,25 @@
     -button-text-color: #000000;
 
     -fx-font-weight: 500;
-    -fx-font-family: Roboto;
 
     -fx-background-color: -neutral-color;
     -fx-background-text-color: -label-text-color;
+}
+
+.font--roboto {
+    -fx-font-family: Roboto;
+}
+
+.font--arial {
+    -fx-font-family: Arial;
+}
+
+.font--times_new_roman {
+    -fx-font-family: "Times New Roman";
+}
+
+.font--verdana {
+    -fx-font-family: Verdana;
 }
 
 .root.theme--light {

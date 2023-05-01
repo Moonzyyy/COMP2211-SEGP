@@ -97,6 +97,8 @@ public class Graph extends AbstractScene {
      * Creates all the components of the scene, and adds them to the layout
      */
     public void createScene() {
+        Font graphFontLg = new Font(getFont(), Font.PLAIN, 20);
+        Font graphFontSm = new Font(getFont(), Font.PLAIN, 12);
 
         var topBar = new HBox();
         topBar.setAlignment(Pos.BOTTOM_CENTER);
@@ -178,31 +180,31 @@ public class Graph extends AbstractScene {
         XYBarRenderer barRenderer = (XYBarRenderer) histogramPlot.getRenderer();
 
         SwingUtilities.invokeLater(() -> {
-            lineChart.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
-            histogram.getTitle().setFont(new Font("Roboto", Font.PLAIN, 20));
+            lineChart.getTitle().setFont(graphFontLg);
+            histogram.getTitle().setFont(graphFontLg);
 
             histogramPlot.getDomainAxis()
-                    .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                    .setLabelFont(graphFontSm);
             histogramPlot.getDomainAxis()
-                    .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                    .setTickLabelFont(graphFontSm);
             histogramPlot.getRangeAxis()
-                    .setLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                    .setLabelFont(graphFontSm);
             histogramPlot.getRangeAxis()
-                    .setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                    .setTickLabelFont(graphFontSm);
             histogramPlot.getRenderer()
-                    .setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
+                    .setDefaultItemLabelFont(graphFontSm);
             histogramPlot.getRenderer().setSeriesStroke(0, new BasicStroke(4.0f));
             histogramPlot.getRenderer().setDefaultSeriesVisible(false);
             histogramPlot.getRenderer().setSeriesVisible(0, true);
             histogramPlot.setDatasetRenderingOrder(DatasetRenderingOrder.REVERSE);
 
-            rangeAxis.setLabelFont(new Font("Roboto", Font.PLAIN, 12));
-            rangeAxis.setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+            rangeAxis.setLabelFont(graphFontSm);
+            rangeAxis.setTickLabelFont(graphFontSm);
 
-            domainAxis.setLabelFont(new Font("Roboto", Font.PLAIN, 12));
-            domainAxis.setTickLabelFont(new Font("Roboto", Font.PLAIN, 12));
+            domainAxis.setLabelFont(graphFontSm);
+            domainAxis.setTickLabelFont(graphFontSm);
 
-            renderer.setDefaultItemLabelFont(new Font("Roboto", Font.PLAIN, 12));
+            renderer.setDefaultItemLabelFont(graphFontSm);
             renderer.setSeriesStroke(0, new BasicStroke(4.0f));
             renderer.setSeriesStroke(1, new BasicStroke(4.0f));
             renderer.setSeriesStroke(2, new BasicStroke(4.0f));
@@ -215,7 +217,7 @@ public class Graph extends AbstractScene {
             chartPanel.setRangeZoomable(false);
             chartPanel.addMouseWheelListener(this::handleZoom);
 
-            chart.getLegend().setItemFont(new Font("Roboto", Font.PLAIN, 12));
+            chart.getLegend().setItemFont(graphFontSm);
 
             barRenderer.setDrawBarOutline(true);
         });
