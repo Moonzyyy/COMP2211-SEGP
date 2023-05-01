@@ -15,30 +15,7 @@
 
 .title {
     -fx-padding: 100 0 0 0;
-    -fx-font-size: 100px;
     -fx-text-fill: -label-text-color;
-}
-
-
-.button {
-    -fx-background-radius: 30;
-    -fx-background-color: -primary-color;
-    -fx-text-fill: -button-text-color;
-    -fx-font-size: 25px;
-    -fx-padding: 10;
-    -fx-cursor: hand;
-    -fx-pref-width: 200;
-}
-
-.button:hover {
-    -fx-background-color: derive(-primary-color, -20%);
-    -fx-text-fill: -button-text-color;
-}
-
-.button:pressed {
-    -fx-background-color: derive(-primary-color, -30%);
-    -fx-text-fill: darkgray;
-    -fx-font-size: 23px;
 }
 
 .loading {
@@ -46,4 +23,3 @@
     -fx-font-weight: 600;
     -fx-text-fill: -primary-color;
 }
-

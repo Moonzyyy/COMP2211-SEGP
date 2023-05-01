@@ -45,11 +45,11 @@ abstract public class AbstractScene {
     public void setTheme(boolean theme) {
         var classes = this.scene.getRoot().getStyleClass();
         if (!theme) {
-            classes.remove("theme-dark");
+//            classes.remove("theme-dark");
             classes.add("theme--light");
         } else {
             classes.remove("theme--light");
-            classes.add("theme--dark");
+//            classes.add("theme--dark");
         }
     }
 }

@@ -1,5 +1,15 @@
 @import "style.css";
 
+.root.theme--light{
+    -primary-color: #dce5db;
+    -secondary-color: #a03670;
+    -tertiary-color: #7c3cbe;
+    -neutral-color: #f8fdff;
+    -surface-color: #006d3e;
+    -button-text-color: #000000;
+    -label-text-color: #000000;
+}
+
 .DashboardComp {
     -fx-spacing: 40;
     -fx-alignment: center;

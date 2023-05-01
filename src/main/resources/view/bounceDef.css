@@ -1,5 +1,15 @@
 @import "style.css";
 
+.root.theme--light {
+    -primary-color: #dce5db;
+    -secondary-color: #a03670;
+    -tertiary-color: #7c3cbe;
+    -neutral-color: #f8fdff;
+    -surface-color: #006d3e;
+    -label-text-color: black;
+    -button-text-color: black;
+}
+
 .errorLabel {
     -fx-font-size: 30px;
     -fx-text-fill: red;
@@ -28,7 +38,7 @@
 
 .text-field {
     -fx-font-size: 30px;
-    -fx-prompt-text-fill: derive(-label-text-color,-40%);
+    -fx-prompt-text-fill: derive(-label-text-color, -40%);
     -fx-text-fill: -label-text-color;
     -fx-padding: 5px 10px;
     -fx-background-color: transparent;
@@ -48,7 +58,7 @@
 }
 
 .text-field:hover {
-    -fx-background-color: derive(-surface-color,-10%);
+    -fx-background-color: derive(-surface-color, -10%);
 }
 
 

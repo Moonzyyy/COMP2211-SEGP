@@ -12,6 +12,7 @@
     -fx-background-text-color: -label-text-color;
 }
 
+
 .button {
     -fx-background-radius: 30;
     -fx-background-color: -primary-color;
