@@ -23,6 +23,8 @@ public class Settings extends AbstractScene {
     private ColorPicker bgColorPicker;
     private ComboBox<String> themeDropdown;
 
+    private ComboBox<String> fontDropdown;
+
     public Settings() {
         super();
     }
@@ -45,8 +47,8 @@ public class Settings extends AbstractScene {
         settingsPane.setTop(settingsTitle);
 
         Label fontLabel = new Label("Text Font:");
-        ComboBox<String> fontDropdown = new ComboBox<>();
-        fontDropdown.getItems().addAll("Arial", "Times New Roman", "Verdana");
+        fontDropdown = new ComboBox<>();
+        fontDropdown.getItems().addAll("Roboto", "Arial", "Times New Roman", "Verdana");
         HBox fontBox = new HBox(fontLabel, fontDropdown);
         fontBox.setAlignment(Pos.CENTER);
         fontBox.setSpacing(10);
@@ -104,6 +106,10 @@ public class Settings extends AbstractScene {
 
     public ComboBox<String> getThemeDropdown() {
         return themeDropdown;
+    }
+
+    public ComboBox<String> getFontDropdown() {
+        return fontDropdown;
     }
 
     public void setStyles(boolean theme) {
