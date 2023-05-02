@@ -80,7 +80,7 @@
 }
 
 .check-box > .box > .mark {
-    -fx-background-color: -label-text-color;
+    -fx-background-color: #000000;
     -fx-background-radius: 10px;
     -fx-padding: 5;
     visibility: hidden;
@@ -107,7 +107,7 @@
 }
 
 .check-box:selected > .text {
-    -fx-fill: -label-text-color;
+    -fx-fill: #000000;
 }
 
 /* Set font color for CheckBox */
