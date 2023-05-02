@@ -20,6 +20,10 @@ import view.components.CompareItem;
 import view.components.DashboardComp;
 import view.scenes.*;
 
+import javax.swing.*;
+import java.awt.print.PageFormat;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.*;
 import java.util.*;
 
@@ -417,7 +421,23 @@ public class Controller {
         });
         // Creates a print job, works for physical printers, not PDFs
         graphScene.getPrintButton().setOnAction((event) -> {
-            graphScene.getLineChart().createChartPrintJob();
+//            graphScene.getLineChart().createChartPrintJob();
+            SwingUtilities.invokeLater(() -> {
+                PrinterJob job = PrinterJob.getPrinterJob();
+                PageFormat pf = job.defaultPage();
+                PageFormat pf2 = job.pageDialog(pf);
+                if (pf2 == pf)
+                    return;
+                var p = graphScene.getLineChart();
+                job.setPrintable(p, pf2);
+                if (!job.printDialog())
+                    return;
+                try {
+                    job.print();
+                } catch (PrinterException e) {
+                    e.printStackTrace();
+                }
+            });
 
         });
 
