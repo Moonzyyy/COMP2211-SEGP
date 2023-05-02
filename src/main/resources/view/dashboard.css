@@ -144,7 +144,7 @@
 .list-cell {
     -fx-alignment: center;
     -fx-spacing: 10;
-    -fx-background-color: -surface-color;
+    -fx-background-color: -menu-bg;
 }
 
 /*Scroll bar styling*/
