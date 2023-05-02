@@ -3,11 +3,11 @@
 .root.theme--light {
     -primary-color: #dce5db;
     -secondary-color: #a03670;
-    -tertiary-color: #7c3cbe;
-    -neutral-color: #f8fdff;
-    -surface-color: #006d3e;
-    -label-text-color: black;
-    -button-text-color: black;
+    /*-tertiary-color: #7c3cbe;*/
+    /*-neutral-color: #f8fdff;*/
+    /*!*-surface-color: #006d3e;*!*/
+    /*-label-text-color: black;*/
+    /*-button-text-color: black;*/
 }
 
 .errorLabel {
