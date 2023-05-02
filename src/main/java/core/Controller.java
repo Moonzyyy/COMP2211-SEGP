@@ -125,6 +125,10 @@ public class Controller {
             }
         });
 
+        menu.getFaqButton().setOnAction((event) -> {
+            setUpScene(new FaqScene());
+        });
+
         // Predicates
         menu.getResumeButton()
                 .setVisible(model.getImpressions() != null && model.getMetrics().size() > 0);
@@ -245,6 +249,17 @@ public class Controller {
         }
 
 
+    }
+
+    public void setUpScene(FaqScene faqScene)
+    {
+        faqScene.createScene();
+        faqScene.setStyles(theme);
+        this.setCurrentScene(faqScene);
+
+        faqScene.getBackButton().setOnAction((event -> {
+            setUpScene(new StartMenu());
+        }));
     }
 
     /**
