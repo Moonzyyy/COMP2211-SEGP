@@ -232,8 +232,8 @@ public class Graph extends AbstractScene {
                 chart.setBackgroundPaint(new Color(18, 18, 18));
                 lineChart.getTitle().setPaint(Color.WHITE);
                 histogram.getTitle().setPaint(Color.WHITE);
-                chart.getPlot().setBackgroundPaint(Color.DARK_GRAY);
-                chart.getPlot().setOutlinePaint(Color.DARK_GRAY);
+                chart.getPlot().setBackgroundPaint(new Color(47, 47, 47));
+                chart.getPlot().setOutlinePaint(new Color(47, 47, 47));
 
                 domainAxis.setAxisLinePaint(Color.WHITE);
                 domainAxis.setTickLabelPaint(Color.WHITE);
@@ -249,8 +249,8 @@ public class Graph extends AbstractScene {
                 renderer.setSeriesPaint(3, Color.YELLOW);
 
                 histogram.setBackgroundPaint(new Color(18, 18, 18));
-                histogram.getPlot().setBackgroundPaint(Color.DARK_GRAY);
-                histogram.getPlot().setOutlinePaint(Color.DARK_GRAY);
+                histogram.getPlot().setBackgroundPaint(new Color(47, 47, 47));
+                histogram.getPlot().setOutlinePaint(new Color(47, 47, 47));
                 histogramPlot.getRenderer().setSeriesPaint(0, Color.WHITE);
                 histogramPlot.getDomainAxis().setAxisLinePaint(Color.WHITE);
                 histogramPlot.getDomainAxis().setTickLabelPaint(Color.WHITE);
@@ -273,12 +273,12 @@ public class Graph extends AbstractScene {
         } else {
             //LIGHT MODE
             SwingUtilities.invokeLater(() -> {
-                chart.setBackgroundPaint(new Color(238, 243, 245));
+                chart.setBackgroundPaint(new Color(248, 253, 255));
                 lineChart.getTitle().setPaint(Color.BLACK);
                 histogram.getTitle().setPaint(Color.BLACK);
 
-                chart.getPlot().setBackgroundPaint(Color.LIGHT_GRAY);
-                chart.getPlot().setOutlinePaint(Color.LIGHT_GRAY);
+                chart.getPlot().setBackgroundPaint(new Color(230,238,245));
+                chart.getPlot().setOutlinePaint(new Color(230,238,245));
 
                 domainAxis.setAxisLinePaint(Color.BLACK);
                 domainAxis.setTickLabelPaint(Color.BLACK);
@@ -291,9 +291,9 @@ public class Graph extends AbstractScene {
 
                 renderer.setSeriesPaint(0, Color.BLACK);
 
-                histogram.setBackgroundPaint(new Color(237, 243, 245));
-                histogram.getPlot().setBackgroundPaint(Color.LIGHT_GRAY);
-                histogram.getPlot().setOutlinePaint(Color.LIGHT_GRAY);
+                histogram.setBackgroundPaint(new Color(248, 253, 255));
+                histogram.getPlot().setBackgroundPaint(new Color(230,238,245));
+                histogram.getPlot().setOutlinePaint(new Color(230,238,245));
                 histogramPlot.getRenderer().setSeriesPaint(0, Color.BLACK);
                 histogramPlot.getDomainAxis().setAxisLinePaint(Color.BLACK);
                 histogramPlot.getDomainAxis().setTickLabelPaint(Color.BLACK);
@@ -308,7 +308,7 @@ public class Graph extends AbstractScene {
                 swingNode.setContent(chartPanel);
 
                 chart.getLegend().setItemPaint(Color.BLACK);
-                chart.getLegend().setBackgroundPaint(Color.decode("#D3D3D3"));
+                chart.getLegend().setBackgroundPaint(Color.decode("#f8fdff"));
             });
 
         }
