@@ -277,8 +277,8 @@ public class Graph extends AbstractScene {
                 lineChart.getTitle().setPaint(Color.BLACK);
                 histogram.getTitle().setPaint(Color.BLACK);
 
-                chart.getPlot().setBackgroundPaint(new Color(230,238,245));
-                chart.getPlot().setOutlinePaint(new Color(230,238,245));
+                chart.getPlot().setBackgroundPaint(new Color(230, 238, 245));
+                chart.getPlot().setOutlinePaint(new Color(230, 238, 245));
 
                 domainAxis.setAxisLinePaint(Color.BLACK);
                 domainAxis.setTickLabelPaint(Color.BLACK);
@@ -289,11 +289,11 @@ public class Graph extends AbstractScene {
                 rangeAxis.setLabelPaint(Color.BLACK);
 
 
-                renderer.setSeriesPaint(0, Color.BLACK);
+                renderer.setSeriesPaint(0, new Color(0, 109, 62));
 
                 histogram.setBackgroundPaint(new Color(248, 253, 255));
-                histogram.getPlot().setBackgroundPaint(new Color(230,238,245));
-                histogram.getPlot().setOutlinePaint(new Color(230,238,245));
+                histogram.getPlot().setBackgroundPaint(new Color(230, 238, 245));
+                histogram.getPlot().setOutlinePaint(new Color(230, 238, 245));
                 histogramPlot.getRenderer().setSeriesPaint(0, Color.BLACK);
                 histogramPlot.getDomainAxis().setAxisLinePaint(Color.BLACK);
                 histogramPlot.getDomainAxis().setTickLabelPaint(Color.BLACK);
@@ -309,6 +309,8 @@ public class Graph extends AbstractScene {
 
                 chart.getLegend().setItemPaint(Color.BLACK);
                 chart.getLegend().setBackgroundPaint(Color.decode("#f8fdff"));
+
+                compareControl1.setStyle("-fx-background-color: #1C7C54; -fx-background-insets: 0;");
             });
 
         }
@@ -395,6 +397,7 @@ public class Graph extends AbstractScene {
             layout.setRight(null);
         }
     }
+
     private void handleZoom(MouseWheelEvent e) {
         double ZOOM_INCREMENT = 0.1;
         double zoomFactor = 1.0 + (ZOOM_INCREMENT * e.getWheelRotation());
@@ -613,13 +616,6 @@ public class Graph extends AbstractScene {
     public void setStyles(boolean theme) {
         scene.getStylesheets().clear();
         scene.getStylesheets().add(getClass().getResource("/view/graph.css").toExternalForm());
-//        if (theme) {
-//            scene.getStylesheets().add(getClass().getResource("/view/graph.css").toExternalForm());
-////            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menu.png"))));
-//        } else {
-//            scene.getStylesheets().add(getClass().getResource("/view/graph.css").toExternalForm());
-////            menuImg.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/menuLight.png"))));
-//
-//        }
+        setGraphTheme(theme);
     }
 }

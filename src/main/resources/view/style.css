@@ -6,6 +6,7 @@
     -surface-color: #424242;
     -label-text-color: #ffffff;
     -button-text-color: #000000;
+    -dropdown-color: -label-text-color;
 
     -fx-font-weight: 500;
 

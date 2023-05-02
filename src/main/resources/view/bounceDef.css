@@ -1,11 +1,11 @@
 @import "style.css";
 
 .root.theme--light {
-    -primary-color: #dce5db;
+    -primary-color: #006d3e;
     -secondary-color: #a03670;
     /*-tertiary-color: #7c3cbe;*/
     /*-neutral-color: #f8fdff;*/
-    /*!*-surface-color: #006d3e;*!*/
+    -surface-color: #dce5db;
     /*-label-text-color: black;*/
     /*-button-text-color: black;*/
 }
