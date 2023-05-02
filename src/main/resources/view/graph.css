@@ -8,6 +8,7 @@
     -surface-color: #006d3e;
     -button-text-color: #000000;
     -label-text-color: #000000;
+    -dropdown-color: rgb(230, 238, 245);
 }
 
 .label {
@@ -108,7 +109,7 @@
 
 /* Set font color for ListView header */
 .list-view .column-header .label {
-    -fx-text-fill: -primary-color;
+    -fx-text-fill: -neutral-color;
 }
 
 
@@ -117,9 +118,10 @@
     -fx-background-color: -neutral-color;
 }
 
-.list-cell-text {
-    -fx-text-fill: -label-text-color;
-    -fx-padding: 10 0 0 0;
+.list-cell .text {
+    -fx-text-fill: -button-text-color;
+    -fx-translate-x: -8px;
+    /*-fx-padding: 10 0 0 0;*/
 }
 
 .list-cell {
@@ -143,7 +145,7 @@
 }
 
 .scroll-bar:vertical .thumb:pressed {
-    -fx-background-color: -neutral-color;
+    -fx-background-color: derive(-surface-color,-20%);
 }
 
 .scroll-bar:vertical .track {
@@ -168,9 +170,14 @@
 .start-date-picker, .end-date-picker {
     -fx-font-size: 14px;
     -fx-background-color: -surface-color;
-    -fx-text-fill: -label-text-color;
-    -fx-highlight-text-fill: -label-text-color;
+    -fx-text-fill: -button-text-color;
+    -fx-highlight-text-fill: -button-text-color;
     -fx-highlight-fill: derive(-surface-color, 20%);
+}
+
+.date-picker-popup > .month-year-pane  {
+    -fx-base: -surface-color;
+    -fx-mark-highlight-color: -button-text-color;
 }
 
 .start-date-picker .arrow, .end-date-picker .arrow {
@@ -179,7 +186,7 @@
 
 .start-date-picker .arrow-button:hover, .end-date-picker .arrow-button:hover {
     -fx-background-color: derive(-surface-color, 20%);
-    -fx-text-fill: -label-text-color;
+    -fx-text-fill: -button-text-color;
 }
 
 .start-date-picker .arrow-button:pressed, .end-date-picker .arrow-button:pressed {
@@ -187,8 +194,9 @@
     -fx-text-fill: -label-text-color;
 }
 
+/*Drop downs for both time and multi-line comparison*/
 .time-filter {
-    -fx-background-color: -primary-color;
+    -fx-background-color: -surface-color;
     -fx-text-fill: -label-text-color;
     -fx-pref-width: 100;
     -fx-highlight-text-fill: -label-text-color;
@@ -196,24 +204,24 @@
 }
 
 .time-filter .list-view .list-cell {
-    -fx-background-color: -primary-color;
+    -fx-background-color: -surface-color;
     -fx-text-fill: -label-text-color;
     -fx-highlight-text-fill: -label-text-color;
-    -fx-highlight-fill: -primary-color;
+    -fx-highlight-fill: derive(-primary-color, 20%);
 }
 
 .time-filter .list-view .list-cell:hover {
     -fx-background-color: derive(-primary-color, 30%);
-    -fx-text-fill: -label-text-color;
+    -fx-text-fill: -button-text-color;
     -fx-highlight-text-fill: -label-text-color;
     -fx-highlight-fill: #626262;
 }
 
 .time-filter .list-cell {
-    -fx-background-color: -primary-color;
-    -fx-text-fill: -label-text-color;
+    -fx-background-color: -dropdown-color;
+    -fx-text-fill: black;
     -fx-highlight-text-fill: -label-text-color;
-    -fx-highlight-fill: -primary-color;
+    -fx-highlight-fill: -surface-color;
 }
 
 .time-filter .arrow {
