@@ -329,14 +329,14 @@ public class Controller {
 //                }
             } else {
                 String text = bounceDef.getInputTimeText().getText();
-                if (Integer.parseInt(text) < 1 || Integer.parseInt(text) > 10) {
-                    bounceDef.getTimeErrorMsg().setVisible(true);
-                } else {
-                    bounceDef.getTimeErrorMsg().setVisible(false);
-                    model.setBounceDef("Time");
+//                if (Integer.parseInt(text) < 1 || Integer.parseInt(text) > 300) {
+//                    bounceDef.getTimeErrorMsg().setVisible(true);
+//                } else {
+//                    bounceDef.getTimeErrorMsg().setVisible(false);
                     model.setBounceTimeValue(Integer.parseInt(text.length() > 0 ? text : "1"));
+                    model.setBounceDef("Time");
                     setUpScene(new Dashboard());
-                }
+//                }
             }
         });
 
@@ -372,7 +372,7 @@ public class Controller {
 
         bounceDef.getInputPageText().textProperty().addListener((observable, oldValue, newValue) -> {
             String text = bounceDef.getInputPageText().getText();
-            boolean valid = validBounceDef(text);
+            boolean valid = validBounceDef(text, true);
 //            if (!valid && text.length() > 0) {
 //                bounceDef.getInputPageText().setText(bounceDef.getInputPageText().getText(0, text.length() - 1));
 //                valid = validBounceDef(text);
@@ -385,12 +385,12 @@ public class Controller {
 
         bounceDef.getPageRadio().setOnAction(e -> {
             String text = bounceDef.getInputPageText().getText();
-            bounceDef.getApplyButton().setDisable(!validBounceDef(text));
+            bounceDef.getApplyButton().setDisable(!validBounceDef(text, true));
         });
 
         bounceDef.getInputTimeText().textProperty().addListener((observable, oldValue, newValue) -> {
             String text = bounceDef.getInputTimeText().getText();
-            boolean valid = validBounceDef(text);
+            boolean valid = validBounceDef(text, false);
 //            if (!valid && text.length() > 0) {
 //                bounceDef.getInputTimeText().setText(bounceDef.getInputTimeText().getText(0, text.length() - 1));
 //                valid = validBounceDef(text);
@@ -403,14 +403,15 @@ public class Controller {
 
         bounceDef.getTimeRadio().setOnAction(e -> {
             String text = bounceDef.getInputTimeText().getText();
-            bounceDef.getApplyButton().setDisable(!validBounceDef(text));
+            bounceDef.getApplyButton().setDisable(!validBounceDef(text, false));
         });
 
     }
 
-    private boolean validBounceDef(String input) {
+    private boolean validBounceDef(String input, boolean isPage) {
+        int max = isPage ? 10 : 300;
         if (input.length() > 0) {
-            return input.matches("[0-9]+") && Integer.parseInt(input) >= 1 && Integer.parseInt(input) <= 10;
+            return input.matches("[0-9]+") && Integer.parseInt(input) >= 1 && Integer.parseInt(input) <= max;
         } else {
             return false;
         }

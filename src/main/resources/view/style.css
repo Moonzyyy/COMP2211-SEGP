@@ -13,6 +13,16 @@
     -fx-background-text-color: -label-text-color;
 }
 
+.root.theme--light {
+    -primary-color: #006d3e;
+    -secondary-color: #a03670;
+    -tertiary-color: #7c3cbe;
+    -neutral-color: #f8fdff;
+    -surface-color: #dce5db;
+    -label-text-color: #000000;
+    -button-text-color: #ffffff;
+}
+
 .font--roboto {
     -fx-font-family: Roboto;
 }
@@ -27,16 +37,6 @@
 
 .font--verdana {
     -fx-font-family: Verdana;
-}
-
-.root.theme--light {
-    -primary-color: #006d3e;
-    -secondary-color: #a03670;
-    -tertiary-color: #7c3cbe;
-    -neutral-color: #f8fdff;
-    -surface-color: #dce5db;
-    -label-text-color: #000000;
-    -button-text-color: #ffffff;
 }
 
 .label {

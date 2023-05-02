@@ -94,8 +94,8 @@ public class BounceDef extends AbstractScene {
         timeBox.maxWidthProperty().bind(bounceDefPane.widthProperty().multiply(0.33));
         VBox timeWrapper = new VBox(timeBox, timeErrorMsg);
         timeWrapper.setAlignment(Pos.CENTER);
-        timeRadio.maxWidthProperty().bind(timeBox.widthProperty().multiply(0.8));
-        inputTimeText.maxWidthProperty().bind(pageBox.widthProperty().multiply(0.15));
+        timeRadio.maxWidthProperty().bind(timeBox.widthProperty().multiply(0.75));
+        inputTimeText.maxWidthProperty().bind(pageBox.widthProperty().multiply(0.2));
         timeBox.setAlignment(Pos.CENTER);
         timeBox.setSpacing(10);
 

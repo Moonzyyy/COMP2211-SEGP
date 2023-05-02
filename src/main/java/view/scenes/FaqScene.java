@@ -3,15 +3,16 @@ package view.scenes;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class FaqScene extends AbstractScene {
 
-    private ListView<VBox> faqList;
+    private ListView<Text> faqList;
     private Button backButton;
 
     public FaqScene() {
@@ -20,6 +21,13 @@ public class FaqScene extends AbstractScene {
     }
 
     public void createScene() {
+        HBox titleBox = new HBox();
+        titleBox.setAlignment(Pos.CENTER);
+        titleBox.setPadding(new Insets(20, 0, 10, 0));
+        Label titleLabel = new Label("FAQs");
+        titleLabel.getStyleClass().add("title");
+        titleBox.getChildren().add(titleLabel);
+
         Text faq1 = new Text("Q - I currently have the wrong csv files open; how do I re-import the correct ones?\n" +
                 "A - Navigate back to the main menu, and you will see the import button which will allow you to import new csv files.\n");
 
@@ -65,13 +73,17 @@ public class FaqScene extends AbstractScene {
         vBox.setAlignment(Pos.TOP_LEFT);
         vBox.getChildren().addAll(faq1, faq2, faq3, faq4, faq5, faq6, faq7, faq8, faq9, faq10, faq11);
 
+        vBox.getChildren().forEach(faq -> faq.getStyleClass().add("faq"));
+
         faqList = new ListView<>();
-        faqList.getStyleClass().add("list-cell");
+        faqList.getStyleClass().add("faq-wrapper");
+        vBox.getStyleClass().add("faq-list");
 
-        faqList.getItems().add(vBox);
-        faqList.setMinHeight(600);
+//        faqList.getItems().add(vBox);
+        faqList.getItems().addAll(faq1, faq2, faq3, faq4, faq5, faq6, faq7, faq8, faq9, faq10, faq11);
+        faqList.getItems().forEach(faq -> faq.wrappingWidthProperty().bind(faqList.widthProperty().subtract(75)));
+//        faqList.setMinHeight(600);
         faqList.setMaxWidth(1200);
-
 
         backButton = new Button("Back");
         backButton.getStyleClass().add("backButton");
@@ -80,14 +92,17 @@ public class FaqScene extends AbstractScene {
 
         BorderPane.setAlignment(faqList, Pos.TOP_CENTER);
 
-        BorderPane.setMargin(backButton, new Insets(20, 0, 10, 10));
+        BorderPane.setMargin(backButton, new Insets(20, 0, 20, 20));
         BorderPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
 
-        startBorderPane.setTop(faqList);
-        startBorderPane.setLeft(backButton);
+        startBorderPane.setTop(titleBox);
+        startBorderPane.setCenter(faqList);
+        startBorderPane.setBottom(backButton);
+
 
         scene = new Scene(startBorderPane, 1280, 720);
         scene.getStylesheets().add(getClass().getResource("/view/startLight.css").toExternalForm());
+        startBorderPane.setPrefHeight(scene.getHeight());
 
     }
 
@@ -95,8 +110,7 @@ public class FaqScene extends AbstractScene {
 
     public void setStyles(boolean theme) {
         scene.getStylesheets().clear();
-        scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
-        scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/view/faqs.css").toExternalForm());
 //        if (theme) {
 //            scene.getStylesheets().add(getClass().getResource("/view/dashboard.css").toExternalForm());
 //            scene.getStylesheets().add(getClass().getResource("/view/dashboardComp.css").toExternalForm());
