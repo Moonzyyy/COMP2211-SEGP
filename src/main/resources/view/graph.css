@@ -22,8 +22,8 @@
 }
 
 .graph {
-    -fx-background-color: #ffffff;
-    -fx-fill: #ffffff;
+    -fx-background-color: -neutral-color;
+    -fx-fill: -neutral-color;
     -fx-background-radius: 10;
     -fx-padding: 20;
     -fx-spacing: 20;
@@ -33,7 +33,7 @@
 .graphTitle {
     -fx-font-size: 40;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -label-text-color;
     -fx-alignment: center;
 }
 
@@ -54,7 +54,7 @@
 
 /* Set background color and font color for ListView */
 .list-cell {
-    -fx-background-color: #121212;
+    -fx-background-color: -neutral-color;
     -fx-font-size: 14px;
     -fx-text-fill: #ffffff;
 }
@@ -62,14 +62,14 @@
 
 /* Set background color and border color for CheckBox */
 .check-box {
-    -fx-border-color: #f5f5f5;
+    -fx-border-color: -primary-color;
     -fx-padding: 0 10 0 10;
     -fx-alignment: center;
     -fx-pref-width: 150;
 }
 
 .check-box > .box > .mark {
-    -fx-background-color: #000000;
+    -fx-background-color: -neutral-color;
     -fx-background-radius: 10px;
     -fx-padding: 5;
     visibility: hidden;
@@ -77,17 +77,17 @@
 
 /* Set background color for CheckBox when hovered */
 .check-box:hover {
-    -fx-background-color: #212121;
+    -fx-background-color: derive(-surface-color, 20%);
 }
 
 /* Set checkbox text color */
 .check-box > .text {
-    -fx-fill: #ffffff;
+    -fx-fill: -label-text-color;
 }
 
 /* Set background color for CheckBox when selected */
 .check-box:selected {
-    -fx-background-color: #f5f5f5;
+    -fx-background-color: derive(-surface-color, 25%);
     -fx-opacity: 0.85;
 }
 
@@ -96,29 +96,29 @@
 }
 
 .check-box:selected > .text {
-    -fx-fill: #000000;
+    -fx-fill: -button-text-color;
 }
 
 /* Set font color for CheckBox */
 .check-box .box {
     -fx-background-color: transparent;
-    -fx-text-fill: #f5f5f5;
+    -fx-text-fill: -primary-color;
 }
 
 
 /* Set font color for ListView header */
 .list-view .column-header .label {
-    -fx-text-fill: #f5f5f5;
+    -fx-text-fill: -primary-color;
 }
 
 
 /* Set divider color for ListView */
 .list-view .virtual-flow .clipped-container {
-    -fx-background-color: #212121;
+    -fx-background-color: -neutral-color;
 }
 
 .list-cell-text {
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -label-text-color;
     -fx-padding: 10 0 0 0;
 }
 
@@ -133,17 +133,17 @@
 }
 
 .scroll-bar:vertical .thumb {
-    -fx-background-color: #616161;
+    -fx-background-color: derive(-primary-color, 10%);
     -fx-background-insets: 0, 1, 2;
     -fx-background-radius: 10px;
 }
 
 .scroll-bar:vertical .thumb:hover {
-    -fx-background-color: #515151;
+    -fx-background-color: derive(-primary-color, 20%);
 }
 
 .scroll-bar:vertical .thumb:pressed {
-    -fx-background-color: #212121;
+    -fx-background-color: -neutral-color;
 }
 
 .scroll-bar:vertical .track {
@@ -151,72 +151,72 @@
 }
 
 .scroll-bar:vertical .track-background {
-    -fx-background-color: #424242;
+    -fx-background-color: -surface-color;
 }
 
 .scroll-bar:vertical .increment-arrow,
 .scroll-bar:vertical .decrement-arrow {
-    -fx-background-color: #212121;
+    -fx-background-color: -neutral-color;
 }
 
 .scroll-bar:vertical .increment-arrow:hover,
 .scroll-bar:vertical .decrement-arrow:hover {
-    -fx-background-color: #424242;
+    -fx-background-color: -surface-color;
 }
 
 /*Date picker styling*/
 .start-date-picker, .end-date-picker {
     -fx-font-size: 14px;
-    -fx-background-color: #424242;
-    -fx-text-fill: white;
-    -fx-highlight-text-fill: white;
-    -fx-highlight-fill: #9c27b0;
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: derive(-surface-color, 20%);
 }
 
 .start-date-picker .arrow, .end-date-picker .arrow {
-    -fx-background-color: #424242;
+    -fx-background-color: -surface-color;
 }
 
 .start-date-picker .arrow-button:hover, .end-date-picker .arrow-button:hover {
-    -fx-background-color: #9c27b0;
-    -fx-text-fill: white;
+    -fx-background-color: derive(-surface-color, 20%);
+    -fx-text-fill: -label-text-color;
 }
 
 .start-date-picker .arrow-button:pressed, .end-date-picker .arrow-button:pressed {
-    -fx-background-color: #9c27b0;
-    -fx-text-fill: white;
+    -fx-background-color: derive(-surface-color, 20%);
+    -fx-text-fill: -label-text-color;
 }
 
 .time-filter {
-    -fx-background-color: #424242;
-    -fx-text-fill: white;
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -label-text-color;
     -fx-pref-width: 100;
-    -fx-highlight-text-fill: white;
-    -fx-highlight-fill: #424242;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: -surface-color;
 }
 
 .time-filter .list-view .list-cell {
-    -fx-background-color: #424242;
-    -fx-text-fill: white;
-    -fx-highlight-text-fill: white;
-    -fx-highlight-fill: #424242;
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: -surface-color;
 }
 
 .time-filter .list-view .list-cell:hover {
-    -fx-background-color: #626262;
-    -fx-text-fill: white;
-    -fx-highlight-text-fill: white;
+    -fx-background-color: derive(-surface-color, 30%);
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
     -fx-highlight-fill: #626262;
 }
 
 .time-filter .list-cell {
-    -fx-background-color: #424242;
-    -fx-text-fill: white;
-    -fx-highlight-text-fill: white;
-    -fx-highlight-fill: #424242;
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: -surface-color;
 }
 
 .time-filter .arrow {
-    -fx-background-color: BLACK;
+    -fx-background-color: -button-color;
 }
 
