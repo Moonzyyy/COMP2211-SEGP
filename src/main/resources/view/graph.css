@@ -133,13 +133,13 @@
 }
 
 .scroll-bar:vertical .thumb {
-    -fx-background-color: derive(-primary-color, 10%);
+    -fx-background-color: derive(-surface-color, 10%);
     -fx-background-insets: 0, 1, 2;
     -fx-background-radius: 10px;
 }
 
 .scroll-bar:vertical .thumb:hover {
-    -fx-background-color: derive(-primary-color, 20%);
+    -fx-background-color: derive(-surface-color, 20%);
 }
 
 .scroll-bar:vertical .thumb:pressed {
@@ -188,32 +188,32 @@
 }
 
 .time-filter {
-    -fx-background-color: -surface-color;
+    -fx-background-color: -primary-color;
     -fx-text-fill: -label-text-color;
     -fx-pref-width: 100;
     -fx-highlight-text-fill: -label-text-color;
-    -fx-highlight-fill: -surface-color;
+    -fx-highlight-fill: derive(-primary-color, 20%);
 }
 
 .time-filter .list-view .list-cell {
-    -fx-background-color: -surface-color;
+    -fx-background-color: -primary-color;
     -fx-text-fill: -label-text-color;
     -fx-highlight-text-fill: -label-text-color;
-    -fx-highlight-fill: -surface-color;
+    -fx-highlight-fill: -primary-color;
 }
 
 .time-filter .list-view .list-cell:hover {
-    -fx-background-color: derive(-surface-color, 30%);
+    -fx-background-color: derive(-primary-color, 30%);
     -fx-text-fill: -label-text-color;
     -fx-highlight-text-fill: -label-text-color;
     -fx-highlight-fill: #626262;
 }
 
 .time-filter .list-cell {
-    -fx-background-color: -surface-color;
+    -fx-background-color: -primary-color;
     -fx-text-fill: -label-text-color;
     -fx-highlight-text-fill: -label-text-color;
-    -fx-highlight-fill: -surface-color;
+    -fx-highlight-fill: -primary-color;
 }
 
 .time-filter .arrow {
