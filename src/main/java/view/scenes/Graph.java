@@ -371,8 +371,8 @@ public class Graph extends AbstractScene {
 
         layout.setBottom(filterBar);
         scene = new Scene(layout, 1280, 720);
-        scene.getStylesheets()
-                .add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
+//        scene.getStylesheets()
+//                .add(Objects.requireNonNull(getClass().getResource("/view/graph.css")).toExternalForm());
 
     }
 

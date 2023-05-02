@@ -218,6 +218,6 @@
 }
 
 .time-filter .arrow {
-    -fx-background-color: -button-color;
+    -fx-background-color: -button-text-color;
 }
 
