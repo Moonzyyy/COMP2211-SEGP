@@ -117,9 +117,10 @@
     -fx-background-color: -neutral-color;
 }
 
-.list-cell-text {
+.list-cell .text {
     -fx-text-fill: -label-text-color;
-    -fx-padding: 10 0 0 0;
+    -fx-translate-x: -8px;
+    /*-fx-padding: 10 0 0 0;*/
 }
 
 .list-cell {
