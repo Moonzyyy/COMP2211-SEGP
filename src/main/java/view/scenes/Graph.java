@@ -149,10 +149,14 @@ public class Graph extends AbstractScene {
                     toggleGraph.setText("Line Graph");
                     showLineGraph = false;
                     chartPanel.setChart(histogram);
+                    updateFilterVisibility(false);
+                    toggleCheckBoxes(false);
                 } else {
                     toggleGraph.setText("Histogram");
                     showLineGraph = true;
                     chartPanel.setChart(lineChart);
+                    updateFilterVisibility(true);
+                    toggleCheckBoxes(true);
                 }
             });
             toggleGraph.getStyleClass().add("button");
@@ -269,7 +273,7 @@ public class Graph extends AbstractScene {
         } else {
             //LIGHT MODE
             SwingUtilities.invokeLater(() -> {
-                chart.setBackgroundPaint(new Color(237, 243, 245));
+                chart.setBackgroundPaint(new Color(238, 243, 245));
                 lineChart.getTitle().setPaint(Color.BLACK);
                 histogram.getTitle().setPaint(Color.BLACK);
 
@@ -360,7 +364,6 @@ public class Graph extends AbstractScene {
         compareControlStartDatePicker.setMaxWidth(110);
         compareControlEndDatePicker.setMaxWidth(110);
 
-
         filterBar.getChildren()
                 .addAll(compareControl1, compareSpacer, compareControl2, compareSpacer2, compareControl3, compareControlStartDatePicker, compareControlEndDatePicker, compareControlDateFilterButton, timeFilter, startDatePicker, endDatePicker, dateFilterButton);
 
@@ -373,7 +376,25 @@ public class Graph extends AbstractScene {
 
     }
 
+    private void updateFilterVisibility(boolean lineGraphVisible) {
+        timeFilter.setVisible(lineGraphVisible);
+        startDatePicker.setVisible(lineGraphVisible);
+        endDatePicker.setVisible(lineGraphVisible);
+        dateFilterButton.setVisible(lineGraphVisible);
+        compareControl1.setVisible(lineGraphVisible);
+        compareControl2.setVisible(lineGraphVisible);
+        compareControlStartDatePicker.setVisible(lineGraphVisible);
+        compareControlEndDatePicker.setVisible(lineGraphVisible);
+        compareControlDateFilterButton.setVisible(lineGraphVisible);
+    }
 
+    private void toggleCheckBoxes(boolean visible) {
+        if (visible) {
+            layout.setRight(compareList);
+        } else {
+            layout.setRight(null);
+        }
+    }
     private void handleZoom(MouseWheelEvent e) {
         double ZOOM_INCREMENT = 0.1;
         double zoomFactor = 1.0 + (ZOOM_INCREMENT * e.getWheelRotation());
