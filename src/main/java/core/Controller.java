@@ -408,7 +408,7 @@ public class Controller {
 
     }
 
-    private boolean validBounceDef(String input, boolean isPage) {
+    public static boolean validBounceDef(String input, boolean isPage) {
         int max = isPage ? 10 : 300;
         if (input.length() > 0) {
             return input.matches("[0-9]+") && Integer.parseInt(input) >= 1 && Integer.parseInt(input) <= max;

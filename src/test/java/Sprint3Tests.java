@@ -1,11 +1,13 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import model.GraphModel;
+import model.HistogramModel;
 import model.Model;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class Sprint3Tests {
     private static Model model;
@@ -19,20 +21,6 @@ public class Sprint3Tests {
         model.setServerFile(new File("src/test/TestData/server_log.csv"));
         model.importData();
         model.getMetrics();
-    }
-
-    /**
-     * Helper function to increase modularity
-     *
-     * @param gm the graph model
-     * @return the sum of all the values as a double
-     */
-    private double testHelper(GraphModel gm) {
-        double sum = 0.0;
-        for (int a = 0; a < gm.getLines().get(0).getDataSeries().getItemCount(); a++) {
-            sum += (double) gm.getLines().get(0).getDataSeries().getDataItem(a).getValue();
-        }
-        return sum;
     }
 
     /**
@@ -77,5 +65,13 @@ public class Sprint3Tests {
     void bounceRateTime2() {
         bounceTimeTestHelper(2);
         assertEquals(0.158, model.bounceRate(), "Bounce rate when time taken is 2");
+    }
+
+    //Histogram test
+    @Test
+    void histogramTest() {
+        HistogramModel hsModel = new HistogramModel(model, 4);
+        //maybe test a few different click costs and check if their frequency is correct?
+        assertEquals(2.1, Arrays.stream(hsModel.extractCostData(model.loadTotalCostData())).sum());
     }
 }

@@ -1,3 +1,4 @@
+import core.Controller;
 import model.GraphModel;
 import model.Model;
 import org.junit.jupiter.api.BeforeAll;
@@ -6,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class PartitionBoundaryTesting {
     private static Model model;
@@ -21,25 +23,10 @@ public class PartitionBoundaryTesting {
         model.getMetrics();
     }
 
-    /**
-     * Helper function to increase modularity
-     *
-     * @param gm the graph model
-     * @return the sum of all the values as a double
-     */
-    private double testHelper(GraphModel gm) {
-        double sum = 0.0;
-        for (int a = 0; a < gm.getLines().get(0).getDataSeries().getItemCount(); a++) {
-            sum += (double) gm.getLines().get(0).getDataSeries().getDataItem(a).getValue();
-        }
-        return sum;
-    }
-
     //Bounce def partitions
     /**
      * Helper function for pages in bounce def to increase modularity
      *
-     * @param bounceDef the bounce definition, either page or time
      * @param bounceVal the bounce value
      */
     private void bouncePageTestHelper(int bounceVal) {
@@ -50,7 +37,6 @@ public class PartitionBoundaryTesting {
     /**
      * Helper function for pages in bounce def to increase modularity
      *
-     * @param bounceDef the bounce definition, either page or time
      * @param bounceVal the bounce value
      */
     private void bounceTimeTestHelper(int bounceVal) {
@@ -83,27 +69,121 @@ public class PartitionBoundaryTesting {
         assertEquals(0.215, model.bounceRate(), "Bounce rate when time taken is 5");
     }
 
-//    @Test
-//    void bounceNumPages2Valid() {
-//        bounceTestHelper("Page", 2);
-//        assertEquals(10089, model.numberOfBounces(), "Number of bounces when pages viewed is 2");
-//    }
-//
-//    @Test
-//    void bounceRatePages2Valid() {
-//        bounceTestHelper("Page", 2);
-//        assertEquals(0.422, model.bounceRate(), "Bounce rate when pages viewed is 2");
-//    }
-//
-//    @Test
-//    void bounceNumTime2Valid() {
-//        bounceTestHelper("Time", 2);
-//        assertEquals(3775, model.numberOfBounces(), "Number of bounces when time taken is 2");
-//    }
-//
-//    @Test
-//    void bounceRateTime2Valid() {
-//        bounceTestHelper("Time", 2);
-//        assertEquals(0.158, model.bounceRate(), "Bounce rate when time taken is 2");
-//    }
+    //Invalid inputs
+    @Test
+    void bouncePages11Invalid() {
+        assertFalse(Controller.validBounceDef("11", true));
+    }
+
+    @Test
+    void bounceTime301Invalid() {
+        assertFalse(Controller.validBounceDef("301", false));
+    }
+
+    @Test
+    void bouncePages0Invalid() {
+        assertFalse(Controller.validBounceDef("0", true));
+    }
+
+    @Test
+    void bounceTime0Invalid() {
+        assertFalse(Controller.validBounceDef("0", false));
+    }
+
+    //Boundary
+    @Test
+    void bounceNumPages1Boundary() {
+        bouncePageTestHelper(1);
+        assertEquals(8665, model.numberOfBounces(), "Number of bounces when pages viewed is 1");
+    }
+
+    @Test
+    void bounceRatePages1Boundary() {
+        bouncePageTestHelper(1);
+        assertEquals(0.362, model.bounceRate(), "Bounce rate when pages viewed is 1");
+    }
+
+    @Test
+    void bounceNumPages2Boundary() {
+        bouncePageTestHelper(2);
+        assertEquals(10089, model.numberOfBounces(), "Number of bounces when pages viewed is 2");
+    }
+
+    @Test
+    void bounceRatePages2Boundary() {
+        bouncePageTestHelper(2);
+        assertEquals(0.422, model.bounceRate(), "Bounce rate when pages viewed is 2");
+    }
+
+    @Test
+    void bounceNumPages9Boundary() {
+        bouncePageTestHelper(9);
+        assertEquals(21186, model.numberOfBounces(), "Number of bounces when pages viewed is 9");
+    }
+
+    @Test
+    void bounceRatePages9Boundary() {
+        bouncePageTestHelper(9);
+        assertEquals(0.886, model.bounceRate(), "Bounce rate when pages viewed is 9");
+    }
+
+    @Test
+    void bounceNumPages10Boundary() {
+        bouncePageTestHelper(10);
+        assertEquals(22819, model.numberOfBounces(), "Number of bounces when pages viewed is 10");
+    }
+
+    @Test
+    void bounceRatePages10Boundary() {
+        bouncePageTestHelper(10);
+        assertEquals(0.954, model.bounceRate(), "Bounce rate when pages viewed is 10");
+    }
+
+    @Test
+    void bounceNumTime1Boundary() {
+        bounceTimeTestHelper(1);
+        assertEquals(3259, model.numberOfBounces(), "Number of bounces when time taken is 1");
+    }
+
+    @Test
+    void bounceRateTime1Boundary() {
+        bounceTimeTestHelper(1);
+        assertEquals(0.136, model.bounceRate(), "Bounce rate when time taken is 1");
+    }
+
+    @Test
+    void bounceNumTime2Boundary() {
+        bounceTimeTestHelper(2);
+        assertEquals(3775, model.numberOfBounces(), "Number of bounces when time taken is 2");
+    }
+
+    @Test
+    void bounceRateTime2Boundary() {
+        bounceTimeTestHelper(2);
+        assertEquals(0.158, model.bounceRate(), "Bounce rate when time taken is 2");
+    }
+
+    @Test
+    void bounceNumTime299Boundary() {
+        bounceTimeTestHelper(299);
+        assertEquals(21387, model.numberOfBounces(), "Number of bounces when time taken is 9");
+    }
+
+    @Test
+    void bounceRateTime299Boundary() {
+        bounceTimeTestHelper(299);
+        assertEquals(0.894, model.bounceRate(), "Bounce rate when time taken is 9");
+    }
+
+    @Test
+    void bounceNumTime300Boundary() {
+        bounceTimeTestHelper(300);
+        assertEquals(21404, model.numberOfBounces(), "Number of bounces when time taken is 10");
+    }
+
+    @Test
+    void bounceRateTime300Boundary() {
+        bounceTimeTestHelper(300);
+        assertEquals(0.895, model.bounceRate(), "Bounce rate when time taken is 10");
+    }
 }

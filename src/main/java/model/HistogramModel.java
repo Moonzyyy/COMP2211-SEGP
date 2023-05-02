@@ -41,7 +41,7 @@ public class HistogramModel {
         plot.setDomainAxis(xAxis);
     }
 
-    private double[] extractCostData(Map<LocalDateTime, Double> data) {
+    public double[] extractCostData(Map<LocalDateTime, Double> data) {
         double[] values = new double[data.size()];
 
         int i = 0;
