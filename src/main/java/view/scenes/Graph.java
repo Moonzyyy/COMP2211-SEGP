@@ -11,10 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.ValueAxis;
@@ -357,8 +354,11 @@ public class Graph extends AbstractScene {
         compareSpacer.setPadding(new Insets(0, 0, 0, 20));
         var compareSpacer2 = new Region();
         HBox.setHgrow(compareSpacer2, Priority.ALWAYS);
+        var compareSpacer3 = new Region();
+        HBox.setHgrow(compareSpacer3, Priority.ALWAYS);
 
-        compareControlDateFilterButton = new Button("Apply");
+
+        compareControlDateFilterButton = new Button("Compare");
         compareControlDateFilterButton.setDisable(true);
 
 
@@ -369,7 +369,7 @@ public class Graph extends AbstractScene {
         compareControlEndDatePicker.setMaxWidth(110);
 
         filterBar.getChildren()
-                .addAll(compareControl1, compareSpacer, compareControl2, compareSpacer2, compareControl3, compareControlStartDatePicker, compareControlEndDatePicker, compareControlDateFilterButton, timeFilter, startDatePicker, endDatePicker, dateFilterButton);
+                .addAll(compareControl1, compareSpacer, compareControl2, compareSpacer2, new Label("Group by: "), timeFilter, compareSpacer3, startDatePicker, endDatePicker, dateFilterButton, compareControlStartDatePicker, compareControlEndDatePicker, compareControlDateFilterButton);
 
         createCheckBoxes();
 
