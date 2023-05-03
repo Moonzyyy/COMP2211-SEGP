@@ -15,6 +15,7 @@ import model.HistogramModel;
 import model.Model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.pdfbox.printing.PDFPageable;
 import org.jfree.chart.ChartPanel;
 import org.jfree.data.time.TimeSeries;
 import view.components.CompareItem;
@@ -26,8 +27,6 @@ import javax.print.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.*;
@@ -44,7 +43,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import org.jfree.chart.JFreeChart;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.rendering.PDFRenderer;
+
 
 
 public class Controller {
@@ -604,35 +603,34 @@ public class Controller {
         SwingUtilities.invokeLater(() -> {
             try {
                 PDDocument document = PDDocument.load(new File(pdfPath));
-                PDFRenderer pdfRenderer = new PDFRenderer(document);
-                Printable printable = new Printable() {
-                    @Override
-                    public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
-                        if (pageIndex >= document.getNumberOfPages()) {
-                            return NO_SUCH_PAGE;
-                        }
-                        try {
-                            BufferedImage image = pdfRenderer.renderImage(pageIndex, 2.5f);
-                            graphics.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
-                            return PAGE_EXISTS;
-                        } catch (IOException e) {
-                            throw new PrinterException(e.getMessage());
-                        }
-                    }
-                };
                 PrinterJob job = PrinterJob.getPrinterJob();
-                job.setPrintable(printable);
-                if (!job.printDialog()) {
-                    return;
+                String fileName = new File(pdfPath).getName();
+                if (!fileName.endsWith(".pdf")) {
+                    fileName += ".pdf";
                 }
-                job.print();
-                document.close();
+                FileDialog fd = new FileDialog(new JFrame(), "Save", FileDialog.SAVE);
+                fd.setFile(fileName);
+                fd.setVisible(true);
+                String destFilePath = fd.getDirectory() + fd.getFile();
+                if (destFilePath != null) {
+                    FileOutputStream fos = new FileOutputStream(destFilePath);
+                    document.save(fos);
+                    document.close();
+                    fos.close();
+                    job.setJobName(fileName);
+                    job.setPageable(new PDFPageable(PDDocument.load(new File(destFilePath))));
+                    boolean doPrint = job.printDialog();
+                    if (doPrint) {
+                        job.print();
+                    }
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (PrinterException e) {
                 e.printStackTrace();
             }
         });
+
     }
 
     private void updateLine(GraphModel graphModel, Graph graphScene, int index) {
