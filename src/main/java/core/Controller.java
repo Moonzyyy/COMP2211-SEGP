@@ -8,6 +8,7 @@ import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.GraphLine;
 import model.GraphModel;
@@ -16,7 +17,6 @@ import model.Model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.printing.PDFPageable;
-import org.jfree.chart.ChartPanel;
 import org.jfree.data.time.TimeSeries;
 import view.components.CompareItem;
 import view.components.DashboardComp;
@@ -25,7 +25,6 @@ import view.scenes.*;
 import javax.imageio.ImageIO;
 import javax.print.*;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
@@ -457,25 +456,43 @@ public class Controller {
         });
         // Creates a print job, works for physical printers, not PDFs
         graphScene.getPrintButton().setOnAction((event) -> {
-//            graphScene.getLineChart().createChartPrintJob();
-//            SwingUtilities.invokeLater(() -> {
-//                PrinterJob job = PrinterJob.getPrinterJob();
-//                PageFormat pf = job.defaultPage();
-//                PageFormat pf2 = job.pageDialog(pf);
-//                if (pf2 == pf)
-//                    return;
-//                var p = graphScene.getLineChart();
-//                job.setPrintable(p, pf2);
-//                if (!job.printDialog())
-//                    return;
-//                try {
-//                    job.print();
-//                } catch (PrinterException e) {
-//                    e.printStackTrace();
-//                }
-//                });
-            printChartAsPDF(graphScene.getLineChart());
+            try {
+                JFreeChart chart = graphScene.getLineChart().getChart();
+                BufferedImage chartImage = chart.createBufferedImage(graphScene.getLineChart().getWidth(), graphScene.getLineChart().getHeight(), null);
+                ByteArrayOutputStream chartBytes = new ByteArrayOutputStream();
+                ImageIO.write(chartImage, "png", chartBytes);
+                chartBytes.flush();
 
+                String pdfPath = "chart.pdf";
+                savePDF(chartBytes.toByteArray(), pdfPath);
+
+                printPDF(pdfPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (PrintException e) {
+                e.printStackTrace();
+            }
+        });
+
+        graphScene.getSaveButton().setOnAction((event) -> {
+            try {
+                JFreeChart chart = graphScene.getLineChart().getChart();
+                BufferedImage chartImage = chart.createBufferedImage(graphScene.getLineChart().getWidth(), graphScene.getLineChart().getHeight(), null);
+                ByteArrayOutputStream chartBytes = new ByteArrayOutputStream();
+                ImageIO.write(chartImage, "png", chartBytes);
+                chartBytes.flush();
+
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save Chart as PDF");
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf"));
+                File selectedFile = fileChooser.showSaveDialog(graphScene.getSaveButton().getScene().getWindow());
+
+                if (selectedFile != null) {
+                    savePDF(chartBytes.toByteArray(), selectedFile.getAbsolutePath());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
         graphModel.configureDatePickers(graphScene.getStartDatePicker(), graphScene.getEndDatePicker(),
@@ -568,70 +585,47 @@ public class Controller {
 //    });
     }
 
-    public void printChartAsPDF(ChartPanel chartPanel) {
+    private void savePDF(byte[] imageData, String pdfPath) {
         try {
-            JFreeChart chart = chartPanel.getChart();
-            BufferedImage chartImage = chart.createBufferedImage(chartPanel.getWidth(), chartPanel.getHeight(), null);
-            ByteArrayOutputStream chartBytes = new ByteArrayOutputStream();
-            ImageIO.write(chartImage, "png", chartBytes);
-            chartBytes.flush();
+            ImageData imgData = ImageDataFactory.create(imageData);
+            Image pdfImage = new Image(imgData);
 
-            ImageData imageData = ImageDataFactory.create(chartBytes.toByteArray());
-            Image pdfImage = new Image(imageData);
-
-            String pdfPath = "chart.pdf";
             PdfWriter writer = new PdfWriter(pdfPath);
             PdfDocument pdfDoc = new PdfDocument(writer);
-            com.itextpdf.layout.Document doc = new com.itextpdf.layout.Document(pdfDoc, PageSize.A4);
+            PageSize pageSize = new PageSize(PageSize.A4.getHeight(), PageSize.A4.getWidth());
+            com.itextpdf.layout.Document doc = new com.itextpdf.layout.Document(pdfDoc, pageSize);
 
-            float pageWidth = PageSize.A4.getWidth() - doc.getLeftMargin() - doc.getRightMargin();
-            float pageHeight = PageSize.A4.getHeight() - doc.getTopMargin() - doc.getBottomMargin();
+            float pageWidth = pageSize.getWidth() - doc.getLeftMargin() - doc.getRightMargin();
+            float pageHeight = pageSize.getHeight() - doc.getTopMargin() - doc.getBottomMargin();
             pdfImage.scaleToFit(pageWidth, pageHeight);
 
             doc.add(pdfImage);
             doc.close();
-
-            printPDF(pdfPath);
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (PrintException e) {
             e.printStackTrace();
         }
     }
 
-    private void printPDF(String pdfPath) throws PrintException {
+    private void printPDF(String pdfPath) throws PrintException, IOException {
         SwingUtilities.invokeLater(() -> {
             try {
                 PDDocument document = PDDocument.load(new File(pdfPath));
                 PrinterJob job = PrinterJob.getPrinterJob();
-                String fileName = new File(pdfPath).getName();
-                if (!fileName.endsWith(".pdf")) {
-                    fileName += ".pdf";
+                job.setPageable(new PDFPageable(document));
+
+                boolean doPrint = job.printDialog();
+                if (doPrint) {
+                    job.print();
                 }
-                FileDialog fd = new FileDialog(new JFrame(), "Save", FileDialog.SAVE);
-                fd.setFile(fileName);
-                fd.setVisible(true);
-                String destFilePath = fd.getDirectory() + fd.getFile();
-                if (destFilePath != null) {
-                    FileOutputStream fos = new FileOutputStream(destFilePath);
-                    document.save(fos);
-                    document.close();
-                    fos.close();
-                    job.setJobName(fileName);
-                    job.setPageable(new PDFPageable(PDDocument.load(new File(destFilePath))));
-                    boolean doPrint = job.printDialog();
-                    if (doPrint) {
-                        job.print();
-                    }
-                }
+                document.close();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (PrinterException e) {
                 e.printStackTrace();
             }
         });
-
     }
+
 
     private void updateLine(GraphModel graphModel, Graph graphScene, int index) {
         var line = graphModel.getLines().get(index);
