@@ -15,17 +15,37 @@ import model.HistogramModel;
 import model.Model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jfree.chart.ChartPanel;
 import org.jfree.data.time.TimeSeries;
 import view.components.CompareItem;
 import view.components.DashboardComp;
 import view.scenes.*;
 
+import javax.imageio.ImageIO;
+import javax.print.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
+import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.*;
 import java.util.*;
+import java.util.List;
+
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import org.jfree.chart.JFreeChart;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
+
 
 public class Controller {
 
@@ -439,22 +459,23 @@ public class Controller {
         // Creates a print job, works for physical printers, not PDFs
         graphScene.getPrintButton().setOnAction((event) -> {
 //            graphScene.getLineChart().createChartPrintJob();
-            SwingUtilities.invokeLater(() -> {
-                PrinterJob job = PrinterJob.getPrinterJob();
-                PageFormat pf = job.defaultPage();
-                PageFormat pf2 = job.pageDialog(pf);
-                if (pf2 == pf)
-                    return;
-                var p = graphScene.getLineChart();
-                job.setPrintable(p, pf2);
-                if (!job.printDialog())
-                    return;
-                try {
-                    job.print();
-                } catch (PrinterException e) {
-                    e.printStackTrace();
-                }
-            });
+//            SwingUtilities.invokeLater(() -> {
+//                PrinterJob job = PrinterJob.getPrinterJob();
+//                PageFormat pf = job.defaultPage();
+//                PageFormat pf2 = job.pageDialog(pf);
+//                if (pf2 == pf)
+//                    return;
+//                var p = graphScene.getLineChart();
+//                job.setPrintable(p, pf2);
+//                if (!job.printDialog())
+//                    return;
+//                try {
+//                    job.print();
+//                } catch (PrinterException e) {
+//                    e.printStackTrace();
+//                }
+//                });
+            printChartAsPDF(graphScene.getLineChart());
 
         });
 
@@ -546,6 +567,72 @@ public class Controller {
 //        graphScene.getMaleCheckBox().setSelected(false);
 //      }
 //    });
+    }
+
+    public void printChartAsPDF(ChartPanel chartPanel) {
+        try {
+            JFreeChart chart = chartPanel.getChart();
+            BufferedImage chartImage = chart.createBufferedImage(chartPanel.getWidth(), chartPanel.getHeight(), null);
+            ByteArrayOutputStream chartBytes = new ByteArrayOutputStream();
+            ImageIO.write(chartImage, "png", chartBytes);
+            chartBytes.flush();
+
+            ImageData imageData = ImageDataFactory.create(chartBytes.toByteArray());
+            Image pdfImage = new Image(imageData);
+
+            String pdfPath = "chart.pdf";
+            PdfWriter writer = new PdfWriter(pdfPath);
+            PdfDocument pdfDoc = new PdfDocument(writer);
+            com.itextpdf.layout.Document doc = new com.itextpdf.layout.Document(pdfDoc, PageSize.A4);
+
+            float pageWidth = PageSize.A4.getWidth() - doc.getLeftMargin() - doc.getRightMargin();
+            float pageHeight = PageSize.A4.getHeight() - doc.getTopMargin() - doc.getBottomMargin();
+            pdfImage.scaleToFit(pageWidth, pageHeight);
+
+            doc.add(pdfImage);
+            doc.close();
+
+            printPDF(pdfPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (PrintException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void printPDF(String pdfPath) throws PrintException {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                PDDocument document = PDDocument.load(new File(pdfPath));
+                PDFRenderer pdfRenderer = new PDFRenderer(document);
+                Printable printable = new Printable() {
+                    @Override
+                    public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+                        if (pageIndex >= document.getNumberOfPages()) {
+                            return NO_SUCH_PAGE;
+                        }
+                        try {
+                            BufferedImage image = pdfRenderer.renderImage(pageIndex, 2.5f);
+                            graphics.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
+                            return PAGE_EXISTS;
+                        } catch (IOException e) {
+                            throw new PrinterException(e.getMessage());
+                        }
+                    }
+                };
+                PrinterJob job = PrinterJob.getPrinterJob();
+                job.setPrintable(printable);
+                if (!job.printDialog()) {
+                    return;
+                }
+                job.print();
+                document.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (PrinterException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void updateLine(GraphModel graphModel, Graph graphScene, int index) {
