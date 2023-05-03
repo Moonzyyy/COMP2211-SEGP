@@ -3,12 +3,16 @@ package core;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import model.Model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import view.scenes.StartMenu;
+
+import java.awt.*;
+import java.util.Objects;
 
 /**
  * The main class of the application.
@@ -47,6 +51,10 @@ public class AdViz extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("AdViz");
+        Taskbar taskbar = Taskbar.getTaskbar();
+        final Toolkit toolkit = Toolkit.getDefaultToolkit();
+        var dockIcon = toolkit.getImage(getClass().getResource("/images/logo--dark.png"));
+        taskbar.setIconImage(dockIcon);
         StartMenu sm = new StartMenu();
         theController.setStage(stage);
         theController.setUpScene(sm);
