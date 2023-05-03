@@ -8,8 +8,12 @@ import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
+
+
 
 public class Loading extends AbstractScene {
 
@@ -42,13 +46,6 @@ public class Loading extends AbstractScene {
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
-
-        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), loadingLabel);
-        fadeTransition.setFromValue(1.0);
-        fadeTransition.setToValue(0.5);
-        fadeTransition.setAutoReverse(true);
-        fadeTransition.setCycleCount(FadeTransition.INDEFINITE);
-        fadeTransition.play();
     }
 
     public void setStyles(boolean theme) {
