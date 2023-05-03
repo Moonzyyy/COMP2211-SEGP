@@ -51,6 +51,8 @@ public class Graph extends AbstractScene {
     private final DatePicker endDatePicker;
     Map<LocalDateTime, Double> data;
     private Button homeButton;
+
+    private Button saveButton;
     private Button printButton;
     private Button segmentFilterButton;
     private ListView<Node> compareList;
@@ -112,10 +114,11 @@ public class Graph extends AbstractScene {
         var graphTitle = new Label("AdViz - Graph");
         graphTitle.getStyleClass().add("graphTitle");
 
+        saveButton = new Button("Save");
+        saveButton.getStyleClass().add("button");
 
         printButton = new Button("Print");
         printButton.getStyleClass().add("button");
-
 
         segmentFilterButton = new Button("Filter");
         segmentFilterButton.setDisable(true);
@@ -130,6 +133,7 @@ public class Graph extends AbstractScene {
         Region spacer2 = new Region();
         HBox.setHgrow(spacer2, Priority.ALWAYS);
         topBar.getChildren().add(spacer2);
+        topBar.getChildren().add(saveButton);
         topBar.getChildren().add(printButton);
         topBar.getChildren().add(segmentFilterButton);
 
@@ -509,6 +513,10 @@ public class Graph extends AbstractScene {
      */
     public Button getHomeButton() {
         return homeButton;
+    }
+
+    public  Button getSaveButton() {
+        return saveButton;
     }
 
     /**
