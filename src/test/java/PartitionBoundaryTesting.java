@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -21,6 +22,43 @@ public class PartitionBoundaryTesting {
         model.setServerFile(new File("src/test/TestData/server_log.csv"));
         model.importData();
         model.getMetrics();
+    }
+
+    /**
+     * Helper function to increase modularity
+     *
+     * @param gm the graph model
+     * @return the sum of all the values as a double
+     */
+    private double graphModelTestHelper(GraphModel gm) {
+        double sum = 0.0;
+        for (int a = 0; a < gm.getLines().get(0).getDataSeries().getItemCount(); a++) {
+            sum += (double) gm.getLines().get(0).getDataSeries().getDataItem(a).getValue();
+        }
+        return sum;
+    }
+
+    @Test
+    void allFiltersBoundary() {
+        GraphModel graphModel = new GraphModel(model, "Impression", "Date", "Impression", 0, false);
+        //Create hashmap with predicates to test, then update the graph with it
+        HashMap<String, Boolean> hm2 = new HashMap<>();
+        hm2.put("age_1", true);
+        hm2.put("age_2", true);
+        hm2.put("age_3", true);
+        hm2.put("age_4", true);
+        hm2.put("age_5", true);
+        hm2.put("context_1", true);
+        hm2.put("context_2", true);
+        hm2.put("context_3", true);
+        hm2.put("context_4", true);
+        hm2.put("context_5", true);
+        hm2.put("context_6", true);
+        hm2.put("income_1", true);
+        hm2.put("income_2", true);
+        hm2.put("income_3", true);
+        graphModel.updateGraphData(hm2);
+        assertEquals(486104, graphModelTestHelper(graphModel), "Impressions with all but gender filters applied");
     }
 
     //Bounce def partitions
