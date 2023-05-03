@@ -441,7 +441,7 @@ public class Graph extends AbstractScene {
         for (Context context : Context.values()) {
             compareControl.getItems().add(new CompareItem(context.label, "context_" + context.idx));
         }
-        compareControl.getStyleClass().add("line-filter");
+        compareControl.getStyleClass().add("time-filter");
         compareControl.setValue(defaultItem);
     }
 
