@@ -51,10 +51,16 @@ public class AdViz extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("AdViz");
-        Taskbar taskbar = Taskbar.getTaskbar();
-        final Toolkit toolkit = Toolkit.getDefaultToolkit();
-        var dockIcon = toolkit.getImage(getClass().getResource("/images/logo--dark.png"));
-        taskbar.setIconImage(dockIcon);
+        if (Taskbar.isTaskbarSupported()) {
+            Taskbar taskbar = Taskbar.getTaskbar();
+            if (taskbar.isSupported(Taskbar.Feature.ICON_IMAGE)) {
+                final Toolkit toolkit = Toolkit.getDefaultToolkit();
+                var dockIcon = toolkit.getImage(getClass().getResource("/images/logo--dark.png"));
+                taskbar.setIconImage(dockIcon);
+            }
+        } else {
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/logo--dark.png"))));
+        }
         StartMenu sm = new StartMenu();
         theController.setStage(stage);
         theController.setUpScene(sm);

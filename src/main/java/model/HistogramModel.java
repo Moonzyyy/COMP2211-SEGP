@@ -41,7 +41,7 @@ public class HistogramModel {
         plot.setDomainAxis(xAxis);
     }
 
-    public double[] extractCostData(Map<LocalDateTime, Double> data) {
+    private double[] extractCostData(Map<LocalDateTime, Double> data) {
         double[] values = new double[data.size()];
 
         int i = 0;
@@ -57,6 +57,10 @@ public class HistogramModel {
             maxCost = Math.max(maxCost, cost);
         }
         return maxCost;
+    }
+
+    public HistogramDataset getDataSet() {
+        return dataSet;
     }
 
     public JFreeChart getChart() {

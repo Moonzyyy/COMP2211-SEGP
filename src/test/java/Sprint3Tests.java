@@ -68,10 +68,25 @@ public class Sprint3Tests {
     }
 
     //Histogram test
+    public double histogramHelper(HistogramModel hsModel, int series, int item) {
+        return hsModel.getDataSet().getY(series, item).doubleValue();
+    }
+
     @Test
-    void histogramTest() {
+    void histogramTestStartFreq() {
         HistogramModel hsModel = new HistogramModel(model, 4);
-        //maybe test a few different click costs and check if their frequency is correct?
-        assertEquals(2.1, Arrays.stream(hsModel.extractCostData(model.loadTotalCostData())).sum());
+        assertEquals(23, histogramHelper(hsModel, 0, 0));
+    }
+
+    @Test
+    void histogramTestMiddleFreq() {
+        HistogramModel hsModel = new HistogramModel(model, 4);
+        assertEquals(8, histogramHelper(hsModel, 0, (int) Math.ceil(hsModel.getDataSet().getItemCount(0)/2)));
+    }
+
+    @Test
+    void histogramTestEndFreq() {
+        HistogramModel hsModel = new HistogramModel(model, 4);
+        assertEquals(3, histogramHelper(hsModel, 0, hsModel.getDataSet().getItemCount(0)-1));
     }
 }
