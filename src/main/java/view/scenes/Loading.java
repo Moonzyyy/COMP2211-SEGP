@@ -45,7 +45,7 @@ public class Loading extends AbstractScene {
 
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), loadingLabel);
         fadeTransition.setFromValue(1.0);
-        fadeTransition.setToValue(0.3);
+        fadeTransition.setToValue(0.5);
         fadeTransition.setAutoReverse(true);
         fadeTransition.setCycleCount(FadeTransition.INDEFINITE);
         fadeTransition.play();
