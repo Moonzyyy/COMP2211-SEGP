@@ -58,6 +58,8 @@ public class Graph extends AbstractScene {
     private Button compareControlDateFilterButton;
     private Button dateFilterButton;
 
+    private Label groupBy;
+
     private CheckBox maleCheckBox;
     private CheckBox femaleCheckBox;
 
@@ -368,8 +370,10 @@ public class Graph extends AbstractScene {
         compareControlStartDatePicker.setMaxWidth(110);
         compareControlEndDatePicker.setMaxWidth(110);
 
+        groupBy = new Label("Group by: ");
+
         filterBar.getChildren()
-                .addAll(compareControl1, compareSpacer, compareControl2, compareSpacer2, new Label("Group by: "), timeFilter, compareSpacer3, startDatePicker, endDatePicker, dateFilterButton, compareControlStartDatePicker, compareControlEndDatePicker, compareControlDateFilterButton);
+                .addAll(compareControl1, compareSpacer, compareControl2, compareSpacer2, groupBy, timeFilter, compareSpacer3, startDatePicker, endDatePicker, dateFilterButton, compareControlStartDatePicker, compareControlEndDatePicker, compareControlDateFilterButton);
 
         createCheckBoxes();
 
@@ -387,6 +391,7 @@ public class Graph extends AbstractScene {
         dateFilterButton.setVisible(lineGraphVisible);
         compareControl1.setVisible(lineGraphVisible);
         compareControl2.setVisible(lineGraphVisible);
+        groupBy.setVisible(lineGraphVisible);
         compareControlStartDatePicker.setVisible(lineGraphVisible);
         compareControlEndDatePicker.setVisible(lineGraphVisible);
         compareControlDateFilterButton.setVisible(lineGraphVisible);
