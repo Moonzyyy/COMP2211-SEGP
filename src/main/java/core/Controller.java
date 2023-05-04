@@ -66,18 +66,24 @@ public class Controller {
         try
         {
             settingsFile = new Properties();
-            InputStream readSetting =  new FileInputStream("config.properties");
+            File configFile = new File("config.properties");
+            if(!configFile.exists())
+            {
+                logger.info( "New Config File Created: " + configFile.createNewFile());
+            }
+            InputStream readSetting =  new FileInputStream(configFile);
             settingsFile.load(readSetting);
             theme = settingsFile.getProperty("sceneTheme") == null || settingsFile.getProperty("sceneTheme").equals("DarkMode");
             fontFamily = settingsFile.getProperty("sceneFont") != null ? settingsFile.getProperty("sceneFont") : "Roboto";
             readSetting.close();
-            writeToSettings = new FileOutputStream("config.properties");
+
 
 
         }catch (Exception e){logger.error(e.getMessage());}
 
 
     }
+
 
 
     /**
@@ -301,9 +307,9 @@ public class Controller {
 
         settings.getFontDropdown().setOnAction((event) -> {
             try {
+
                 fontFamily = settings.getFontDropdown().getValue();
                 settingsFile.setProperty("sceneFont", fontFamily);
-                settingsFile.store(writeToSettings, null);
                 settings.setFont(fontFamily);
                 System.out.println("Setting font");
             } catch (Exception e) {logger.error(e.getMessage());}
@@ -314,10 +320,22 @@ public class Controller {
                 theme = !settings.getThemeDropdown().getValue().equals("Light Mode");
                 if(theme) settingsFile.setProperty("sceneTheme", "DarkMode"); else settingsFile.setProperty("sceneTheme", "LightMode");
 
-                settingsFile.store(writeToSettings, null);
 //            settings.setStyles(theme);
                 settings.setTheme(theme);
             } catch (Exception e){logger.error(e.getMessage());}
+
+        });
+
+        settings.getApplyButton().setOnAction(event ->
+        {
+            try{
+                writeToSettings = new FileOutputStream("config.properties", false);
+                settingsFile.store(writeToSettings, null);
+                writeToSettings.close();
+            }catch(Exception e)
+            {
+                logger.info("Error: " + e.getMessage());
+            }
 
         });
 

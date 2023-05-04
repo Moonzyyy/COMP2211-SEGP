@@ -20,6 +20,7 @@ public class Settings extends AbstractScene {
     ObjectProperty<javafx.scene.paint.Color> bgColor;
 
     private Button backButton;
+    private Button applyButton;
     private ColorPicker bgColorPicker;
     private ComboBox<String> themeDropdown;
 
@@ -69,7 +70,9 @@ public class Settings extends AbstractScene {
         themeBox.setAlignment(Pos.CENTER);
         themeBox.setSpacing(10);
 
-        VBox controls = new VBox(fontBox, themeBox);
+        applyButton = new Button("Save Settings");
+
+        VBox controls = new VBox(fontBox, themeBox , applyButton);
         controls.setAlignment(Pos.CENTER);
         controls.setPrefSize(200, 200);
         controls.setSpacing(20);
@@ -111,6 +114,8 @@ public class Settings extends AbstractScene {
     public ComboBox<String> getFontDropdown() {
         return fontDropdown;
     }
+
+    public Button getApplyButton(){return applyButton; }
 
     public void setStyles(boolean theme) {
         scene.getStylesheets().clear();
