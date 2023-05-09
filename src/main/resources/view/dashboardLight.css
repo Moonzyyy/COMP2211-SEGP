@@ -1,0 +1,81 @@
+.root {
+    -primary-color: #dce5db;
+    -secondary-color: #a03670;
+    -tertiary-color: #7c3cbe;
+    -neutral-color: #f8fdff;
+    -surface-color: #006d3e;
+    -button-text-color: #000000;
+    -label-text-color: #000000;
+
+    -fx-font-weight: 500;
+    -fx-font-family: Roboto;
+
+    -fx-background-color: -neutral-color;
+    -fx-background-text-color: -label-text-color;
+}
+
+
+.button {
+    -fx-background-radius: 30;
+    -fx-background-color: -primary-color;
+    -fx-text-fill: -button-text-color;
+    -fx-font-size: 25px;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+    -fx-pref-width: 200;
+}
+
+.button:hover {
+    -fx-background-color: derive(-primary-color, -15%);
+    -fx-text-fill: -button-text-color;
+}
+
+.button:pressed {
+    -fx-text-fill: darkgray;
+    -fx-font-size: 23px;
+}
+
+.title {
+    -fx-font-size: 80px;
+    -fx-text-fill: black;
+    -fx-font-weight: 600;
+    -fx-padding: 20 0 0 0;
+
+}
+
+.titleBox .text {
+    -fx-fill: black;
+    -fx-font-size: 40;
+}
+
+.dashboardComp {
+    -fx-spacing: 40;
+    -fx-alignment: center;
+    -fx-padding: 40;
+}
+
+/*CSS related to the sliding menu*/
+.menu {
+    -fx-background-color: derive(-neutral-color, -20%);
+    -fx-padding: 10;
+    -fx-spacing: 20;
+    -fx-pref-height: 70%;
+    -fx-alignment: center;
+
+}
+
+.menuButton {
+    -fx-background-radius: 50%;
+    -fx-background-color: -primary-color;
+    -fx-cursor: hand;
+    -fx-pref-width: 50;
+    -fx-padding: 5;
+    -fx-pref-height: 50;
+
+}
+
+.menu .text {
+    -fx-fill: -button-text-color;
+    -fx-font-size: 30;
+    -fx-font-family: "Roboto";
+}

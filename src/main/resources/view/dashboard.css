@@ -1,69 +1,185 @@
-.backButton {
-  -fx-background-radius: 30;
-  -fx-background-color: #f2e9e4;
-  -fx-text-fill: black;
-  -fx-font-size: 100;
-  -fx-font-family: "Roboto";
-  -fx-cursor: hand;
-  -fx-pref-width: 50;
-  -fx-padding: 5;
+@import "style.css";
+
+.root {
+    -menu-bg: derive(-surface-color, +50%);
+    -button-text-color: #000000;
+    -scrollbar-color: #8a8f99;
 }
 
-.backButton:hover {
-  -fx-background-color: #dedede;
-  -fx-text-fill: #121212;
-}
-
-.backButton:pressed {
-  -fx-background-color: #bfbfbf;
-  -fx-text-fill: #121212;
+.root.theme--light {
+    -primary-color: #dce5db;
+    -secondary-color: #a03670;
+    -tertiary-color: #7c3cbe;
+    -neutral-color: #f8fdff;
+    -surface-color: #006d3e;
+    -button-text-color: #000000;
+    -label-text-color: #000000;
+    -scrollbar-color: #97b09e;
 }
 
 .title {
-  -fx-font-size: 40;
-  -fx-font-family: "Roboto";
-  -fx-text-fill: #FFFFFF;
-  -fx-padding: 20 0 0 0;
+    -fx-font-size: 40;
+    -fx-text-fill: -label-text-color;
+    -fx-padding: 20 0 0 0;
+}
 
+.theme--light .title .text {
+    -fx-fill: black;
 }
 
 .titleBox .text {
-  -fx-fill: #FFFFFF;
-  -fx-font-size: 40;
-  -fx-font-family: "Roboto";
+    -fx-fill: -label-text-color;
+    -fx-font-size: 40;
 }
 
-.dashboardComp{
-  -fx-spacing: 40;
-  -fx-alignment: center;
-  -fx-padding: 40;
+.dashboardComp {
+    -fx-spacing: 40;
+    -fx-alignment: center;
+    -fx-padding: 40;
 }
 
+/*CSS related to the sliding menu*/
 .menu {
-  -fx-background-color: #757e8e;
-  -fx-padding: 20;
-  -fx-spacing: 20;
-  -fx-pref-height: 70%;
-  -fx-alignment: center;
+    -fx-background-color: -menu-bg;
+    -fx-padding: 20;
+    -fx-spacing: 20;
+    -fx-pref-height: 70%;
+    -fx-alignment: center;
 
 }
 
-.menuButton{
-  -fx-background-radius: 50%;
-  -fx-background-color: #f2e9e4;
-  -fx-cursor: hand;
-  -fx-pref-width: 50;
-  -fx-padding: 5;
-  -fx-pref-height: 50;
+.button.menuButton {
+    -fx-background-radius: 50%;
+    -fx-background-color: -primary-color;
+    -fx-cursor: hand;
+    -fx-pref-width: 50;
+    -fx-padding: 5;
+    -fx-pref-height: 50;
 
 }
 
 .menu .text {
-  -fx-fill: black;
-  -fx-font-size: 30;
-  -fx-font-family: "Roboto";
+    -fx-fill: -label-text-color;
+    -fx-font-size: 16px;
 }
 
-.root {
-  -fx-background-color: #121212;
+.menu .button .text {
+    -fx-fill: -button-text-color;
+}
+
+/* Set background color and font color for ListView */
+.list-cell {
+    -fx-background-color: -menu-bg;
+    -fx-font-size: 14px;
+    -fx-text-fill: -label-text-color;
+}
+
+
+/* Set background color and border color for CheckBox */
+.check-box {
+    -fx-border-color: #f5f5f5;
+    -fx-padding: 0 10 0 10;
+    -fx-alignment: center;
+    -fx-pref-width: 150;
+}
+
+.check-box > .box > .mark {
+    -fx-background-color: #000000;
+    -fx-background-radius: 10px;
+    -fx-padding: 5;
+    visibility: hidden;
+}
+
+/* Set background color for CheckBox when hovered */
+.check-box:hover {
+    -fx-background-color: derive(-surface-color, +75%);
+}
+
+/* Set checkbox text color */
+.check-box > .text {
+    -fx-fill: #ffffff;
+}
+
+/* Set background color for CheckBox when selected */
+.check-box:selected {
+    -fx-background-color: #f5f5f5;
+    -fx-opacity: 0.85;
+}
+
+.check-box:selected > .box > .mark {
+    visibility: visible;
+}
+
+.check-box:selected > .text {
+    -fx-fill: #000000;
+}
+
+/* Set font color for CheckBox */
+.check-box .box {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f5f5f5;
+}
+
+.list-view .text {
+    -fx-font-size: 16px;
+}
+
+
+/* Set font color for ListView header */
+.list-view .column-header .label {
+    -fx-text-fill: #f5f5f5;
+}
+
+
+/* Set divider color for ListView */
+.list-view .virtual-flow .clipped-container {
+    -fx-background-color: #212121;
+}
+
+.list-cell .text {
+    -fx-text-fill: #ffffff;
+    -fx-translate-x: -8px;
+}
+
+.list-cell {
+    -fx-alignment: center;
+    -fx-spacing: 10;
+    -fx-background-color: -menu-bg;
+}
+
+/*Scroll bar styling*/
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: -scrollbar-color;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 10px;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: derive(-scrollbar-color, -10%);
+}
+
+.scroll-bar:vertical .thumb:pressed {
+    -fx-background-color: derive(-scrollbar-color, -20%);
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .track-background {
+    -fx-background-color: derive(-scrollbar-color, +15%);
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+    -fx-background-color: derive(-scrollbar-color, +10%);
+}
+
+.scroll-bar:vertical .increment-arrow:hover,
+.scroll-bar:vertical .decrement-arrow:hover {
+    -fx-background-color: derive(-scrollbar-color, +5%);
 }

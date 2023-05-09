@@ -7,12 +7,16 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import view.scenes.AbstractScene;
-import view.scenes.Graph;
 
 public class DashboardComp extends VBox {
 
   private final List<VBox> numberBoxes = new ArrayList<>();
 
+  /**
+   * Sets up the dashboard component by the amount of boxes per row, the total amount of boxes and making sure boxes don't clash
+   *
+   * @param scene The scene to setup the Dashboard Components in
+   */
   public DashboardComp(AbstractScene scene) {
     setAlignment(Pos.CENTER);
     setSpacing(20);
@@ -40,6 +44,12 @@ public class DashboardComp extends VBox {
     }
   }
 
+  /**
+   * Text labels for all metrics to use in buttons
+   *
+   * @param number that denotes metric
+   * @return metric text
+   */
   private String getLabelText(int number) {
     switch (number) {
       case 1:
@@ -69,6 +79,14 @@ public class DashboardComp extends VBox {
     }
   }
 
+  /**
+   * Button for each metric, with the name and value of each metric
+   *
+   * @param number, the metric value
+   * @param text,   the name of the metric
+   * @param scene
+   * @return metric button
+   */
   private VBox createNumberBox(int number, String text, AbstractScene scene) {
     final Label numberLabel = new Label(Integer.toString(number));
     numberLabel.getStyleClass().add("number");
@@ -82,9 +100,6 @@ public class DashboardComp extends VBox {
     numberBox.setPrefWidth(USE_COMPUTED_SIZE);
     numberBox.setPrefHeight(USE_COMPUTED_SIZE);
 
-    numberBox.setOnMouseClicked(e -> {
-      System.out.println("Button:" + text + " clicked");
-    });
 
     return numberBox;
   }
@@ -93,10 +108,20 @@ public class DashboardComp extends VBox {
     return numberBoxes;
   }
 
+  /**
+   * Loops through all the number boxes and updates the text with the new values
+   *
+   * @param numbers list of new values
+   */
   public void updateNumberBoxes(List<String> numbers) {
     for (int i = 0; i < numbers.size(); i++) {
       final Label numberLabel = (Label) numberBoxes.get(i).getChildren().get(0);
-      numberLabel.setText(numbers.get(i));
+      //Neaten up number boxes
+      switch (i+1) {
+        case 1, 2, 3, 4, 11 -> numberLabel.setText(numbers.get(i).substring(0, numbers.get(i).length()-2));
+        case 5, 7, 8, 9 -> numberLabel.setText("$" + numbers.get(i));
+        case 6, 10 -> numberLabel.setText(numbers.get(i));
+      }
     }
   }
 }

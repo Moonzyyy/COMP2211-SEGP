@@ -9,60 +9,87 @@ import javafx.scene.layout.VBox;
 
 public class StartMenu extends AbstractScene {
 
-  private Button importButton;
-  private Button settingsButton;
+    private Button importButton;
+    private Button settingsButton;
 
-  private Button resumeButton;
+    private Button resumeButton;
 
-  public StartMenu() {
-    super();
-//    createScene();
+    private Button faqButton;
 
-  }
+    public StartMenu() {
+        super();
 
-  /**
-   * Creates the scene for the start menu.
-   */
-  public void createScene() {
-    importButton = new Button("Import");
-    importButton.getStyleClass().add("startButton");
+    }
 
-    settingsButton = new Button("Settings");
-    settingsButton.getStyleClass().add("startButton");
+    /**
+     * Creates the scene for the start menu.
+     */
+    public void createScene() {
+        importButton = new Button("Import");
+        importButton.getStyleClass().add("startButton");
 
-    resumeButton = new Button("Resume");
-    resumeButton.getStyleClass().add("startButton");
+        settingsButton = new Button("Settings");
+        settingsButton.getStyleClass().add("startButton");
 
-    var title = new Label("AdViz");
-    title.getStyleClass().add("title");
+        resumeButton = new Button("Resume");
+        resumeButton.getStyleClass().add("startButton");
 
-    var startTitle = new VBox();
-    startTitle.setAlignment(Pos.CENTER);
-    startTitle.getChildren().add(title);
+        faqButton = new Button("FAQ");
+        faqButton.getStyleClass().add("startButton");
 
-    var startButtonsVBox = new VBox();
-    startButtonsVBox.getChildren().addAll(importButton, settingsButton, resumeButton);
-    startButtonsVBox.setPrefSize(200, 200);
-    startButtonsVBox.setSpacing(20);
-    startButtonsVBox.setAlignment(Pos.CENTER);
+        var title = new Label("AdViz");
+        title.getStyleClass().add("title");
 
-    var startBorderPane = new BorderPane();
-    startBorderPane.setTop(startTitle);
-    startBorderPane.setCenter(startButtonsVBox);
+        var startTitle = new VBox();
+        startTitle.setAlignment(Pos.CENTER);
+        startTitle.getChildren().add(title);
 
-    scene = new Scene(startBorderPane, 1280, 720);
-    scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
-  }
+        var startButtonsVBox = new VBox();
+        startButtonsVBox.getChildren().addAll(importButton, settingsButton, faqButton, resumeButton);
+        startButtonsVBox.setPrefSize(200, 200);
+        startButtonsVBox.setSpacing(20);
+        startButtonsVBox.setAlignment(Pos.CENTER);
 
-  public Button getImportButton() {
-    return this.importButton;
-  }
+        var startBorderPane = new BorderPane();
+        startBorderPane.setTop(startTitle);
+        startBorderPane.setCenter(startButtonsVBox);
 
-  public Button getSettingsButton() {
-    return this.settingsButton;
-  }
+        startBorderPane.getStyleClass().add("light");
+        scene = new Scene(startBorderPane, 1280, 720);
 
-  public Button getResumeButton() {
-    return this.resumeButton;
-  }
+        scene.getStylesheets().add(getClass().getResource("/view/startLight.css").toExternalForm());
+    }
+
+    /**
+     * @return get the Import button
+     */
+    public Button getImportButton() {
+        return this.importButton;
+    }
+
+    /**
+     * @return get the Settings button
+     */
+    public Button getSettingsButton() {
+        return this.settingsButton;
+    }
+
+    /**
+     * @return get the Resume Button
+     */
+    public Button getResumeButton() {
+        return this.resumeButton;
+    }
+
+    public Button getFaqButton() {return this.faqButton;}
+
+    public void setStyles(boolean theme) {
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
+//        if (theme) {
+//            scene.getStylesheets().add(getClass().getResource("/view/start.css").toExternalForm());
+//        } else {
+//            scene.getStylesheets().add(getClass().getResource("/view/startLight.css").toExternalForm());
+//        }
+    }
 }

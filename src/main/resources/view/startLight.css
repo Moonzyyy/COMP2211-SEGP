@@ -1,0 +1,25 @@
+.root {
+    -primary-color: #006d3e;
+    -secondary-color: #a03670;
+    -tertiary-color: #7c3cbe;
+    -neutral-color: #f8fdff;
+    -label-text-color: black;
+    -button-text-color: white;
+
+    -fx-font-weight: 500;
+    -fx-font-family: Roboto;
+
+    -fx-background-color: -neutral-color;
+    -fx-text-background-color: -label-text-color;
+}
+
+.title {
+    -fx-padding: 100 0 0 0;
+    -fx-text-fill: -label-text-color;
+}
+
+.loading {
+    -fx-font-size: 100px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -primary-color;
+}

@@ -1,0 +1,99 @@
+@import "style.css";
+
+.root.theme--light {
+    -primary-color: #006d3e;
+    -secondary-color: #a03670;
+    /*-tertiary-color: #7c3cbe;*/
+    /*-neutral-color: #f8fdff;*/
+    -surface-color: #dce5db;
+    /*-label-text-color: black;*/
+    /*-button-text-color: black;*/
+}
+
+.errorLabel {
+    -fx-font-size: 30px;
+    -fx-text-fill: red;
+}
+
+.title {
+    -fx-padding: 50 0 0 0;
+    -fx-font-size: 75px;
+}
+
+.radio-button {
+    -fx-font-size: 30px;
+    -fx-text-fill: -label-text-color;
+    -fx-padding: 5px 10px;
+    -fx-background-color: transparent;
+    -fx-border-color: -primary-color;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+
+}
+
+.radio-button:selected {
+    -fx-border-color: -primary-color;
+}
+
+.text-field {
+    -fx-font-size: 30px;
+    -fx-prompt-text-fill: derive(-label-text-color, -40%);
+    -fx-text-fill: -label-text-color;
+    -fx-padding: 5px 10px;
+    -fx-background-color: transparent;
+    -fx-border-color: -secondary-color;
+    -fx-border-width: 2px;
+    -fx-border-radius: 3px;
+    -fx-pref-width: 400;
+    -fx-cursor: text;
+}
+
+.text-field:focused {
+    -fx-border-color: -primary-color;
+}
+
+.text-field:disabled {
+    -fx-opacity: 0.6;
+}
+
+.text-field:hover {
+    -fx-background-color: derive(-surface-color, -10%);
+}
+
+
+.combo-box {
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -fx-text-background-color;
+    -fx-pref-width: 200;
+    -fx-font-size: 20px;
+    -fx-pref-height: -fx-font-size;
+    -fx-highlight-text-fill: -fx-text-background-color;
+    -fx-highlight-fill: derive(-surface-color, -10%);
+}
+
+.combo-box .list-view .list-cell {
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: derive(-surface-color, -10%);
+}
+
+.combo-box .list-view .list-cell:hover {
+    -fx-background-color: derive(-surface-color, -10%);
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: derive(-surface-color, -20%);
+}
+
+.combo-box .list-cell {
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: -surface-color;
+}
+
+.combo-box .arrow {
+    -fx-background-color: BLACK;
+}

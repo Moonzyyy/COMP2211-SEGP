@@ -1,166 +1,230 @@
+@import "style.css";
+
+.root.theme--light {
+    -primary-color: #dce5db;
+    -secondary-color: #a03670;
+    -tertiary-color: #7c3cbe;
+    -neutral-color: #f8fdff;
+    -surface-color: #006d3e;
+    -button-text-color: #000000;
+    -label-text-color: #000000;
+    -dropdown-color: rgb(230, 238, 245);
+}
+
+.label {
+    -fx-font-size: 16px;
+}
+
 .topBar {
-  -fx-pref-height: 50;
-  -fx-pref-width: 100%;
-  -fx-spacing: 20;
-  -fx-alignment: center;
+    -fx-pref-height: 50;
+    -fx-pref-width: 100%;
+    -fx-spacing: 20;
+    -fx-alignment: center;
 }
 
 .graph {
-  -fx-background-color: #ffffff;
-  -fx-fill: #ffffff;
-  -fx-background-radius: 10;
-  -fx-padding: 20;
-  -fx-spacing: 20;
-  -fx-alignment: center;
+    -fx-background-color: -neutral-color;
+    -fx-fill: -neutral-color;
+    -fx-background-radius: 10;
+    -fx-padding: 20;
+    -fx-spacing: 20;
+    -fx-alignment: center;
 }
 
 .graphTitle {
-  -fx-font-size: 40;
-  -fx-font-weight: bold;
-  -fx-text-fill: #ffffff;
-  -fx-alignment: center;
+    -fx-font-size: 40;
+    -fx-font-weight: bold;
+    -fx-text-fill: -label-text-color;
+    -fx-alignment: center;
 }
 
 .compare {
-  -fx-alignment: center-right;
-  -fx-nodeorientation: left-to-right;
+    -fx-alignment: center-right;
+    -fx-nodeorientation: left-to-right;
 }
 
 .button {
-  -fx-background-radius: 30;
-  -fx-background-color: white;
-  -fx-text-fill: black;
-  -fx-font-size: 16px;
-  -fx-font-family: "Roboto";
-  -fx-padding: 10;
-  -fx-cursor: hand;
-  -fx-pref-width: 100;
+    -fx-font-size: 16px;
+    -fx-pref-width: 100;
+}
+
+.button:pressed {
+    -fx-text-fill: darkgray;
+    -fx-font-size: 15px;
 }
 
 /* Set background color and font color for ListView */
 .list-cell {
-  -fx-background-color: #121212;
-  -fx-font-size: 14px;
-  -fx-text-fill: #ffffff;
+    -fx-background-color: -neutral-color;
+    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff;
 }
 
 
 /* Set background color and border color for CheckBox */
 .check-box {
-  -fx-border-color: #f5f5f5;
-  -fx-padding: 0 10 0 10;
-  -fx-alignment: center;
-  -fx-pref-width: 150;
+    -fx-border-color: -primary-color;
+    -fx-padding: 0 10 0 10;
+    -fx-alignment: center;
+    -fx-pref-width: 150;
 }
 
-.check-box:selected > .box> .mark {
-  -fx-background-color: #ffffff;
-  -fx-background-radius: 10px;
-  -fx-padding: 5;
+.check-box > .box > .mark {
+    -fx-background-color: -neutral-color;
+    -fx-background-radius: 10px;
+    -fx-padding: 5;
+    visibility: hidden;
 }
 
 /* Set background color for CheckBox when hovered */
 .check-box:hover {
-  -fx-background-color: #212121;
+    -fx-background-color: derive(-surface-color, 20%);
 }
 
 /* Set checkbox text color */
 .check-box > .text {
-  -fx-fill: #ffffff;
+    -fx-fill: -label-text-color;
 }
 
 /* Set background color for CheckBox when selected */
 .check-box:selected {
-  -fx-background-color: #212121;
+    -fx-background-color: derive(-surface-color, 25%);
+    -fx-opacity: 0.85;
+}
+
+.check-box:selected > .box > .mark {
+    visibility: visible;
+}
+
+.check-box:selected > .text {
+    -fx-fill: -button-text-color;
 }
 
 /* Set font color for CheckBox */
 .check-box .box {
-  -fx-background-color: transparent;
-  -fx-text-fill: #f5f5f5;
+    -fx-background-color: transparent;
+    -fx-text-fill: -primary-color;
 }
 
 
 /* Set font color for ListView header */
 .list-view .column-header .label {
-  -fx-text-fill: #f5f5f5;
+    -fx-text-fill: -neutral-color;
 }
 
 
 /* Set divider color for ListView */
 .list-view .virtual-flow .clipped-container {
-  -fx-background-color: #212121;
+    -fx-background-color: -neutral-color;
 }
 
-.list-cell-text {
-  -fx-text-fill: #ffffff;
+.list-cell .text {
+    -fx-text-fill: -button-text-color;
+    -fx-translate-x: -8px;
+    /*-fx-padding: 10 0 0 0;*/
 }
 
-.list-cell{
-  -fx-alignment: center;
-  -fx-spacing: 10;
+.list-cell {
+    -fx-alignment: center;
+    -fx-spacing: 10;
 }
 
 /*Scroll bar styling*/
 .scroll-bar:vertical {
-  -fx-background-color: transparent;
+    -fx-background-color: transparent;
 }
 
 .scroll-bar:vertical .thumb {
-  -fx-background-color: #616161;
-  -fx-background-insets: 0, 1, 2;
-  -fx-background-radius: 10px;
+    -fx-background-color: derive(-surface-color, 10%);
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 10px;
 }
 
 .scroll-bar:vertical .thumb:hover {
-  -fx-background-color: #424242;
+    -fx-background-color: derive(-surface-color, 20%);
 }
 
 .scroll-bar:vertical .thumb:pressed {
-  -fx-background-color: #212121;
+    -fx-background-color: derive(-surface-color,-20%);
 }
 
 .scroll-bar:vertical .track {
-  -fx-background-color: transparent;
+    -fx-background-color: transparent;
 }
 
 .scroll-bar:vertical .track-background {
-  -fx-background-color: #424242;
+    -fx-background-color: -surface-color;
 }
 
 .scroll-bar:vertical .increment-arrow,
 .scroll-bar:vertical .decrement-arrow {
-  -fx-background-color: #212121;
+    -fx-background-color: -neutral-color;
 }
 
 .scroll-bar:vertical .increment-arrow:hover,
 .scroll-bar:vertical .decrement-arrow:hover {
-  -fx-background-color: #424242;
+    -fx-background-color: -surface-color;
 }
 
 /*Date picker styling*/
 .start-date-picker, .end-date-picker {
-  -fx-font-size: 14px;
-  -fx-background-color: #424242;
-  -fx-text-fill: white;
-  -fx-highlight-text-fill: white;
-  -fx-highlight-fill: #9c27b0;
+    -fx-font-size: 14px;
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -button-text-color;
+    -fx-highlight-text-fill: -button-text-color;
+    -fx-highlight-fill: derive(-surface-color, 20%);
+}
+
+.date-picker-popup > .month-year-pane  {
+    -fx-base: -surface-color;
+    -fx-mark-highlight-color: -button-text-color;
 }
 
 .start-date-picker .arrow, .end-date-picker .arrow {
-  -fx-background-color: #424242;
+    -fx-background-color: -surface-color;
 }
 
 .start-date-picker .arrow-button:hover, .end-date-picker .arrow-button:hover {
-  -fx-background-color: #9c27b0;
-  -fx-text-fill: white;
+    -fx-background-color: derive(-surface-color, 20%);
+    -fx-text-fill: -button-text-color;
 }
 
 .start-date-picker .arrow-button:pressed, .end-date-picker .arrow-button:pressed {
-  -fx-background-color: #9c27b0;
-  -fx-text-fill: white;
+    -fx-background-color: derive(-surface-color, 20%);
+    -fx-text-fill: -label-text-color;
 }
 
-.root {
-  -fx-background-color: #121212;
+/*Drop downs for both time and multi-line comparison*/
+.time-filter {
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -label-text-color;
+    -fx-pref-width: 100;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: derive(-primary-color, 20%);
 }
+
+.time-filter .list-view .list-cell {
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: derive(-primary-color, 20%);
+}
+
+.time-filter .list-view .list-cell:hover {
+    -fx-background-color: derive(-primary-color, 30%);
+    -fx-text-fill: -button-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: #626262;
+}
+
+.time-filter .list-cell {
+    -fx-background-color: -dropdown-color;
+    -fx-text-fill: black;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: -surface-color;
+}
+
+.time-filter .arrow {
+    -fx-background-color: -button-text-color;
+}
+

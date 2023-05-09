@@ -1,85 +1,42 @@
+@import "style.css";
+
 .title {
+    -fx-padding: 50 0 0 0;
     -fx-font-size: 80px;
-    -fx-font-family: "Roboto";
-    -fx-text-fill: #FFFFFF;
-    -fx-padding: 20 0 0 0;
+    -fx-text-fill: -label-text-color;
 }
 
-.backButton {
-    -fx-background-radius: 30;
-    -fx-background-color: #f2e9e4;
-    -fx-text-fill: black;
-    -fx-font-size: 100;
-    -fx-font-family: "Roboto";
-    -fx-cursor: hand;
-    -fx-pref-width: 50;
-    -fx-pref-height: 30;
-    -fx-padding: 5;
+.combo-box {
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -fx-text-background-color;
+    -fx-pref-width: 200;
+    -fx-font-size: 20px;
+    -fx-pref-height: -fx-font-size;
+    -fx-highlight-text-fill: -fx-text-background-color;
+    -fx-highlight-fill: derive(-surface-color, -10%);
 }
 
-.backButton:hover {
-    -fx-background-color: #dedede;
-    -fx-text-fill: #121212;
+.combo-box .list-view .list-cell {
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: derive(-surface-color, -10%);
 }
 
-.backButton:pressed {
-    -fx-background-color: #bfbfbf;
-    -fx-text-fill: #121212;
+.combo-box .list-view .list-cell:hover {
+    -fx-background-color: derive(-surface-color, -10%);
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: derive(-surface-color, -20%);
 }
 
-.button {
-    -fx-background-color: #f2e9e4;
-    -fx-text-fill: black;
-    -fx-font-size: 11px;
-    -fx-font-family: "Roboto";
-    -fx-cursor: hand;
-    -fx-padding: 5;
+.combo-box .list-cell {
+    -fx-background-color: -surface-color;
+    -fx-text-fill: -label-text-color;
+    -fx-highlight-text-fill: -label-text-color;
+    -fx-highlight-fill: -surface-color;
 }
 
-.button:hover {
-    -fx-background-color: #dedede;
-    -fx-text-fill: #121212;
-}
-
-.button:pressed {
-    -fx-background-color: #bfbfbf;
-    -fx-text-fill: #121212;
-}
-
-.label {
-    -fx-font-size: 30px;
-    -fx-text-fill: #FFFFFF;
-}
-
-.fontBox {
-    -fx-spacing: 10px;
-}
-
-.fontBox > .label {
-    -fx-font-size: 18px;
-}
-
-.sizeBox {
-    -fx-spacing: 10px;
-}
-
-.sizeBox > .label {
-    -fx-font-size: 18px;
-}
-.sizeBox > .button {
-    -fx-background-color: #d9d9d9;
-    -fx-text-fill: #2d2d2d;
-    -fx-padding: 5px 10px;
-}
-
-.themeBox {
-    -fx-spacing: 10px;
-}
-
-.themeBox > .label {
-    -fx-font-size: 18px;
-}
-
-.root {
-    -fx-background-color: #121212;
+.combo-box .arrow {
+    -fx-background-color: BLACK;
 }

@@ -1,48 +1,26 @@
-.root {
-    -fx-background-color: #171515;
-}
+@import "style.css";
 
-.button {
-    -fx-background-color: #4c4c4c;
-    -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
-    -fx-background-radius: 30;
-}
+.root.theme--light{
+    -primary-color: #006d3e;
+    -secondary-color: #a03670;
+    -tertiary-color: #7c3cbe;
+    -neutral-color: #f8fdff;
+    -label-text-color: black;
+    -button-text-color: white;
 
-.botton:hover {
-    -fx-background-color: #282828;
-}
+    -fx-font-weight: 500;
 
-.startButton{
-    -fx-background-radius: 30;
-    -fx-background-color: #f2e9e4;
-    -fx-text-fill: black;
-    -fx-font-size: 25px;
-    -fx-font-family: "Roboto";
-    -fx-padding: 10;
-    -fx-cursor: hand;
-    -fx-pref-width: 200;
-}
-
-.startButton:hover{
-    -fx-background-color: #dedede;
-    -fx-text-fill: #121212;
-}
-
-.startButton:pressed{
-    -fx-background-color: #bfbfbf;
-    -fx-text-fill: #121212;
-    -fx-font-size: 23px;
+    -fx-background-color: -neutral-color;
+    -fx-text-background-color: -label-text-color;
 }
 
 .title {
-    -fx-font-size: 100px;
-    -fx-font-family: "Roboto";
-    -fx-text-fill: #f2e9e4;
     -fx-padding: 100 0 0 0;
-
+    -fx-text-fill: -label-text-color;
 }
 
-.root {
-    -fx-background-color: #121212;
+.loading {
+    -fx-font-size: 100px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -primary-color;
 }
